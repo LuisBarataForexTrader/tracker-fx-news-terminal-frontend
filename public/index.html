@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracker FX News Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c0f;
+    --bg2: #0f1217;
+    --bg3: #141820;
+    --border: #1e2530;
+    --border2: #252d3a;
+    --text: #c8d4e0;
+    --text-dim: #4a5568;
+    --text-muted: #2d3748;
+    --accent: #00d4ff;
+    --accent2: #0099cc;
+    --high: #ff3b5c;
+    --high-bg: rgba(255,59,92,0.08);
+    --high-border: rgba(255,59,92,0.2);
+    --medium: #f59e0b;
+    --medium-bg: rgba(245,158,11,0.08);
+    --medium-border: rgba(245,158,11,0.2);
+    --low: #10b981;
+    --low-bg: rgba(16,185,129,0.06);
+    --low-border: rgba(16,185,129,0.15);
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* Header */
+  .header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+    border: 1.5px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .logo-icon::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    display: block;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .logo-text {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--text);
+    text-transform: uppercase;
+  }
+
+  .logo-text span {
+    color: var(--accent);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--low);
+    text-transform: uppercase;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--low);
+    animation: blink 1.5s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Language toggle */
+  .lang-toggle {
+    display: flex;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .lang-btn {
+    padding: 5px 12px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  .lang-btn.active {
+    background: var(--accent);
+    color: #000;
+  }
+
+  /* Clock */
+  .clock {
+    font-size: 12px;
+    font-weight: 300;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
+  /* Main layout */
+  .main {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    height: calc(100vh - 56px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    overflow-y: auto;
+  }
+
+  .sidebar-section {
+    padding: 0 16px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .sidebar-label {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
+
+  .filter-btn {
+    width: 100%;
+    padding: 8px 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+  }
+
+  .filter-btn:hover {
+    color: var(--text);
+    background: var(--bg3);
+    border-color: var(--border);
+  }
+
+  .filter-btn.active {
+    color: var(--accent);
+    border-color: var(--accent2);
+    background: rgba(0, 212, 255, 0.05);
+  }
+
+  .filter-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-all { background: var(--text-dim); }
+  .dot-high { background: var(--high); }
+  .dot-medium { background: var(--medium); }
+  .dot-low { background: var(--low); }
+
+  .filter-count {
+    margin-left: auto;
+    font-size: 9px;
+    color: var(--text-muted);
+  }
+
+  /* Asset filters */
+  .asset-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    padding: 0 4px;
+  }
+
+  .asset-btn {
+    padding: 6px 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s;
+  }
+
+  .asset-btn:hover, .asset-btn.active {
+    color: var(--accent);
+    border-color: var(--accent2);
+    background: rgba(0, 212, 255, 0.05);
+  }
+
+  /* Refresh button */
+  .refresh-btn {
+    margin: 0 20px;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: calc(100% - 40px);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .refresh-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0, 212, 255, 0.05);
+  }
+
+  .refresh-btn.loading {
+    animation: spin-border 1s linear infinite;
+  }
+
+  /* Feed */
+  .feed {
+    overflow-y: auto;
+    padding: 0;
+    background: var(--bg);
+  }
+
+  /* Ticker bar */
+  .ticker-bar {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    height: 32px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ticker-inner {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    white-space: nowrap;
+    animation: ticker 30s linear infinite;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .ticker-item {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    padding: 0 24px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ticker-item .up { color: var(--low); }
+  .ticker-item .down { color: var(--high); }
+
+  .ticker-separator {
+    color: var(--border2);
+    padding: 0 4px;
+  }
+
+  /* News items */
+  .news-item {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px;
+    transition: background 0.15s;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 16px;
+    align-items: start;
+    animation: slideIn 0.3s ease-out;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .news-item:hover {
+    background: var(--bg2);
+  }
+
+  .news-item.high {
+    background: var(--high-bg);
+    border-left: 2px solid var(--high);
+    border-bottom-color: var(--high-border);
+  }
+
+  .news-item.high:hover {
+    background: rgba(255,59,92,0.12);
+  }
+
+  .news-item.medium {
+    border-left: 2px solid var(--medium);
+  }
+
+  .news-item.low {
+    border-left: 2px solid transparent;
+  }
+
+  .news-time {
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    padding-top: 2px;
+    font-weight: 300;
+  }
+
+  .news-content {
+    flex: 1;
+  }
+
+  .news-headline {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+
+  .news-item.high .news-headline {
+    color: #fff;
+  }
+
+  .news-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .news-source {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .asset-tag {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 2px 6px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  .news-impact {
+    text-align: right;
+    padding-top: 2px;
+  }
+
+  .impact-badge {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    padding: 3px 8px;
+    text-transform: uppercase;
+    display: inline-block;
+  }
+
+  .badge-high {
+    background: var(--high-bg);
+    border: 1px solid var(--high-border);
+    color: var(--high);
+  }
+
+  .badge-medium {
+    background: var(--medium-bg);
+    border: 1px solid var(--medium-border);
+    color: var(--medium);
+  }
+
+  .badge-low {
+    background: var(--low-bg);
+    border: 1px solid var(--low-border);
+    color: var(--low);
+  }
+
+  /* Market moves */
+  .market-moves {
+    margin-top: 6px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .move {
+    font-size: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .move.up { color: var(--low); }
+  .move.down { color: var(--high); }
+  .move.neutral { color: var(--text-dim); }
+
+  /* Empty state */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+    color: var(--text-muted);
+    gap: 12px;
+  }
+
+  .empty-icon {
+    font-size: 32px;
+    opacity: 0.3;
+  }
+
+  .empty-text {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .empty-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    font-weight: 300;
+  }
+
+  /* Status bar */
+  .status-bar {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 6px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    position: fixed;
+    bottom: 0;
+    left: 220px;
+    right: 0;
+  }
+
+  .status-item {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-item span { color: var(--text-dim); }
+
+  /* Feed container padding for status bar */
+  .feed-inner {
+    padding-bottom: 40px;
+  }
+
+  /* Top bar for feed */
+  .feed-header {
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg2);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .feed-title {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .feed-count {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* Alert flash for high impact */
+  @keyframes flashHigh {
+    0% { background: rgba(255,59,92,0.2); }
+    100% { background: var(--high-bg); }
+  }
+
+  .news-item.high.new {
+    animation: flashHigh 1s ease-out forwards, slideIn 0.3s ease-out;
+  }
+
+  /* Backend URL notice */
+  .backend-notice {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    padding: 10px 16px;
+    margin: 16px;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .backend-url-input {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 4px 8px;
+    outline: none;
+  }
+
+  .backend-url-input:focus {
+    border-color: var(--accent2);
+  }
+
+  .set-url-btn {
+    padding: 4px 10px;
+    background: var(--accent);
+    border: none;
+    color: #000;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon"></div>
+    <div class="logo-text">Tracker FX <span>News Terminal</span></div>
+  </div>
+  <div class="header-right">
+    <div class="live-indicator">
+      <div class="live-dot"></div>
+      Live
+    </div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('pt')">PT</button>
+    </div>
+    <div class="clock" id="clock">--:--:--</div>
+  </div>
+</header>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <!-- Backend URL -->
+    <div class="backend-notice">
+      <div style="flex:1">
+        <div style="margin-bottom:4px;color:var(--accent);font-size:9px;letter-spacing:0.1em;text-transform:uppercase">Backend URL</div>
+        <input class="backend-url-input" id="backendUrl" type="text"
+          value="https://tracker-fx-news-terminal-backend-production.up.railway.app"
+          placeholder="https://...railway.app">
+      </div>
+      <button class="set-url-btn" onclick="setBackendUrl()">SET</button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Impact</div>
+      <button class="filter-btn active" onclick="setImpact('ALL', this)">
+        <div class="filter-dot dot-all"></div> All
+        <span class="filter-count" id="count-all">0</span>
+      </button>
+      <button class="filter-btn" onclick="setImpact('HIGH', this)">
+        <div class="filter-dot dot-high"></div> High
+        <span class="filter-count" id="count-high">0</span>
+      </button>
+      <button class="filter-btn" onclick="setImpact('MEDIUM', this)">
+        <div class="filter-dot dot-medium"></div> Medium
+        <span class="filter-count" id="count-medium">0</span>
+      </button>
+      <button class="filter-btn" onclick="setImpact('LOW', this)">
+        <div class="filter-dot dot-low"></div> Low
+        <span class="filter-count" id="count-low">0</span>
+      </button>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Assets</div>
+      <div class="asset-grid">
+        <button class="asset-btn active" onclick="toggleAsset('ALL', this)">ALL</button>
+        <button class="asset-btn" onclick="toggleAsset('USD', this)">USD</button>
+        <button class="asset-btn" onclick="toggleAsset('EUR', this)">EUR</button>
+        <button class="asset-btn" onclick="toggleAsset('GOLD', this)">XAU</button>
+        <button class="asset-btn" onclick="toggleAsset('OIL', this)">OIL</button>
+        <button class="asset-btn" onclick="toggleAsset('SP500', this)">SPX</button>
+        <button class="asset-btn" onclick="toggleAsset('BTC', this)">BTC</button>
+        <button class="asset-btn" onclick="toggleAsset('GBP', this)">GBP</button>
+      </div>
+    </div>
+
+    <button class="refresh-btn" onclick="fetchAndRefresh()" id="refreshBtn">
+      <span id="refreshIcon">↻</span> Fetch News
+    </button>
+
+  </aside>
+
+  <!-- Feed -->
+  <main class="feed">
+
+    <!-- Ticker -->
+    <div class="ticker-bar">
+      <div class="ticker-inner" id="ticker">
+        <div class="ticker-item">EUR/USD <span class="up">▲ 1.0923</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">GBP/USD <span class="down">▼ 1.2734</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">GOLD <span class="up">▲ 2,341.50</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">OIL <span class="down">▼ 72.14</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">S&P 500 <span class="up">▲ 5,218.40</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">BTC/USD <span class="up">▲ 68,420</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">USD/JPY <span class="down">▼ 149.82</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">EUR/USD <span class="up">▲ 1.0923</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">GBP/USD <span class="down">▼ 1.2734</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">GOLD <span class="up">▲ 2,341.50</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">OIL <span class="down">▼ 72.14</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">S&P 500 <span class="up">▲ 5,218.40</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">BTC/USD <span class="up">▲ 68,420</span></div>
+        <div class="ticker-separator">|</div>
+        <div class="ticker-item">USD/JPY <span class="down">▼ 149.82</span></div>
+        <div class="ticker-separator">|</div>
+      </div>
+    </div>
+
+    <!-- Feed header -->
+    <div class="feed-header">
+      <div class="feed-title" id="feedTitle">All News</div>
+      <div class="feed-count" id="feedCount">Loading...</div>
+    </div>
+
+    <!-- News list -->
+    <div class="feed-inner" id="newsFeed">
+      <div class="empty-state">
+        <div class="empty-icon">◈</div>
+        <div class="empty-text">Connecting to backend</div>
+        <div class="empty-sub">Click "Fetch News" to load market data</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Status bar -->
+<div class="status-bar">
+  <div class="status-item">Status <span id="statusText">Idle</span></div>
+  <div class="status-item">Last update <span id="lastUpdate">—</span></div>
+  <div class="status-item">Total <span id="totalCount">0</span> items</div>
+  <div class="status-item">Auto-refresh <span>30s</span></div>
+</div>
+
+<script>
+  // State
+  let lang = 'en';
+  let impactFilter = 'ALL';
+  let assetFilter = 'ALL';
+  let allNews = [];
+  let BACKEND_URL = document.getElementById('backendUrl').value;
+
+  // Clock
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toUTCString().split(' ')[4] + ' UTC';
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Language
+  function setLang(l) {
+    lang = l;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    renderNews(allNews);
+  }
+
+  // Backend URL
+  function setBackendUrl() {
+    BACKEND_URL = document.getElementById('backendUrl').value.replace(/\/$/, '');
+    fetchAndRefresh();
+  }
+
+  // Impact filter
+  function setImpact(impact, btn) {
+    impactFilter = impact;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderNews(allNews);
+    updateFeedTitle();
+  }
+
+  // Asset filter
+  function toggleAsset(asset, btn) {
+    assetFilter = asset;
+    document.querySelectorAll('.asset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderNews(allNews);
+  }
+
+  function updateFeedTitle() {
+    const titles = { ALL: 'All News', HIGH: 'High Impact', MEDIUM: 'Medium Impact', LOW: 'Low Impact' };
+    document.getElementById('feedTitle').textContent = titles[impactFilter] || 'All News';
+  }
+
+  // Fetch news from backend
+  async function loadNews() {
+    try {
+      const res = await fetch(BACKEND_URL + '/news?limit=50');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      allNews = data;
+      updateCounts(data);
+      renderNews(data);
+      document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+      document.getElementById('totalCount').textContent = data.length;
+      document.getElementById('statusText').textContent = 'Connected';
+    } catch(e) {
+      document.getElementById('statusText').textContent = 'Error: ' + e.message;
+      if (allNews.length === 0) showError(e.message);
+    }
+  }
+
+  async function fetchAndRefresh() {
+    const btn = document.getElementById('refreshBtn');
+    const icon = document.getElementById('refreshIcon');
+    btn.disabled = true;
+    icon.style.display = 'inline-block';
+    icon.style.animation = 'spin 1s linear infinite';
+
+    // Add spin keyframe dynamically
+    if (!document.getElementById('spinStyle')) {
+      const s = document.createElement('style');
+      s.id = 'spinStyle';
+      s.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+      document.head.appendChild(s);
+    }
+
+    document.getElementById('statusText').textContent = 'Fetching...';
+
+    try {
+      await fetch(BACKEND_URL + '/fetch');
+      await loadNews();
+    } catch(e) {
+      document.getElementById('statusText').textContent = 'Error: ' + e.message;
+    }
+
+    icon.style.animation = '';
+    btn.disabled = false;
+  }
+
+  function updateCounts(news) {
+    const counts = { HIGH: 0, MEDIUM: 0, LOW: 0 };
+    news.forEach(n => { if (counts[n.impact] !== undefined) counts[n.impact]++; });
+    document.getElementById('count-all').textContent = news.length;
+    document.getElementById('count-high').textContent = counts.HIGH;
+    document.getElementById('count-medium').textContent = counts.MEDIUM;
+    document.getElementById('count-low').textContent = counts.LOW;
+  }
+
+  function getSource(url) {
+    try {
+      const h = new URL(url).hostname.replace('www.', '');
+      const map = {
+        'reuters.com': 'Reuters',
+        'cnbc.com': 'CNBC',
+        'bloomberg.com': 'Bloomberg',
+        'investing.com': 'Investing.com'
+      };
+      for (const [k, v] of Object.entries(map)) {
+        if (h.includes(k)) return v;
+      }
+      return h.split('.')[0].toUpperCase();
+    } catch { return 'Unknown'; }
+  }
+
+  function formatTime(ts) {
+    try {
+      const d = new Date(ts);
+      return d.toUTCString().split(' ')[4];
+    } catch { return '--:--'; }
+  }
+
+  function getAssetTags(assets) {
+    if (!assets) return [];
+    return assets.split(',').map(a => a.trim()).filter(Boolean);
+  }
+
+  function getMarketMoves(headline) {
+    // Simple heuristic for market moves based on keywords
+    const h = headline.toLowerCase();
+    const moves = [];
+    if (h.includes('cpi') || h.includes('inflation')) {
+      moves.push({ asset: 'USD', dir: h.includes('above') || h.includes('rise') ? 'up' : 'down' });
+      moves.push({ asset: 'GOLD', dir: h.includes('above') || h.includes('rise') ? 'down' : 'up' });
+    }
+    if (h.includes('fed') || h.includes('rate')) {
+      moves.push({ asset: 'USD', dir: 'up' });
+      moves.push({ asset: 'INDICES', dir: 'down' });
+    }
+    if (h.includes('oil') || h.includes('opec')) {
+      moves.push({ asset: 'OIL', dir: h.includes('cut') || h.includes('rise') ? 'up' : 'down' });
+    }
+    return moves;
+  }
+
+  function renderNews(news) {
+    let filtered = news;
+
+    if (impactFilter !== 'ALL') {
+      filtered = filtered.filter(n => n.impact === impactFilter);
+    }
+
+    if (assetFilter !== 'ALL') {
+      filtered = filtered.filter(n => n.assets && n.assets.includes(assetFilter));
+    }
+
+    document.getElementById('feedCount').textContent = filtered.length + ' items';
+
+    if (filtered.length === 0) {
+      document.getElementById('newsFeed').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">◈</div>
+          <div class="empty-text">No news found</div>
+          <div class="empty-sub">Try changing filters or fetch new data</div>
+        </div>`;
+      return;
+    }
+
+    const html = filtered.map(n => {
+      const headline = lang === 'pt' ? (n.headline_pt || n.headline_en) : n.headline_en;
+      const impactClass = (n.impact || 'LOW').toLowerCase();
+      const tags = getAssetTags(n.assets);
+      const moves = getMarketMoves(headline);
+      const source = getSource(n.url || '');
+
+      return `
+        <div class="news-item ${impactClass}" onclick="window.open('${n.url}','_blank')">
+          <div class="news-time">${formatTime(n.timestamp)}</div>
+          <div class="news-content">
+            <div class="news-headline">${headline}</div>
+            <div class="news-meta">
+              <span class="news-source">${source}</span>
+              ${tags.map(t => `<span class="asset-tag">${t}</span>`).join('')}
+            </div>
+            ${moves.length ? `<div class="market-moves">
+              ${moves.map(m => `<span class="move ${m.dir}">${m.asset} ${m.dir === 'up' ? '▲' : '▼'}</span>`).join('')}
+            </div>` : ''}
+          </div>
+          <div class="news-impact">
+            <span class="impact-badge badge-${impactClass}">${n.impact || 'LOW'}</span>
+          </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('newsFeed').innerHTML = html;
+  }
+
+  function showError(msg) {
+    document.getElementById('newsFeed').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠</div>
+        <div class="empty-text">Backend unreachable</div>
+        <div class="empty-sub">${msg}</div>
+      </div>`;
+  }
+
+  // Auto-refresh every 30s
+  setInterval(loadNews, 30000);
+
+  // Initial load
+  loadNews();
+</script>
+</body>
+</html>
