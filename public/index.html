@@ -410,10 +410,15 @@
     document.getElementById('count-low').textContent = counts.LOW;
   }
 
-  function getSource(url) {
+  function getSource(url, sourceName) {
+    const smap = {'investing':'Investing','cnbc':'CNBC','marketwatch':'MarketWatch','yahoo finance':'Yahoo Finance','forexlive':'ForexLive','fxstreet':'FXStreet','tradingview':'TradingView','wsj':'WSJ','zerohedge':'ZeroHedge','oilprice':'OilPrice','business insider':'Business Insider'};
+    if (sourceName && sourceName !== 'undefined') {
+      const sl = sourceName.toLowerCase();
+      return smap[sl] || sourceName.toUpperCase();
+    }
     try {
       const h = new URL(url).hostname.replace('www.','');
-      const map = {'reuters.com':'Reuters','cnbc.com':'CNBC','bloomberg.com':'Bloomberg','investing.com':'Investing','marketwatch.com':'MarketWatch','forexlive.com':'ForexLive','fxstreet.com':'FXStreet','yahoo.com':'Yahoo Finance'};
+      const map = {'reuters.com':'Reuters','cnbc.com':'CNBC','bloomberg.com':'Bloomberg','investing.com':'Investing','marketwatch.com':'MarketWatch','forexlive.com':'ForexLive','fxstreet.com':'FXStreet','yahoo.com':'Yahoo Finance','tradingview.com':'TradingView','wsj.com':'WSJ','dj.com':'WSJ','zerohedge.com':'ZeroHedge','oilprice.com':'OilPrice','businessinsider.com':'Business Insider'};
       for (const [k,v] of Object.entries(map)) { if (h.includes(k)) return v; }
       return h.split('.')[0].toUpperCase();
     } catch { return 'Unknown'; }
@@ -458,7 +463,7 @@
       const impactClass = (n.impact || 'LOW').toLowerCase();
       const tags = getAssetTags(n.assets);
       const moves = getMarketMoves(n.headline_en);
-      const source = n.source || getSource(n.url || '');
+      const source = getSource(n.url || '', n.source);
 
       return `<div class="news-item ${impactClass}" onclick="window.open('${n.url}','_blank')">
         <div class="news-time">${formatTime(n.timestamp)}</div>
