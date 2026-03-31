@@ -127,10 +127,40 @@
   .empty-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 0.05em; font-weight: 300; }
 
   /* ── Calendar tab ── */
-  .calendar-container { flex: 1; overflow: hidden; }
-  .calendar-container iframe,
-  .calendar-container .tradingview-widget-container,
-  .calendar-container .tradingview-widget-container__widget { height: 100% !important; }
+  .cal-toolbar { display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: var(--bg2); border-bottom: 1px solid var(--border); flex-shrink: 0; flex-wrap: wrap; }
+  .cal-filter-btn { padding: 4px 10px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; transition: all 0.15s; }
+  .cal-filter-btn:hover { color: var(--text-dim); border-color: var(--border2); }
+  .cal-filter-btn.active { color: var(--accent); border-color: var(--accent2); background: rgba(0,212,255,0.05); }
+  .cal-filter-btn.f-high.active  { color: var(--high);   border-color: var(--high);   background: var(--high-bg); }
+  .cal-filter-btn.f-med.active   { color: var(--medium); border-color: var(--medium); background: var(--medium-bg); }
+  .cal-filter-btn.f-low.active   { color: var(--low);    border-color: var(--low);    background: var(--low-bg); }
+  .cal-sep { width: 1px; height: 16px; background: var(--border); margin: 0 4px; }
+  .cal-body { flex: 1; overflow-y: auto; padding-bottom: 40px; }
+  .cal-day-header { padding: 10px 20px 6px; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 5; }
+  .cal-event { display: grid; grid-template-columns: 90px 50px 60px 1fr auto; gap: 12px; align-items: center; padding: 10px 20px; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .cal-event:hover { background: var(--bg2); }
+  .cal-event.imp-high  { border-left: 2px solid var(--high);   background: var(--high-bg); }
+  .cal-event.imp-high:hover  { background: rgba(255,59,92,0.12); }
+  .cal-event.imp-med   { border-left: 2px solid var(--medium); }
+  .cal-event.imp-low   { border-left: 2px solid var(--border2); }
+  .cal-event.released  { opacity: 0.75; }
+  .cal-event.just-out  { animation: flashEvent 2s ease-out forwards; }
+  @keyframes flashEvent { 0%{background:rgba(0,212,255,0.2)} 100%{background:transparent} }
+  .cal-time { font-size: 11px; color: var(--text-dim); letter-spacing: 0.05em; }
+  .cal-countdown { font-size: 9px; color: var(--accent); letter-spacing: 0.04em; margin-top: 2px; }
+  .cal-country { font-size: 11px; letter-spacing: 0.05em; color: var(--text-dim); display: flex; align-items: center; gap: 4px; }
+  .cal-imp { }
+  .cal-title { font-size: 11px; font-weight: 500; color: var(--text); letter-spacing: 0.02em; line-height: 1.4; }
+  .cal-period { font-size: 9px; color: var(--text-muted); margin-top: 1px; }
+  .cal-values { display: flex; gap: 16px; align-items: center; }
+  .cal-val { text-align: right; }
+  .cal-val-label { font-size: 8px; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .cal-val-data  { font-size: 11px; color: var(--text-dim); letter-spacing: 0.03em; }
+  .cal-val-data.actual-positive { color: var(--low); font-weight: 600; }
+  .cal-val-data.actual-negative { color: var(--high); font-weight: 600; }
+  .cal-val-data.actual-neutral  { color: var(--medium); font-weight: 600; }
+  .cal-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 300px; gap: 12px; color: var(--text-muted); }
+  @media (max-width: 900px) { .cal-event { grid-template-columns: 80px 40px 50px 1fr; } .cal-values { display: none; } }
 
   /* ── Status bar ── */
   .status-bar { background: var(--bg2); border-top: 1px solid var(--border); padding: 6px 24px; display: flex; align-items: center; gap: 24px; position: fixed; bottom: 0; left: 220px; right: 0; z-index: 50; }
@@ -240,21 +270,22 @@
 
     <!-- Calendar tab -->
     <div class="tab-content hidden" id="tab-calendar">
-      <div class="calendar-container">
-        <div class="tradingview-widget-container" style="height:100%">
-          <div class="tradingview-widget-container__widget" style="height:100%"></div>
-          <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
-          {
-            "colorTheme": "dark",
-            "isTransparent": true,
-            "width": "100%",
-            "height": "100%",
-            "locale": "en",
-            "importanceFilter": "-1,0,1",
-            "countryFilter": "us,eu,gb,jp,ch,au,ca,nz,cn"
-          }
-          </script>
-        </div>
+      <div class="cal-toolbar">
+        <button class="cal-filter-btn f-high active" onclick="calSetImpact(1,this)">● High</button>
+        <button class="cal-filter-btn f-med  active" onclick="calSetImpact(0,this)">● Medium</button>
+        <button class="cal-filter-btn f-low"         onclick="calSetImpact(-1,this)">● Low</button>
+        <div class="cal-sep"></div>
+        <button class="cal-filter-btn active" id="cal-country-ALL" onclick="calSetCountry('ALL',this)">ALL</button>
+        <button class="cal-filter-btn" id="cal-country-US"  onclick="calSetCountry('US',this)">🇺🇸 US</button>
+        <button class="cal-filter-btn" id="cal-country-EU"  onclick="calSetCountry('EU',this)">🇪🇺 EU</button>
+        <button class="cal-filter-btn" id="cal-country-GB"  onclick="calSetCountry('GB',this)">🇬🇧 GB</button>
+        <button class="cal-filter-btn" id="cal-country-JP"  onclick="calSetCountry('JP',this)">🇯🇵 JP</button>
+        <button class="cal-filter-btn" id="cal-country-CN"  onclick="calSetCountry('CN',this)">🇨🇳 CN</button>
+        <button class="cal-filter-btn" id="cal-country-AU"  onclick="calSetCountry('AU',this)">🇦🇺 AU</button>
+        <button class="cal-filter-btn" id="cal-country-CA"  onclick="calSetCountry('CA',this)">🇨🇦 CA</button>
+      </div>
+      <div class="cal-body" id="calBody">
+        <div class="cal-empty"><div class="empty-icon">📅</div><div class="empty-text">Loading calendar...</div></div>
       </div>
     </div>
   </main>
@@ -548,6 +579,164 @@
 
   function showError(msg) {
     document.getElementById('newsFeed').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠</div><div class="empty-text">Connection failed</div><div class="empty-sub">${msg}</div></div>`;
+  }
+
+  // ─── Economic Calendar ────────────────────────────────────────
+  let calEvents        = [];
+  let calImpactFilter  = new Set([1, 0]);   // HIGH + MED by default
+  let calCountryFilter = 'ALL';
+  let calCountdownTimer = null;
+
+  const COUNTRY_FLAGS = {
+    US:'🇺🇸',EU:'🇪🇺',GB:'🇬🇧',JP:'🇯🇵',CH:'🇨🇭',AU:'🇦🇺',
+    CA:'🇨🇦',NZ:'🇳🇿',CN:'🇨🇳',DE:'🇩🇪',FR:'🇫🇷',
+  };
+
+  function calSetImpact(imp, btn) {
+    if (calImpactFilter.has(imp)) {
+      if (calImpactFilter.size > 1) calImpactFilter.delete(imp);
+    } else {
+      calImpactFilter.add(imp);
+    }
+    btn.classList.toggle('active', calImpactFilter.has(imp));
+    renderCalendar();
+  }
+
+  function calSetCountry(country, btn) {
+    calCountryFilter = country;
+    document.querySelectorAll('[id^="cal-country-"]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCalendar();
+  }
+
+  function formatCalValue(val, unit) {
+    if (val === null || val === undefined) return '—';
+    const formatted = parseFloat(val).toFixed(Math.abs(val) < 10 ? 2 : 1);
+    return formatted + (unit || '');
+  }
+
+  function getActualClass(actual, forecast, previous) {
+    if (actual === null || actual === undefined) return '';
+    const ref = forecast !== null && forecast !== undefined ? forecast : previous;
+    if (ref === null || ref === undefined) return 'actual-neutral';
+    return actual > ref ? 'actual-positive' : actual < ref ? 'actual-negative' : 'actual-neutral';
+  }
+
+  function countdown(dateStr) {
+    const diff = new Date(dateStr) - Date.now();
+    if (diff <= 0) return null;
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    if (h > 0)  return `in ${h}h ${m}m`;
+    if (m > 0)  return `in ${m}m ${s}s`;
+    return `in ${s}s`;
+  }
+
+  function renderCalendar() {
+    const body = document.getElementById('calBody');
+    let filtered = calEvents.filter(e => {
+      if (!calImpactFilter.has(e.importance)) return false;
+      if (calCountryFilter !== 'ALL' && e.country !== calCountryFilter) return false;
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      body.innerHTML = `<div class="cal-empty"><div class="empty-icon">📅</div><div class="empty-text">No events found</div><div class="empty-sub">Try changing filters</div></div>`;
+      return;
+    }
+
+    // Group by day
+    const days = {};
+    filtered.forEach(e => {
+      const day = e.date.split('T')[0];
+      if (!days[day]) days[day] = [];
+      days[day].push(e);
+    });
+
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    const tomorrowStr = new Date(now.getTime() + 86400000).toISOString().split('T')[0];
+
+    body.innerHTML = Object.entries(days).sort().map(([day, events]) => {
+      const dayLabel = day === todayStr ? 'Today' : day === tomorrowStr ? 'Tomorrow'
+        : new Date(day + 'T00:00:00Z').toLocaleDateString('en-GB', { weekday:'long', month:'short', day:'numeric' });
+
+      const evHtml = events.map(e => {
+        const impClass  = e.importance === 1 ? 'imp-high' : e.importance === 0 ? 'imp-med' : 'imp-low';
+        const impLabel  = e.importance === 1 ? 'HIGH' : e.importance === 0 ? 'MED' : 'LOW';
+        const badgeCls  = e.importance === 1 ? 'badge-high' : e.importance === 0 ? 'badge-medium' : 'badge-low';
+        const flag      = COUNTRY_FLAGS[e.country] || '';
+        const timeUTC   = new Date(e.date).toUTCString().split(' ')[4];
+        const released  = e.actual !== null && e.actual !== undefined;
+        const cd        = !released ? countdown(e.date) : null;
+        const actualCls = getActualClass(e.actual, e.forecast, e.previous);
+        const unit      = e.unit || '';
+
+        return `<div class="cal-event ${impClass}${released ? ' released' : ''}" data-date="${e.date}">
+          <div class="cal-time">
+            <div>${timeUTC} UTC</div>
+            ${cd ? `<div class="cal-countdown">${cd}</div>` : ''}
+          </div>
+          <div class="cal-country">${flag} ${e.country}</div>
+          <div class="cal-imp"><span class="impact-badge ${badgeCls}">${impLabel}</span></div>
+          <div>
+            <div class="cal-title">${e.title}</div>
+            ${e.period ? `<div class="cal-period">${e.period}</div>` : ''}
+          </div>
+          <div class="cal-values">
+            <div class="cal-val"><div class="cal-val-label">Prev</div><div class="cal-val-data">${formatCalValue(e.previous, unit)}</div></div>
+            <div class="cal-val"><div class="cal-val-label">Fore</div><div class="cal-val-data">${formatCalValue(e.forecast, unit)}</div></div>
+            <div class="cal-val"><div class="cal-val-label">Actual</div><div class="cal-val-data ${actualCls}">${formatCalValue(e.actual, unit)}</div></div>
+          </div>
+        </div>`;
+      }).join('');
+
+      return `<div class="cal-day-header">${dayLabel}</div>${evHtml}`;
+    }).join('');
+  }
+
+  function updateCountdowns() {
+    document.querySelectorAll('.cal-event[data-date]').forEach(el => {
+      const date = el.getAttribute('data-date');
+      const cdEl = el.querySelector('.cal-countdown');
+      if (!cdEl) return;
+      const cd = countdown(date);
+      cdEl.textContent = cd || '';
+    });
+  }
+
+  async function loadCalendar() {
+    try {
+      const res = await fetch(BACKEND_URL + '/calendar?days=7');
+      const data = await res.json();
+      const prev = new Set(calEvents.filter(e => e.actual !== null).map(e => e.id));
+      calEvents = data.events || [];
+      // Highlight newly released events
+      calEvents.forEach(e => {
+        if (e.actual !== null && !prev.has(e.id)) {
+          setTimeout(() => {
+            const el = document.querySelector(`[data-date="${e.date}"]`);
+            if (el) el.classList.add('just-out');
+          }, 100);
+          if (soundEnabled && e.importance === 1) playAlert();
+        }
+      });
+      renderCalendar();
+    } catch(err) {
+      console.error('[CAL] Load error:', err);
+    }
+  }
+
+  // Refresh calendar every 60s and update countdowns every second
+  setInterval(loadCalendar, 60000);
+  setInterval(updateCountdowns, 1000);
+
+  // Load calendar when tab is opened
+  const origSwitchTab = switchTab;
+  function switchTab(tab) {
+    origSwitchTab(tab);
+    if (tab === 'calendar' && calEvents.length === 0) loadCalendar();
   }
 
   // ─── Init ─────────────────────────────────────────────────────
