@@ -29,11 +29,12 @@
     --low-bg: rgba(16,185,129,0.07);
     --low-border: rgba(16,185,129,0.2);
     --pro: #a78bfa;
-    /* Inter = primary (TradingView-style). Mono = data/numbers only */
+    --pro-bg: rgba(167,139,250,0.08);
+    --pro-border: rgba(167,139,250,0.25);
     --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
     --header-h: 72px;
-    --sidebar-w: 220px;
+    --sidebar-w: 230px;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
@@ -48,162 +49,165 @@
   .logo-text { font-size:13px; font-weight:700; letter-spacing:0.12em; color:var(--text); text-transform:uppercase; line-height:1.3; }
   .logo-text span { color:var(--accent); }
   .logo-sub { font-size:9px; font-weight:400; color:var(--text-muted); letter-spacing:0.12em; text-transform:uppercase; margin-top:2px; }
-
-  /* Search bar */
   .header-center { display:flex; align-items:center; gap:16px; flex:1; justify-content:center; }
-  .search-wrap { display:flex; align-items:center; background:var(--bg3); border:1px solid var(--border2); gap:0; width:340px; border-radius:2px; }
+  .search-wrap { display:flex; align-items:center; background:var(--bg3); border:1px solid var(--border2); width:340px; border-radius:3px; }
   .search-wrap:focus-within { border-color:var(--accent2); }
   .search-icon { padding:0 12px; color:var(--text-muted); font-size:14px; flex-shrink:0; }
-  .search-input { flex:1; background:transparent; border:none; color:var(--text); font-family:var(--font); font-size:12px; font-weight:400; padding:9px 10px 9px 0; outline:none; }
-  .search-input::placeholder { color:var(--text-muted); font-weight:400; }
+  .search-input { flex:1; background:transparent; border:none; color:var(--text); font-family:var(--font); font-size:12px; padding:9px 10px 9px 0; outline:none; }
+  .search-input::placeholder { color:var(--text-muted); }
   .search-clear { padding:0 12px; color:var(--text-muted); font-size:11px; cursor:pointer; flex-shrink:0; display:none; }
   .search-clear:hover { color:var(--text); }
   .live-block { display:flex; flex-direction:column; align-items:center; gap:2px; }
   .live-indicator { display:flex; align-items:center; gap:6px; font-size:10px; font-weight:500; letter-spacing:0.1em; color:var(--low); text-transform:uppercase; }
   .live-dot { width:6px; height:6px; border-radius:50%; background:var(--low); animation:blink 1.5s ease-in-out infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-  .clock { font-size:14px; font-weight:500; color:var(--text); letter-spacing:0.08em; font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+  .clock { font-size:14px; font-weight:500; color:var(--text); font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
   .tz-label { font-size:9px; font-weight:500; color:var(--text-muted); letter-spacing:0.1em; text-transform:uppercase; text-align:center; }
-
   .header-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
-  .lang-toggle { display:flex; background:var(--bg3); border:1px solid var(--border); overflow:hidden; border-radius:2px; }
+  .lang-toggle { display:flex; background:var(--bg3); border:1px solid var(--border); overflow:hidden; border-radius:3px; }
   .lang-btn { padding:6px 12px; font-family:var(--font); font-size:11px; font-weight:600; letter-spacing:0.08em; border:none; background:transparent; color:var(--text-muted); cursor:pointer; transition:all 0.15s; text-transform:uppercase; }
   .lang-btn.active { background:var(--accent); color:#000; }
-  .sound-btn { padding:6px 12px; font-family:var(--font); font-size:11px; font-weight:500; border:1px solid var(--border); background:transparent; color:var(--text-muted); cursor:pointer; transition:all 0.15s; border-radius:2px; }
+  .sound-btn { padding:6px 12px; font-family:var(--font); font-size:11px; font-weight:500; border:1px solid var(--border); background:transparent; color:var(--text-muted); cursor:pointer; transition:all 0.15s; border-radius:3px; }
   .sound-btn.active { border-color:var(--low); color:var(--low); }
-  .auth-btn { padding:7px 16px; font-family:var(--font); font-size:11px; font-weight:500; letter-spacing:0.05em; border:1px solid var(--border); background:transparent; color:var(--text-dim); cursor:pointer; transition:all 0.15s; border-radius:2px; }
+  .auth-btn { padding:7px 16px; font-family:var(--font); font-size:11px; font-weight:500; border:1px solid var(--border); background:transparent; color:var(--text-dim); cursor:pointer; transition:all 0.15s; border-radius:3px; }
   .auth-btn:hover { border-color:var(--accent2); color:var(--accent); }
   .auth-btn.signup { background:var(--accent); border-color:var(--accent); color:#000; font-weight:700; }
-  .auth-btn.signup:hover { background:var(--accent2); border-color:var(--accent2); }
+  .auth-btn.signup:hover { background:var(--accent2); }
 
   /* ── Layout ── */
   .main { display:grid; grid-template-columns:var(--sidebar-w) 1fr; height:calc(100vh - var(--header-h)); }
   .sidebar { background:var(--bg2); border-right:1px solid var(--border); padding:0 0 80px; overflow-y:auto; display:flex; flex-direction:column; }
   .sidebar-section { padding:14px 14px 12px; border-bottom:1px solid var(--border); }
-  .sidebar-label { font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; padding:0 4px; }
-  .filter-btn { width:100%; padding:7px 10px; background:transparent; border:1px solid transparent; color:var(--text-dim); font-family:var(--font); font-size:12px; font-weight:400; cursor:pointer; text-align:left; transition:all 0.15s; display:flex; align-items:center; gap:8px; margin-bottom:2px; border-radius:2px; }
-  .filter-btn:hover { color:var(--text); background:var(--bg3); border-color:var(--border); }
-  .filter-btn.active { color:var(--accent); border-color:var(--accent2); background:rgba(0,212,255,0.06); }
+  .sidebar-label { font-size:9px; font-weight:600; letter-spacing:0.22em; text-transform:uppercase; color:var(--text-muted); margin-bottom:8px; padding:0 4px; }
+
+  /* ── Active indicator: glow at top instead of underline ── */
+  .filter-btn { width:100%; padding:8px 10px; background:transparent; border:none; border-radius:4px; color:var(--text-dim); font-family:var(--font); font-size:12px; font-weight:400; cursor:pointer; text-align:left; transition:all 0.15s; display:flex; align-items:center; gap:8px; margin-bottom:2px; position:relative; }
+  .filter-btn:hover { color:var(--text); background:var(--bg3); }
+  .filter-btn.active { color:var(--accent); background:rgba(0,212,255,0.07); }
+  .filter-btn.active::before { content:''; position:absolute; top:0; left:10%; right:10%; height:2px; background:linear-gradient(90deg,transparent,var(--accent),transparent); box-shadow:0 0 8px 2px rgba(0,212,255,0.5); border-radius:0 0 3px 3px; }
   .filter-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
   .dot-all{background:var(--text-dim)} .dot-high{background:var(--high)} .dot-medium{background:var(--medium)} .dot-low{background:var(--low)}
   .filter-count { margin-left:auto; font-size:10px; font-family:var(--font-mono); color:var(--text-muted); }
 
   /* Watchlist */
   .watchlist-grid { display:flex; flex-wrap:wrap; gap:4px; padding:0 4px; }
-  .watch-btn { padding:5px 9px; background:var(--bg3); border:1px solid var(--border); color:var(--text-dim); font-family:var(--font); font-size:11px; font-weight:500; cursor:pointer; transition:all 0.15s; border-radius:2px; }
+  .watch-btn { padding:5px 9px; background:var(--bg3); border:1px solid var(--border); color:var(--text-dim); font-family:var(--font); font-size:11px; font-weight:500; cursor:pointer; transition:all 0.15s; border-radius:3px; }
   .watch-btn:hover { color:var(--text); border-color:var(--border2); }
-  .watch-btn.selected { color:var(--accent); border-color:var(--accent2); background:rgba(0,212,255,0.07); }
-  .my-news-hint { font-size:10px; font-weight:400; color:var(--text-muted); line-height:1.5; padding:6px 4px 2px; }
+  .watch-btn.selected { color:var(--accent); border-color:var(--accent2); background:rgba(0,212,255,0.08); }
+  .my-news-hint { font-size:10px; color:var(--text-muted); line-height:1.5; padding:4px 4px 6px; }
 
-  /* Pack CTA — red */
-  .pack-info { margin:14px 14px 0; padding:14px; background:rgba(255,59,92,0.07); border:1px solid rgba(255,59,92,0.25); border-radius:2px; }
-  .pack-badge { font-size:9px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--high); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
-  .pack-badge::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--high); animation:blink 1.5s ease-in-out infinite; }
-  .pack-desc { font-size:11px; font-weight:400; color:var(--text-dim); line-height:1.6; margin-bottom:10px; }
-  .pack-desc strong { color:#fff; font-weight:600; }
-  .pack-upgrade { display:block; padding:9px; text-align:center; background:var(--high); color:#fff; font-family:var(--font); font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; border:none; width:100%; transition:all 0.15s; border-radius:2px; }
-  .pack-upgrade:hover { background:#e02244; }
+  /* ── Pack CTA — redesigned, bigger, more impactful ── */
+  .pack-info { margin:14px 12px 0; background:linear-gradient(145deg,rgba(255,59,92,0.12) 0%,rgba(20,10,15,0.9) 60%); border:1px solid rgba(255,59,92,0.3); border-radius:6px; overflow:hidden; }
+  .pack-info-header { padding:14px 14px 10px; border-bottom:1px solid rgba(255,59,92,0.15); }
+  .pack-badge { font-size:9px; font-weight:800; letter-spacing:0.25em; text-transform:uppercase; color:var(--high); display:flex; align-items:center; gap:6px; margin-bottom:4px; }
+  .pack-badge::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--high); animation:blink 1.5s ease-in-out infinite; flex-shrink:0; }
+  .pack-plan-name { font-size:15px; font-weight:700; color:#fff; letter-spacing:0.04em; }
+  .pack-features { padding:10px 14px; display:flex; flex-direction:column; gap:5px; }
+  .pack-feat { display:flex; align-items:center; gap:8px; font-size:11px; font-weight:400; color:var(--text-dim); }
+  .pack-feat .feat-icon { font-size:10px; flex-shrink:0; width:14px; }
+  .pack-feat.feat-pro { color:var(--text-muted); text-decoration:none; }
+  .pack-feat.feat-pro .feat-icon { color:var(--pro); }
+  .pack-feat.feat-current .feat-icon { color:var(--high); }
+  .pack-cta { padding:12px 14px 14px; }
+  .pack-cta-text { font-size:12px; font-weight:500; color:var(--text-dim); line-height:1.6; margin-bottom:12px; }
+  .pack-cta-text strong { color:#fff; font-weight:700; }
+  .pack-upgrade { display:block; padding:11px 14px; text-align:center; background:linear-gradient(135deg,var(--high) 0%,#c0153a 100%); color:#fff; font-family:var(--font); font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; border:none; width:100%; transition:all 0.2s; border-radius:4px; box-shadow:0 4px 16px rgba(255,59,92,0.3); }
+  .pack-upgrade:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,59,92,0.45); }
 
   /* ── Feed ── */
   .feed { overflow:hidden; background:var(--bg); display:flex; flex-direction:column; }
   .ticker-bar { background:var(--bg3); border-bottom:1px solid var(--border); height:46px; overflow:hidden; flex-shrink:0; }
-  .ticker-bar .tradingview-widget-container { height:46px !important; }
 
-  /* ── Tabs ── */
+  /* ── Tabs — glow at TOP, no underline ── */
   .tab-bar { display:flex; background:var(--bg2); border-bottom:1px solid var(--border); flex-shrink:0; padding:0 12px; gap:4px; }
-  .tab-btn { padding:15px 22px; font-family:var(--font); font-size:12px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; border:none; border-bottom:2px solid transparent; background:transparent; color:var(--text-muted); cursor:pointer; transition:all 0.15s; }
-  .tab-btn:hover { color:var(--text-dim); }
-  .tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); }
+  .tab-btn { padding:15px 22px; font-family:var(--font); font-size:12px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; border:none; background:transparent; color:var(--text-muted); cursor:pointer; transition:all 0.2s; position:relative; }
+  .tab-btn:hover { color:var(--text-dim); background:rgba(255,255,255,0.02); }
+  .tab-btn.active { color:var(--accent); }
+  .tab-btn.active::before { content:''; position:absolute; top:0; left:20%; right:20%; height:2px; background:linear-gradient(90deg,transparent,var(--accent),transparent); box-shadow:0 0 10px 3px rgba(0,212,255,0.55), 0 0 20px rgba(0,212,255,0.25); border-radius:0 0 4px 4px; }
   .tab-content { flex:1; overflow:hidden; display:flex; flex-direction:column; }
   .tab-content.hidden { display:none; }
 
-  /* ── Category bar ── */
-  .category-bar { display:flex; align-items:center; background:var(--bg2); border-bottom:2px solid var(--border); flex-shrink:0; overflow-x:auto; padding:0 20px; gap:0; scrollbar-width:none; }
+  /* ── Category bar — glow at TOP on active ── */
+  .category-bar { display:flex; align-items:center; background:var(--bg2); border-bottom:2px solid var(--border); flex-shrink:0; overflow-x:auto; padding:0 20px; scrollbar-width:none; }
   .category-bar::-webkit-scrollbar { display:none; }
-  .cat-btn { padding:13px 18px; font-family:var(--font); font-size:12px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; border:none; border-bottom:2px solid transparent; margin-bottom:-2px; background:transparent; color:var(--text-muted); cursor:pointer; transition:all 0.15s; white-space:nowrap; flex-shrink:0; }
+  .cat-btn { padding:13px 18px; font-family:var(--font); font-size:12px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; border:none; background:transparent; color:var(--text-muted); cursor:pointer; transition:all 0.2s; white-space:nowrap; flex-shrink:0; position:relative; }
   .cat-btn:hover { color:var(--text-dim); background:rgba(255,255,255,0.02); }
-  .cat-btn.active { color:var(--text); border-bottom-color:var(--accent); }
-  .cat-btn.cat-my-news.active { color:var(--pro); border-bottom-color:var(--pro); }
-  .cat-btn.cat-market-moving.active { color:var(--high); border-bottom-color:var(--high); }
-  .cat-sep { width:1px; height:18px; background:var(--border2); margin:0 6px; flex-shrink:0; align-self:center; }
+  .cat-btn.active { color:var(--text); }
+  .cat-btn.active::before { content:''; position:absolute; top:0; left:15%; right:15%; height:2px; background:linear-gradient(90deg,transparent,var(--accent),transparent); box-shadow:0 0 10px 3px rgba(0,212,255,0.55), 0 0 20px rgba(0,212,255,0.2); border-radius:0 0 4px 4px; }
+  .cat-btn.cat-my-news.active { color:var(--pro); }
+  .cat-btn.cat-my-news.active::before { background:linear-gradient(90deg,transparent,var(--pro),transparent); box-shadow:0 0 10px 3px rgba(167,139,250,0.55); }
+  .cat-btn.cat-market-moving.active { color:var(--high); }
+  .cat-btn.cat-market-moving.active::before { background:linear-gradient(90deg,transparent,var(--high),transparent); box-shadow:0 0 10px 3px rgba(255,59,92,0.55); }
+  .cat-sep { width:1px; height:18px; background:var(--border2); margin:0 4px; flex-shrink:0; align-self:center; }
 
   /* ── Feed header ── */
   .feed-header { padding:18px 28px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:var(--bg2); flex-shrink:0; }
   .feed-title { font-size:16px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--text); display:flex; align-items:center; gap:12px; }
-  .feed-title-badge { font-size:9px; font-weight:600; letter-spacing:0.12em; color:var(--text-muted); border:1px solid var(--border); padding:3px 8px; font-family:var(--font-mono); }
-  .feed-count { font-size:11px; font-weight:400; color:var(--text-muted); }
+  .feed-title-badge { font-size:9px; font-weight:700; letter-spacing:0.12em; color:var(--low); border:1px solid var(--low-border); padding:3px 8px; font-family:var(--font-mono); background:var(--low-bg); border-radius:2px; animation:blink 2s ease-in-out infinite; }
+  .feed-count { font-size:11px; color:var(--text-muted); }
   .feed-inner { overflow-y:auto; flex:1; padding-bottom:40px; }
 
   /* ── News items ── */
   .news-item { border-bottom:1px solid var(--border); padding:14px 28px; transition:background 0.15s; cursor:pointer; display:grid; grid-template-columns:72px 1fr auto; gap:16px; align-items:start; animation:slideIn 0.3s ease-out; }
   @keyframes slideIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
   .news-item:hover { background:var(--bg2); }
-  /* HIGH */
-  .news-item.high { background:var(--high-bg); border-left:3px solid var(--high); border-bottom-color:var(--high-border); }
-  .news-item.high:hover { background:rgba(255,59,92,0.13); }
-  .news-item.high .news-headline { color:#fff; font-weight:600; }
-  /* MEDIUM */
+  .news-item.high   { background:var(--high-bg);   border-left:3px solid var(--high);   border-bottom-color:var(--high-border); }
   .news-item.medium { background:var(--medium-bg); border-left:3px solid var(--medium); border-bottom-color:var(--medium-border); }
+  .news-item.low    { background:var(--low-bg);    border-left:3px solid var(--low);    border-bottom-color:var(--low-border); }
+  .news-item.high:hover   { background:rgba(255,59,92,0.13); }
   .news-item.medium:hover { background:rgba(245,158,11,0.12); }
-  .news-item.medium .news-headline { color:#fde8a0; font-weight:500; }
-  /* LOW */
-  .news-item.low { background:var(--low-bg); border-left:3px solid var(--low); border-bottom-color:var(--low-border); }
-  .news-item.low:hover { background:rgba(16,185,129,0.1); }
-  .news-item.low .news-headline { color:#d4f5eb; }
-
-  /* Calendar release — colour-coded by actual vs forecast */
-  .news-item.cal-release { border-left:3px solid var(--accent); background:rgba(0,212,255,0.05); }
-  .news-item.cal-release:hover { background:rgba(0,212,255,0.09); }
-  .news-item.cal-release .news-headline { color:var(--accent); }
-  /* Positive surprise (actual > forecast) */
-  .news-item.cal-positive { border-left:3px solid var(--low); background:var(--low-bg); }
+  .news-item.low:hover    { background:rgba(16,185,129,0.1); }
+  .news-item.high .news-headline   { color:#fff;     font-weight:600; }
+  .news-item.medium .news-headline { color:#fde8a0;  font-weight:500; }
+  .news-item.low .news-headline    { color:#d4f5eb; }
+  /* Calendar release — colour-coded */
+  .news-item.cal-positive { background:var(--low-bg);    border-left:3px solid var(--low);    border-bottom-color:var(--low-border); }
+  .news-item.cal-negative { background:var(--high-bg);   border-left:3px solid var(--high);   border-bottom-color:var(--high-border); }
+  .news-item.cal-neutral  { background:var(--medium-bg); border-left:3px solid var(--medium); border-bottom-color:var(--medium-border); }
+  .news-item.cal-release  { background:rgba(0,212,255,0.05); border-left:3px solid var(--accent); }
   .news-item.cal-positive:hover { background:rgba(16,185,129,0.12); }
-  .news-item.cal-positive .news-headline { color:#a7f3d0; font-weight:600; }
-  /* Negative surprise (actual < forecast) */
-  .news-item.cal-negative { border-left:3px solid var(--high); background:var(--high-bg); }
   .news-item.cal-negative:hover { background:rgba(255,59,92,0.13); }
+  .news-item.cal-neutral:hover  { background:rgba(245,158,11,0.11); }
+  .news-item.cal-positive .news-headline { color:#a7f3d0; font-weight:600; }
   .news-item.cal-negative .news-headline { color:#ffd4dc; font-weight:600; }
-  /* Neutral (in line with forecast) */
-  .news-item.cal-neutral { border-left:3px solid var(--medium); background:var(--medium-bg); }
-  .news-item.cal-neutral:hover { background:rgba(245,158,11,0.11); }
-  .news-item.cal-neutral .news-headline { color:#fde8a0; font-weight:500; }
-
-  .news-time { font-size:10px; font-family:var(--font-mono); color:var(--text-dim); letter-spacing:0.04em; padding-top:2px; font-weight:300; line-height:1.6; }
-  .news-headline { font-size:13px; font-weight:400; line-height:1.55; color:var(--text); letter-spacing:0.01em; margin-bottom:6px; }
+  .news-item.cal-neutral  .news-headline { color:#fde8a0; font-weight:500; }
+  .news-item.cal-release  .news-headline { color:var(--accent); }
+  .news-time { font-size:10px; font-family:var(--font-mono); color:var(--text-dim); padding-top:2px; font-weight:300; line-height:1.6; }
+  .news-headline { font-size:13px; font-weight:400; line-height:1.55; color:var(--text); margin-bottom:6px; }
   .news-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px; }
-  .news-source { font-size:10px; font-weight:500; letter-spacing:0.08em; color:var(--text-muted); text-transform:uppercase; }
-  .asset-tag { font-size:10px; font-weight:500; letter-spacing:0.04em; padding:2px 7px; background:var(--bg3); border:1px solid var(--border); color:var(--text-dim); border-radius:2px; }
-  .cal-tag { font-size:10px; font-weight:600; letter-spacing:0.06em; padding:2px 7px; background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.2); color:var(--accent); border-radius:2px; }
-  .cal-tag-positive { background:rgba(16,185,129,0.12); border:1px solid var(--low-border); color:var(--low); }
-  .cal-tag-negative { background:rgba(255,59,92,0.1);  border:1px solid var(--high-border); color:var(--high); }
-  .cal-tag-neutral  { background:rgba(245,158,11,0.1); border:1px solid var(--medium-border); color:var(--medium); }
+  .news-source { font-size:10px; font-weight:500; letter-spacing:0.06em; color:var(--text-muted); text-transform:uppercase; }
+  .asset-tag { font-size:10px; font-weight:500; padding:2px 7px; background:var(--bg3); border:1px solid var(--border); color:var(--text-dim); border-radius:2px; }
+  .cal-tag           { font-size:10px; font-weight:600; padding:2px 7px; border-radius:2px; }
+  .cal-tag-positive  { background:rgba(16,185,129,0.12); border:1px solid var(--low-border);    color:var(--low); }
+  .cal-tag-negative  { background:rgba(255,59,92,0.1);   border:1px solid var(--high-border);   color:var(--high); }
+  .cal-tag-neutral   { background:rgba(245,158,11,0.1);  border:1px solid var(--medium-border); color:var(--medium); }
+  .cal-tag-default   { background:rgba(0,212,255,0.08);  border:1px solid rgba(0,212,255,0.2);  color:var(--accent); }
   .news-actions { display:flex; align-items:center; gap:6px; margin-top:4px; }
-  .share-btn { font-size:10px; font-weight:500; letter-spacing:0.04em; padding:3px 9px; background:transparent; border:1px solid var(--border); color:var(--text-muted); cursor:pointer; font-family:var(--font); transition:all 0.15s; border-radius:2px; }
+  .share-btn { font-size:10px; font-weight:500; padding:3px 9px; background:transparent; border:1px solid var(--border); color:var(--text-muted); cursor:pointer; font-family:var(--font); transition:all 0.15s; border-radius:2px; }
   .share-btn:hover { border-color:var(--accent); color:var(--accent); }
   .news-impact { text-align:right; padding-top:2px; }
   .impact-badge { font-size:9px; font-weight:700; letter-spacing:0.1em; padding:3px 8px; text-transform:uppercase; display:inline-block; font-family:var(--font); border-radius:2px; }
   .badge-high     { background:var(--high-bg);   border:1px solid var(--high-border);   color:var(--high); }
   .badge-medium   { background:var(--medium-bg); border:1px solid var(--medium-border); color:var(--medium); }
   .badge-low      { background:var(--low-bg);    border:1px solid var(--low-border);    color:var(--low); }
-  .badge-cal-pos  { background:rgba(16,185,129,0.12); border:1px solid var(--low-border); color:var(--low); }
-  .badge-cal-neg  { background:rgba(255,59,92,0.1); border:1px solid var(--high-border); color:var(--high); }
-  .badge-cal-neu  { background:rgba(245,158,11,0.1); border:1px solid var(--medium-border); color:var(--medium); }
-  .badge-cal      { background:rgba(0,212,255,0.08); border:1px solid rgba(0,212,255,0.25); color:var(--accent); }
-
+  .badge-cal-pos  { background:rgba(16,185,129,0.12); border:1px solid var(--low-border);    color:var(--low); }
+  .badge-cal-neg  { background:rgba(255,59,92,0.1);   border:1px solid var(--high-border);   color:var(--high); }
+  .badge-cal-neu  { background:rgba(245,158,11,0.1);  border:1px solid var(--medium-border); color:var(--medium); }
+  .badge-cal      { background:rgba(0,212,255,0.08);  border:1px solid rgba(0,212,255,0.25); color:var(--accent); }
   .market-moves { margin-top:5px; display:flex; gap:8px; flex-wrap:wrap; }
   .move { font-size:11px; font-weight:500; }
-  .move.up{color:var(--low)} .move.down{color:var(--high)} .move.neutral{color:var(--text-dim)}
+  .move.up{color:var(--low)} .move.down{color:var(--high)}
 
   /* ── Delay banner ── */
-  .delay-banner { margin:0 0 1px; border-top:1px solid rgba(255,59,92,0.35); border-bottom:1px solid rgba(255,59,92,0.35); background:rgba(255,59,92,0.08); padding:32px 28px; text-align:center; position:relative; overflow:hidden; }
-  .delay-banner::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,59,92,0.06) 0%,transparent 60%); pointer-events:none; }
-  .delay-banner-eyebrow { font-size:10px; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:var(--high); margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:10px; }
+  .delay-banner { margin:0 0 1px; border-top:1px solid rgba(255,59,92,0.35); border-bottom:1px solid rgba(255,59,92,0.35); background:rgba(255,59,92,0.08); padding:36px 32px; text-align:center; position:relative; overflow:hidden; }
+  .delay-banner::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,59,92,0.07) 0%,transparent 60%); pointer-events:none; }
+  .delay-banner-eyebrow { font-size:10px; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:var(--high); margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:12px; }
   .delay-banner-eyebrow::before,.delay-banner-eyebrow::after { content:''; flex:1; max-width:70px; height:1px; background:rgba(255,59,92,0.3); }
-  .delay-banner-title { font-size:20px; font-weight:700; letter-spacing:0.06em; color:#fff; text-transform:uppercase; margin-bottom:10px; }
-  .delay-banner-sub { font-size:12px; font-weight:400; color:var(--text-dim); margin-bottom:22px; line-height:1.7; }
-  .delay-banner-sub strong { color:#fff; font-weight:600; }
-  .delay-banner-btn { display:inline-block; padding:12px 36px; background:var(--high); color:#fff; font-family:var(--font); font-size:12px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; cursor:pointer; border:none; transition:all 0.15s; border-radius:2px; }
-  .delay-banner-btn:hover { background:#e02244; transform:translateY(-1px); }
+  .delay-banner-title { font-size:22px; font-weight:800; letter-spacing:0.04em; color:#fff; text-transform:uppercase; margin-bottom:12px; }
+  .delay-banner-sub { font-size:14px; font-weight:400; color:var(--text-dim); margin-bottom:24px; line-height:1.75; max-width:480px; margin-left:auto; margin-right:auto; }
+  .delay-banner-sub strong { color:#fff; font-weight:700; }
+  .delay-banner-btn { display:inline-block; padding:13px 38px; background:linear-gradient(135deg,var(--high) 0%,#c0153a 100%); color:#fff; font-family:var(--font); font-size:13px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; border:none; transition:all 0.2s; border-radius:3px; box-shadow:0 4px 16px rgba(255,59,92,0.35); }
+  .delay-banner-btn:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(255,59,92,0.5); }
 
   /* ── Empty / Error ── */
   .empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; height:300px; color:var(--text-muted); gap:12px; }
@@ -215,9 +219,9 @@
   .cal-header { padding:18px 28px; border-bottom:1px solid var(--border); background:var(--bg2); flex-shrink:0; }
   .cal-header-title { font-size:16px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--text); margin-bottom:12px; }
   .cal-toolbar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-  .cal-filter-btn { padding:5px 13px; font-family:var(--font); font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; border:1px solid var(--border); background:transparent; color:var(--text-muted); cursor:pointer; transition:all 0.15s; border-radius:2px; }
+  .cal-filter-btn { padding:5px 13px; font-family:var(--font); font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; border:1px solid var(--border); background:transparent; color:var(--text-muted); cursor:pointer; transition:all 0.15s; border-radius:3px; }
   .cal-filter-btn:hover { color:var(--text-dim); border-color:var(--border2); }
-  .cal-filter-btn.active { color:var(--accent); border-color:var(--accent2); background:rgba(0,212,255,0.05); }
+  .cal-filter-btn.active { color:var(--accent); border-color:var(--accent2); background:rgba(0,212,255,0.06); }
   .cal-filter-btn.f-high.active { color:var(--high);   border-color:var(--high);   background:var(--high-bg); }
   .cal-filter-btn.f-med.active  { color:var(--medium); border-color:var(--medium); background:var(--medium-bg); }
   .cal-filter-btn.f-low.active  { color:var(--low);    border-color:var(--low);    background:var(--low-bg); }
@@ -226,11 +230,11 @@
   .cal-day-header { padding:9px 28px; font-size:10px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted); border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:0; z-index:5; }
   .cal-event { display:grid; grid-template-columns:90px 52px 58px 1fr auto; gap:12px; align-items:center; padding:11px 28px; border-bottom:1px solid var(--border); transition:background 0.15s; }
   .cal-event:hover { background:var(--bg2); }
-  .cal-event.imp-high { border-left:3px solid var(--high); background:var(--high-bg); }
-  .cal-event.imp-high:hover { background:rgba(255,59,92,0.12); }
+  .cal-event.imp-high { border-left:3px solid var(--high);   background:var(--high-bg); }
   .cal-event.imp-med  { border-left:3px solid var(--medium); background:var(--medium-bg); }
-  .cal-event.imp-med:hover  { background:rgba(245,158,11,0.11); }
   .cal-event.imp-low  { border-left:3px solid var(--border2); }
+  .cal-event.imp-high:hover { background:rgba(255,59,92,0.12); }
+  .cal-event.imp-med:hover  { background:rgba(245,158,11,0.11); }
   .cal-event.released { opacity:0.7; }
   .cal-event.just-out { animation:flashEvent 2s ease-out forwards; }
   @keyframes flashEvent { 0%{background:rgba(0,212,255,0.2)} 100%{background:transparent} }
@@ -260,7 +264,7 @@
   /* ── Misc ── */
   @keyframes flashHigh { 0%{background:rgba(255,59,92,0.3)} 100%{background:var(--high-bg)} }
   .news-item.high.new-item { animation:flashHigh 1.5s ease-out forwards, slideIn 0.3s ease-out; }
-  .toast { position:fixed; bottom:50px; left:50%; transform:translateX(-50%); background:var(--bg3); border:1px solid var(--accent); color:var(--accent); font-family:var(--font); font-size:11px; font-weight:500; letter-spacing:0.08em; padding:9px 22px; opacity:0; transition:opacity 0.3s; pointer-events:none; z-index:999; border-radius:2px; }
+  .toast { position:fixed; bottom:50px; left:50%; transform:translateX(-50%); background:var(--bg3); border:1px solid var(--accent); color:var(--accent); font-family:var(--font); font-size:11px; font-weight:500; padding:9px 22px; opacity:0; transition:opacity 0.3s; pointer-events:none; z-index:999; border-radius:3px; }
   .toast.show { opacity:1; }
   ::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:var(--bg)} ::-webkit-scrollbar-thumb{background:var(--border2)} ::-webkit-scrollbar-thumb:hover{background:var(--text-muted)}
 </style>
@@ -273,50 +277,63 @@
     <div class="logo-icon"></div>
     <div>
       <div class="logo-text">Trading <span>News Terminal</span></div>
-      <div class="logo-sub">Real-time Market Intelligence</div>
+      <div class="logo-sub" data-i18n="logo.sub">Real-time Market Intelligence</div>
     </div>
   </div>
-
   <div class="header-center">
     <div class="search-wrap">
       <div class="search-icon">⌕</div>
-      <input class="search-input" id="searchInput" type="text" placeholder="Search news, assets, keywords..." oninput="onSearchInput(this.value)" />
+      <input class="search-input" id="searchInput" type="text" data-i18n-placeholder="search.placeholder" placeholder="Search news, assets, keywords..." oninput="onSearchInput(this.value)" />
       <div class="search-clear" id="searchClear" onclick="clearSearch()">✕</div>
     </div>
     <div class="live-block">
-      <div class="live-indicator"><div class="live-dot"></div>Live Feed</div>
+      <div class="live-indicator"><div class="live-dot"></div><span data-i18n="nav.live">Live Feed</span></div>
       <div class="clock" id="clock">--:--:--</div>
       <div class="tz-label" id="tzLabel">Local</div>
     </div>
   </div>
-
   <div class="header-right">
-    <button class="sound-btn active" id="soundBtn" onclick="toggleSound()">🔔 Alerts ON</button>
+    <button class="sound-btn active" id="soundBtn" onclick="toggleSound()" data-i18n="nav.alerts_on">🔔 Alerts ON</button>
     <div class="lang-toggle">
       <button class="lang-btn active" id="lang-en" onclick="setLang('en',this)">EN</button>
       <button class="lang-btn" id="lang-pt" onclick="setLang('pt',this)">PT</button>
     </div>
-    <button class="auth-btn" onclick="showToast('Login coming soon — Pro features')">Login</button>
-    <button class="auth-btn signup" onclick="showToast('Sign up coming soon — Get Pro access')">Sign Up</button>
+    <button class="auth-btn" onclick="showToast(t('toast.login'))" data-i18n="nav.login">Login</button>
+    <button class="auth-btn signup" onclick="showToast(t('toast.signup'))" data-i18n="nav.signup">Sign Up</button>
   </div>
 </header>
 
 <!-- ── MAIN ── -->
 <div class="main">
-
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-section">
-      <div class="sidebar-label">Impact</div>
-      <button class="filter-btn active" onclick="setImpact('ALL',this)"><div class="filter-dot dot-all"></div>All News<span class="filter-count" id="count-all">0</span></button>
-      <button class="filter-btn" onclick="setImpact('HIGH',this)"><div class="filter-dot dot-high"></div>High Impact<span class="filter-count" id="count-high">0</span></button>
-      <button class="filter-btn" onclick="setImpact('MEDIUM',this)"><div class="filter-dot dot-medium"></div>Medium<span class="filter-count" id="count-medium">0</span></button>
-      <button class="filter-btn" onclick="setImpact('LOW',this)"><div class="filter-dot dot-low"></div>Low<span class="filter-count" id="count-low">0</span></button>
+      <div class="sidebar-label" data-i18n="sidebar.impact">Impact</div>
+      <button class="filter-btn active" onclick="setImpact('ALL',this)">
+        <div class="filter-dot dot-all"></div>
+        <span data-i18n="sidebar.all_news">All News</span>
+        <span class="filter-count" id="count-all">0</span>
+      </button>
+      <button class="filter-btn" onclick="setImpact('HIGH',this)">
+        <div class="filter-dot dot-high"></div>
+        <span data-i18n="sidebar.high_impact">High Impact</span>
+        <span class="filter-count" id="count-high">0</span>
+      </button>
+      <button class="filter-btn" onclick="setImpact('MEDIUM',this)">
+        <div class="filter-dot dot-medium"></div>
+        <span data-i18n="sidebar.medium">Medium</span>
+        <span class="filter-count" id="count-medium">0</span>
+      </button>
+      <button class="filter-btn" onclick="setImpact('LOW',this)">
+        <div class="filter-dot dot-low"></div>
+        <span data-i18n="sidebar.low">Low</span>
+        <span class="filter-count" id="count-low">0</span>
+      </button>
     </div>
 
     <div class="sidebar-section">
-      <div class="sidebar-label">My News — Watchlist</div>
-      <div class="my-news-hint">Select assets to pin to MY NEWS</div>
+      <div class="sidebar-label" data-i18n="sidebar.watchlist_label">My News — Watchlist</div>
+      <div class="my-news-hint" data-i18n="sidebar.watchlist_hint">Select assets to pin to MY NEWS</div>
       <div class="watchlist-grid" style="margin-top:8px;">
         <button class="watch-btn" data-asset="USD"   onclick="toggleWatch('USD',this)">USD</button>
         <button class="watch-btn" data-asset="EUR"   onclick="toggleWatch('EUR',this)">EUR</button>
@@ -329,22 +346,34 @@
       </div>
     </div>
 
+    <!-- Pack CTA — redesigned -->
     <div class="pack-info" id="packInfo">
-      <div class="pack-badge">Basic Pack</div>
-      <div class="pack-desc">You're on the <strong>free plan</strong>.<br>Upgrade to <strong>Pro</strong> for instant real-time news, no delays, priority alerts and full calendar data.</div>
-      <button class="pack-upgrade" onclick="showToast('Pro Pack coming soon!')">⚡ Upgrade to Pro →</button>
+      <div class="pack-info-header">
+        <div class="pack-badge" data-i18n="pack.badge">Basic Pack</div>
+        <div class="pack-plan-name" data-i18n="pack.plan_name">Free Plan</div>
+      </div>
+      <div class="pack-features">
+        <div class="pack-feat feat-current"><span class="feat-icon">✓</span><span data-i18n="pack.feat1">News with delay</span></div>
+        <div class="pack-feat feat-pro"><span class="feat-icon">✦</span><span data-i18n="pack.feat2">Real-time feed</span></div>
+        <div class="pack-feat feat-pro"><span class="feat-icon">✦</span><span data-i18n="pack.feat3">Zero delay</span></div>
+        <div class="pack-feat feat-pro"><span class="feat-icon">✦</span><span data-i18n="pack.feat4">Priority alerts</span></div>
+        <div class="pack-feat feat-pro"><span class="feat-icon">✦</span><span data-i18n="pack.feat5">Full calendar data</span></div>
+      </div>
+      <div class="pack-cta">
+        <div class="pack-cta-text" data-i18n-html="pack.cta_text">You're on the <strong>Basic Plan</strong>.<br>Upgrade to <strong>Pro</strong> for real-time coverage with zero delay.</div>
+        <button class="pack-upgrade" onclick="showToast(t('toast.pro'))" data-i18n="pack.upgrade_btn">⚡ Upgrade to Pro →</button>
+      </div>
     </div>
   </aside>
 
   <!-- FEED -->
   <main class="feed">
-    <!-- TradingView Ticker Tape (real-time) -->
     <div class="ticker-bar">
       <div class="tradingview-widget-container" style="height:46px;overflow:hidden;">
         <div class="tradingview-widget-container__widget"></div>
         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
         {
-          "symbols": [
+          "symbols":[
             {"proName":"FOREXCOM:EURUSD","title":"EUR/USD"},
             {"proName":"FOREXCOM:GBPUSD","title":"GBP/USD"},
             {"proName":"FOREXCOM:USDJPY","title":"USD/JPY"},
@@ -362,52 +391,45 @@
             {"proName":"TVC:US10Y","title":"US 10Y"},
             {"proName":"TVC:DXY","title":"DXY"}
           ],
-          "showSymbolLogo": false,
-          "colorTheme": "dark",
-          "isTransparent": true,
-          "displayMode": "adaptive",
-          "locale": "en"
+          "showSymbolLogo":false,"colorTheme":"dark","isTransparent":true,"displayMode":"adaptive","locale":"en"
         }
         </script>
       </div>
     </div>
 
-    <!-- Tabs -->
     <div class="tab-bar">
-      <button class="tab-btn active" id="tab-news-btn" onclick="switchTab('news')">📰 News Feed</button>
-      <button class="tab-btn" id="tab-calendar-btn" onclick="switchTab('calendar')">📅 Economic Calendar</button>
+      <button class="tab-btn active" id="tab-news-btn" onclick="switchTab('news')" data-i18n="tab.news">📰 News Feed</button>
+      <button class="tab-btn" id="tab-calendar-btn" onclick="switchTab('calendar')" data-i18n="tab.calendar">📅 Economic Calendar</button>
     </div>
 
     <!-- NEWS TAB -->
     <div class="tab-content" id="tab-news">
-      <!-- Category filter bar -->
       <div class="category-bar" id="categoryBar">
-        <button class="cat-btn active"            data-cat="ALL"          onclick="setCategory('ALL',this)">All</button>
-        <button class="cat-btn cat-my-news"       data-cat="MY_NEWS"      onclick="setCategory('MY_NEWS',this)">★ My News</button>
+        <button class="cat-btn active"            data-cat="ALL"          onclick="setCategory('ALL',this)"          data-i18n="cat.all">All</button>
+        <button class="cat-btn cat-my-news"       data-cat="MY_NEWS"      onclick="setCategory('MY_NEWS',this)"      data-i18n="cat.my_news">★ My News</button>
         <div class="cat-sep"></div>
-        <button class="cat-btn" data-cat="FOREX"        onclick="setCategory('FOREX',this)">Forex</button>
-        <button class="cat-btn" data-cat="CRYPTO"       onclick="setCategory('CRYPTO',this)">Crypto</button>
-        <button class="cat-btn" data-cat="MACRO"        onclick="setCategory('MACRO',this)">Macro</button>
-        <button class="cat-btn" data-cat="BONDS"        onclick="setCategory('BONDS',this)">Bonds</button>
-        <button class="cat-btn" data-cat="EQUITIES"     onclick="setCategory('EQUITIES',this)">Equities</button>
-        <button class="cat-btn" data-cat="INDEXES"      onclick="setCategory('INDEXES',this)">Indexes</button>
-        <button class="cat-btn" data-cat="COMMODITIES"  onclick="setCategory('COMMODITIES',this)">Commodities</button>
+        <button class="cat-btn" data-cat="FOREX"       onclick="setCategory('FOREX',this)"       data-i18n="cat.forex">Forex</button>
+        <button class="cat-btn" data-cat="CRYPTO"      onclick="setCategory('CRYPTO',this)"      data-i18n="cat.crypto">Crypto</button>
+        <button class="cat-btn" data-cat="MACRO"       onclick="setCategory('MACRO',this)"       data-i18n="cat.macro">Macro</button>
+        <button class="cat-btn" data-cat="BONDS"       onclick="setCategory('BONDS',this)"       data-i18n="cat.bonds">Bonds</button>
+        <button class="cat-btn" data-cat="EQUITIES"    onclick="setCategory('EQUITIES',this)"    data-i18n="cat.equities">Equities</button>
+        <button class="cat-btn" data-cat="INDEXES"     onclick="setCategory('INDEXES',this)"     data-i18n="cat.indexes">Indexes</button>
+        <button class="cat-btn" data-cat="COMMODITIES" onclick="setCategory('COMMODITIES',this)" data-i18n="cat.commodities">Commodities</button>
         <div class="cat-sep"></div>
-        <button class="cat-btn cat-market-moving" data-cat="MARKET_MOVING" onclick="setCategory('MARKET_MOVING',this)">🔴 Market Moving</button>
+        <button class="cat-btn cat-market-moving" data-cat="MARKET_MOVING" onclick="setCategory('MARKET_MOVING',this)" data-i18n="cat.market_moving">🔴 Market Moving</button>
       </div>
-
       <div class="feed-header">
         <div class="feed-title" id="feedTitle">
           All News
-          <span class="feed-title-badge" id="feedTitleBadge">LIVE</span>
+          <span class="feed-title-badge" id="feedTitleBadge" data-i18n="feed.live">LIVE</span>
         </div>
-        <div class="feed-count" id="feedCount">Connecting...</div>
+        <div class="feed-count" id="feedCount" data-i18n="feed.connecting">Connecting...</div>
       </div>
       <div class="feed-inner" id="newsFeed">
         <div class="empty-state">
           <div class="empty-icon">◈</div>
-          <div class="empty-text">Connecting</div>
-          <div class="empty-sub">Establishing real-time connection...</div>
+          <div class="empty-text" data-i18n="empty.connecting">Connecting</div>
+          <div class="empty-sub" data-i18n="empty.connecting_sub">Establishing real-time connection...</div>
         </div>
       </div>
     </div>
@@ -415,13 +437,13 @@
     <!-- CALENDAR TAB -->
     <div class="tab-content hidden" id="tab-calendar">
       <div class="cal-header">
-        <div class="cal-header-title">Economic Calendar</div>
+        <div class="cal-header-title" data-i18n="calendar.title">Economic Calendar</div>
         <div class="cal-toolbar">
-          <button class="cal-filter-btn f-high active" onclick="calSetImpact(1,this)">● High</button>
-          <button class="cal-filter-btn f-med  active" onclick="calSetImpact(0,this)">● Medium</button>
-          <button class="cal-filter-btn f-low"         onclick="calSetImpact(-1,this)">● Low</button>
+          <button class="cal-filter-btn f-high active" onclick="calSetImpact(1,this)" data-i18n="cal.high">● High</button>
+          <button class="cal-filter-btn f-med  active" onclick="calSetImpact(0,this)" data-i18n="cal.medium">● Medium</button>
+          <button class="cal-filter-btn f-low"         onclick="calSetImpact(-1,this)" data-i18n="cal.low">● Low</button>
           <div class="cal-sep"></div>
-          <button class="cal-filter-btn active" id="cal-country-ALL" onclick="calSetCountry('ALL',this)">ALL</button>
+          <button class="cal-filter-btn active" id="cal-country-ALL" onclick="calSetCountry('ALL',this)" data-i18n="cal.all">ALL</button>
           <button class="cal-filter-btn" id="cal-country-US"  onclick="calSetCountry('US',this)">🇺🇸 US</button>
           <button class="cal-filter-btn" id="cal-country-EU"  onclick="calSetCountry('EU',this)">🇪🇺 EU</button>
           <button class="cal-filter-btn" id="cal-country-GB"  onclick="calSetCountry('GB',this)">🇬🇧 GB</button>
@@ -432,17 +454,17 @@
         </div>
       </div>
       <div class="cal-body" id="calBody">
-        <div class="cal-empty"><div class="empty-icon">📅</div><div class="empty-text">Loading calendar...</div></div>
+        <div class="cal-empty"><div class="empty-icon">📅</div><div class="empty-text" data-i18n="cal.loading">Loading calendar...</div></div>
       </div>
     </div>
   </main>
 </div>
 
 <div class="status-bar">
-  <div class="status-item">Status <span id="statusText">Connecting...</span></div>
-  <div class="status-item">Connection <span id="wsStatus" class="ws-badge disconnected">WS</span></div>
-  <div class="status-item">Updated <span id="lastUpdate">—</span></div>
-  <div class="status-item">Items <span id="totalCount">0</span></div>
+  <div class="status-item"><span data-i18n="status.status">Status</span> <span id="statusText" data-i18n="status.connecting">Connecting...</span></div>
+  <div class="status-item"><span data-i18n="status.connection">Connection</span> <span id="wsStatus" class="ws-badge disconnected">WS</span></div>
+  <div class="status-item"><span data-i18n="status.updated">Updated</span> <span id="lastUpdate">—</span></div>
+  <div class="status-item"><span data-i18n="status.items">Items</span> <span id="totalCount">0</span></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -468,80 +490,181 @@ let ws             = null;
 let wsReconnectTimer = null;
 let myWatchlist    = JSON.parse(localStorage.getItem('myWatchlist') || '[]');
 
-// ─── PT Translation dictionary (comprehensive) ────────────────────
+// Country → primary asset mapping (for calendar releases)
+const COUNTRY_ASSET = {US:'USD',EU:'EUR',GB:'GBP',JP:'JPY',CH:'CHF',AU:'AUD',CA:'CAD',NZ:'NZD',CN:'CNY',DE:'EUR',FR:'EUR'};
+
+// ─── i18n ────────────────────────────────────────────────────────
+const STRINGS = {
+  en: {
+    'logo.sub':'Real-time Market Intelligence',
+    'nav.live':'Live Feed','nav.alerts_on':'🔔 Alerts ON','nav.alerts_off':'🔕 Alerts OFF',
+    'nav.login':'Login','nav.signup':'Sign Up',
+    'search.placeholder':'Search news, assets, keywords...',
+    'sidebar.impact':'Impact','sidebar.all_news':'All News',
+    'sidebar.high_impact':'High Impact','sidebar.medium':'Medium','sidebar.low':'Low',
+    'sidebar.watchlist_label':'My News — Watchlist',
+    'sidebar.watchlist_hint':'Select assets to pin to MY NEWS',
+    'pack.badge':'Basic Pack','pack.plan_name':'Free Plan',
+    'pack.feat1':'News with delay','pack.feat2':'Real-time feed',
+    'pack.feat3':'Zero delay','pack.feat4':'Priority alerts','pack.feat5':'Full calendar data',
+    'pack.cta_text':"You're on the <strong>Basic Plan</strong>.<br>Upgrade to <strong>Pro</strong> for real-time coverage with zero delay.",
+    'pack.upgrade_btn':'⚡ Upgrade to Pro →',
+    'cat.all':'All','cat.my_news':'★ My News','cat.forex':'Forex','cat.crypto':'Crypto',
+    'cat.macro':'Macro','cat.bonds':'Bonds','cat.equities':'Equities','cat.indexes':'Indexes',
+    'cat.commodities':'Commodities','cat.market_moving':'🔴 Market Moving',
+    'tab.news':'📰 News Feed','tab.calendar':'📅 Economic Calendar',
+    'feed.live':'LIVE','feed.connecting':'Connecting...','feed.items':'items',
+    'calendar.title':'Economic Calendar',
+    'cal.high':'● High','cal.medium':'● Medium','cal.low':'● Low',
+    'cal.all':'ALL','cal.loading':'Loading calendar...','cal.no_events':'No events',
+    'delay.notice':'Notice','delay.title':'⚠ This Feed is Delayed',
+    'delay.sub':"You're on the <strong>Basic Plan</strong>.<br>News below may be delayed. Upgrade to <strong>Pro</strong> for real-time coverage with zero delay.",
+    'delay.btn':'⚡ Go Real-Time — Upgrade to Pro',
+    'status.status':'Status','status.connection':'Connection',
+    'status.updated':'Updated','status.items':'Items','status.connecting':'Connecting...',
+    'empty.connecting':'Connecting','empty.connecting_sub':'Establishing real-time connection...',
+    'empty.no_news':'No news found','empty.no_news_sub':'Change filters or wait for next update',
+    'share.btn':'⇪ Share','toast.link_copied':'Link copied',
+    'toast.login':'Login coming soon — Pro features',
+    'toast.signup':'Sign up coming soon — Get Pro access','toast.pro':'Pro Pack coming soon!',
+    'badge.positive':'▲ POSITIVE','badge.negative':'▼ NEGATIVE','badge.neutral':'● NEUTRAL',
+    'cal.tag.release':'📅 RELEASE',
+    'feed.title.all':'All News','feed.title.high':'High Impact',
+    'feed.title.medium':'Medium Impact','feed.title.low':'Low Impact',
+    'feed.title.my_news':'My News','feed.title.forex':'Forex News',
+    'feed.title.crypto':'Crypto News','feed.title.macro':'Macro News',
+    'feed.title.bonds':'Bonds & Yields','feed.title.equities':'Equities News',
+    'feed.title.indexes':'Indexes News','feed.title.commodities':'Commodities News',
+    'feed.title.market_moving':'Market Moving',
+    'cal.source':'Economic Calendar',
+  },
+  pt: {
+    'logo.sub':'Inteligência de Mercado em Tempo Real',
+    'nav.live':'Feed ao Vivo','nav.alerts_on':'🔔 Alertas ON','nav.alerts_off':'🔕 Alertas OFF',
+    'nav.login':'Entrar','nav.signup':'Registar',
+    'search.placeholder':'Pesquisar notícias, ativos, palavras-chave...',
+    'sidebar.impact':'Impacto','sidebar.all_news':'Todas as Notícias',
+    'sidebar.high_impact':'Alto Impacto','sidebar.medium':'Médio','sidebar.low':'Baixo',
+    'sidebar.watchlist_label':'As Minhas Notícias',
+    'sidebar.watchlist_hint':'Seleciona ativos para fixar em As Minhas',
+    'pack.badge':'Plano Básico','pack.plan_name':'Plano Gratuito',
+    'pack.feat1':'Notícias com atraso','pack.feat2':'Feed em tempo real',
+    'pack.feat3':'Sem atrasos','pack.feat4':'Alertas prioritários','pack.feat5':'Calendário completo',
+    'pack.cta_text':"Estás no <strong>Plano Básico</strong>.<br>Muda para <strong>Pro</strong> para cobertura em tempo real sem atrasos.",
+    'pack.upgrade_btn':'⚡ Mudar para Pro →',
+    'cat.all':'Todas','cat.my_news':'★ As Minhas','cat.forex':'Forex','cat.crypto':'Cripto',
+    'cat.macro':'Macro','cat.bonds':'Obrigações','cat.equities':'Ações','cat.indexes':'Índices',
+    'cat.commodities':'Matérias-Primas','cat.market_moving':'🔴 Movendo Mercado',
+    'tab.news':'📰 Notícias','tab.calendar':'📅 Calendário Económico',
+    'feed.live':'AO VIVO','feed.connecting':'A conectar...','feed.items':'itens',
+    'calendar.title':'Calendário Económico',
+    'cal.high':'● Alto','cal.medium':'● Médio','cal.low':'● Baixo',
+    'cal.all':'TODOS','cal.loading':'A carregar calendário...','cal.no_events':'Sem eventos',
+    'delay.notice':'Aviso','delay.title':'⚠ Este Feed Tem Atraso',
+    'delay.sub':"Estás no <strong>Plano Básico</strong>.<br>As notícias abaixo podem ter atraso. Muda para <strong>Pro</strong> para cobertura em tempo real sem atrasos.",
+    'delay.btn':'⚡ Tempo Real — Mudar para Pro',
+    'status.status':'Estado','status.connection':'Ligação',
+    'status.updated':'Atualizado','status.items':'Itens','status.connecting':'A conectar...',
+    'empty.connecting':'A conectar','empty.connecting_sub':'A estabelecer ligação em tempo real...',
+    'empty.no_news':'Sem notícias','empty.no_news_sub':'Altera os filtros ou aguarda a próxima atualização',
+    'share.btn':'⇪ Partilhar','toast.link_copied':'Ligação copiada',
+    'toast.login':'Login em breve — Funcionalidades Pro',
+    'toast.signup':'Registo em breve — Acesso Pro','toast.pro':'Plano Pro em breve!',
+    'badge.positive':'▲ POSITIVO','badge.negative':'▼ NEGATIVO','badge.neutral':'● NEUTRO',
+    'cal.tag.release':'📅 DADOS',
+    'feed.title.all':'Todas as Notícias','feed.title.high':'Alto Impacto',
+    'feed.title.medium':'Impacto Médio','feed.title.low':'Baixo Impacto',
+    'feed.title.my_news':'As Minhas Notícias','feed.title.forex':'Notícias Forex',
+    'feed.title.crypto':'Notícias Cripto','feed.title.macro':'Notícias Macro',
+    'feed.title.bonds':'Obrigações e Yields','feed.title.equities':'Notícias de Ações',
+    'feed.title.indexes':'Notícias de Índices','feed.title.commodities':'Matérias-Primas',
+    'feed.title.market_moving':'A Mover Mercado',
+    'cal.source':'Calendário Económico',
+  }
+};
+
+function t(key) { return (STRINGS[lang] || STRINGS.en)[key] || key; }
+
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    el.innerHTML = t(el.getAttribute('data-i18n-html'));
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+  });
+  // Update sound button
+  const sb = document.getElementById('soundBtn');
+  if (sb) sb.textContent = soundEnabled ? t('nav.alerts_on') : t('nav.alerts_off');
+  // Update status text if still connecting
+  const st = document.getElementById('statusText');
+  if (st && (st.textContent === STRINGS.en['status.connecting'] || st.textContent === STRINGS.pt['status.connecting'])) {
+    st.textContent = t('status.connecting');
+  }
+  // Update feed count suffix if it shows items
+  updateFeedTitle();
+}
+
+// ─── PT headline translation ──────────────────────────────────────
 const PT_TRANS = {
-  // Central banks & monetary policy
-  'federal reserve':'Reserva Federal','fed ':'FED ','fomc':'FOMC',
-  'interest rate':'taxa de juro','interest rates':'taxas de juro',
+  'federal reserve':'Reserva Federal','fomc':'FOMC',
+  'interest rates':'taxas de juro','interest rate':'taxa de juro',
   'rate hike':'subida de taxas','rate cut':'corte de taxas','rate decision':'decisão de taxas',
-  'rate increase':'aumento de taxas','rate decrease':'redução de taxas',
   'monetary policy':'política monetária','quantitative easing':'afrouxamento quantitativo',
   'balance sheet':'balanço','tightening':'aperto monetário',
   'european central bank':'Banco Central Europeu',
   'bank of england':'Banco de Inglaterra','bank of japan':'Banco do Japão',
-  'bank of canada':'Banco do Canadá','reserve bank':'Banco de Reserva',
-  'central bank':'banco central','powell':'Powell','lagarde':'Lagarde',
-  // Macro
+  'bank of canada':'Banco do Canadá','central bank':'banco central',
   'inflation':'inflação','deflation':'deflação','stagflation':'estagflação',
-  'gdp':'PIB','gross domestic product':'produto interno bruto',
-  'unemployment':'desemprego','employment':'emprego','jobs report':'relatório de emprego',
-  'non-farm payrolls':'empregos não-agrícolas','nfp':'NFP',
+  'gross domestic product':'produto interno bruto','gdp':'PIB',
+  'unemployment':'desemprego','employment':'emprego',
+  'non-farm payrolls':'empregos não-agrícolas',
   'consumer price index':'índice de preços ao consumidor',
-  'producer price':'preço ao produtor','retail sales':'vendas a retalho',
-  'trade balance':'balança comercial','trade deficit':'défice comercial',
-  'trade surplus':'excedente comercial','current account':'conta corrente',
+  'retail sales':'vendas a retalho','trade balance':'balança comercial',
+  'trade deficit':'défice comercial','trade surplus':'excedente comercial',
   'housing':'habitação','manufacturing':'indústria transformadora',
   'industrial output':'produção industrial','factory orders':'encomendas de fábricas',
   'recession':'recessão','contraction':'contração','expansion':'expansão',
   'economic growth':'crescimento económico','economic slowdown':'abrandamento económico',
   'stimulus':'estímulo','fiscal':'fiscal','budget':'orçamento','deficit':'défice',
   'debt ceiling':'teto da dívida','sovereign debt':'dívida soberana',
-  'tariff':'tarifa','tariffs':'tarifas','sanction':'sanção','sanctions':'sanções',
-  // Markets
-  'stocks':'ações','stock market':'mercado de ações','equities':'ações',
-  'shares':'ações','dividend':'dividendo','earnings':'resultados',
-  'quarterly results':'resultados trimestrais','ipo':'OPI',
+  'tariffs':'tarifas','tariff':'tarifa','sanctions':'sanções','sanction':'sanção',
+  'stock market':'mercado de ações','equities':'ações','dividend':'dividendo',
+  'earnings':'resultados','quarterly results':'resultados trimestrais',
   'merger':'fusão','acquisition':'aquisição','bankruptcy':'falência',
   'bull market':'mercado em alta','bear market':'mercado em baixa',
   'volatility':'volatilidade','selloff':'venda massiva','rally':'valorização',
-  'bond':'obrigação','bonds':'obrigações','yield':'rendimento','yields':'rendimentos',
-  'treasury':'tesouro','gilt':'gilt','bund':'Bund',
-  // FX
-  'dollar':'dólar','euro':'euro','pound':'libra','yen':'iene',
-  'franc':'franco','currency':'moeda','exchange rate':'taxa de câmbio',
-  'foreign exchange':'câmbio','forex':'forex','appreciation':'apreciação',
-  'depreciation':'depreciação','devaluation':'desvalorização',
-  // Commodities
-  'gold':'ouro','silver':'prata','oil':'petróleo','crude oil':'petróleo bruto',
-  'natural gas':'gás natural','copper':'cobre','wheat':'trigo',
-  'energy':'energia','commodity':'matéria-prima','commodities':'matérias-primas',
-  // Geopolitical
+  'bonds':'obrigações','bond':'obrigação','yield':'rendimento','yields':'rendimentos',
+  'treasury':'tesouro','gilt':'gilt',
+  'dollar':'dólar','euro':'euro','pound':'libra','yen':'iene','franc':'franco',
+  'currency':'moeda','exchange rate':'taxa de câmbio','foreign exchange':'câmbio',
+  'gold':'ouro','silver':'prata','crude oil':'petróleo bruto','natural gas':'gás natural',
+  'copper':'cobre','wheat':'trigo','energy':'energia',
+  'commodity':'matéria-prima','commodities':'matérias-primas',
   'war':'guerra','conflict':'conflito','ceasefire':'cessar-fogo',
-  'attack':'ataque','invasion':'invasão','sanction':'sanção',
-  'crisis':'crise','emergency':'emergência','collapse':'colapso',
-  'nuclear':'nuclear','missile':'míssil',
-  // General
+  'attack':'ataque','invasion':'invasão','crisis':'crise',
+  'emergency':'emergência','collapse':'colapso',
   'market':'mercado','markets':'mercados','economy':'economia',
-  'bank':'banco','banks':'bancos','government':'governo',
-  'president':'presidente','minister':'ministro',
+  'government':'governo','president':'presidente','minister':'ministro',
   'growth':'crescimento','decline':'queda','rise':'subida','fall':'queda',
-  'surge':'disparar','drop':'cair','tumble':'despenhar',
-  'higher':'mais alto','lower':'mais baixo','above':'acima','below':'abaixo',
+  'surge':'disparar','drop':'queda','higher':'acima','lower':'abaixo',
   'expected':'esperado','forecast':'previsão','estimate':'estimativa',
   'report':'relatório','data':'dados','figures':'números',
   'concern':'preocupação','warning':'aviso','outlook':'perspetiva',
   'uncertainty':'incerteza','confidence':'confiança','sentiment':'sentimento',
+  'stocks':'ações','shares':'ações','bank':'banco','banks':'bancos',
 };
 
 function translatePT(text) {
   if (!text) return text;
-  let t = text;
-  // Sort by key length descending to replace longer phrases first
+  let t2 = text;
   const sorted = Object.entries(PT_TRANS).sort((a,b) => b[0].length - a[0].length);
   for (const [en, pt] of sorted) {
-    t = t.replace(new RegExp('\\b' + en.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\b', 'gi'), pt);
+    t2 = t2.replace(new RegExp('\\b' + en.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\b','gi'), pt);
   }
-  return t;
+  return t2;
 }
 
 // ─── Category definitions ─────────────────────────────────────────
@@ -553,13 +676,19 @@ const CATEGORY_KEYWORDS = {
   EQUITIES:     { assets:['SP500'], keywords:['stock','shares','equity','equities','earnings','ipo','dividend','s&p','nasdaq','dow','nyse','listed','quarterly results','profit','revenue','guidance','upgrade','downgrade'] },
   INDEXES:      { assets:['SP500'], keywords:['s&p','sp500','nasdaq','dow jones','dax','ftse','nikkei','index','indices','vix','russell'] },
   COMMODITIES:  { assets:['GOLD','OIL'], keywords:['gold','silver','crude','oil','opec','brent','wti','copper','wheat','natural gas','energy','commodity','commodities','precious metals','corn','soybean'] },
-  MARKET_MOVING:{ assets:[], keywords:[], impactOnly:'HIGH' },
+  MARKET_MOVING:{ impactOnly:'HIGH' },
 };
 
 function newsMatchesCategory(n, cat) {
   if (cat === 'ALL') return true;
   if (cat === 'MY_NEWS') {
     if (myWatchlist.length === 0) return false;
+    if (n._calRelease) {
+      // Calendar releases: match watchlist asset AND currently active impact filter
+      const calAsset = COUNTRY_ASSET[n._calCountry];
+      const impactOk = (impactFilter === 'ALL' || n.impact === impactFilter);
+      return calAsset && myWatchlist.includes(calAsset) && impactOk;
+    }
     const a = (n.assets || '').split(',').map(x => x.trim());
     return myWatchlist.some(w => a.includes(w));
   }
@@ -567,16 +696,16 @@ function newsMatchesCategory(n, cat) {
   if (!def) return true;
   if (def.impactOnly) return n.impact === def.impactOnly;
   const headline = (n.headline_en || '').toLowerCase();
-  const assets = (n.assets || '').split(',').map(x => x.trim());
-  if (def.assets.length && def.assets.some(a => assets.includes(a))) return true;
-  if (def.keywords.some(kw => headline.includes(kw))) return true;
+  const assets   = (n.assets || '').split(',').map(x => x.trim());
+  if (def.assets && def.assets.some(a => assets.includes(a))) return true;
+  if (def.keywords && def.keywords.some(kw => headline.includes(kw))) return true;
   return false;
 }
 
 // ─── Clock ────────────────────────────────────────────────────────
 function updateClock() {
   const now = new Date();
-  document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB', {hour12:false});
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-GB',{hour12:false});
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   document.getElementById('tzLabel').textContent = tz.replace(/_/g,' ');
 }
@@ -585,13 +714,8 @@ updateClock();
 
 // ─── Watchlist ────────────────────────────────────────────────────
 function toggleWatch(asset, btn) {
-  if (myWatchlist.includes(asset)) {
-    myWatchlist = myWatchlist.filter(a => a !== asset);
-    btn.classList.remove('selected');
-  } else {
-    myWatchlist.push(asset);
-    btn.classList.add('selected');
-  }
+  if (myWatchlist.includes(asset)) { myWatchlist = myWatchlist.filter(a => a !== asset); btn.classList.remove('selected'); }
+  else { myWatchlist.push(asset); btn.classList.add('selected'); }
   localStorage.setItem('myWatchlist', JSON.stringify(myWatchlist));
   if (categoryFilter === 'MY_NEWS') renderNews();
 }
@@ -617,7 +741,7 @@ function playAlert() {
 function toggleSound() {
   soundEnabled = !soundEnabled;
   const b = document.getElementById('soundBtn');
-  b.textContent = soundEnabled ? '🔔 Alerts ON' : '🔕 Alerts OFF';
+  b.textContent = t(soundEnabled ? 'nav.alerts_on' : 'nav.alerts_off');
   b.classList.toggle('active', soundEnabled);
 }
 
@@ -640,19 +764,16 @@ function connectWebSocket() {
   ws.onclose = () => {
     const b = document.getElementById('wsStatus');
     b.textContent = 'WS OFF'; b.className = 'ws-badge disconnected';
-    document.getElementById('statusText').textContent = 'Reconnecting...';
+    document.getElementById('statusText').textContent = t('status.connecting');
     wsReconnectTimer = setTimeout(connectWebSocket, 5000);
   };
   ws.onerror = () => ws.close();
 }
 
-// ─── News data handler ────────────────────────────────────────────
+// ─── News data ────────────────────────────────────────────────────
 function handleNewsData(data, isUpdate) {
   let hasNewHigh = false;
-  data.forEach(n => {
-    if (!knownUrls.has(n.url) && n.impact === 'HIGH') hasNewHigh = true;
-    knownUrls.add(n.url);
-  });
+  data.forEach(n => { if (!knownUrls.has(n.url) && n.impact === 'HIGH') hasNewHigh = true; knownUrls.add(n.url); });
   if (hasNewHigh && allNews.length > 0) playAlert();
   allNews = data;
   updateCounts(data);
@@ -688,24 +809,28 @@ function switchTab(tab) {
 }
 
 // ─── Filters ─────────────────────────────────────────────────────
-const FEED_TITLES = {
-  ALL:'All News', HIGH:'High Impact', MEDIUM:'Medium Impact', LOW:'Low Impact',
-  ALL_CAT:'All News', MY_NEWS:'My News', FOREX:'Forex News', CRYPTO:'Crypto News',
-  MACRO:'Macro News', BONDS:'Bonds & Yields', EQUITIES:'Equities News',
-  INDEXES:'Indexes News', COMMODITIES:'Commodities News', MARKET_MOVING:'Market Moving',
-};
+function getFeedTitle() {
+  if (searchQuery) return (lang === 'pt' ? 'Pesquisa: "' : 'Search: "') + searchQuery + '"';
+  const catKey = {
+    MY_NEWS:'feed.title.my_news', FOREX:'feed.title.forex', CRYPTO:'feed.title.crypto',
+    MACRO:'feed.title.macro', BONDS:'feed.title.bonds', EQUITIES:'feed.title.equities',
+    INDEXES:'feed.title.indexes', COMMODITIES:'feed.title.commodities', MARKET_MOVING:'feed.title.market_moving'
+  }[categoryFilter];
+  if (catKey) return t(catKey);
+  const impKey = {HIGH:'feed.title.high', MEDIUM:'feed.title.medium', LOW:'feed.title.low'}[impactFilter];
+  if (impKey) return t(impKey);
+  return t('feed.title.all');
+}
 function updateFeedTitle() {
-  let title = 'All News';
-  if (searchQuery) title = 'Search: "' + searchQuery + '"';
-  else if (categoryFilter !== 'ALL') title = FEED_TITLES[categoryFilter] || 'All News';
-  else if (impactFilter !== 'ALL') title = FEED_TITLES[impactFilter] || 'All News';
+  const title = getFeedTitle();
   const node = document.getElementById('feedTitle');
-  node.childNodes[0].textContent = title + ' ';
+  if (node) node.childNodes[0].textContent = title + ' ';
 }
 function setLang(l, btn) {
   lang = l;
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  applyTranslations();
   renderNews();
 }
 function setImpact(impact, btn) {
@@ -719,16 +844,14 @@ function setCategory(cat, btn) {
   btn.classList.add('active'); updateFeedTitle(); renderNews();
 }
 function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
 }
 function shareNews(url, headline) {
-  if (navigator.share) navigator.share({ title: headline, url });
-  else navigator.clipboard.writeText(url).then(() => showToast('Link copiado / Link copied'));
+  if (navigator.share) navigator.share({title:headline,url});
+  else navigator.clipboard.writeText(url).then(() => showToast(t('toast.link_copied')));
 }
-
-// ─── Counts ───────────────────────────────────────────────────────
 function updateCounts(news) {
   const c = {HIGH:0,MEDIUM:0,LOW:0};
   news.forEach(n => { if(c[n.impact]!==undefined) c[n.impact]++; });
@@ -740,23 +863,11 @@ function updateCounts(news) {
 
 // ─── Helpers ──────────────────────────────────────────────────────
 function getSource(url, src) {
-  const sm = {
-    'investing':'Investing','cnbc':'CNBC','marketwatch':'MarketWatch',
-    'yahoo finance':'Yahoo Finance','forexlive':'ForexLive','fxstreet':'FXStreet',
-    'tradingview':'TradingView','wsj':'WSJ','dow jones':'Dow Jones',
-    'zerohedge':'ZeroHedge','oilprice':'OilPrice','business insider':'Business Insider',
-    'reuters':'Reuters','bloomberg':'Bloomberg','cointelegraph':'Cointelegraph','ft':'FT',
-  };
+  const sm = {'investing':'Investing','cnbc':'CNBC','marketwatch':'MarketWatch','yahoo finance':'Yahoo Finance','forexlive':'ForexLive','fxstreet':'FXStreet','tradingview':'TradingView','wsj':'WSJ','dow jones':'Dow Jones','zerohedge':'ZeroHedge','oilprice':'OilPrice','business insider':'Business Insider','reuters':'Reuters','bloomberg':'Bloomberg','cointelegraph':'Cointelegraph','ft':'FT'};
   if (src && src !== 'undefined') return sm[src.toLowerCase()] || src.toUpperCase();
   try {
     const h = new URL(url).hostname.replace('www.','');
-    const dm = {
-      'reuters.com':'Reuters','cnbc.com':'CNBC','bloomberg.com':'Bloomberg',
-      'investing.com':'Investing','marketwatch.com':'MarketWatch','forexlive.com':'ForexLive',
-      'fxstreet.com':'FXStreet','yahoo.com':'Yahoo Finance','tradingview.com':'TradingView',
-      'wsj.com':'WSJ','dj.com':'WSJ','zerohedge.com':'ZeroHedge','oilprice.com':'OilPrice',
-      'businessinsider.com':'Business Insider',
-    };
+    const dm = {'reuters.com':'Reuters','cnbc.com':'CNBC','bloomberg.com':'Bloomberg','investing.com':'Investing','marketwatch.com':'MarketWatch','forexlive.com':'ForexLive','fxstreet.com':'FXStreet','yahoo.com':'Yahoo Finance','tradingview.com':'TradingView','wsj.com':'WSJ','dj.com':'WSJ','zerohedge.com':'ZeroHedge','oilprice.com':'OilPrice','businessinsider.com':'Business Insider'};
     for (const [k,v] of Object.entries(dm)) if (h.includes(k)) return v;
     return h.split('.')[0].toUpperCase();
   } catch { return 'Unknown'; }
@@ -765,16 +876,10 @@ function formatTime(ts) {
   try { return new Date(ts).toLocaleTimeString('en-GB',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
   catch { return '--:--'; }
 }
-function getAssetTags(a) {
-  if (!a) return [];
-  return a.split(',').map(x=>x.trim()).filter(Boolean);
-}
+function getAssetTags(a) { if(!a)return[]; return a.split(',').map(x=>x.trim()).filter(Boolean); }
 function getMarketMoves(h) {
   const l = h.toLowerCase(), m = [];
-  if (l.includes('cpi')||l.includes('inflation')) {
-    m.push({asset:'USD',dir:l.includes('above')||l.includes('rise')||l.includes('high')?'up':'down'});
-    m.push({asset:'GOLD',dir:l.includes('above')||l.includes('rise')?'down':'up'});
-  }
+  if (l.includes('cpi')||l.includes('inflation')) { m.push({asset:'USD',dir:l.includes('above')||l.includes('rise')||l.includes('high')?'up':'down'}); m.push({asset:'GOLD',dir:l.includes('above')||l.includes('rise')?'down':'up'}); }
   if (l.includes('fed')||l.includes('rate hike')) { m.push({asset:'USD',dir:'up'}); m.push({asset:'INDICES',dir:'down'}); }
   if (l.includes('rate cut')) { m.push({asset:'USD',dir:'down'}); m.push({asset:'GOLD',dir:'up'}); }
   if (l.includes('oil')||l.includes('opec')) m.push({asset:'OIL',dir:l.includes('cut')||l.includes('rise')?'up':'down'});
@@ -786,16 +891,19 @@ function getMarketMoves(h) {
 function renderNews() {
   const combined = [...allNews, ...calReleases].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
   let filtered = combined;
-  if (impactFilter !== 'ALL')   filtered = filtered.filter(n => n.impact === impactFilter);
+  // For MY_NEWS, impact filter is applied inside newsMatchesCategory for calReleases
+  // For other categories, apply impact filter globally
+  if (impactFilter !== 'ALL' && categoryFilter !== 'MY_NEWS') {
+    filtered = filtered.filter(n => n.impact === impactFilter);
+  }
   if (categoryFilter !== 'ALL') filtered = filtered.filter(n => newsMatchesCategory(n, categoryFilter));
-  if (searchQuery)              filtered = filtered.filter(n =>
-    (n.headline_en||'').toLowerCase().includes(searchQuery) ||
-    (n.source||'').toLowerCase().includes(searchQuery)
-  );
-  document.getElementById('feedCount').textContent = filtered.length + ' items';
+  if (searchQuery) filtered = filtered.filter(n => (n.headline_en||'').toLowerCase().includes(searchQuery) || (n.source||'').toLowerCase().includes(searchQuery));
+
+  const countEl = document.getElementById('feedCount');
+  if (countEl) countEl.textContent = filtered.length + ' ' + t('feed.items');
 
   if (filtered.length === 0) {
-    document.getElementById('newsFeed').innerHTML = `<div class="empty-state"><div class="empty-icon">◈</div><div class="empty-text">No news found</div><div class="empty-sub">Change filters or wait for next update</div></div>`;
+    document.getElementById('newsFeed').innerHTML = `<div class="empty-state"><div class="empty-icon">◈</div><div class="empty-text">${t('empty.no_news')}</div><div class="empty-sub">${t('empty.no_news_sub')}</div></div>`;
     return;
   }
 
@@ -805,35 +913,31 @@ function renderNews() {
     const impactCls = (n.impact || 'LOW').toLowerCase();
     const tags      = getAssetTags(n.assets);
     const moves     = isCalRelease ? [] : getMarketMoves(n.headline_en);
-    const src       = isCalRelease ? 'Calendário Económico' : getSource(n.url || '', n.source);
+    const src       = isCalRelease ? t('cal.source') : getSource(n.url || '', n.source);
 
-    // Calendar release — colour-coded by actual vs forecast
     let itemCls, badgeCls, badgeLbl, calTagCls;
     if (isCalRelease) {
       const ac = n._ac || '';
-      if (ac === 'actual-positive') {
-        itemCls = 'cal-positive'; badgeCls = 'badge-cal-pos'; badgeLbl = '▲ POSITIVO'; calTagCls = 'cal-tag cal-tag-positive';
-      } else if (ac === 'actual-negative') {
-        itemCls = 'cal-negative'; badgeCls = 'badge-cal-neg'; badgeLbl = '▼ NEGATIVO'; calTagCls = 'cal-tag cal-tag-negative';
-      } else {
-        itemCls = 'cal-neutral'; badgeCls = 'badge-cal-neu'; badgeLbl = '● NEUTRO'; calTagCls = 'cal-tag cal-tag-neutral';
-      }
+      if      (ac === 'actual-positive') { itemCls='cal-positive'; badgeCls='badge-cal-pos'; badgeLbl=t('badge.positive'); calTagCls='cal-tag cal-tag-positive'; }
+      else if (ac === 'actual-negative') { itemCls='cal-negative'; badgeCls='badge-cal-neg'; badgeLbl=t('badge.negative'); calTagCls='cal-tag cal-tag-negative'; }
+      else                               { itemCls='cal-neutral';  badgeCls='badge-cal-neu'; badgeLbl=t('badge.neutral');  calTagCls='cal-tag cal-tag-neutral'; }
     } else {
       itemCls = impactCls; badgeCls = `badge-${impactCls}`; badgeLbl = n.impact || 'LOW'; calTagCls = '';
     }
 
+    const safeHeadline = headline.replace(/'/g,"\\'");
     const cardHtml = `<div class="news-item ${itemCls}" onclick="window.open('${n.url}','_blank')">
       <div class="news-time">${formatTime(n.timestamp)}</div>
       <div>
         <div class="news-headline">${headline}</div>
         <div class="news-meta">
           <span class="news-source">${src}</span>
-          ${isCalRelease ? `<span class="${calTagCls}">📅 RELEASE</span>` : ''}
-          ${tags.map(t=>`<span class="asset-tag">${t}</span>`).join('')}
+          ${isCalRelease ? `<span class="${calTagCls}">${t('cal.tag.release')}</span>` : ''}
+          ${tags.map(tg=>`<span class="asset-tag">${tg}</span>`).join('')}
         </div>
         ${moves.length?`<div class="market-moves">${moves.map(m=>`<span class="move ${m.dir}">${m.asset} ${m.dir==='up'?'▲':'▼'}</span>`).join('')}</div>`:''}
         <div class="news-actions">
-          <button class="share-btn" onclick="event.stopPropagation();shareNews('${n.url}','${headline.replace(/'/g,"\\'")}')">⇪ Share</button>
+          <button class="share-btn" onclick="event.stopPropagation();shareNews('${n.url}','${safeHeadline}')">${t('share.btn')}</button>
         </div>
       </div>
       <div class="news-impact"><span class="impact-badge ${badgeCls}">${badgeLbl}</span></div>
@@ -841,10 +945,10 @@ function renderNews() {
 
     if (USER_PACK === 'basic' && idx === DELAY_AFTER) {
       return cardHtml + `<div class="delay-banner">
-        <div class="delay-banner-eyebrow">Notice</div>
-        <div class="delay-banner-title">⚠ This Feed is Delayed</div>
-        <div class="delay-banner-sub">You're on the <strong>Basic Plan</strong>.<br>News below may be delayed. Upgrade to <strong>Pro</strong> for real-time coverage with zero delay.</div>
-        <button class="delay-banner-btn" onclick="showToast('Pro Pack coming soon!')">⚡ Go Real-Time — Upgrade to Pro</button>
+        <div class="delay-banner-eyebrow">${t('delay.notice')}</div>
+        <div class="delay-banner-title">${t('delay.title')}</div>
+        <div class="delay-banner-sub">${t('delay.sub')}</div>
+        <button class="delay-banner-btn" onclick="showToast(t('toast.pro'))">${t('delay.btn')}</button>
       </div>`;
     }
     return cardHtml;
@@ -857,7 +961,6 @@ function renderNews() {
 let calEvents        = [];
 let calImpactFilter  = new Set([1, 0]);
 let calCountryFilter = 'ALL';
-
 const FLAGS = {US:'🇺🇸',EU:'🇪🇺',GB:'🇬🇧',JP:'🇯🇵',CH:'🇨🇭',AU:'🇦🇺',CA:'🇨🇦',NZ:'🇳🇿',CN:'🇨🇳',DE:'🇩🇪',FR:'🇫🇷'};
 
 function calSetImpact(imp, btn) {
@@ -881,35 +984,29 @@ function actualClass(actual, forecast, prev) {
   if (ref === null || ref === undefined) return 'actual-neutral';
   return actual > ref ? 'actual-positive' : actual < ref ? 'actual-negative' : 'actual-neutral';
 }
-function calReleaseClass(ac) {
-  if (ac === 'actual-positive') return 'cal-positive';
-  if (ac === 'actual-negative') return 'cal-negative';
-  return 'cal-neutral';
-}
 function countdown(dateStr) {
   const diff = new Date(dateStr) - Date.now();
   if (diff <= 0) return null;
   const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
   return h > 0 ? `in ${h}h ${m}m` : m > 0 ? `in ${m}m ${s}s` : `in ${s}s`;
 }
-
 function renderCalendar() {
   const body = document.getElementById('calBody');
   let f = calEvents.filter(e => calImpactFilter.has(e.importance) && (calCountryFilter === 'ALL' || e.country === calCountryFilter));
-  if (!f.length) { body.innerHTML = `<div class="cal-empty"><div class="empty-icon">📅</div><div class="empty-text">No events</div></div>`; return; }
+  if (!f.length) { body.innerHTML = `<div class="cal-empty"><div class="empty-icon">📅</div><div class="empty-text">${t('cal.no_events')}</div></div>`; return; }
   const days = {};
-  f.forEach(e => { const d = e.date.split('T')[0]; if(!days[d]) days[d]=[]; days[d].push(e); });
+  f.forEach(e => { const d = e.date.split('T')[0]; if(!days[d])days[d]=[]; days[d].push(e); });
   const now = new Date(), todayStr = now.toISOString().split('T')[0];
   const tmrStr = new Date(now.getTime()+86400000).toISOString().split('T')[0];
-  body.innerHTML = Object.entries(days).sort().map(([day, evs]) => {
-    const lbl = day===todayStr?'Today':day===tmrStr?'Tomorrow':new Date(day+'T00:00:00Z').toLocaleDateString('en-GB',{weekday:'long',month:'short',day:'numeric'});
+  body.innerHTML = Object.entries(days).sort().map(([day,evs]) => {
+    const lbl = day===todayStr?(lang==='pt'?'Hoje':'Today'):day===tmrStr?(lang==='pt'?'Amanhã':'Tomorrow'):new Date(day+'T00:00:00Z').toLocaleDateString(lang==='pt'?'pt-PT':'en-GB',{weekday:'long',month:'short',day:'numeric'});
     return `<div class="cal-day-header">${lbl}</div>` + evs.map(e => {
       const ic = e.importance===1?'imp-high':e.importance===0?'imp-med':'imp-low';
       const bc = e.importance===1?'badge-high':e.importance===0?'badge-medium':'badge-low';
-      const il = e.importance===1?'HIGH':e.importance===0?'MED':'LOW';
+      const il = e.importance===1?(lang==='pt'?'ALTO':'HIGH'):e.importance===0?(lang==='pt'?'MÉD':'MED'):(lang==='pt'?'BAIXO':'LOW');
       const released = e.actual!==null && e.actual!==undefined;
       const cd = !released ? countdown(e.date) : null;
-      const ac = actualClass(e.actual, e.forecast, e.previous);
+      const ac = actualClass(e.actual,e.forecast,e.previous);
       const timeLocal = new Date(e.date).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
       return `<div class="cal-event ${ic}${released?' released':''}" data-date="${e.date}">
         <div class="cal-time"><div>${timeLocal}</div>${cd?`<div class="cal-countdown">${cd}</div>`:''}</div>
@@ -917,9 +1014,9 @@ function renderCalendar() {
         <div><span class="impact-badge ${bc}">${il}</span></div>
         <div><div class="cal-title">${e.title}</div>${e.period?`<div class="cal-period">${e.period}</div>`:''}</div>
         <div class="cal-values">
-          <div class="cal-val"><div class="cal-val-label">Prev</div><div class="cal-val-data">${fmtVal(e.previous,e.unit)}</div></div>
-          <div class="cal-val"><div class="cal-val-label">Fore</div><div class="cal-val-data">${fmtVal(e.forecast,e.unit)}</div></div>
-          <div class="cal-val"><div class="cal-val-label">Actual</div><div class="cal-val-data ${ac}">${fmtVal(e.actual,e.unit)}</div></div>
+          <div class="cal-val"><div class="cal-val-label">${lang==='pt'?'Ant':'Prev'}</div><div class="cal-val-data">${fmtVal(e.previous,e.unit)}</div></div>
+          <div class="cal-val"><div class="cal-val-label">${lang==='pt'?'Prev':'Fore'}</div><div class="cal-val-data">${fmtVal(e.forecast,e.unit)}</div></div>
+          <div class="cal-val"><div class="cal-val-label">${lang==='pt'?'Atual':'Actual'}</div><div class="cal-val-data ${ac}">${fmtVal(e.actual,e.unit)}</div></div>
         </div>
       </div>`;
     }).join('');
@@ -928,22 +1025,23 @@ function renderCalendar() {
 
 function injectCalRelease(e) {
   const ac = actualClass(e.actual, e.forecast, e.previous);
-  const acLabel = ac === 'actual-positive' ? '🟢' : ac === 'actual-negative' ? '🔴' : '🟡';
+  const acLabel = ac==='actual-positive'?'🟢':ac==='actual-negative'?'🔴':'🟡';
   const flag = FLAGS[e.country] || '';
   const unit = e.unit || '';
   const headline = `${acLabel} ${flag} ${e.title} — Actual: ${fmtVal(e.actual,unit)} | Forecast: ${fmtVal(e.forecast,unit)} | Previous: ${fmtVal(e.previous,unit)}`;
-  const impact = e.importance === 1 ? 'HIGH' : e.importance === 0 ? 'MEDIUM' : 'LOW';
+  const impact = e.importance===1?'HIGH':e.importance===0?'MEDIUM':'LOW';
+  const calAsset = COUNTRY_ASSET[e.country] || 'USD';
   calReleases.unshift({
     timestamp: new Date().toISOString(),
-    headline_en: headline,
-    impact,
-    assets: 'USD',
-    url: `https://www.tradingview.com/symbols/${e.ticker || ''}`,
+    headline_en: headline, impact,
+    assets: calAsset,
+    url: `https://www.tradingview.com/symbols/${e.ticker||''}`,
     source: 'Economic Calendar',
     _calRelease: true,
-    _ac: ac,   // store the actual-vs-forecast result for colour coding
+    _ac: ac,
+    _calCountry: e.country,
   });
-  if (soundEnabled && e.importance === 1) playAlert();
+  if (soundEnabled && e.importance===1) playAlert();
   renderNews();
 }
 
@@ -951,20 +1049,17 @@ async function loadCalendar() {
   try {
     const res = await fetch(BACKEND_URL + '/calendar?days=7');
     const data = await res.json();
-    const prevReleased = new Set(calEvents.filter(e => e.actual !== null && e.actual !== undefined).map(e => e.id));
+    const prevReleased = new Set(calEvents.filter(e => e.actual!==null && e.actual!==undefined).map(e => e.id));
     calEvents = data.events || [];
     calEvents.forEach(e => {
-      if (e.actual !== null && e.actual !== undefined && !prevReleased.has(e.id) && !knownCalIds.has(e.id)) {
+      if (e.actual!==null && e.actual!==undefined && !prevReleased.has(e.id) && !knownCalIds.has(e.id)) {
         knownCalIds.add(e.id);
         injectCalRelease(e);
-        setTimeout(() => {
-          const el = document.querySelector(`[data-date="${e.date}"]`);
-          if (el) el.classList.add('just-out');
-        }, 200);
+        setTimeout(() => { const el = document.querySelector(`[data-date="${e.date}"]`); if(el)el.classList.add('just-out'); }, 200);
       }
     });
     renderCalendar();
-  } catch(err) { console.error('[CAL]', err); }
+  } catch(err) { console.error('[CAL]',err); }
 }
 
 setInterval(() => {
@@ -979,6 +1074,7 @@ setInterval(() => {
 setInterval(loadCalendar, 60000);
 
 // ─── Init ─────────────────────────────────────────────────────────
+applyTranslations();
 connectWebSocket();
 setTimeout(loadCalendar, 3000);
 </script>
