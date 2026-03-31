@@ -774,6 +774,36 @@ function connectWebSocket() {
   ws.onerror = () => ws.close();
 }
 
+// ─── localStorage news cache ──────────────────────────────────────
+const NEWS_CACHE_KEY = 'tnt_news_cache';
+const NEWS_CACHE_MAX = 300; // keep up to 300 items cached
+
+function saveNewsCache(newsArr) {
+  try {
+    // Keep only the most recent MAX items to avoid filling localStorage
+    const toSave = newsArr.slice(0, NEWS_CACHE_MAX);
+    localStorage.setItem(NEWS_CACHE_KEY, JSON.stringify(toSave));
+  } catch(e) {
+    // If storage is full, clear and retry
+    try { localStorage.removeItem(NEWS_CACHE_KEY); } catch(e2){}
+  }
+}
+
+function loadNewsCache() {
+  try {
+    const raw = localStorage.getItem(NEWS_CACHE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+function mergeNewsArrays(existing, incoming) {
+  // Merge by URL, incoming takes precedence, sorted by timestamp DESC
+  const map = new Map();
+  existing.forEach(n => map.set(n.url, n));
+  incoming.forEach(n => map.set(n.url, n)); // overwrite with fresh data
+  return [...map.values()].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+}
+
 // ─── News data handler ────────────────────────────────────────────
 function handleNewsData(data) {
   const fiveMinAgo = Date.now() - 5*60*1000;
@@ -809,13 +839,29 @@ function handleNewsData(data) {
     updateNotificationBadge();
   }
 
-  allNews = data;
-  updateCounts(data);
-  displayLimit = Math.max(displayLimit, PAGE_SIZE); // don't reset if user loaded more
+  // Merge incoming with existing (preserves older cached items not in this batch)
+  allNews = mergeNewsArrays(allNews, data);
+  // Persist to localStorage so refresh doesn't lose history
+  saveNewsCache(allNews);
+
+  updateCounts(allNews);
+  displayLimit = Math.max(displayLimit, PAGE_SIZE);
   renderNews();
   document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('en-GB',{hour12:false});
-  document.getElementById('totalCount').textContent = data.length;
+  document.getElementById('totalCount').textContent = allNews.length;
 }
+
+// ─── Boot from cache (instant render on page load) ───────────────
+(function bootFromCache() {
+  const cached = loadNewsCache();
+  if (cached.length === 0) return;
+  cached.forEach(n => knownUrls.add(n.url));
+  allNews = cached;
+  updateCounts(allNews);
+  renderNews();
+  document.getElementById('totalCount').textContent = allNews.length;
+  document.getElementById('lastUpdate').textContent = '(cached)';
+}());
 
 // ─── Notification badge ───────────────────────────────────────────
 function updateNotificationBadge() {
