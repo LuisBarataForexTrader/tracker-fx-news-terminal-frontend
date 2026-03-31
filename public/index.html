@@ -220,6 +220,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .news-actions{display:flex;align-items:center;gap:6px;margin-top:4px;}
 .share-btn{font-size:10px;font-weight:500;padding:3px 9px;background:transparent;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;font-family:var(--font);transition:all .15s;border-radius:2px;}
 .share-btn:hover{border-color:var(--accent);color:var(--accent);}
+.cal-release-time{font-size:10px;font-family:var(--font-mono);color:var(--text-muted);letter-spacing:0.04em;}
 .news-impact{text-align:right;padding-top:2px;}
 .impact-badge{font-size:9px;font-weight:700;letter-spacing:0.1em;padding:3px 8px;text-transform:uppercase;display:inline-block;font-family:var(--font);border-radius:2px;}
 .badge-high{background:var(--high-bg);border:1px solid var(--high-border);color:var(--high);}
@@ -639,7 +640,12 @@ let calReleases      = [];
 let displayLimit     = PAGE_SIZE;
 let soundEnabled     = true;
 let knownUrls        = new Set();
-let knownCalIds      = new Set();
+// Persist knownCalIds across reloads so old events don't reappear at top
+let knownCalIds = new Set(JSON.parse(localStorage.getItem('tnt_cal_ids')||'[]'));
+function saveCalIds() {
+  // Keep only IDs from last 48h to avoid unbounded growth
+  try { localStorage.setItem('tnt_cal_ids', JSON.stringify([...knownCalIds].slice(-500))); } catch(e){}
+}
 let recentNewUrls    = new Set(); // URLs arrived in last 3 min → show NEW badge
 let newItemsCount    = 0;         // count for notification badge
 let lastSoundTime    = 0;         // throttle: 1 sound per 60s max
@@ -1345,7 +1351,10 @@ function renderNews() {
         </div>
         ${moves.length?`<div class="market-moves">${moves.map(m=>`<span class="move ${m.dir}">${m.asset} ${m.dir==='up'?'▲':'▼'}</span>`).join('')}</div>`:''}
         ${videoEmbed}
-        <div class="news-actions">${!ytId?`<button class="share-btn" onclick="event.stopPropagation();shareNews('${n.url}','${safeH}')">${t('share.btn')}</button>`:''}</div>
+        <div class="news-actions">
+          ${isCalRelease?`<span class="cal-release-time">🕐 ${new Date(n.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false})}</span>`:''}
+          ${!ytId&&!isCalRelease?`<button class="share-btn" onclick="event.stopPropagation();shareNews('${n.url}','${safeH}')">${t('share.btn')}</button>`:''}
+        </div>
       </div>
       <div class="news-impact"><span class="impact-badge ${badgeCls}">${badgeLbl}</span></div>
     </div>`;
@@ -1443,11 +1452,15 @@ function injectCalRelease(e) {
   const headline=`${acLabel} ${flag} ${e.title} — Actual: ${fmtVal(e.actual,unit)} | Forecast: ${fmtVal(e.forecast,unit)} | Previous: ${fmtVal(e.previous,unit)}`;
   const impact=e.importance===1?'HIGH':e.importance===0?'MEDIUM':'LOW';
   const calAsset=COUNTRY_ASSET[e.country]||'USD';
-  calReleases.unshift({
-    timestamp:new Date().toISOString(), headline_en:headline, impact,
+  // Use the actual event release time (e.date), not the current time
+  // This ensures cal releases sort chronologically with other news
+  calReleases.push({
+    timestamp: e.date,   // ← real event time, not now()
+    headline_en:headline, impact,
     assets:calAsset,
     url:`https://www.tradingview.com/economic-calendar/`,
     source:'Economic Calendar', _calRelease:true, _ac:ac, _calCountry:e.country,
+    _calId: e.id,
   });
   if(soundEnabled&&e.importance===1){const now=Date.now();if(now-lastSoundTime>60000){lastSoundTime=now;playAlert();}}
   renderNews();
@@ -1461,6 +1474,7 @@ async function loadCalendar() {
     calEvents.forEach(e=>{
       if(e.actual!==null&&e.actual!==undefined&&!prevReleased.has(e.id)&&!knownCalIds.has(e.id)){
         knownCalIds.add(e.id);
+        saveCalIds();
         injectCalRelease(e);
         setTimeout(()=>{const el=document.querySelector(`[data-date="${e.date}"]`);if(el)el.classList.add('just-out');},200);
       }
