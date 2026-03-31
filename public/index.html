@@ -60,7 +60,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .auth-btn.signup:hover{background:var(--accent2);}
 
 /* ── Layout ── */
-.main{display:grid;grid-template-columns:var(--sidebar-w) 1fr;height:calc(100vh - var(--header-h));}
+.main{display:grid;grid-template-columns:var(--sidebar-w) 1fr;height:calc(100vh - var(--header-h));transition:grid-template-columns .3s ease;}
+.main.tv-open{grid-template-columns:var(--sidebar-w) 1fr 360px;}
 .sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:0 0 80px;overflow-y:auto;display:flex;flex-direction:column;}
 .sidebar-section{padding:14px 14px 12px;border-bottom:1px solid var(--border);}
 .sidebar-label{font-size:9px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding:0 4px;}
@@ -99,6 +100,47 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 /* Two ticker bars */
 .ticker-bar{background:var(--bg3);border-bottom:1px solid var(--border);height:46px;overflow:hidden;flex-shrink:0;}
 .ticker-bar-2{background:rgba(8,12,18,0.8);border-bottom:1px solid var(--border);height:42px;overflow:hidden;flex-shrink:0;}
+
+/* ── Live Streams Bar ── */
+.live-streams-bar{display:flex;align-items:center;gap:12px;padding:8px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;}
+.live-streams-label{display:flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--high);flex-shrink:0;}
+.ls-dot{width:6px;height:6px;border-radius:50%;background:var(--high);animation:blink 1.5s ease-in-out infinite;}
+.live-streams-scroll{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:1;}
+.live-streams-scroll::-webkit-scrollbar{display:none;}
+.ls-chip{padding:5px 12px;font-family:var(--font);font-size:10px;font-weight:600;letter-spacing:0.04em;border:1px solid var(--border);background:var(--bg3);color:var(--text-muted);cursor:pointer;transition:all .15s;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+.ls-chip:hover{border-color:var(--high);color:var(--high);}
+.ls-chip.active{border-color:var(--high);color:var(--high);background:var(--high-bg);}
+.ls-close{border-color:transparent;color:var(--text-muted);}
+.ls-close:hover{border-color:var(--border);color:var(--text);}
+/* Inline live player */
+.live-player-inline{flex-shrink:0;position:relative;background:#000;height:320px;border-bottom:2px solid var(--high);}
+.live-player-inline iframe{width:100%;height:100%;border:none;display:block;}
+.live-player-close{position:absolute;top:10px;right:12px;background:rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:14px;cursor:pointer;padding:4px 10px;border-radius:3px;z-index:10;transition:background .15s;}
+.live-player-close:hover{background:rgba(255,59,92,0.8);}
+/* Inline YouTube in news item */
+.news-item.has-video{grid-template-columns:72px 1fr auto;cursor:default;}
+.news-video-wrap{margin-top:10px;position:relative;border-radius:4px;overflow:hidden;background:#000;aspect-ratio:16/9;max-height:220px;}
+.news-video-frame{width:100%;height:100%;border:none;display:block;}
+.news-video-label{position:absolute;top:8px;left:8px;background:rgba(255,0,0,0.85);color:#fff;font-size:9px;font-weight:800;letter-spacing:0.12em;padding:3px 8px;border-radius:2px;pointer-events:none;}
+.yt-live-tag{font-size:9px;font-weight:800;letter-spacing:0.12em;color:#fff;background:rgba(255,0,0,0.85);padding:2px 6px;border-radius:2px;}
+
+/* ── TV Side Panel ── */
+.tv-panel{background:#000;border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.tv-panel-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 12px;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.tv-panel-title{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text);flex:1;}
+.tv-panel-live{font-size:8px;font-weight:800;letter-spacing:0.15em;color:var(--high);border:1px solid var(--high);padding:2px 5px;border-radius:2px;animation:blink 2s ease-in-out infinite;}
+.tv-panel-close{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;padding:2px 4px;line-height:1;transition:color .15s;}
+.tv-panel-close:hover{color:var(--text);}
+.tv-panel-channels{background:var(--bg3);border-bottom:1px solid var(--border);display:flex;gap:4px;padding:6px 10px;flex-wrap:wrap;flex-shrink:0;}
+.tv-panel-ch{padding:3px 9px;font-family:var(--font);font-size:9px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s;border-radius:2px;}
+.tv-panel-ch:hover{color:var(--text-dim);border-color:var(--border2);}
+.tv-panel-ch.active{color:var(--high);border-color:var(--high);background:var(--high-bg);}
+.tv-panel-player{flex:1;position:relative;background:#000;}
+.tv-panel-player iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.tv-toggle-btn{margin-left:auto;padding:6px 14px;font-family:var(--font);font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .2s;border-radius:3px;display:flex;align-items:center;gap:6px;}
+.tv-toggle-btn:hover{border-color:var(--high);color:var(--high);}
+.tv-toggle-btn.active{border-color:var(--high);color:var(--high);background:var(--high-bg);}
+.tv-toggle-btn .tv-dot{width:5px;height:5px;border-radius:50%;background:var(--high);animation:blink 1.5s ease-in-out infinite;}
 
 /* ── Tabs — glow on top ── */
 .tab-bar{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;padding:0 12px;gap:4px;}
@@ -429,6 +471,25 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
         <div class="feed-title" id="feedTitle">All News <span class="feed-title-badge" data-i18n="feed.live">LIVE</span></div>
         <div class="feed-count" id="feedCount" data-i18n="feed.connecting">Connecting...</div>
       </div>
+      <!-- Pinned Live Streams bar -->
+      <div class="live-streams-bar" id="liveStreamsBar">
+        <div class="live-streams-label"><span class="ls-dot"></span><span data-i18n="live.streams">Live TV</span></div>
+        <div class="live-streams-scroll">
+          <div class="ls-chip active" data-vid="UCIALMKvObZNtJ6AmdCLP7Lg" data-type="channel" onclick="openLiveStream('UCIALMKvObZNtJ6AmdCLP7Lg','channel',this)">📺 Bloomberg TV</div>
+          <div class="ls-chip" data-vid="UCvJJ_dzjViJCoLf5uKUTwoA" data-type="channel" onclick="openLiveStream('UCvJJ_dzjViJCoLf5uKUTwoA','channel',this)">📺 CNBC</div>
+          <div class="ls-chip" data-vid="UChqUTb7kYRX8-EiaN3XFrSQ" data-type="channel" onclick="openLiveStream('UChqUTb7kYRX8-EiaN3XFrSQ','channel',this)">📺 Reuters</div>
+          <div class="ls-chip" data-vid="UC5xQMo6rBuZHRNKnBhCi3Dw" data-type="channel" onclick="openLiveStream('UC5xQMo6rBuZHRNKnBhCi3Dw','channel',this)">📺 Fox Business</div>
+          <div class="ls-chip" data-vid="UCNye-wNBqNL5ZzHSJj3l8Bg" data-type="channel" onclick="openLiveStream('UCNye-wNBqNL5ZzHSJj3l8Bg','channel',this)">📺 Al Jazeera</div>
+          <div class="ls-chip" data-vid="UCEAZeUIeJs0IjQiqTCdVSIg" data-type="channel" onclick="openLiveStream('UCEAZeUIeJs0IjQiqTCdVSIg','channel',this)">📺 Yahoo Finance</div>
+          <div class="ls-chip ls-close" onclick="closeLivePlayer()" data-i18n="live.close">✕ Close</div>
+        </div>
+      </div>
+      <!-- Inline Live Player (hidden by default) -->
+      <div class="live-player-inline" id="livePlayerInline" style="display:none">
+        <iframe id="livePlayerFrame" src="" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+        <button class="live-player-close" onclick="closeLivePlayer()">✕</button>
+      </div>
+
       <div class="feed-inner" id="newsFeed">
         <div class="empty-state">
           <div class="empty-icon">◈</div>
@@ -609,6 +670,7 @@ const STRINGS = {
     'cat.all':'All','cat.my_news':'★ My News','cat.forex':'Forex','cat.crypto':'Crypto','cat.macro':'Macro',
     'cat.bonds':'Bonds','cat.equities':'Equities','cat.indexes':'Indexes','cat.commodities':'Commodities',
     'cat.market_moving':'🔴 Market Moving',
+    'live.streams':'Live TV','live.close':'✕ Close','video.live':'LIVE',
     'tab.news':'📰 News Feed','tab.calendar':'📅 Economic Calendar','tab.tv':'📺 Live TV',
     'tv.title':'Live Financial TV','tv.channels':'Channels','tv.disclaimer':'Live stream provided by YouTube. Availability may vary.','tv.note':'💡 Streams open the YouTube live broadcast for each channel. Use fullscreen for the best experience.',
     'feed.live':'LIVE','feed.connecting':'Connecting...','feed.items':'items',
@@ -653,6 +715,7 @@ const STRINGS = {
     'cat.all':'Todas','cat.my_news':'★ As Minhas','cat.forex':'Forex','cat.crypto':'Cripto','cat.macro':'Macro',
     'cat.bonds':'Obrigações','cat.equities':'Ações','cat.indexes':'Índices','cat.commodities':'Matérias-Primas',
     'cat.market_moving':'🔴 A Mover Mercado',
+    'live.streams':'TV em Direto','live.close':'✕ Fechar','video.live':'DIRETO',
     'tab.news':'📰 Notícias','tab.calendar':'📅 Calendário Económico','tab.tv':'📺 TV em Direto',
     'tv.title':'TV Financeira em Direto','tv.channels':'Canais','tv.disclaimer':'Stream fornecido pelo YouTube. Disponibilidade pode variar.','tv.note':'💡 Os streams abrem a transmissão ao vivo do YouTube de cada canal. Usa o ecrã inteiro para melhor experiência.',
     'feed.live':'AO VIVO','feed.connecting':'A conectar...','feed.items':'itens',
@@ -1007,6 +1070,44 @@ function clearSearch() {
 }
 
 // ─── Tabs ────────────────────────────────────────────────────────
+// ─── Inline Live Player ───────────────────────────────────────────
+function openLiveStream(vid, type, chipEl) {
+  const frame = document.getElementById('livePlayerFrame');
+  const player = document.getElementById('livePlayerInline');
+  const src = type === 'channel'
+    ? `https://www.youtube.com/embed/live_stream?channel=${vid}&autoplay=1`
+    : `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0`;
+  frame.src = src;
+  player.style.display = 'block';
+  // Update active chip
+  document.querySelectorAll('.ls-chip').forEach(c => c.classList.remove('active'));
+  if (chipEl) chipEl.classList.add('active');
+}
+function closeLivePlayer() {
+  const player = document.getElementById('livePlayerInline');
+  const frame  = document.getElementById('livePlayerFrame');
+  if (player) player.style.display = 'none';
+  if (frame)  frame.src = ''; // stop video
+  document.querySelectorAll('.ls-chip').forEach(c => c.classList.remove('active'));
+}
+// Auto-open Bloomberg on first load
+window.addEventListener('DOMContentLoaded', () => {
+  const chip = document.querySelector('.ls-chip[data-vid="UCIALMKvObZNtJ6AmdCLP7Lg"]');
+  if (chip) openLiveStream('UCIALMKvObZNtJ6AmdCLP7Lg', 'channel', chip);
+});
+
+// ─── YouTube helper ──────────────────────────────────────────────
+function extractYouTubeId(url) {
+  if (!url) return null;
+  const short = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+  if (short) return short[1];
+  const watch = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+  if (watch) return watch[1];
+  const live  = url.match(/youtube\.com\/live\/([a-zA-Z0-9_-]{11})/);
+  if (live) return live[1];
+  return null;
+}
+
 // ─── Live TV channels ─────────────────────────────────────────────
 // YouTube live stream embed URLs (24/7 streams)
 const TV_CHANNELS = {
@@ -1214,17 +1315,29 @@ function renderNews() {
     }
 
     const safeH = (headline||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
-    const card = `<div class="news-item ${itemCls}${freshCls}" style="opacity:${opacity}" onclick="window.open('${n.url}','_blank')">
+
+    // Detect YouTube URL → embed inline player
+    const ytId = extractYouTubeId(n.url);
+    const videoEmbed = ytId
+      ? `<div class="news-video-wrap">
+           <iframe class="news-video-frame" src="https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1" allow="encrypted-media; fullscreen" allowfullscreen loading="lazy"></iframe>
+           <div class="news-video-label">▶ ${t('video.live')}</div>
+         </div>`
+      : '';
+
+    const card = `<div class="news-item ${itemCls}${freshCls}${ytId?' has-video':''}" style="opacity:${opacity}" onclick="${n.url&&!ytId?`window.open('${n.url}','_blank')`:'void(0)'}">
       <div class="news-time">${formatTime(n.timestamp)}</div>
       <div>
         <div class="news-headline">${headline}${newBadge}</div>
         <div class="news-meta">
           <span class="news-source">${src}</span>
           ${isCalRelease?`<span class="${calTagCls}">${t('cal.tag.release')}</span>`:''}
+          ${ytId?`<span class="yt-live-tag">▶ LIVE</span>`:''}
           ${tags.map(tg=>`<span class="asset-tag">${tg}</span>`).join('')}
         </div>
         ${moves.length?`<div class="market-moves">${moves.map(m=>`<span class="move ${m.dir}">${m.asset} ${m.dir==='up'?'▲':'▼'}</span>`).join('')}</div>`:''}
-        <div class="news-actions"><button class="share-btn" onclick="event.stopPropagation();shareNews('${n.url}','${safeH}')">${t('share.btn')}</button></div>
+        ${videoEmbed}
+        <div class="news-actions">${!ytId?`<button class="share-btn" onclick="event.stopPropagation();shareNews('${n.url}','${safeH}')">${t('share.btn')}</button>`:''}</div>
       </div>
       <div class="news-impact"><span class="impact-badge ${badgeCls}">${badgeLbl}</span></div>
     </div>`;
