@@ -1071,15 +1071,23 @@ function clearSearch() {
 
 // ─── Tabs ────────────────────────────────────────────────────────
 // ─── Inline Live Player ───────────────────────────────────────────
+// 24/7 live stream video IDs (permanent streams, no channel ID needed)
+const LIVE_STREAM_IDS = {
+  'UCIALMKvObZNtJ6AmdCLP7Lg': 'dp8PhLsUcFE',   // Bloomberg Markets & Finance 24/7
+  'UCvJJ_dzjViJCoLf5uKUTwoA': '9VkFpvMRoGM',   // CNBC Live
+  'UChqUTb7kYRX8-EiaN3XFrSQ': 'INciEsKLwrs',   // Reuters TV
+  'UC5xQMo6rBuZHRNKnBhCi3Dw': 'HyTNE6Q4xeQ',   // Fox Business
+  'UCNye-wNBqNL5ZzHSJj3l8Bg': 'FtZoPn--MAs',   // Al Jazeera English
+  'UCEAZeUIeJs0IjQiqTCdVSIg': 'YRN1VKj8M74',   // Yahoo Finance Live
+};
+
 function openLiveStream(vid, type, chipEl) {
   const frame = document.getElementById('livePlayerFrame');
   const player = document.getElementById('livePlayerInline');
-  const src = type === 'channel'
-    ? `https://www.youtube.com/embed/live_stream?channel=${vid}&autoplay=1`
-    : `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0`;
-  frame.src = src;
+  // Use known video ID if available, otherwise fall back to video ID directly
+  const videoId = LIVE_STREAM_IDS[vid] || vid;
+  frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
   player.style.display = 'block';
-  // Update active chip
   document.querySelectorAll('.ls-chip').forEach(c => c.classList.remove('active'));
   if (chipEl) chipEl.classList.add('active');
 }
@@ -1087,14 +1095,9 @@ function closeLivePlayer() {
   const player = document.getElementById('livePlayerInline');
   const frame  = document.getElementById('livePlayerFrame');
   if (player) player.style.display = 'none';
-  if (frame)  frame.src = ''; // stop video
+  if (frame)  frame.src = '';
   document.querySelectorAll('.ls-chip').forEach(c => c.classList.remove('active'));
 }
-// Auto-open Bloomberg on first load
-window.addEventListener('DOMContentLoaded', () => {
-  const chip = document.querySelector('.ls-chip[data-vid="UCIALMKvObZNtJ6AmdCLP7Lg"]');
-  if (chip) openLiveStream('UCIALMKvObZNtJ6AmdCLP7Lg', 'channel', chip);
-});
 
 // ─── YouTube helper ──────────────────────────────────────────────
 function extractYouTubeId(url) {
@@ -1325,7 +1328,12 @@ function renderNews() {
          </div>`
       : '';
 
-    const card = `<div class="news-item ${itemCls}${freshCls}${ytId?' has-video':''}" style="opacity:${opacity}" onclick="${n.url&&!ytId?`window.open('${n.url}','_blank')`:'void(0)'}">
+    // Calendar releases open the TradingView economic calendar; no-URL items are not clickable
+    const clickAction = isCalRelease
+      ? `window.open('https://www.tradingview.com/economic-calendar/','_blank')`
+      : (n.url && !ytId ? `window.open('${n.url}','_blank')` : 'void(0)');
+
+    const card = `<div class="news-item ${itemCls}${freshCls}${ytId?' has-video':''}" style="opacity:${opacity}" onclick="${clickAction}">
       <div class="news-time">${formatTime(n.timestamp)}</div>
       <div>
         <div class="news-headline">${headline}${newBadge}</div>
@@ -1438,7 +1446,7 @@ function injectCalRelease(e) {
   calReleases.unshift({
     timestamp:new Date().toISOString(), headline_en:headline, impact,
     assets:calAsset,
-    url:`https://www.tradingview.com/news/calendar/`,
+    url:`https://www.tradingview.com/economic-calendar/`,
     source:'Economic Calendar', _calRelease:true, _ac:ac, _calCountry:e.country,
   });
   if(soundEnabled&&e.importance===1){const now=Date.now();if(now-lastSoundTime>60000){lastSoundTime=now;playAlert();}}
