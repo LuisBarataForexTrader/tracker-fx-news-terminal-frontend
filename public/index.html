@@ -627,17 +627,57 @@ function translatePT(text) {
   return s;
 }
 
-// ─── Category keywords ────────────────────────────────────────────
+// ─── Category definitions ─────────────────────────────────────────
+// calCountries: which calendar countries are shown in this category (null = all, [] = none)
 const CATEGORY_KEYWORDS = {
-  FOREX:       {assets:['USD','EUR','GBP','JPY'],keywords:['forex','currency','exchange rate','dollar','euro','pound','yen','franc','fx','cable','fiber','aussie','loonie','kiwi']},
-  CRYPTO:      {assets:['BTC'],keywords:['bitcoin','btc','crypto','ethereum','eth','blockchain','defi','altcoin','digital asset','coinbase','binance','token','stablecoin','nft']},
-  MACRO:       {assets:[],keywords:['fed','federal reserve','ecb','boj','boe','central bank','interest rate','rate hike','rate cut','cpi','inflation','gdp','nfp','non-farm','unemployment','recession','monetary','fiscal','stimulus','tariff','sanction','powell','lagarde','yellen','fomc','pmi','retail sales','trade balance','housing','manufacturing']},
-  BONDS:       {assets:[],keywords:['bond','yield','treasury','10-year','2-year','30-year','gilt','bund','spread','debt','sovereign','fixed income','auction','coupon']},
-  EQUITIES:    {assets:['SP500'],keywords:['stock','shares','equity','equities','earnings','ipo','dividend','s&p','nasdaq','dow','nyse','listed','quarterly results','profit','revenue','guidance','upgrade','downgrade']},
-  INDEXES:     {assets:['SP500'],keywords:['s&p','sp500','nasdaq','dow jones','dax','ftse','nikkei','index','indices','vix','russell']},
-  COMMODITIES: {assets:['GOLD','OIL'],keywords:['gold','silver','crude','oil','opec','brent','wti','copper','wheat','natural gas','energy','commodity','commodities','precious metals']},
+  FOREX: {
+    assets:['USD','EUR','GBP','JPY','AUD','CAD','CHF','NZD','CNY'],
+    keywords:['forex','currency','exchange rate','dollar','euro','pound','yen','franc','fx','cable','fiber','aussie','loonie','kiwi','usdx','dxy','greenback'],
+    calCountries:['US','EU','GB','JP','AU','CA','CH','NZ','CN','DE','FR'], // all major FX countries
+  },
+  CRYPTO: {
+    assets:['BTC'],
+    keywords:['bitcoin','btc','crypto','ethereum','eth','blockchain','defi','altcoin','digital asset','coinbase','binance','token','stablecoin','nft','web3','solana','xrp','ripple','dogecoin'],
+    calCountries:[], // NO calendar releases in crypto — there are no crypto economic events
+  },
+  MACRO: {
+    assets:[],
+    keywords:['fed','federal reserve','ecb','boj','boe','central bank','interest rate','rate hike','rate cut','cpi','inflation','gdp','nfp','non-farm','unemployment','recession','monetary','fiscal','stimulus','tariff','sanction','powell','lagarde','yellen','fomc','pmi','retail sales','trade balance','housing','manufacturing','imf','world bank','g7','g20','geopolitical'],
+    calCountries:null, // ALL calendar releases (macro covers everything)
+  },
+  BONDS: {
+    assets:[],
+    keywords:['bond','yield','treasury','10-year','2-year','30-year','gilt','bund','spread','debt','sovereign','fixed income','auction','coupon','t-bill','note','curve','inversion'],
+    calCountries:['US','EU','GB','JP','AU','CA','CH','DE','FR'], // major bond markets only
+  },
+  EQUITIES: {
+    assets:['SP500'],
+    keywords:['stock','shares','equity','equities','earnings','ipo','dividend','s&p','nasdaq','dow','nyse','listed','quarterly results','profit','revenue','guidance','upgrade','downgrade','buyback','merger','acquisition','ipo'],
+    calCountries:['US'], // only US economic data relevant to equities (earnings, GDP, jobs)
+  },
+  INDEXES: {
+    assets:['SP500'],
+    keywords:['s&p','sp500','nasdaq','dow jones','dax','ftse','nikkei','cac','asx','hang seng','index','indices','vix','russell','stoxx'],
+    calCountries:['US','DE','GB','JP'], // S&P/NASDAQ=US, DAX=DE, FTSE=GB, Nikkei=JP
+  },
+  COMMODITIES: {
+    assets:['GOLD','OIL'],
+    keywords:['gold','silver','crude','oil','opec','brent','wti','copper','wheat','corn','natural gas','energy','commodity','commodities','precious metals','platinum','palladium','lithium','iron ore'],
+    calCountries:['US','CN'], // US energy reports + China demand data
+  },
   MARKET_MOVING:{impactOnly:'HIGH'},
 };
+
+// Calendar country → asset (used by COUNTRY_ASSET below)
+function calItemMatchesCat(n, catDef) {
+  // If calCountries is null → all calendar events pass (e.g. MACRO)
+  if (catDef.calCountries === null) return true;
+  // If calCountries is empty array → no calendar events pass (e.g. CRYPTO)
+  if (Array.isArray(catDef.calCountries) && catDef.calCountries.length === 0) return false;
+  // Otherwise check the item's country
+  return catDef.calCountries.includes(n._calCountry);
+}
+
 function newsMatchesCategory(n, cat) {
   if (cat === 'ALL') return true;
   if (cat === 'MY_NEWS') {
@@ -652,7 +692,11 @@ function newsMatchesCategory(n, cat) {
   }
   const def = CATEGORY_KEYWORDS[cat];
   if (!def) return true;
+  // MARKET_MOVING: only HIGH impact, both news and calendar
   if (def.impactOnly) return n.impact === def.impactOnly;
+  // Calendar releases: use per-category country whitelist
+  if (n._calRelease) return calItemMatchesCat(n, def);
+  // Regular news items: check assets & keywords
   const headline = (n.headline_en||'').toLowerCase();
   const assets   = (n.assets||'').split(',').map(x=>x.trim());
   if (def.assets && def.assets.some(a => assets.includes(a))) return true;
@@ -661,9 +705,7 @@ function newsMatchesCategory(n, cat) {
 }
 function newsMatchesSelected(n) {
   if (selectedCategories.size === 0) return true; // ALL — no category filter
-  // Support multi-select: match ANY selected category
   const cats = [...selectedCategories];
-  // MY_NEWS special: apply its own impact gate
   if (cats.length === 1 && cats[0] === 'MY_NEWS') return newsMatchesCategory(n, 'MY_NEWS');
   return cats.some(cat => newsMatchesCategory(n, cat));
 }
