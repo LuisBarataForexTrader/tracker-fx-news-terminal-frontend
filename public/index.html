@@ -517,12 +517,12 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
       <div class="tv-header">
         <div class="tv-header-title" data-i18n="tv.title">Live Financial TV</div>
         <div class="tv-channel-bar">
-          <button class="tv-ch-btn active" data-ch="aljazeera" onclick="switchChannel('aljazeera',this)">Al Jazeera</button>
+          <button class="tv-ch-btn active" data-ch="bloomberg" onclick="switchChannel('bloomberg',this)">Bloomberg TV</button>
+          <button class="tv-ch-btn" data-ch="cnbc"      onclick="switchChannel('cnbc',this)">CNBC</button>
+          <button class="tv-ch-btn" data-ch="aljazeera" onclick="switchChannel('aljazeera',this)">Al Jazeera</button>
           <button class="tv-ch-btn" data-ch="skynews"   onclick="switchChannel('skynews',this)">Sky News</button>
           <button class="tv-ch-btn" data-ch="dw"        onclick="switchChannel('dw',this)">DW News</button>
           <button class="tv-ch-btn" data-ch="france24"  onclick="switchChannel('france24',this)">France 24</button>
-          <button class="tv-ch-btn" data-ch="wion"      onclick="switchChannel('wion',this)">WION</button>
-          <button class="tv-ch-btn" data-ch="euronews"  onclick="switchChannel('euronews',this)">Euronews</button>
         </div>
       </div>
       <div class="tv-body">
@@ -535,7 +535,17 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
         <div class="tv-sidebar">
           <div class="tv-sidebar-title" data-i18n="tv.channels">Channels</div>
           <div class="tv-ch-list">
-            <div class="tv-ch-item active" data-ch="aljazeera" onclick="switchChannel('aljazeera',this)">
+            <div class="tv-ch-item active" data-ch="bloomberg" onclick="switchChannel('bloomberg',this)">
+              <div class="tv-ch-dot"></div>
+              <div class="tv-ch-info"><div class="tv-ch-name">Bloomberg TV</div><div class="tv-ch-desc">Markets, Economics, Business 24/7</div></div>
+              <div class="tv-live-badge">LIVE</div>
+            </div>
+            <div class="tv-ch-item" data-ch="cnbc" onclick="switchChannel('cnbc',this)">
+              <div class="tv-ch-dot"></div>
+              <div class="tv-ch-info"><div class="tv-ch-name">CNBC</div><div class="tv-ch-desc">Wall Street, Stocks, Economy</div></div>
+              <div class="tv-live-badge">LIVE</div>
+            </div>
+            <div class="tv-ch-item" data-ch="aljazeera" onclick="switchChannel('aljazeera',this)">
               <div class="tv-ch-dot"></div>
               <div class="tv-ch-info"><div class="tv-ch-name">Al Jazeera English</div><div class="tv-ch-desc">Global News, Geopolitics</div></div>
               <div class="tv-live-badge">LIVE</div>
@@ -553,16 +563,6 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
             <div class="tv-ch-item" data-ch="france24" onclick="switchChannel('france24',this)">
               <div class="tv-ch-dot"></div>
               <div class="tv-ch-info"><div class="tv-ch-name">France 24</div><div class="tv-ch-desc">International News English</div></div>
-              <div class="tv-live-badge">LIVE</div>
-            </div>
-            <div class="tv-ch-item" data-ch="wion" onclick="switchChannel('wion',this)">
-              <div class="tv-ch-dot"></div>
-              <div class="tv-ch-info"><div class="tv-ch-name">WION</div><div class="tv-ch-desc">World News 24/7</div></div>
-              <div class="tv-live-badge">LIVE</div>
-            </div>
-            <div class="tv-ch-item" data-ch="euronews" onclick="switchChannel('euronews',this)">
-              <div class="tv-ch-dot"></div>
-              <div class="tv-ch-info"><div class="tv-ch-name">Euronews</div><div class="tv-ch-desc">European Markets & Politics</div></div>
               <div class="tv-live-badge">LIVE</div>
             </div>
           </div>
@@ -1039,21 +1039,26 @@ function clearSearch() {
 
 // ─── Tabs ────────────────────────────────────────────────────────
 // ─── Inline Live Player ───────────────────────────────────────────
-// 24/7 live stream video IDs — only channels that allow embedding
+// Live stream sources — videoId for specific streams, channelId for live_stream embed
 const LIVE_STREAM_IDS = {
-  'aljazeera':  'FtZoPn--MAs',   // Al Jazeera English 24/7 ✓
-  'skynews':    '9Auq9mP2C84',   // Sky News 24/7 ✓
-  'dw':         'dGCJ6kXFd-w',   // DW News 24/7 ✓
-  'france24':   'UsTNPH6jn6Q',   // France 24 English 24/7 ✓
-  'wion':       '6mEOThyWGBA',   // WION 24/7 ✓
-  'euronews':   'Ij_-VXFkQMI',   // Euronews English 24/7 ✓
+  'bloomberg':  {type:'channel', id:'UCIALMKvObZNtJ6AmdCLP7Lg'},  // Bloomberg TV
+  'cnbc':       {type:'channel', id:'UCvJJ_dzjViJCoLf5uKUTwoA'},  // CNBC
+  'aljazeera':  {type:'video',   id:'FtZoPn--MAs'},                // Al Jazeera 24/7
+  'skynews':    {type:'video',   id:'9Auq9mP2C84'},                // Sky News 24/7
+  'dw':         {type:'video',   id:'dGCJ6kXFd-w'},                // DW News 24/7
+  'france24':   {type:'video',   id:'UsTNPH6jn6Q'},                // France 24 24/7
+  'wion':       {type:'video',   id:'6mEOThyWGBA'},                // WION 24/7
+  'euronews':   {type:'video',   id:'Ij_-VXFkQMI'},                // Euronews 24/7
 };
 
 function openLiveStream(key, chipEl) {
-  const videoId = LIVE_STREAM_IDS[key];
-  if (!videoId) return;
+  const s = LIVE_STREAM_IDS[key];
+  if (!s) return;
+  const src = s.type === 'channel'
+    ? `https://www.youtube.com/embed/live_stream?channel=${s.id}&autoplay=1`
+    : `https://www.youtube.com/embed/${s.id}?autoplay=1&rel=0&modestbranding=1`;
   const frame = document.getElementById('tvPlayerFrame');
-  if (frame) frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+  if (frame) frame.src = src;
   document.querySelectorAll('.tv-ch-btn, .tv-ch-item').forEach(c => c.classList.toggle('active', c.dataset.ch === key));
 }
 function closeLivePlayer() {
@@ -1086,17 +1091,13 @@ const TV_CHANNELS = {
   aljazeera:  'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg&autoplay=1&mute=0',
   yahoo:      'https://www.youtube.com/embed/live_stream?channel=UCEAZeUIeJs0IjQiqTCdVSIg&autoplay=1&mute=0',
 };
-let currentChannel = 'aljazeera';
+let currentChannel = 'bloomberg';
 
 function switchChannel(ch, btn) {
   currentChannel = ch;
   document.querySelectorAll('.tv-ch-btn').forEach(b => b.classList.toggle('active', b.dataset.ch === ch));
   document.querySelectorAll('.tv-ch-item').forEach(b => b.classList.toggle('active', b.dataset.ch === ch));
-  const videoId = LIVE_STREAM_IDS[ch];
-  const frame = document.getElementById('tvPlayerFrame');
-  if (frame && videoId) {
-    frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
-  }
+  openLiveStream(ch, null);
 }
 
 function switchTab(tab) {
