@@ -11,7 +11,7 @@
 :root {
   --bg:#0a0c0f; --bg2:#0f1217; --bg3:#141820;
   --border:#1e2530; --border2:#2a3444;
-  --text:#e8eef4; --text-dim:#b0c4d8; --text-muted:#7a94a8;
+  --text:#ffffff; --text-dim:#d0dde8; --text-muted:#a0b4c4;
   --accent:#00d4ff; --accent2:#0099cc;
   --high:#ff3b5c; --high-bg:rgba(255,59,92,0.09); --high-border:rgba(255,59,92,0.25);
   --medium:#f59e0b; --medium-bg:rgba(245,158,11,0.08); --medium-border:rgba(245,158,11,0.25);
@@ -33,7 +33,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.75)}}
 .logo-text{font-size:13px;font-weight:700;letter-spacing:0.12em;color:var(--text);text-transform:uppercase;line-height:1.3;}
 .logo-text span{color:var(--accent);}
-.logo-sub{font-size:9px;font-weight:400;color:var(--text-muted);letter-spacing:0.12em;text-transform:uppercase;margin-top:2px;}
+.logo-sub{font-size:9px;font-weight:400;color:#fff;letter-spacing:0.12em;text-transform:uppercase;margin-top:2px;}
 .header-center{display:flex;align-items:center;gap:16px;flex:1;justify-content:center;}
 .search-wrap{display:flex;align-items:center;background:var(--bg3);border:1px solid var(--border2);width:340px;border-radius:3px;}
 .search-wrap:focus-within{border-color:var(--accent2);}
@@ -47,14 +47,14 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--low);animation:blink 1.5s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
 .clock{font-size:14px;font-weight:500;color:var(--text);font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
-.tz-label{font-size:9px;font-weight:500;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;text-align:center;}
+.tz-label{font-size:9px;font-weight:500;color:#fff;letter-spacing:0.1em;text-transform:uppercase;text-align:center;}
 .header-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .lang-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);overflow:hidden;border-radius:3px;}
-.lang-btn{padding:6px 12px;font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:0.08em;border:none;background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s;text-transform:uppercase;}
+.lang-btn{padding:6px 12px;font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:0.08em;border:none;background:transparent;color:#fff;cursor:pointer;transition:all .15s;text-transform:uppercase;}
 .lang-btn.active{background:var(--accent);color:#000;}
-.sound-btn{padding:6px 12px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s;border-radius:3px;}
+.sound-btn{padding:6px 12px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:#fff;cursor:pointer;transition:all .15s;border-radius:3px;}
 .sound-btn.active{border-color:var(--low);color:var(--low);}
-.auth-btn{padding:7px 16px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;transition:all .15s;border-radius:3px;}
+.auth-btn{padding:7px 16px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:#fff;cursor:pointer;transition:all .15s;border-radius:3px;}
 .auth-btn:hover{border-color:var(--accent2);color:var(--accent);}
 .auth-btn.signup{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
 .auth-btn.signup:hover{background:var(--accent2);}
@@ -64,19 +64,19 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .main.tv-open{grid-template-columns:var(--sidebar-w) 1fr 360px;}
 .sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:0 0 80px;overflow-y:auto;display:flex;flex-direction:column;}
 .sidebar-section{padding:14px 14px 12px;border-bottom:1px solid var(--border);}
-.sidebar-label{font-size:9px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;padding:0 4px;}
-.filter-btn{width:100%;padding:8px 10px;background:transparent;border:none;border-radius:4px;color:var(--text-dim);font-family:var(--font);font-size:12px;font-weight:400;cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:8px;margin-bottom:2px;position:relative;}
-.filter-btn:hover{color:var(--text);background:var(--bg3);}
+.sidebar-label{font-size:9px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#fff;margin-bottom:8px;padding:0 4px;}
+.filter-btn{width:100%;padding:8px 10px;background:transparent;border:none;border-radius:4px;color:#fff;font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:8px;margin-bottom:2px;position:relative;}
+.filter-btn:hover{color:#fff;background:var(--bg3);}
 .filter-btn.active{color:var(--accent);background:rgba(0,212,255,0.07);}
 .filter-btn.active::before{content:'';position:absolute;top:0;left:10%;right:10%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);box-shadow:0 0 8px 2px rgba(0,212,255,0.5);border-radius:0 0 3px 3px;}
 .filter-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.dot-all{background:var(--text-dim)}.dot-high{background:var(--high)}.dot-medium{background:var(--medium)}.dot-low{background:var(--low)}
-.filter-count{margin-left:auto;font-size:10px;font-family:var(--font-mono);color:var(--text-muted);}
+.dot-all{background:#fff}.dot-high{background:var(--high)}.dot-medium{background:var(--medium)}.dot-low{background:var(--low)}
+.filter-count{margin-left:auto;font-size:10px;font-family:var(--font-mono);color:#fff;}
 .watchlist-grid{display:flex;flex-wrap:wrap;gap:4px;padding:0 4px;}
-.watch-btn{padding:5px 9px;background:var(--bg3);border:1px solid var(--border);color:var(--text-dim);font-family:var(--font);font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;border-radius:3px;}
-.watch-btn:hover{color:var(--text);border-color:var(--border2);}
+.watch-btn{padding:5px 9px;background:var(--bg3);border:1px solid var(--border);color:#fff;font-family:var(--font);font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;border-radius:3px;}
+.watch-btn:hover{color:#fff;border-color:var(--border2);}
 .watch-btn.selected{color:var(--accent);border-color:var(--accent2);background:rgba(0,212,255,0.08);}
-.my-news-hint{font-size:10px;color:var(--text-muted);line-height:1.5;padding:4px 4px 6px;}
+.my-news-hint{font-size:10px;color:#fff;line-height:1.5;padding:4px 4px 6px;}
 
 /* Pack CTA */
 .pack-info{margin:14px 12px 0;background:linear-gradient(145deg,rgba(255,59,92,0.12) 0%,rgba(20,10,15,0.9) 60%);border:1px solid rgba(255,59,92,0.3);border-radius:6px;overflow:hidden;}
@@ -142,22 +142,24 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .tv-toggle-btn.active{border-color:var(--high);color:var(--high);background:var(--high-bg);}
 .tv-toggle-btn .tv-dot{width:5px;height:5px;border-radius:50%;background:var(--high);animation:blink 1.5s ease-in-out infinite;}
 
-/* ── Tabs — glow on top ── */
+/* ── Tabs — glow all around ── */
 .tab-bar{display:flex;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;padding:0 12px;gap:4px;}
-.tab-btn{padding:15px 22px;font-family:var(--font);font-size:12px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;border:none;background:transparent;color:var(--text-muted);cursor:pointer;transition:all .2s;position:relative;}
-.tab-btn:hover{color:var(--text-dim);}
-.tab-btn.active{color:var(--accent);}
-.tab-btn.active::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);box-shadow:0 0 10px 3px rgba(0,212,255,0.55),0 0 20px rgba(0,212,255,0.25);border-radius:0 0 4px 4px;}
+.tab-btn{padding:15px 22px;font-family:var(--font);font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;border:none;background:transparent;color:#fff;cursor:pointer;transition:all .2s;position:relative;border-radius:4px;}
+.tab-btn:hover{color:#fff;background:rgba(255,255,255,0.04);}
+.tab-btn.active{color:var(--accent);background:rgba(0,212,255,0.06);box-shadow:0 0 0 1px rgba(0,212,255,0.35),0 0 14px rgba(0,212,255,0.25),inset 0 0 10px rgba(0,212,255,0.06);}
+.tab-btn.active::before{content:'';position:absolute;top:0;left:15%;right:15%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);box-shadow:0 0 10px 3px rgba(0,212,255,0.6);border-radius:0 0 4px 4px;}
+.tab-btn.tab-pulse{animation:tabPulse 1s ease-in-out infinite;}
+@keyframes tabPulse{0%,100%{box-shadow:0 0 0 1px rgba(16,185,129,0.5),0 0 10px rgba(16,185,129,0.3)}50%{box-shadow:0 0 0 2px rgba(16,185,129,0.8),0 0 20px rgba(16,185,129,0.5)}}
 .tab-content{flex:1;overflow:hidden;display:flex;flex-direction:column;}
 .tab-content.hidden{display:none;}
 
-/* ── Category bar — multi-select, glow on top ── */
-.category-bar{display:flex;align-items:center;background:var(--bg2);border-bottom:2px solid var(--border);flex-shrink:0;overflow-x:auto;padding:0 20px;scrollbar-width:none;}
+/* ── Category bar — multi-select, glow all around ── */
+.category-bar{display:flex;align-items:center;background:var(--bg2);border-bottom:2px solid var(--border);flex-shrink:0;overflow-x:auto;padding:0 12px;scrollbar-width:none;}
 .category-bar::-webkit-scrollbar{display:none;}
-.cat-btn{padding:13px 16px;font-family:var(--font);font-size:12px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;border:none;background:transparent;color:var(--text-muted);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;position:relative;}
-.cat-btn:hover{color:var(--text-dim);background:rgba(255,255,255,0.02);}
-.cat-btn.active{color:var(--text);}
-.cat-btn.active::before{content:'';position:absolute;top:0;left:15%;right:15%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);box-shadow:0 0 10px 3px rgba(0,212,255,0.55),0 0 20px rgba(0,212,255,0.2);border-radius:0 0 4px 4px;}
+.cat-btn{padding:11px 14px;font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:none;background:transparent;color:#fff;cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;position:relative;border-radius:4px;}
+.cat-btn:hover{color:#fff;background:rgba(255,255,255,0.04);}
+.cat-btn.active{color:var(--accent);background:rgba(0,212,255,0.07);box-shadow:0 0 0 1px rgba(0,212,255,0.35),0 0 12px rgba(0,212,255,0.2),inset 0 0 8px rgba(0,212,255,0.05);}
+.cat-btn.active::before{content:'';position:absolute;top:0;left:15%;right:15%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);box-shadow:0 0 10px 3px rgba(0,212,255,0.55);border-radius:0 0 4px 4px;}
 .cat-btn.cat-my-news.active{color:var(--pro);}
 .cat-btn.cat-my-news.active::before{background:linear-gradient(90deg,transparent,var(--pro),transparent);box-shadow:0 0 10px 3px rgba(167,139,250,0.55);}
 .cat-btn.cat-market-moving.active{color:var(--high);}
@@ -215,7 +217,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .news-item.cal-positive .news-source,.news-item.cal-negative .news-source,.news-item.cal-neutral .news-source{color:rgba(255,255,255,0.75);}
 .news-item.high .news-time,.news-item.medium .news-time,.news-item.low .news-time,
 .news-item.cal-positive .news-time,.news-item.cal-negative .news-time,.news-item.cal-neutral .news-time{color:#fff;}
-.asset-tag{font-size:11px;font-weight:700;padding:3px 8px;background:rgba(0,212,255,0.12);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:3px;letter-spacing:0.04em;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
+.asset-tag{font-size:12px;font-weight:700;padding:4px 9px;background:rgba(0,212,255,0.12);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:3px;letter-spacing:0.04em;text-shadow:0 1px 3px rgba(0,0,0,0.5);display:inline-flex;align-items:center;gap:4px;}
 .cal-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;border:1px solid rgba(255,255,255,0.35);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
 .cal-tag-positive{background:rgba(16,185,129,0.25);}
 .cal-tag-negative{background:rgba(255,59,92,0.25);}
@@ -627,7 +629,8 @@ let myWatchlist      = JSON.parse(localStorage.getItem('myWatchlist') || '[]');
 const COUNTRY_ASSET  = {US:'USD',EU:'EUR',GB:'GBP',JP:'JPY',CH:'CHF',AU:'AUD',CA:'CAD',NZ:'NZD',CN:'CNY',DE:'EUR',FR:'EUR'};
 const ASSET_COUNTRIES= {USD:['US'],EUR:['EU','DE','FR'],GBP:['GB'],JPY:['JP'],AUD:['AU'],CAD:['CA'],CNY:['CN'],CHF:['CH'],NZD:['NZ']};
 const FLAGS          = {US:'🇺🇸',EU:'🇪🇺',GB:'🇬🇧',JP:'🇯🇵',CH:'🇨🇭',AU:'🇦🇺',CA:'🇨🇦',NZ:'🇳🇿',CN:'🇨🇳',DE:'🇩🇪',FR:'🇫🇷'};
-const ASSET_FLAG     = {USD:'🇺🇸',EUR:'🇪🇺',GBP:'🇬🇧',JPY:'🇯🇵',CHF:'🇨🇭',AUD:'🇦🇺',CAD:'🇨🇦',NZD:'🇳🇿',CNY:'🇨🇳',BTC:'₿',ETH:'Ξ',XRP:'◎',GOLD:'🟡',OIL:'🛢',SPX:'🇺🇸',NDX:'🇺🇸',DAX:'🇩🇪',FTSE:'🇬🇧',NKY:'🇯🇵'};
+const ASSET_FLAG = {USD:'🇺🇸',EUR:'🇪🇺',GBP:'🇬🇧',JPY:'🇯🇵',CHF:'🇨🇭',AUD:'🇦🇺',CAD:'🇨🇦',NZD:'🇳🇿',CNY:'🇨🇳',BTC:'₿',ETH:'Ξ',XRP:'◎',GOLD:'🟡',OIL:'🛢',SPX:'🇺🇸',NDX:'🇺🇸',DAX:'🇩🇪',FTSE:'🇬🇧',NKY:'🇯🇵'};
+const ASSET_NAME = {USD:'USA',EUR:'EURO',GBP:'UK',JPY:'JAPAN',CHF:'SWISS',AUD:'AUS',CAD:'CANADA',NZD:'N.ZEALAND',CNY:'CHINA',BTC:'BITCOIN',ETH:'ETHEREUM',XRP:'RIPPLE',GOLD:'GOLD',OIL:'OIL',SPX:'S&P500',NDX:'NASDAQ',DAX:'DAX',FTSE:'FTSE',NKY:'NIKKEI'};
 
 // ─── i18n ────────────────────────────────────────────────────────
 const STRINGS = {
@@ -843,7 +846,7 @@ function newsMatchesCategory(n, cat) {
   }
   const def = CATEGORY_KEYWORDS[cat];
   if (!def) return true;
-  if (def.impactOnly) return n.impact === def.impactOnly;
+  if (def.impactOnly) return n.impact === def.impactOnly && (!n._calRelease || n.impact === 'HIGH');
   if (n._calRelease) return calItemMatchesCat(n, def);
   const headline = (n.headline_en||'').toLowerCase();
   // Agricultural commodities must NOT appear in FOREX/CRYPTO/BONDS/EQUITIES/INDEXES
@@ -973,14 +976,16 @@ function handleNewsData(data) {
     }
   });
 
-  // Throttled sound: max 1 per 60s, for any genuinely new item < 5min old
-  if (hasRecentNew && allNews.length > 0 && soundEnabled) {
+  // Sound: always fire for any new item < 5min old, throttled to max 1 per 60s
+  if (hasRecentNew && soundEnabled) {
     const now = Date.now();
     if (now - lastSoundTime > 60000) {
       lastSoundTime = now;
       playAlert();
     }
   }
+  // Pulse the news tab if user is not on it
+  if (hasRecentNew) pulseTab('tab-news-btn');
 
   // Notification badge: if user is NOT on ALL, count new items
   if (genuineNewCount > 0 && selectedCategories.size > 0) {
@@ -1119,17 +1124,24 @@ function switchChannel(ch, btn) {
   openLiveStream(ch, null);
 }
 
+let currentTab = 'news';
 function switchTab(tab) {
+  currentTab = tab;
   document.querySelectorAll('.tab-content').forEach(el=>el.classList.add('hidden'));
   document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.remove('hidden');
-  document.getElementById('tab-'+tab+'-btn').classList.add('active');
+  const btn = document.getElementById('tab-'+tab+'-btn');
+  btn.classList.add('active');
+  btn.classList.remove('tab-pulse'); // stop pulse when user enters the tab
   if (tab==='calendar' && calEvents.length===0) loadCalendar();
   if (tab==='tv') {
-    // Auto-load Bloomberg when entering TV tab for the first time
     const frame = document.getElementById('tvPlayerFrame');
     if (frame && !frame.src) switchChannel(currentChannel, null);
   }
+}
+function pulseTab(tabId) {
+  const btn = document.getElementById(tabId);
+  if (btn && !btn.classList.contains('active')) btn.classList.add('tab-pulse');
 }
 
 // ─── Filters ─────────────────────────────────────────────────────
@@ -1237,7 +1249,8 @@ function getAssetTags(a) {
   if(!a) return [];
   return a.split(',').map(x=>x.trim()).filter(Boolean).map(tag=>{
     const flag = ASSET_FLAG[tag] || '';
-    return flag ? `${flag} ${tag}` : tag;
+    const name = ASSET_NAME[tag] || tag;
+    return flag ? `${flag} ${name}` : name;
   });
 }
 function getMarketMoves(h) {
@@ -1416,11 +1429,19 @@ function calSetImpact(imp, btn) {
   renderCalendar();
 }
 function fmtVal(v,u) { if(v===null||v===undefined)return'—'; return parseFloat(v).toFixed(Math.abs(v)<10?2:1)+(u||''); }
-function actualClass(actual,forecast,prev) {
+// Indicators where higher = negative (unemployment, deficit, debt, claims, etc.)
+const NEGATIVE_HIGHER = ['unemployment','jobless','claims','deficit','debt','inflation','cpi','ppi','trade balance','current account','budget'];
+function actualClass(actual,forecast,prev,title) {
   if(actual===null||actual===undefined)return'';
   const ref=forecast??prev;
   if(ref===null||ref===undefined)return'actual-neutral';
-  return actual>ref?'actual-positive':actual<ref?'actual-negative':'actual-neutral';
+  const t=(title||'').toLowerCase();
+  const invertedMetric = NEGATIVE_HIGHER.some(k=>t.includes(k));
+  const higher = actual>ref;
+  const lower  = actual<ref;
+  if(higher) return invertedMetric?'actual-negative':'actual-positive';
+  if(lower)  return invertedMetric?'actual-positive':'actual-negative';
+  return'actual-neutral';
 }
 function countdown(dateStr) {
   const diff=new Date(dateStr)-Date.now();
@@ -1444,7 +1465,7 @@ function renderCalendar() {
       const il=e.importance===1?t('cal.high_lbl'):e.importance===0?t('cal.med_lbl'):t('cal.low_lbl');
       const released=e.actual!==null&&e.actual!==undefined;
       const cd=!released?countdown(e.date):null;
-      const ac=actualClass(e.actual,e.forecast,e.previous);
+      const ac=actualClass(e.actual,e.forecast,e.previous,e.title);
       const timeLocal=new Date(e.date).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
       return`<div class="cal-event ${ic}${released?' released':''}" data-date="${e.date}">
         <div class="cal-time"><div>${timeLocal}</div>${cd?`<div class="cal-countdown">${cd}</div>`:''}</div>
@@ -1461,7 +1482,7 @@ function renderCalendar() {
   }).join('');
 }
 function injectCalRelease(e) {
-  const ac=actualClass(e.actual,e.forecast,e.previous);
+  const ac=actualClass(e.actual,e.forecast,e.previous,e.title);
   const acLabel=ac==='actual-positive'?'🟢':ac==='actual-negative'?'🔴':'🟡';
   const flag=FLAGS[e.country]||'';
   const unit=e.unit||'';
