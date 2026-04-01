@@ -904,10 +904,20 @@ function toggleWatch(asset, btn) {
 document.querySelectorAll('.watch-btn').forEach(btn => { if (myWatchlist.includes(btn.dataset.asset)) btn.classList.add('selected'); });
 
 // ─── Squawk (Web Speech API) ─────────────────────────────────────
+// Pre-load voices as soon as possible (async on most browsers)
+let _squawkVoices = [];
+function _loadVoices() {
+  _squawkVoices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+}
+if (window.speechSynthesis) {
+  _loadVoices();
+  speechSynthesis.onvoiceschanged = _loadVoices;
+}
+
 function squawkSpeak(text, url) {
   if (!squawkEnabled || !text) return;
-  // Strip HTML tags and emoji shortcodes, clean up for TTS
   const clean = text.replace(/<[^>]*>/g,'').replace(/[🟢🔴🟡▲▼●★◈▶]/gu,'').replace(/\s+/g,' ').trim();
+  if (!clean) return;
   squawkQueue.push({text: clean, url: url||''});
   if (!squawkSpeaking) drainSquawkQueue();
 }
@@ -920,16 +930,17 @@ function drainSquawkQueue() {
   const item = squawkQueue.shift();
   const utter = new SpeechSynthesisUtterance(item.text);
   utter.lang  = lang === 'pt' ? 'pt-PT' : 'en-US';
-  utter.rate  = 1.15;
+  utter.rate  = 1.1;
   utter.pitch = 1.0;
-  // Pick best available voice
-  const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+  // Pick best available voice (voices may now be populated)
+  const voices = _squawkVoices.length ? _squawkVoices : (window.speechSynthesis ? speechSynthesis.getVoices() : []);
   const langPfx = lang === 'pt' ? 'pt' : 'en';
   const voice = voices.find(v => v.lang.startsWith(langPfx) && /google|samantha|karen|daniel/i.test(v.name))
              || voices.find(v => v.lang.startsWith(langPfx) && v.default)
-             || voices.find(v => v.lang.startsWith(langPfx));
+             || voices.find(v => v.lang.startsWith(langPfx))
+             || voices[0];
   if (voice) utter.voice = voice;
-  // Highlight the matching news card
+  // Highlight matching card
   if (item.url) {
     const card = document.querySelector(`.news-item[data-url="${CSS.escape(item.url)}"]`);
     if (card) { card.classList.add('squawk-reading'); card.scrollIntoView({behavior:'smooth', block:'nearest'}); }
@@ -940,7 +951,12 @@ function drainSquawkQueue() {
 }
 function toggleSquawk() {
   squawkEnabled = !squawkEnabled;
-  if (!squawkEnabled) { speechSynthesis.cancel(); squawkQueue = []; squawkSpeaking = false; }
+  if (!squawkEnabled) {
+    speechSynthesis.cancel(); squawkQueue = []; squawkSpeaking = false;
+  } else {
+    // Test read on enable so the user knows it's working
+    squawkSpeak('Squawk enabled', '');
+  }
   updateSquawkBtn();
 }
 function updateSquawkBtn() {
@@ -952,25 +968,32 @@ function updateSquawkBtn() {
 }
 
 // ─── Sound ───────────────────────────────────────────────────────
-function playAlert() {
-  if (!soundEnabled) return;
+function _playBeep() {
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-    [[0,880,0.15],[0.18,1100,0.15],[0.36,880,0.2]].forEach(([w,f,d]) => {
-      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.frequency.value = f; o.type = 'sine';
-      g.gain.setValueAtTime(0.3,audioCtx.currentTime+w);
-      g.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime+w+d);
-      o.start(audioCtx.currentTime+w); o.stop(audioCtx.currentTime+w+d);
+    const resume = audioCtx.state === 'suspended' ? audioCtx.resume() : Promise.resolve();
+    resume.then(() => {
+      [[0,880,0.15],[0.18,1100,0.15],[0.36,880,0.2]].forEach(([w,f,d]) => {
+        const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+        o.connect(g); g.connect(audioCtx.destination);
+        o.frequency.value = f; o.type = 'sine';
+        g.gain.setValueAtTime(0.3, audioCtx.currentTime+w);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+w+d);
+        o.start(audioCtx.currentTime+w); o.stop(audioCtx.currentTime+w+d);
+      });
     });
   } catch(e) {}
+}
+function playAlert() {
+  if (!soundEnabled) return;
+  _playBeep();
 }
 function toggleSound() {
   soundEnabled = !soundEnabled;
   const b = document.getElementById('soundBtn');
   b.textContent = t(soundEnabled ? 'nav.alerts_on' : 'nav.alerts_off');
   b.classList.toggle('active', soundEnabled);
+  if (soundEnabled) _playBeep(); // test beep on enable
 }
 
 // ─── WebSocket ────────────────────────────────────────────────────
