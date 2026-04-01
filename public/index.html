@@ -54,6 +54,9 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .lang-btn.active{background:var(--accent);color:#000;}
 .sound-btn{padding:6px 12px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:#fff;cursor:pointer;transition:all .15s;border-radius:3px;}
 .sound-btn.active{border-color:var(--low);color:var(--low);}
+.squawk-btn{padding:6px 12px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:#fff;cursor:pointer;transition:all .15s;border-radius:3px;}
+.squawk-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.06);}
+.squawk-btn.speaking{border-color:var(--low);color:var(--low);animation:blink 1s ease-in-out infinite;}
 .auth-btn{padding:7px 16px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:#fff;cursor:pointer;transition:all .15s;border-radius:3px;}
 .auth-btn:hover{border-color:var(--accent2);color:var(--accent);}
 .auth-btn.signup{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
@@ -379,6 +382,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     </div>
   </div>
   <div class="header-right">
+    <button class="squawk-btn" id="squawkBtn" onclick="toggleSquawk()">🔇 Squawk OFF</button>
     <button class="sound-btn active" id="soundBtn" onclick="toggleSound()">🔔 Alerts ON</button>
     <div class="lang-toggle">
       <button class="lang-btn active" id="lang-en" onclick="setLang('en',this)">EN</button>
@@ -625,6 +629,9 @@ let knownUrls        = new Set();
 // so recent events always show after refresh
 let knownCalIds = new Set();
 function saveCalIds() { /* no-op: in-session only */ }
+let squawkEnabled    = false;
+let squawkQueue      = [];
+let squawkSpeaking   = false;
 let recentNewUrls    = new Set(); // URLs arrived in last 3 min → show NEW badge
 let newItemsCount    = 0;         // count for notification badge
 let lastSoundTime    = 0;         // throttle: 1 sound per 60s max
@@ -645,6 +652,7 @@ const STRINGS = {
     'logo.sub':'Real-time Market Intelligence',
     'nav.live':'Live Feed','nav.alerts_on':'🔔 Alerts ON','nav.alerts_off':'🔕 Alerts OFF',
     'nav.login':'Login','nav.signup':'Sign Up',
+    'squawk.off':'🔇 Squawk OFF','squawk.on':'🔊 Squawk ON','squawk.speaking':'🔊 Speaking...',
     'search.placeholder':'Search news, assets, keywords...',
     'sidebar.impact':'Impact','sidebar.all_news':'All News','sidebar.high_impact':'High Impact',
     'sidebar.medium':'Medium','sidebar.low':'Low',
@@ -690,6 +698,7 @@ const STRINGS = {
     'logo.sub':'Inteligência de Mercado em Tempo Real',
     'nav.live':'Feed ao Vivo','nav.alerts_on':'🔔 Alertas ON','nav.alerts_off':'🔕 Alertas OFF',
     'nav.login':'Entrar','nav.signup':'Registar',
+    'squawk.off':'🔇 Squawk OFF','squawk.on':'🔊 Squawk ON','squawk.speaking':'🔊 A falar...',
     'search.placeholder':'Pesquisar notícias, ativos, palavras-chave...',
     'sidebar.impact':'Impacto','sidebar.all_news':'Todas as Notícias','sidebar.high_impact':'Alto Impacto',
     'sidebar.medium':'Médio','sidebar.low':'Baixo',
@@ -739,6 +748,7 @@ function applyTranslations() {
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.getAttribute('data-i18n-placeholder')); });
   const sb = document.getElementById('soundBtn');
   if (sb) sb.textContent = t(soundEnabled ? 'nav.alerts_on' : 'nav.alerts_off');
+  updateSquawkBtn();
   updateFeedTitle();
 }
 
@@ -888,6 +898,47 @@ function toggleWatch(asset, btn) {
 }
 document.querySelectorAll('.watch-btn').forEach(btn => { if (myWatchlist.includes(btn.dataset.asset)) btn.classList.add('selected'); });
 
+// ─── Squawk (Web Speech API) ─────────────────────────────────────
+function squawkSpeak(text) {
+  if (!squawkEnabled || !text) return;
+  // Strip HTML tags and emoji shortcodes, clean up for TTS
+  const clean = text.replace(/<[^>]*>/g,'').replace(/[🟢🔴🟡▲▼●★◈▶]/gu,'').replace(/\s+/g,' ').trim();
+  squawkQueue.push(clean);
+  if (!squawkSpeaking) drainSquawkQueue();
+}
+function drainSquawkQueue() {
+  if (!squawkQueue.length || !squawkEnabled) {
+    squawkSpeaking = false; updateSquawkBtn(); return;
+  }
+  squawkSpeaking = true; updateSquawkBtn();
+  const utter = new SpeechSynthesisUtterance(squawkQueue.shift());
+  utter.lang  = lang === 'pt' ? 'pt-PT' : 'en-US';
+  utter.rate  = 1.15;
+  utter.pitch = 1.0;
+  // Pick best available voice
+  const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+  const langPfx = lang === 'pt' ? 'pt' : 'en';
+  const voice = voices.find(v => v.lang.startsWith(langPfx) && /google|samantha|karen|daniel/i.test(v.name))
+             || voices.find(v => v.lang.startsWith(langPfx) && v.default)
+             || voices.find(v => v.lang.startsWith(langPfx));
+  if (voice) utter.voice = voice;
+  utter.onend   = () => drainSquawkQueue();
+  utter.onerror = () => { squawkSpeaking = false; drainSquawkQueue(); };
+  speechSynthesis.speak(utter);
+}
+function toggleSquawk() {
+  squawkEnabled = !squawkEnabled;
+  if (!squawkEnabled) { speechSynthesis.cancel(); squawkQueue = []; squawkSpeaking = false; }
+  updateSquawkBtn();
+}
+function updateSquawkBtn() {
+  const btn = document.getElementById('squawkBtn');
+  if (!btn) return;
+  if (!squawkEnabled) { btn.textContent = t('squawk.off'); btn.className = 'squawk-btn'; }
+  else if (squawkSpeaking) { btn.textContent = t('squawk.speaking'); btn.className = 'squawk-btn active speaking'; }
+  else { btn.textContent = t('squawk.on'); btn.className = 'squawk-btn active'; }
+}
+
 // ─── Sound ───────────────────────────────────────────────────────
 function playAlert() {
   if (!soundEnabled) return;
@@ -970,6 +1021,7 @@ function handleNewsData(data) {
   let hasRecentNew = false;
   let genuineNewCount = 0;
 
+  const squawkItems = [];
   data.forEach(n => {
     if (!knownUrls.has(n.url)) {
       knownUrls.add(n.url);
@@ -978,10 +1030,13 @@ function handleNewsData(data) {
         recentNewUrls.add(n.url);
         genuineNewCount++;
         hasRecentNew = true;
+        squawkItems.push(n);
         setTimeout(() => recentNewUrls.delete(n.url), 10*60*1000);
       }
     }
   });
+  // Squawk new headlines (sorted oldest→newest so they read in order)
+  squawkItems.reverse().forEach(n => squawkSpeak(lang==='pt' ? translatePT(n.headline_en) : n.headline_en));
 
   // Sound: always fire for any new item < 5min old, throttled to max 1 per 60s
   if (hasRecentNew && soundEnabled) {
@@ -1514,6 +1569,7 @@ function injectCalRelease(e) {
     _calId: e.id,
   });
   if(soundEnabled&&e.importance===1){const now=Date.now();if(now-lastSoundTime>60000){lastSoundTime=now;playAlert();}}
+  if(e.importance===1) squawkSpeak(lang==='pt' ? translatePT(headline) : headline);
   renderNews();
 }
 async function loadCalendar() {
