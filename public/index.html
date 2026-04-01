@@ -952,7 +952,7 @@ function mergeNewsArrays(existing, incoming) {
 // ─── News data handler ────────────────────────────────────────────
 function handleNewsData(data) {
   const fiveMinAgo = Date.now() - 5*60*1000;
-  let hasRecentHigh = false;
+  let hasRecentNew = false;
   let genuineNewCount = 0;
 
   data.forEach(n => {
@@ -962,15 +962,14 @@ function handleNewsData(data) {
       if (itemTime > fiveMinAgo) {
         recentNewUrls.add(n.url);
         genuineNewCount++;
-        if (n.impact === 'HIGH') hasRecentHigh = true;
-        // Clear NEW badge after 3 minutes
+        hasRecentNew = true;
         setTimeout(() => recentNewUrls.delete(n.url), 10*60*1000);
       }
     }
   });
 
-  // Throttled sound: max 1 per 60s, only for genuinely new HIGH items < 5min old
-  if (hasRecentHigh && allNews.length > 0 && soundEnabled) {
+  // Throttled sound: max 1 per 60s, for any genuinely new item < 5min old
+  if (hasRecentNew && allNews.length > 0 && soundEnabled) {
     const now = Date.now();
     if (now - lastSoundTime > 60000) {
       lastSoundTime = now;
