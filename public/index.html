@@ -421,22 +421,22 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   <!-- FEED -->
   <main class="feed">
 
-    <!-- Ticker 1: Forex pairs (real-time) -->
+    <!-- Ticker 1: Forex + DXY + Indices -->
     <div class="ticker-bar">
       <div class="tradingview-widget-container" style="height:46px;overflow:hidden;">
         <div class="tradingview-widget-container__widget"></div>
         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-        {"symbols":[{"proName":"FOREXCOM:EURUSD","title":"EUR/USD"},{"proName":"FOREXCOM:GBPUSD","title":"GBP/USD"},{"proName":"FOREXCOM:USDJPY","title":"USD/JPY"},{"proName":"FOREXCOM:USDCHF","title":"USD/CHF"},{"proName":"FOREXCOM:AUDUSD","title":"AUD/USD"},{"proName":"FOREXCOM:USDCAD","title":"USD/CAD"},{"proName":"FOREXCOM:NZDUSD","title":"NZD/USD"},{"proName":"FOREXCOM:EURGBP","title":"EUR/GBP"},{"proName":"FOREXCOM:USDSEK","title":"USD/SEK"},{"proName":"FOREXCOM:USDNOK","title":"USD/NOK"},{"proName":"TVC:DXY","title":"DXY"}],"showSymbolLogo":false,"colorTheme":"dark","isTransparent":true,"displayMode":"adaptive","locale":"en"}
+        {"symbols":[{"proName":"TVC:DXY","title":"DXY"},{"proName":"FOREXCOM:EURUSD","title":"EUR/USD"},{"proName":"FOREXCOM:GBPUSD","title":"GBP/USD"},{"proName":"FOREXCOM:USDJPY","title":"USD/JPY"},{"proName":"FOREXCOM:USDCHF","title":"USD/CHF"},{"proName":"FOREXCOM:AUDUSD","title":"AUD/USD"},{"proName":"FOREXCOM:USDCAD","title":"USD/CAD"},{"proName":"FOREXCOM:NZDUSD","title":"NZD/USD"},{"proName":"FOREXCOM:EURGBP","title":"EUR/GBP"},{"proName":"FOREXCOM:EURJPY","title":"EUR/JPY"},{"proName":"FOREXCOM:GBPJPY","title":"GBP/JPY"},{"proName":"FOREXCOM:EURCHF","title":"EUR/CHF"},{"proName":"FOREXCOM:USDCNH","title":"USD/CNH"},{"proName":"FOREXCOM:USDBRL","title":"USD/BRL"},{"proName":"FOREXCOM:USDMXN","title":"USD/MXN"},{"proName":"FOREXCOM:USDSEK","title":"USD/SEK"},{"proName":"FOREXCOM:USDNOK","title":"USD/NOK"},{"proName":"SP:SPX","title":"S&P 500"},{"proName":"NASDAQ:NDX","title":"NASDAQ"},{"proName":"DJ:DJI","title":"DOW"},{"proName":"FOREXCOM:DE40","title":"DAX"},{"proName":"SPREADEX:FTSE","title":"FTSE 100"},{"proName":"TVC:NI225","title":"NIKKEI"},{"proName":"TVC:HSI","title":"HANG SENG"},{"proName":"SSE:000001","title":"SHANGHAI"}],"showSymbolLogo":false,"colorTheme":"dark","isTransparent":true,"displayMode":"adaptive","locale":"en"}
         </script>
       </div>
     </div>
 
-    <!-- Ticker 2: Equities, Indexes, Bonds, Commodities -->
+    <!-- Ticker 2: Crypto + Stocks + Commodities + Bonds -->
     <div class="ticker-bar ticker-bar-2">
       <div class="tradingview-widget-container" style="height:42px;overflow:hidden;">
         <div class="tradingview-widget-container__widget"></div>
         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-        {"symbols":[{"proName":"SP:SPX","title":"S&P 500"},{"proName":"NASDAQ:NDX","title":"NASDAQ"},{"proName":"DJ:DJI","title":"DOW"},{"proName":"FOREXCOM:DE40","title":"DAX"},{"proName":"SPREADEX:FTSE","title":"FTSE 100"},{"proName":"TVC:NI225","title":"NIKKEI"},{"proName":"TVC:GOLD","title":"GOLD"},{"proName":"TVC:SILVER","title":"SILVER"},{"proName":"NYMEX:CL1!","title":"CRUDE OIL"},{"proName":"TVC:USOIL","title":"WTI"},{"proName":"TVC:US10Y","title":"US 10Y"},{"proName":"TVC:US02Y","title":"US 2Y"},{"proName":"TVC:DE10Y","title":"BUND 10Y"},{"proName":"BITSTAMP:BTCUSD","title":"BTC"},{"proName":"BITSTAMP:ETHUSD","title":"ETH"}],"showSymbolLogo":false,"colorTheme":"dark","isTransparent":true,"displayMode":"adaptive","locale":"en"}
+        {"symbols":[{"proName":"BITSTAMP:BTCUSD","title":"BTC"},{"proName":"BITSTAMP:ETHUSD","title":"ETH"},{"proName":"CRYPTO:SOLUSD","title":"SOL"},{"proName":"CRYPTO:XRPUSD","title":"XRP"},{"proName":"CRYPTO:BNBUSD","title":"BNB"},{"proName":"CRYPTO:ADAUSD","title":"ADA"},{"proName":"CRYPTO:DOGEUSD","title":"DOGE"},{"proName":"NASDAQ:AAPL","title":"AAPL"},{"proName":"NASDAQ:NVDA","title":"NVDA"},{"proName":"NASDAQ:MSFT","title":"MSFT"},{"proName":"NASDAQ:AMZN","title":"AMZN"},{"proName":"NASDAQ:GOOGL","title":"GOOGL"},{"proName":"NASDAQ:META","title":"META"},{"proName":"NYSE:TSLA","title":"TSLA"},{"proName":"NYSE:JPM","title":"JPM"},{"proName":"NYSE:GS","title":"GS"},{"proName":"TVC:GOLD","title":"GOLD"},{"proName":"TVC:SILVER","title":"SILVER"},{"proName":"NYMEX:CL1!","title":"WTI OIL"},{"proName":"NYMEX:NG1!","title":"NAT GAS"},{"proName":"COMEX:HG1!","title":"COPPER"},{"proName":"TVC:US10Y","title":"US 10Y"},{"proName":"TVC:US02Y","title":"US 2Y"},{"proName":"TVC:DE10Y","title":"BUND 10Y"},{"proName":"TVC:JP10Y","title":"JGB 10Y"}],"showSymbolLogo":false,"colorTheme":"dark","isTransparent":true,"displayMode":"adaptive","locale":"en"}
         </script>
       </div>
     </div>
