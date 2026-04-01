@@ -210,14 +210,13 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .news-item.is-fresh.cal-neutral{background:rgba(245,158,11,0.13);}
 
 .news-time{font-size:12px;font-family:var(--font-mono);color:#fff;padding-top:2px;font-weight:500;line-height:1.6;}
-.news-headline{font-size:13px;font-weight:400;line-height:1.55;color:var(--text);margin-bottom:6px;}
+.news-headline{font-size:13px;font-weight:400;line-height:1.55;color:#fff;margin-bottom:6px;}
 .news-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
-.news-source{font-size:10px;font-weight:600;letter-spacing:0.06em;color:#b0bfcc;text-transform:uppercase;}
-.news-item.high .news-source,.news-item.medium .news-source,.news-item.low .news-source,
-.news-item.cal-positive .news-source,.news-item.cal-negative .news-source,.news-item.cal-neutral .news-source{color:rgba(255,255,255,0.75);}
-.news-item.high .news-time,.news-item.medium .news-time,.news-item.low .news-time,
-.news-item.cal-positive .news-time,.news-item.cal-negative .news-time,.news-item.cal-neutral .news-time{color:#fff;}
-.asset-tag{font-size:12px;font-weight:700;padding:4px 9px;background:rgba(0,212,255,0.12);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:3px;letter-spacing:0.04em;text-shadow:0 1px 3px rgba(0,0,0,0.5);display:inline-flex;align-items:center;gap:4px;}
+.news-source{font-size:10px;font-weight:600;letter-spacing:0.06em;color:rgba(255,255,255,0.7);text-transform:uppercase;}
+.news-item .news-time{color:#fff;}
+.news-item .news-source{color:rgba(255,255,255,0.7);}
+.asset-tag{font-size:12px;font-weight:700;padding:4px 9px;background:rgba(0,212,255,0.12);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:3px;letter-spacing:0.04em;text-shadow:0 1px 3px rgba(0,0,0,0.5);display:inline-flex;align-items:center;gap:5px;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',var(--font);}
+.asset-tag .flag{font-size:15px;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif;line-height:1;}
 .cal-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;border:1px solid rgba(255,255,255,0.35);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
 .cal-tag-positive{background:rgba(16,185,129,0.25);}
 .cal-tag-negative{background:rgba(255,59,92,0.25);}
@@ -248,15 +247,13 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .scroll-sentinel{height:1px;}
 
 /* ── Delay banner ── */
-.delay-banner{margin:0 0 1px;border-top:1px solid rgba(255,59,92,0.35);border-bottom:1px solid rgba(255,59,92,0.35);background:rgba(255,59,92,0.08);padding:36px 32px;text-align:center;position:relative;overflow:hidden;}
-.delay-banner::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,59,92,0.07) 0%,transparent 60%);pointer-events:none;}
-.delay-banner-eyebrow{font-size:10px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--high);margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:12px;}
-.delay-banner-eyebrow::before,.delay-banner-eyebrow::after{content:'';flex:1;max-width:70px;height:1px;background:rgba(255,59,92,0.3);}
-.delay-banner-title{font-size:22px;font-weight:800;letter-spacing:0.04em;color:#fff;text-transform:uppercase;margin-bottom:12px;}
-.delay-banner-sub{font-size:14px;font-weight:400;color:var(--text-dim);margin-bottom:24px;line-height:1.75;max-width:480px;margin-left:auto;margin-right:auto;}
+.delay-banner{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid rgba(245,158,11,0.4);border-bottom:2px solid rgba(245,158,11,0.5);background:rgba(245,158,11,0.12);padding:8px 20px;flex-shrink:0;}
+.delay-banner-eyebrow{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--medium);}
+.delay-banner-title{font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.06em;}
+.delay-banner-sub{font-size:11px;font-weight:400;color:rgba(255,255,255,0.8);line-height:1.4;}
 .delay-banner-sub strong{color:#fff;font-weight:700;}
-.delay-banner-btn{display:inline-block;padding:13px 38px;background:linear-gradient(135deg,var(--high) 0%,#c0153a 100%);color:#fff;font-family:var(--font);font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;border:none;transition:all .2s;border-radius:3px;box-shadow:0 4px 16px rgba(255,59,92,0.35);}
-.delay-banner-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,59,92,0.5);}
+.delay-banner-btn{flex-shrink:0;padding:6px 18px;background:var(--medium);color:#000;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:none;transition:all .15s;border-radius:3px;}
+.delay-banner-btn:hover{background:#fbbf24;}
 
 /* ── Empty ── */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;color:var(--text-muted);gap:12px;}
@@ -479,6 +476,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
         <div class="feed-title" id="feedTitle">All News <span class="feed-title-badge" data-i18n="feed.live">LIVE</span></div>
         <div class="feed-count" id="feedCount" data-i18n="feed.connecting">Connecting...</div>
       </div>
+      <div id="delayBannerWrap"></div>
       <div class="feed-inner" id="newsFeed">
         <div class="empty-state">
           <div class="empty-icon">◈</div>
@@ -1250,7 +1248,7 @@ function getAssetTags(a) {
   return a.split(',').map(x=>x.trim()).filter(Boolean).map(tag=>{
     const flag = ASSET_FLAG[tag] || '';
     const name = ASSET_NAME[tag] || tag;
-    return flag ? `${flag} ${name}` : name;
+    return flag ? `<span class="flag">${flag}</span>${name}` : name;
   });
 }
 function getMarketMoves(h) {
@@ -1315,6 +1313,20 @@ function renderNews() {
   const total = filtered.length;
   const countEl = document.getElementById('feedCount');
   if (countEl) countEl.textContent = total + ' ' + t('feed.items');
+
+  // Delay banner — fixed at top, rendered once
+  const bannerWrap = document.getElementById('delayBannerWrap');
+  if (bannerWrap) {
+    if (USER_PACK==='basic') {
+      bannerWrap.innerHTML = `<div class="delay-banner">
+        <div><div class="delay-banner-eyebrow">${t('delay.notice')}</div><div class="delay-banner-title">${t('delay.title')}</div></div>
+        <div class="delay-banner-sub">${t('delay.sub')}</div>
+        <button class="delay-banner-btn" onclick="showToast(t('toast.pro'))">${t('delay.btn')}</button>
+      </div>`;
+    } else {
+      bannerWrap.innerHTML = '';
+    }
+  }
 
   if (total === 0) {
     document.getElementById('newsFeed').innerHTML = `<div class="empty-state"><div class="empty-icon">◈</div><div class="empty-text">${t('empty.no_news')}</div><div class="empty-sub">${t('empty.no_news_sub')}</div></div>`;
@@ -1388,14 +1400,6 @@ function renderNews() {
       <div class="news-impact"><span class="impact-badge ${badgeCls}">${badgeLbl}</span></div>
     </div>`;
 
-    if (USER_PACK==='basic' && idx===DELAY_AFTER) {
-      return card+`<div class="delay-banner">
-        <div class="delay-banner-eyebrow">${t('delay.notice')}</div>
-        <div class="delay-banner-title">${t('delay.title')}</div>
-        <div class="delay-banner-sub">${t('delay.sub')}</div>
-        <button class="delay-banner-btn" onclick="showToast(t('toast.pro'))">${t('delay.btn')}</button>
-      </div>`;
-    }
     return card;
   }).join('');
 
