@@ -393,8 +393,8 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       <button class="lang-btn active" id="lang-en" onclick="setLang('en',this)">EN</button>
       <button class="lang-btn" id="lang-pt" onclick="setLang('pt',this)">PT</button>
     </div>
-    <button class="auth-btn" onclick="showToast(t('toast.login'))" data-i18n="nav.login">Login</button>
-    <button class="auth-btn signup" onclick="showToast(t('toast.signup'))" data-i18n="nav.signup">Sign Up</button>
+    <span id="userLabel" style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);"></span>
+    <button class="auth-btn" id="logoutBtn" onclick="doLogout()" style="display:none">Sign Out</button>
   </div>
 </header>
 
@@ -612,6 +612,37 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 <div class="toast" id="toast"></div>
 
 <script>
+// ─── Auth Gate ──────────────────────────────────────────────────
+const LOGIN_URL = 'https://www.tradingnewsterminal.com/login.html';
+(function authGate() {
+  const token = localStorage.getItem('tnt_token');
+  if (!token) { window.location.replace(LOGIN_URL); return; }
+  // Validate token with backend silently
+  fetch('https://tracker-fx-news-terminal-backend-production.up.railway.app/auth/me', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  }).then(r => {
+    if (!r.ok) { localStorage.removeItem('tnt_token'); localStorage.removeItem('tnt_user'); window.location.replace(LOGIN_URL); return; }
+    return r.json();
+  }).then(user => {
+    if (!user) return;
+    // Update stored user info
+    localStorage.setItem('tnt_user', JSON.stringify(user));
+    // Show user label + logout in header
+    const label = document.getElementById('userLabel');
+    const btn   = document.getElementById('logoutBtn');
+    if (label) label.textContent = user.name || user.email;
+    if (btn)   btn.style.display = '';
+    // Mark plan on window for pack checks
+    window._tntPlan = user.plan;
+  }).catch(() => {}); // network error → let them in, backend will handle
+})();
+
+function doLogout() {
+  localStorage.removeItem('tnt_token');
+  localStorage.removeItem('tnt_user');
+  window.location.replace(LOGIN_URL);
+}
+
 // ─── Config ─────────────────────────────────────────────────────
 const BACKEND_URL = 'https://tracker-fx-news-terminal-backend-production.up.railway.app';
 const USER_PACK   = 'basic';
