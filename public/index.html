@@ -1172,7 +1172,7 @@ function handleNewsData(data) {
   cached.forEach(n => knownUrls.add(n.url));
   allNews = cached;
   updateCounts(allNews);
-  renderNews();
+  try { renderNews(); } catch(e) { console.error('[bootFromCache] renderNews error:', e); }
   document.getElementById('totalCount').textContent = allNews.length;
   document.getElementById('lastUpdate').textContent = '(cached)';
 }());
@@ -1761,7 +1761,7 @@ function hideUpgrade() {
 applyTranslations();
 // Re-render after translations are applied (bootFromCache runs before applyTranslations,
 // so this ensures counts/feed are correct after translation strings are ready)
-if (allNews.length > 0) { updateCounts(allNews); renderNews(); document.getElementById('totalCount').textContent = allNews.length; }
+if (allNews.length > 0) { try { updateCounts(allNews); renderNews(); } catch(e) { console.error('[init] renderNews error:', e); } document.getElementById('totalCount').textContent = allNews.length; }
 connectWebSocket();
 loadCalendar(); // load calendar immediately on boot
 setInterval(loadCalendar,60000);
