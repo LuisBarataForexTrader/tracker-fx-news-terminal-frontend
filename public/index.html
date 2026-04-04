@@ -2412,9 +2412,8 @@ async function loadSentiment(force=false){
     // COT panel
     let cotHtml=`<div style="text-align:center;padding:32px 20px;">
       <div style="font-size:28px;margin-bottom:12px;">📊</div>
-      <div style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px;">CFTC COT Data Temporarily Unavailable</div>
-      <div style="font-size:11px;color:#4a6070;line-height:1.7;">The CFTC (Commodity Futures Trading Commission) publishes<br>Commitments of Traders data every <strong style="color:var(--text-muted)">Friday after market close</strong>.<br>The public reporting API may be slow or offline.<br>Check back on Saturday for updated positions.</div>
-      <div style="margin-top:16px;"><a href="https://www.cftc.gov/dea/newcot/deafut.txt" target="_blank" style="font-size:10px;color:var(--accent);text-decoration:none;letter-spacing:0.06em;">↗ VIEW CFTC DATA DIRECTLY</a></div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px;">COT Data Loading...</div>
+      <div style="font-size:11px;color:#4a6070;line-height:1.7;">CFTC Commitments of Traders — published every <strong style="color:var(--text-muted)">Friday after market close</strong>.<br>Data is fetched directly from the CFTC weekly report file.</div>
     </div>`;
     if(cot&&Object.keys(cot).length){
       const rows=Object.entries(cot).map(([cur,row])=>{
