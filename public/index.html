@@ -507,7 +507,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       </div>
       <div class="feed-header">
         <div class="feed-title" id="feedTitle">All News <span class="feed-title-badge" data-i18n="feed.live">LIVE</span></div>
-        <div class="feed-count" id="feedCount" data-i18n="feed.connecting">Connecting...</div>
+        <div class="feed-count" id="feedCount">Connecting...</div>
       </div>
       <div id="delayBannerWrap"></div>
       <div class="feed-inner" id="newsFeed">
@@ -1437,6 +1437,7 @@ function getAssetTags(a) {
   });
 }
 function getMarketMoves(h) {
+  if (!h) return [];
   const l=h.toLowerCase(),m=[];
   if(l.includes('cpi')||l.includes('inflation')){m.push({asset:'USD',dir:l.includes('above')||l.includes('rise')||l.includes('high')?'up':'down'});m.push({asset:'GOLD',dir:l.includes('above')||l.includes('rise')?'down':'up'});}
   if(l.includes('fed')||l.includes('rate hike')){m.push({asset:'USD',dir:'up'});m.push({asset:'INDICES',dir:'down'});}
@@ -1758,6 +1759,9 @@ function hideUpgrade() {
 
 // ─── Init ────────────────────────────────────────────────────────
 applyTranslations();
+// Re-render after translations are applied (bootFromCache runs before applyTranslations,
+// so this ensures counts/feed are correct after translation strings are ready)
+if (allNews.length > 0) { updateCounts(allNews); renderNews(); document.getElementById('totalCount').textContent = allNews.length; }
 connectWebSocket();
 loadCalendar(); // load calendar immediately on boot
 setInterval(loadCalendar,60000);
