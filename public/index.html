@@ -55,9 +55,28 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .lang-btn.active{background:var(--accent);color:#000;}
 .sound-btn{padding:6px 12px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:#fff;cursor:pointer;transition:all .15s;border-radius:3px;}
 .sound-btn.active{border-color:var(--low);color:var(--low);}
+.squawk-wrap{display:flex;align-items:center;gap:3px;position:relative;}
 .squawk-btn{padding:6px 12px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:#fff;cursor:pointer;transition:all .15s;border-radius:3px;}
 .squawk-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,0.06);}
 .squawk-btn.speaking{border-color:var(--low);color:var(--low);animation:blink 1s ease-in-out infinite;}
+.squawk-cfg-btn{padding:5px 7px;font-size:11px;border:1px solid var(--border);background:transparent;color:#556070;cursor:pointer;transition:all .15s;border-radius:3px;line-height:1;}
+.squawk-cfg-btn:hover,.squawk-cfg-btn.open{color:var(--accent);border-color:var(--accent);}
+.squawk-dd{display:none;position:absolute;top:calc(100% + 6px);right:0;background:#0d1118;border:1px solid var(--border2);border-radius:6px;padding:16px 18px;width:290px;z-index:500;box-shadow:0 20px 50px rgba(0,0,0,0.6);}
+.squawk-dd::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);border-radius:6px 6px 0 0;}
+.squawk-dd.open{display:block;}
+.squawk-dd-title{font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#445566;margin-bottom:14px;}
+.squawk-dd-row{margin-bottom:13px;}
+.squawk-dd-lbl{font-size:10px;font-weight:600;color:#7a9ab0;margin-bottom:5px;display:block;}
+.squawk-voice-sel{width:100%;background:#0a0c0f;border:1px solid var(--border2);color:#e0e8f0;font-family:var(--font);font-size:11px;padding:5px 8px;border-radius:3px;cursor:pointer;outline:none;}
+.squawk-speed-row{display:flex;align-items:center;gap:8px;}
+.squawk-speed-row input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer;}
+.squawk-speed-val{font-size:11px;font-weight:700;color:#fff;min-width:30px;text-align:right;}
+.squawk-chips{display:flex;gap:5px;flex-wrap:wrap;}
+.squawk-chip{padding:4px 10px;background:var(--bg3);border:1px solid var(--border);color:#7a9ab0;font-family:var(--font);font-size:10px;cursor:pointer;border-radius:3px;transition:all .12s;}
+.squawk-chip.sel{background:rgba(0,212,255,0.1);border-color:var(--accent);color:var(--accent);font-weight:700;}
+.squawk-test-btn{width:100%;margin-top:4px;padding:7px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);color:var(--accent);font-family:var(--font);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .15s;}
+.squawk-test-btn:hover{background:rgba(0,212,255,0.14);}
+.squawk-dd-note{font-size:9px;color:#334455;margin-top:10px;line-height:1.5;}
 
 /* ── Upgrade Modal ── */
 .upgrade-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:4000;align-items:center;justify-content:center;padding:20px;}
@@ -782,7 +801,36 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
     </div>
   </div>
   <div class="header-right">
-    <button class="squawk-btn" id="squawkBtn" onclick="toggleSquawk()">🔇 Squawk OFF</button>
+    <div class="squawk-wrap" id="squawkWrap">
+      <button class="squawk-btn" id="squawkBtn" onclick="toggleSquawk()">🔇 Squawk OFF</button>
+      <button class="squawk-cfg-btn" id="squawkCfgBtn" onclick="toggleSquawkCfg(event)" title="Squawk settings">⚙</button>
+      <div class="squawk-dd" id="squawkDd">
+        <div class="squawk-dd-title">⚙ Squawk Settings</div>
+        <div class="squawk-dd-row">
+          <span class="squawk-dd-lbl">Voice</span>
+          <select class="squawk-voice-sel" id="squawkVoiceSel" onchange="setSquawkVoice(this.value)">
+            <option value="">Auto — best available</option>
+          </select>
+        </div>
+        <div class="squawk-dd-row">
+          <span class="squawk-dd-lbl">Speed</span>
+          <div class="squawk-speed-row">
+            <input type="range" id="squawkRateInput" min="0.6" max="1.6" step="0.1" value="1.0" oninput="setSquawkRate(this.value)">
+            <span class="squawk-speed-val" id="squawkRateVal">1.0×</span>
+          </div>
+        </div>
+        <div class="squawk-dd-row">
+          <span class="squawk-dd-lbl">Read news</span>
+          <div class="squawk-chips">
+            <button class="squawk-chip sel" data-sf="ALL"      onclick="setSquawkFilter('ALL',this)">All</button>
+            <button class="squawk-chip"     data-sf="HIGH"     onclick="setSquawkFilter('HIGH',this)">High Impact only</button>
+            <button class="squawk-chip"     data-sf="MY_NEWS"  onclick="setSquawkFilter('MY_NEWS',this)">My News</button>
+          </div>
+        </div>
+        <button class="squawk-test-btn" onclick="testSquawkVoice()">▶ Test Voice</button>
+        <div class="squawk-dd-note">Voices always read in English for clarity.<br>Neural/Google voices sound best.</div>
+      </div>
+    </div>
     <button class="sound-btn active" id="soundBtn" onclick="toggleSound()">🔔 Alerts ON</button>
     <div class="lang-toggle">
       <button class="lang-btn active" id="lang-en" onclick="setLang('en',this)">EN</button>
@@ -1186,6 +1234,9 @@ function saveCalIds() { /* no-op: in-session only */ }
 let squawkEnabled    = false;
 let squawkQueue      = [];
 let squawkSpeaking   = false;
+let squawkRate       = parseFloat(localStorage.getItem('squawkRate') || '1.0');
+let squawkFilter     = localStorage.getItem('squawkFilter') || 'ALL';
+let squawkVoiceName  = localStorage.getItem('squawkVoiceName') || '';
 let recentNewUrls    = new Set(); // URLs arrived in last 3 min → show NEW badge
 let newItemsCount    = 0;         // count for notification badge
 let lastSoundTime    = 0;         // throttle: 1 sound per 60s max
@@ -1639,69 +1690,76 @@ _syncModalSelections();
 _updateMyNewsCount();
 
 // ─── Squawk (Web Speech API) ─────────────────────────────────────
-// Pre-load voices as soon as possible (async on most browsers)
 let _squawkVoices = [];
 function _loadVoices() {
   _squawkVoices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
 }
 if (window.speechSynthesis) {
   _loadVoices();
-  speechSynthesis.onvoiceschanged = _loadVoices;
+  speechSynthesis.onvoiceschanged = () => { _loadVoices(); populateSquawkVoices(); };
 }
 
-function squawkSpeak(text, url) {
+// Pick the best available English voice — tier order: Neural/Online MS → Google → macOS named → default
+function _getBestVoice() {
+  const voices = _squawkVoices.length ? _squawkVoices : (window.speechSynthesis ? speechSynthesis.getVoices() : []);
+  if (squawkVoiceName) {
+    const named = voices.find(v => v.name === squawkVoiceName);
+    if (named) return named;
+  }
+  const en = voices.filter(v => v.lang.startsWith('en'));
+  return en.find(v => /microsoft/i.test(v.name) && /natural|neural|online/i.test(v.name))
+      || en.find(v => /google/i.test(v.name))
+      || en.find(v => /samantha|alex|karen|daniel|moira|victoria/i.test(v.name))
+      || en.find(v => v.default)
+      || en[0]
+      || voices[0];
+}
+
+function squawkSpeak(text, url, newsItem) {
   if (!squawkEnabled || !text) return;
+  // Apply squawk filter
+  if (squawkFilter === 'HIGH' && newsItem && newsItem.impact !== 'HIGH') return;
+  if (squawkFilter === 'MY_NEWS' && newsItem && !newsMatchesCategory(newsItem, 'MY_NEWS')) return;
   const clean = text.replace(/<[^>]*>/g,'').replace(/[🟢🔴🟡▲▼●★◈▶]/gu,'').replace(/\s+/g,' ').trim();
   if (!clean) return;
   squawkQueue.push({text: clean, url: url||''});
   if (!squawkSpeaking) drainSquawkQueue();
 }
+
 function drainSquawkQueue() {
   document.querySelectorAll('.squawk-reading').forEach(el => el.classList.remove('squawk-reading'));
-  if (!squawkQueue.length || !squawkEnabled) {
-    squawkSpeaking = false; updateSquawkBtn(); return;
-  }
+  if (!squawkQueue.length || !squawkEnabled) { squawkSpeaking = false; updateSquawkBtn(); return; }
   squawkSpeaking = true; updateSquawkBtn();
   const item = squawkQueue.shift();
   const utter = new SpeechSynthesisUtterance(item.text);
-  utter.lang  = lang === 'pt' ? 'pt-PT' : 'en-US';
-  utter.rate  = 1.1;
+  utter.lang  = 'en-US'; // News content is always English — pt-PT TTS is unintelligible
+  utter.rate  = squawkRate;
   utter.pitch = 1.0;
-  // Pick best available voice (voices may now be populated)
-  const voices = _squawkVoices.length ? _squawkVoices : (window.speechSynthesis ? speechSynthesis.getVoices() : []);
-  const langPfx = lang === 'pt' ? 'pt' : 'en';
-  const voice = voices.find(v => v.lang.startsWith(langPfx) && /google|samantha|karen|daniel/i.test(v.name))
-             || voices.find(v => v.lang.startsWith(langPfx) && v.default)
-             || voices.find(v => v.lang.startsWith(langPfx))
-             || voices[0];
+  const voice = _getBestVoice();
   if (voice) utter.voice = voice;
-  // Switch to news tab so the card is visible, then highlight it
   if (item.url) {
     if (currentTab !== 'news') switchTab('news');
-    // Use setTimeout to let the DOM settle after any tab switch / re-render
     setTimeout(() => {
-      const card = [...document.querySelectorAll('.news-item[data-url]')]
-        .find(el => el.dataset.url === item.url);
-      if (card) {
-        card.classList.add('squawk-reading');
-        card.scrollIntoView({behavior:'smooth', block:'center'});
-      }
+      const card = [...document.querySelectorAll('.news-item[data-url]')].find(el => el.dataset.url === item.url);
+      if (card) { card.classList.add('squawk-reading'); card.scrollIntoView({behavior:'smooth', block:'center'}); }
     }, 120);
   }
   utter.onend   = () => drainSquawkQueue();
   utter.onerror = () => { squawkSpeaking = false; drainSquawkQueue(); };
   speechSynthesis.speak(utter);
 }
+
 function toggleSquawk() {
+  if (!IS_PRO) { showUpgrade('Live Squawk'); return; }
   squawkEnabled = !squawkEnabled;
   if (!squawkEnabled) {
     speechSynthesis.cancel(); squawkQueue = []; squawkSpeaking = false;
   } else {
-    // Test read on enable so the user knows it's working
-    squawkSpeak('Squawk enabled', '');
+    squawkSpeak('Squawk enabled. Listening for new headlines.', '', null);
   }
   updateSquawkBtn();
 }
+
 function updateSquawkBtn() {
   const btn = document.getElementById('squawkBtn');
   if (!btn) return;
@@ -1710,10 +1768,72 @@ function updateSquawkBtn() {
     btn.className = 'squawk-btn';
     return;
   }
-  if (!squawkEnabled) { btn.textContent = t('squawk.off'); btn.className = 'squawk-btn'; }
+  if (!squawkEnabled)      { btn.textContent = t('squawk.off');      btn.className = 'squawk-btn'; }
   else if (squawkSpeaking) { btn.textContent = t('squawk.speaking'); btn.className = 'squawk-btn active speaking'; }
-  else { btn.textContent = t('squawk.on'); btn.className = 'squawk-btn active'; }
+  else                     { btn.textContent = t('squawk.on');       btn.className = 'squawk-btn active'; }
 }
+
+// ─── Squawk Config Panel ──────────────────────────────────────────
+function toggleSquawkCfg(e) {
+  e.stopPropagation();
+  const dd  = document.getElementById('squawkDd');
+  const btn = document.getElementById('squawkCfgBtn');
+  const open = dd.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  if (open) {
+    populateSquawkVoices();
+    const ri = document.getElementById('squawkRateInput');
+    if (ri) { ri.value = squawkRate; document.getElementById('squawkRateVal').textContent = squawkRate.toFixed(1) + '×'; }
+    document.querySelectorAll('.squawk-chip').forEach(c => c.classList.toggle('sel', c.dataset.sf === squawkFilter));
+  }
+}
+function populateSquawkVoices() {
+  const sel = document.getElementById('squawkVoiceSel');
+  if (!sel) return;
+  const voices = _squawkVoices.length ? _squawkVoices : (window.speechSynthesis ? speechSynthesis.getVoices() : []);
+  const en = voices.filter(v => v.lang.startsWith('en'));
+  sel.innerHTML = '<option value="">Auto — best available</option>';
+  en.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v.name;
+    opt.textContent = v.name + ' (' + v.lang + ')';
+    if (v.name === squawkVoiceName) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+function setSquawkVoice(name) {
+  squawkVoiceName = name;
+  localStorage.setItem('squawkVoiceName', name);
+}
+function setSquawkRate(val) {
+  squawkRate = parseFloat(val);
+  localStorage.setItem('squawkRate', squawkRate.toString());
+  document.getElementById('squawkRateVal').textContent = squawkRate.toFixed(1) + '×';
+}
+function setSquawkFilter(f, btn) {
+  squawkFilter = f;
+  localStorage.setItem('squawkFilter', f);
+  document.querySelectorAll('.squawk-chip').forEach(c => c.classList.toggle('sel', c.dataset.sf === f));
+}
+function testSquawkVoice() {
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance('Markets alert. Euro Dollar up zero point three percent. Gold hits two thousand seven hundred.');
+  utter.lang  = 'en-US';
+  utter.rate  = squawkRate;
+  utter.pitch = 1.0;
+  const voice = _getBestVoice();
+  if (voice) utter.voice = voice;
+  speechSynthesis.speak(utter);
+}
+// Close squawk dropdown on outside click
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('squawkWrap');
+  if (wrap && !wrap.contains(e.target)) {
+    document.getElementById('squawkDd')?.classList.remove('open');
+    document.getElementById('squawkCfgBtn')?.classList.remove('open');
+  }
+});
 
 // ─── Sound ───────────────────────────────────────────────────────
 function _playBeep() {
@@ -1819,8 +1939,8 @@ function handleNewsData(data) {
       }
     }
   });
-  // Squawk new headlines (sorted oldest→newest so they read in order)
-  squawkItems.reverse().forEach(n => squawkSpeak(lang==='pt' ? translatePT(n.headline_en) : n.headline_en, n.url));
+  // Squawk new headlines — always English, apply squawk filter
+  squawkItems.reverse().forEach(n => squawkSpeak(n.headline_en, n.url, n));
 
   // Sound: always fire for any new item < 5min old, throttled to max 1 per 60s
   if (hasRecentNew && soundEnabled) {
@@ -2407,7 +2527,7 @@ function injectCalRelease(e) {
     _calId: e.id,
   });
   if(soundEnabled&&e.importance===1){const now=Date.now();if(now-lastSoundTime>60000){lastSoundTime=now;playAlert();}}
-  if(e.importance===1) squawkSpeak(lang==='pt' ? translatePT(headline) : headline, calUrl);
+  if(e.importance===1) squawkSpeak(headline, calUrl, null); // Calendar events are always high impact
   renderNews();
 }
 async function loadCalendar() {
