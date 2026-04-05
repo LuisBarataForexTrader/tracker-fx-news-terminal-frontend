@@ -197,7 +197,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .sidebar-tfx-ad-inner{background:#22304A;border:1px solid rgba(107,92,231,0.3);border-radius:6px;overflow:hidden;position:relative;}
 .sidebar-tfx-ad-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#6B5CE7 40%,#9B8BFF 60%,transparent);}
 .tfx-ad-body-wrap{padding:12px 13px 11px;}
-.tfx-ad-eyebrow{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#fff;margin-bottom:7px;}
+.tfx-ad-eyebrow{font-size:7.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:7px;}
 .tfx-ad-logo-text{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1;margin-bottom:4px;}
 .tfx-ad-logo-text span{color:#9B8BFF;}
 .tfx-ad-tagline{font-size:10px;color:#fff;line-height:1.45;margin-bottom:10px;}
@@ -452,7 +452,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .feed-ad-sub{font-size:10px;color:#fff;}
 .feed-ad-cta{flex-shrink:0;padding:7px 16px;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:all .15s;white-space:nowrap;}
 .feed-ad-card:hover .feed-ad-cta{background:linear-gradient(135deg,#4A3ACC,#6B5BEF);}
-.feed-ad-sponsored{position:absolute;top:4px;right:8px;font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.2);pointer-events:none;}
+.feed-ad-sponsored{display:none;}
 
 /* ── Empty ── */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;color:var(--text-muted);gap:12px;}
@@ -834,7 +834,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
               <span class="tfx-ad-stat-lbl">Trial</span>
             </div>
           </div>
-          <a class="tfx-ad-btn" href="https://www.trackerfx.com" target="_blank" rel="noopener">Start Free →</a>
+          <a class="tfx-ad-btn" href="https://www.trackerfx.com" target="_blank" rel="noopener">Start Your Journey</a>
           <div class="tfx-ad-footer-note">Automated Trading Journal</div>
         </div>
       </div>
@@ -2295,7 +2295,7 @@ function renderNews() {
                <div class="feed-ad-headline">The Master Key to Profitable Trading</div>
                <div class="feed-ad-sub">Automated Journal · 1200+ Brokers · MT4/MT5 · Free Trial</div>
              </div>
-             <button class="feed-ad-cta" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">Start Free →</button>
+             <button class="feed-ad-cta" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">Start Your Journey</button>
              <span class="feed-ad-sponsored">Sponsored</span>
            </div>
          </div>`
