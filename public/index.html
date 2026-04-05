@@ -194,20 +194,20 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 /* ── Tracker FX Sidebar Ad ── */
 .sidebar-tfx-ad{margin:0 10px 2px;flex-shrink:0;}
-.sidebar-tfx-ad-inner{background:#22304A;border:1px solid rgba(252,65,74,0.3);border-radius:6px;overflow:hidden;position:relative;}
-.sidebar-tfx-ad-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#fc414a 40%,#ff6b74 60%,transparent);}
+.sidebar-tfx-ad-inner{background:#22304A;border:1px solid rgba(107,92,231,0.3);border-radius:6px;overflow:hidden;position:relative;}
+.sidebar-tfx-ad-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#6B5CE7 40%,#9B8BFF 60%,transparent);}
 .tfx-ad-body-wrap{padding:12px 13px 11px;}
-.tfx-ad-eyebrow{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(252,65,74,.7);margin-bottom:7px;}
+.tfx-ad-eyebrow{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:7px;}
 .tfx-ad-logo-text{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1;margin-bottom:4px;}
-.tfx-ad-logo-text span{color:#fc414a;}
-.tfx-ad-tagline{font-size:10px;color:rgba(255,255,255,.55);line-height:1.45;margin-bottom:10px;}
+.tfx-ad-logo-text span{color:#9B8BFF;}
+.tfx-ad-tagline{font-size:10px;color:#fff;opacity:.8;line-height:1.45;margin-bottom:10px;}
 .tfx-ad-stats{display:flex;gap:5px;margin-bottom:10px;}
-.tfx-ad-stat{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:3px;padding:5px 3px;text-align:center;}
+.tfx-ad-stat{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:5px 3px;text-align:center;}
 .tfx-ad-stat-num{font-size:11px;font-weight:800;color:#fff;display:block;line-height:1;}
-.tfx-ad-stat-lbl{font-size:7.5px;color:rgba(255,255,255,.35);display:block;margin-top:2px;text-transform:uppercase;letter-spacing:.05em;}
-.tfx-ad-btn{display:block;width:100%;padding:8px 10px;text-align:center;background:#fc414a;color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;border-radius:3px;text-decoration:none;transition:all .2s;}
-.tfx-ad-btn:hover{background:#e02f38;transform:translateY(-1px);box-shadow:0 4px 16px rgba(252,65,74,.4);}
-.tfx-ad-footer-note{font-size:8px;color:rgba(255,255,255,.2);text-align:center;margin-top:6px;letter-spacing:.04em;}
+.tfx-ad-stat-lbl{font-size:7.5px;color:rgba(255,255,255,.45);display:block;margin-top:2px;text-transform:uppercase;letter-spacing:.05em;}
+.tfx-ad-btn{display:block;width:100%;padding:8px 10px;text-align:center;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;border-radius:3px;text-decoration:none;transition:all .2s;}
+.tfx-ad-btn:hover{background:linear-gradient(135deg,#4A3ACC,#6B5BEF);transform:translateY(-1px);box-shadow:0 4px 16px rgba(107,92,231,.45);}
+.tfx-ad-footer-note{font-size:8px;color:rgba(255,255,255,.25);text-align:center;margin-top:6px;letter-spacing:.04em;}
 
 /* ── Modal PRO gating ── */
 .mynews-panel[data-plan="basic"] .mnt-pro-section{position:relative;overflow:hidden;border-radius:5px;}
@@ -429,29 +429,29 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .load-more-btn:hover{border-color:var(--accent);color:var(--accent);}
 .scroll-sentinel{height:1px;}
 
-/* ── Delay banner (logo cyan) ── */
+/* ── Delay banner ── */
 .delay-banner-wrap{margin:10px 16px 8px;}
-.delay-banner{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.25);border-left:3px solid #00d4ff;padding:9px 20px;flex-shrink:0;border-radius:3px;}
+.delay-banner{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid #6B5CE7;padding:9px 20px;flex-shrink:0;border-radius:3px;}
 .delay-banner-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
 .delay-banner-icon{font-size:14px;flex-shrink:0;}
-.delay-banner-text{font-size:11px;color:rgba(255,255,255,0.88);line-height:1.5;overflow:hidden;}
-.delay-banner-text strong{color:#00d4ff;font-weight:700;}
-.delay-banner-btn{flex-shrink:0;padding:6px 16px;background:#00d4ff;color:#000;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:none;transition:background .15s;border-radius:3px;white-space:nowrap;}
-.delay-banner-btn:hover{background:#0099cc;}
+.delay-banner-text{font-size:11px;color:#374151;line-height:1.5;overflow:hidden;}
+.delay-banner-text strong{color:#6B5CE7;font-weight:700;}
+.delay-banner-btn{flex-shrink:0;padding:6px 16px;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:none;transition:all .15s;border-radius:3px;white-space:nowrap;}
+.delay-banner-btn:hover{background:linear-gradient(135deg,#4A3ACC,#6B5BEF);}
 /* ── Inline feed ad ── */
 .feed-ad-card{cursor:pointer;transition:opacity .15s;position:relative;overflow:hidden;}
 .feed-ad-card:hover{opacity:.92;}
-.feed-ad-banner{background:#22304A;border-top:2px solid #fc414a;border-bottom:1px solid rgba(252,65,74,.18);padding:11px 20px 11px 22px;display:flex;align-items:center;gap:14px;position:relative;}
+.feed-ad-banner{background:#22304A;border-top:2px solid #6B5CE7;border-bottom:1px solid rgba(107,92,231,.18);padding:11px 20px 11px 22px;display:flex;align-items:center;gap:14px;position:relative;}
 .feed-ad-brand{display:flex;flex-direction:column;gap:1px;flex-shrink:0;min-width:74px;}
 .feed-ad-brand-name{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.01em;line-height:1;}
-.feed-ad-brand-name span{color:#fc414a;}
-.feed-ad-brand-tag{font-size:8px;color:rgba(255,255,255,.35);letter-spacing:.07em;text-transform:uppercase;margin-top:2px;}
+.feed-ad-brand-name span{color:#9B8BFF;}
+.feed-ad-brand-tag{font-size:8px;color:rgba(255,255,255,.4);letter-spacing:.07em;text-transform:uppercase;margin-top:2px;}
 .feed-ad-divider{width:1px;height:28px;background:rgba(255,255,255,.1);flex-shrink:0;}
 .feed-ad-copy{flex:1;min-width:0;}
 .feed-ad-headline{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.feed-ad-sub{font-size:10px;color:rgba(255,255,255,.4);}
-.feed-ad-cta{flex-shrink:0;padding:7px 16px;background:#fc414a;color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:all .15s;white-space:nowrap;}
-.feed-ad-card:hover .feed-ad-cta{background:#e02f38;}
+.feed-ad-sub{font-size:10px;color:rgba(255,255,255,.5);}
+.feed-ad-cta{flex-shrink:0;padding:7px 16px;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:all .15s;white-space:nowrap;}
+.feed-ad-card:hover .feed-ad-cta{background:linear-gradient(135deg,#4A3ACC,#6B5BEF);}
 .feed-ad-sponsored{position:absolute;top:4px;right:8px;font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.2);pointer-events:none;}
 
 /* ── Empty ── */
@@ -873,7 +873,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       </div>
       <div class="pack-cta">
         <div class="pack-cta-text" data-i18n-html="pack.cta_text">You're on the <strong>Basic Plan</strong>.<br>Upgrade to <strong>Pro</strong> for real-time coverage.</div>
-        <button class="pack-upgrade" onclick="showUpgrade('Upgrade to Pro')" data-i18n="pack.upgrade_btn">⚡ Upgrade to Pro →</button>
+        <button class="pack-upgrade" onclick="showUpgrade('Upgrade to Pro')" data-i18n="pack.upgrade_btn">Upgrade to Pro →</button>
         <div style="font-size:10px;color:#4a6070;text-align:center;margin-top:8px;">From €30/mo · excl. VAT · Billed in EUR</div>
       </div>
     </div>
