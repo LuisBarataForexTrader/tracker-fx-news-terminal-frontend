@@ -20,7 +20,7 @@
   --pro:#a78bfa; --pro-bg:rgba(167,139,250,0.08); --pro-border:rgba(167,139,250,0.25);
   --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --font-mono:'IBM Plex Mono','Courier New',monospace;
-  --header-h:72px; --sidebar-w:230px;
+  --header-h:72px; --sidebar-w:210px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
@@ -60,7 +60,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .squawk-btn.speaking{border-color:var(--low);color:var(--low);animation:blink 1s ease-in-out infinite;}
 
 /* ── Upgrade Modal ── */
-.upgrade-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;align-items:center;justify-content:center;padding:20px;}
+.upgrade-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:4000;align-items:center;justify-content:center;padding:20px;}
 .upgrade-overlay.show{display:flex;}
 .upgrade-modal{background:#0f1217;border:1px solid rgba(167,139,250,0.4);border-radius:6px;padding:40px;max-width:440px;width:100%;text-align:center;position:relative;box-shadow:0 40px 80px rgba(0,0,0,0.6),0 0 60px rgba(167,139,250,0.08);}
 .upgrade-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#a78bfa,transparent);}
@@ -100,7 +100,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .plan-card-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 
 /* ── Pro locked badge on tab ── */
-.tab-pro-lock{font-size:6.5px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(167,139,250,0.75);margin-left:5px;padding:1px 3px;border:1px solid rgba(167,139,250,0.3);border-radius:2px;vertical-align:middle;line-height:1;}
+.tab-pro-lock{font-size:6px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(167,139,250,0.8);margin-left:auto;padding:2px 4px;border:1px solid rgba(167,139,250,0.3);border-radius:2px;line-height:1;flex-shrink:0;}
 .auth-btn{padding:7px 16px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:#fff;cursor:pointer;transition:all .15s;border-radius:3px;}
 .auth-btn:hover{border-color:var(--accent2);color:var(--accent);}
 .auth-btn.signup{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700;}
@@ -120,10 +120,141 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .dot-all{background:#fff}.dot-high{background:var(--high)}.dot-medium{background:var(--medium)}.dot-low{background:var(--low)}
 .filter-count{margin-left:auto;font-size:10px;font-family:var(--font-mono);color:#fff;}
 .watchlist-grid{display:flex;flex-wrap:wrap;gap:4px;padding:0 4px;}
-.watch-btn{padding:5px 9px;background:var(--bg3);border:1px solid var(--border);color:#fff;font-family:var(--font);font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;border-radius:3px;}
+.watch-btn{padding:4px 7px;background:var(--bg3);border:1px solid var(--border);color:#889aaa;font-family:var(--font);font-size:10px;font-weight:500;cursor:pointer;transition:all .15s;border-radius:3px;}
 .watch-btn:hover{color:#fff;border-color:var(--border2);}
-.watch-btn.selected{color:var(--accent);border-color:var(--accent2);background:rgba(0,212,255,0.08);}
+.watch-btn.selected{color:var(--accent);border-color:var(--accent2);background:rgba(0,212,255,0.1);}
 .my-news-hint{font-size:10px;color:#fff;line-height:1.5;padding:4px 4px 6px;}
+/* Watchlist groups */
+.wl-groups{display:flex;gap:3px;margin:6px 0 7px;}
+.wl-grp{flex:1;padding:4px 0;background:var(--bg3);border:1px solid var(--border);color:#556070;font-family:var(--font);font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .15s;}
+.wl-grp:hover{color:#9bb;border-color:#2a4;}
+.wl-grp.active{color:var(--accent);border-color:var(--accent2);background:rgba(0,212,255,0.08);}
+.wl-asset-group{display:flex;flex-wrap:wrap;gap:3px;min-height:28px;}
+.wl-asset-group.hidden{display:none;}
+.wl-cat-sep{margin:9px 0 5px;font-size:8.5px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#334;padding:0 1px;display:flex;align-items:center;gap:6px;}
+.wl-cat-sep::after{content:'';flex:1;height:1px;background:var(--border);}
+.wl-cats{display:flex;flex-wrap:wrap;gap:3px;}
+.wl-cat-btn{padding:4px 7px;background:transparent;border:1px solid #1e3a5f;color:#445566;font-family:var(--font);font-size:10px;font-weight:500;cursor:pointer;border-radius:3px;transition:all .15s;}
+.wl-cat-btn:hover{color:#9bb;border-color:#2a5;}
+.wl-cat-btn.selected{color:#a78bfa;border-color:rgba(167,139,250,0.5);background:rgba(167,139,250,0.08);}
+
+/* ── My News compact sidebar trigger ── */
+.mynews-trigger{}
+.mynews-summary{font-size:10px;color:#7a9ab0;margin:2px 0 10px;line-height:1.5;min-height:14px;}
+.mynews-config-btn{width:100%;padding:8px 12px;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.2);color:var(--accent);font-family:var(--font);font-size:11px;font-weight:600;cursor:pointer;border-radius:3px;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;}
+.mynews-config-btn:hover{background:rgba(0,212,255,0.12);border-color:var(--accent);}
+.mynews-badge{background:var(--accent);color:#000;font-size:9px;font-weight:800;padding:1px 5px;border-radius:9px;min-width:14px;text-align:center;display:none;}
+.mynews-badge.show{display:inline-block;}
+
+/* ── My News Config Modal ── */
+.mynews-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:3000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
+.mynews-overlay.show{display:flex;}
+.mynews-panel{background:#0f1217;border:1px solid var(--border2);border-radius:8px;width:620px;max-width:100%;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 40px 80px rgba(0,0,0,0.7),0 0 0 1px rgba(0,212,255,0.04);position:relative;overflow:hidden;}
+.mynews-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);pointer-events:none;}
+.mynews-hdr{display:flex;align-items:flex-start;justify-content:space-between;padding:22px 24px 0;}
+.mynews-hdr-left{}
+.mynews-hdr-title{font-size:16px;font-weight:700;color:var(--text);letter-spacing:-.01em;}
+.mynews-hdr-sub{font-size:11px;color:var(--text-muted);margin-top:4px;}
+.mynews-close{background:none;border:none;color:#556070;cursor:pointer;font-size:22px;line-height:1;padding:2px;margin-top:-4px;transition:color .15s;}
+.mynews-close:hover{color:var(--text);}
+.mynews-tabs{display:flex;padding:16px 24px 0;border-bottom:1px solid var(--border);gap:4px;}
+.mynews-tab{padding:8px 18px;background:transparent;border:none;color:#556070;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;border-radius:3px 3px 0 0;letter-spacing:.01em;}
+.mynews-tab:hover{color:var(--text-dim);}
+.mynews-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(0,212,255,0.04);}
+.mynews-body{flex:1;overflow-y:auto;padding:22px 24px;}
+.mynews-body::-webkit-scrollbar{width:4px;}
+.mynews-body::-webkit-scrollbar-track{background:transparent;}
+.mynews-body::-webkit-scrollbar-thumb{background:#1e2530;border-radius:2px;}
+.mynews-pane{display:none;}
+.mynews-pane.active{display:block;}
+.mnt-group{margin-bottom:22px;}
+.mnt-group-lbl{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:#445566;margin-bottom:9px;display:flex;align-items:center;gap:8px;}
+.mnt-group-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+.mnt-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.mnt-chip{padding:5px 10px;background:var(--bg3);border:1px solid var(--border);color:#7a9ab0;font-family:var(--font);font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;transition:all .15s;}
+.mnt-chip:hover{color:#fff;border-color:var(--border2);}
+.mnt-chip.sel{color:var(--accent);border-color:var(--accent2);background:rgba(0,212,255,0.09);}
+.mnt-cat-chip{padding:6px 13px;background:transparent;border:1px solid #1a2d40;color:#445566;font-family:var(--font);font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;transition:all .15s;}
+.mnt-cat-chip:hover{color:#9bb;border-color:#2a4;}
+.mnt-cat-chip.sel{color:#a78bfa;border-color:rgba(167,139,250,0.45);background:rgba(167,139,250,0.08);}
+.mnt-cal-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--bg3);border:1px solid var(--border);color:#7a9ab0;font-family:var(--font);font-size:11px;font-weight:500;cursor:pointer;border-radius:4px;transition:all .15s;}
+.mnt-cal-chip:hover{color:#fff;border-color:var(--border2);}
+.mnt-cal-chip.sel{color:#f59e0b;border-color:rgba(245,158,11,0.45);background:rgba(245,158,11,0.07);}
+.mnt-cal-chip .cal-flag{font-size:14px;line-height:1;}
+.mnt-cal-chip .cal-code{font-size:10px;font-weight:700;letter-spacing:.05em;}
+.mnt-cal-chip .cal-name{font-size:10px;color:inherit;opacity:.75;}
+.mynews-footer{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-top:1px solid var(--border);background:rgba(10,12,15,0.5);}
+.mynews-footer-count{font-size:11px;color:#556070;}
+.mynews-footer-count strong{color:var(--text-dim);}
+.mynews-footer-actions{display:flex;gap:8px;}
+.mnf-clear{padding:7px 14px;background:transparent;border:1px solid #2a3444;color:#556070;font-family:var(--font);font-size:11px;font-weight:500;cursor:pointer;border-radius:3px;transition:all .15s;}
+.mnf-clear:hover{color:#ff6b6b;border-color:rgba(255,107,107,.4);}
+.mnf-done{padding:7px 20px;background:var(--accent2);border:none;color:#000;font-family:var(--font);font-size:11px;font-weight:700;cursor:pointer;border-radius:3px;transition:all .15s;}
+.mnf-done:hover{background:var(--accent);}
+
+/* ── Tracker FX Sidebar Ad ── */
+.sidebar-tfx-ad{margin:0 10px 2px;background:linear-gradient(150deg,rgba(245,158,11,0.13) 0%,rgba(10,12,15,0.95) 70%);border:1px solid rgba(245,158,11,0.3);border-radius:6px;overflow:hidden;position:relative;flex-shrink:0;}
+.sidebar-tfx-ad::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f59e0b 40%,#fcd34d 60%,transparent);}
+.sidebar-tfx-ad-inner{padding:11px 13px 12px;}
+.tfx-ad-eyebrow{font-size:8px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:#f59e0b;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.tfx-ad-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:#f59e0b;animation:blink 2s ease-in-out infinite;flex-shrink:0;}
+.tfx-ad-title{font-size:13px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:3px;}
+.tfx-ad-title span{color:#fbbf24;}
+.tfx-ad-sub{font-size:10px;color:#8a9ab0;line-height:1.45;margin-bottom:10px;}
+.tfx-ad-features{display:flex;flex-direction:column;gap:3px;margin-bottom:10px;}
+.tfx-ad-feat{font-size:10px;color:#c8a84b;display:flex;align-items:center;gap:6px;}
+.tfx-ad-feat::before{content:'✓';color:#f59e0b;font-weight:800;font-size:9px;flex-shrink:0;}
+.tfx-ad-btn{display:block;width:100%;padding:9px 12px;text-align:center;background:linear-gradient(135deg,#92400e,#d97706,#fbbf24);color:#000;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;border-radius:3px;text-decoration:none;transition:all .2s;box-shadow:0 3px 14px rgba(245,158,11,.3);}
+.tfx-ad-btn:hover{box-shadow:0 5px 20px rgba(245,158,11,.5);transform:translateY(-1px);}
+
+/* ── Modal PRO gating ── */
+.mynews-panel[data-plan="basic"] .mnt-pro-section{position:relative;overflow:hidden;border-radius:5px;}
+.mynews-panel[data-plan="basic"] .mnt-pro-section .mnt-chips{opacity:.25;pointer-events:none;user-select:none;}
+.mnt-gate{display:none;position:absolute;inset:0;background:rgba(10,12,15,0.9);align-items:center;justify-content:center;flex-direction:column;gap:6px;cursor:pointer;border-radius:5px;border:1px dashed rgba(167,139,250,0.22);z-index:3;transition:background .15s;}
+.mnt-gate:hover{background:rgba(20,15,35,0.95);border-color:rgba(167,139,250,.45);}
+.mynews-panel[data-plan="basic"] .mnt-pro-section .mnt-gate{display:flex;}
+.mnt-gate-icon{font-size:14px;color:#a78bfa;opacity:.8;}
+.mnt-gate-text{font-size:11px;font-weight:700;color:#a78bfa;letter-spacing:.05em;}
+.mnt-gate-sub{font-size:9px;color:#556070;letter-spacing:.03em;}
+/* Locked pane overlay */
+.mynews-panel[data-plan="basic"] .mynews-pane-locked{position:relative;min-height:160px;}
+.mynews-panel[data-plan="basic"] .mynews-pane-locked .mnt-lock-overlay{display:flex;}
+.mynews-pane-locked .mnt-lock-overlay{display:none;position:absolute;inset:0;background:rgba(10,12,15,0.94);flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:2;border-radius:4px;border:1px dashed rgba(167,139,250,0.2);}
+.mnt-lock-icon{font-size:28px;color:#a78bfa;opacity:.65;}
+.mnt-lock-text{font-size:13px;font-weight:700;color:#a78bfa;letter-spacing:.04em;}
+.mnt-lock-sub{font-size:11px;color:#556070;text-align:center;max-width:240px;line-height:1.55;}
+.mnt-lock-btn{padding:9px 22px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;border-radius:3px;margin-top:4px;transition:all .15s;}
+.mnt-lock-btn:hover{background:linear-gradient(135deg,#6d28d9,#c4b5fd);transform:translateY(-1px);}
+.mynews-tab[data-pro-tab]::after{content:' ✦';color:#a78bfa;font-size:9px;}
+.mynews-panel[data-plan="basic"] .mynews-tab[data-pro-tab]{color:#445566;}
+.mynews-basic-notice{display:none;background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.15);border-radius:4px;padding:9px 12px;margin-bottom:16px;font-size:10.5px;color:#8a7ab0;line-height:1.5;}
+.mynews-panel[data-plan="basic"] .mynews-basic-notice{display:block;}
+.mynews-basic-notice strong{color:#a78bfa;}
+/* ── Sidebar ad image ── */
+.tfx-ad-img-wrap{display:block;width:100%;border-radius:4px;overflow:hidden;margin-bottom:8px;line-height:0;}
+.tfx-ad-img-wrap img{width:100%;height:auto;display:block;border-radius:4px;}
+.tfx-ad-img-fallback{display:none;}
+.tfx-ad-img-wrap img.broken + .tfx-ad-img-fallback{display:block;}
+/* ── In-feed ad banner ── */
+.infeed-ad{margin:8px 20px 4px;border-radius:5px;overflow:hidden;border:1px solid rgba(245,158,11,0.2);cursor:pointer;position:relative;line-height:0;background:#0a0c0f;}
+.infeed-ad img{width:100%;height:auto;display:block;border-radius:4px;}
+.infeed-ad-fallback{display:none;padding:10px 14px;background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(10,12,15,0.9));align-items:center;justify-content:space-between;gap:12px;}
+.infeed-ad img.broken ~ .infeed-ad-fallback{display:flex;}
+.infeed-ad-text{font-size:12px;font-weight:600;color:#c8a84b;line-height:1.4;}
+.infeed-ad-text strong{color:#fbbf24;display:block;font-size:13px;}
+.infeed-ad-cta{padding:7px 14px;background:linear-gradient(135deg,#92400e,#f59e0b);color:#000;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border:none;border-radius:3px;white-space:nowrap;cursor:pointer;flex-shrink:0;}
+.infeed-ad-label{position:absolute;top:5px;right:7px;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);background:rgba(0,0,0,.4);padding:2px 5px;border-radius:2px;}
+/* Custom ticker search */
+.mnt-search-wrap{display:flex;align-items:center;background:#0a0c0f;border:1px solid var(--border2);border-radius:5px;padding:0 4px;margin-top:4px;transition:border-color .15s;}
+.mnt-search-wrap:focus-within{border-color:var(--accent2);}
+.mnt-search-icon{color:#556070;font-size:13px;padding:0 8px;flex-shrink:0;}
+.mnt-search-input{flex:1;background:transparent;border:none;color:var(--text);font-family:var(--font-mono);font-size:12px;font-weight:500;padding:9px 4px 9px 0;outline:none;text-transform:uppercase;letter-spacing:.04em;}
+.mnt-search-input::placeholder{font-family:var(--font);text-transform:none;letter-spacing:0;color:#445566;font-size:11px;}
+.mnt-search-hint{font-size:10px;color:#334455;margin-top:6px;padding:0 2px;}
+.mnt-custom-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;min-height:0;}
+.mnt-chip-custom{position:relative;padding:5px 22px 5px 10px;background:rgba(0,212,255,0.09);border:1px solid var(--accent2);color:var(--accent);font-family:var(--font-mono);font-size:11px;font-weight:600;border-radius:4px;}
+.mnt-chip-custom .rm{position:absolute;top:50%;right:5px;transform:translateY(-50%);background:none;border:none;color:rgba(0,212,255,0.5);cursor:pointer;font-size:12px;line-height:1;padding:0 2px;}
+.mnt-chip-custom .rm:hover{color:#ff6b6b;}
 
 /* Pack CTA */
 .pack-info{margin:14px 12px 0;background:linear-gradient(145deg,rgba(255,59,92,0.12) 0%,rgba(20,10,15,0.9) 60%);border:1px solid rgba(255,59,92,0.3);border-radius:6px;overflow:hidden;}
@@ -189,14 +320,16 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .tv-toggle-btn.active{border-color:var(--high);color:var(--high);background:var(--high-bg);}
 .tv-toggle-btn .tv-dot{width:5px;height:5px;border-radius:50%;background:var(--high);animation:blink 1.5s ease-in-out infinite;}
 
-/* ── Tabs ── */
-.tab-bar{display:flex;background:linear-gradient(180deg,#0d1f2d 0%,#091520 100%);border-top:3px solid var(--accent);border-bottom:1px solid rgba(0,212,255,0.15);flex-shrink:0;padding:0 6px;overflow-x:auto;scrollbar-width:none;box-shadow:0 6px 24px rgba(0,0,0,0.6);}
-.tab-bar::-webkit-scrollbar{display:none;}
-.tab-btn{padding:0 16px;height:50px;font-family:var(--font);font-size:10px;font-weight:700;letter-spacing:0.13em;text-transform:uppercase;border:none;border-right:1px solid rgba(255,255,255,0.04);background:transparent;color:#506070;cursor:pointer;transition:all .15s;position:relative;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:0;}
-.tab-btn:first-child{border-left:1px solid rgba(255,255,255,0.04);}
-.tab-btn:hover{color:#9bb8cc;background:rgba(0,212,255,0.05);}
-.tab-btn.active{color:#00d4ff;background:rgba(0,212,255,0.12);border-right-color:rgba(0,212,255,0.15);box-shadow:inset 0 -3px 0 var(--accent);}
-.tab-btn.active::after{content:'';position:absolute;top:3px;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(0,212,255,0.08) 0%,transparent 60%);pointer-events:none;}
+/* ── Tabs (now in sidebar as vertical nav) ── */
+.tab-bar{display:none;}
+.sidebar-nav{border-bottom:1px solid var(--border);padding:6px 0;}
+.sidebar-nav-label{font-size:9px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:#fff;padding:8px 18px 4px;display:block;}
+.tab-btn{width:100%;padding:0 10px 0 16px;height:36px;font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:none;border-left:3px solid transparent;background:transparent;color:#506070;cursor:pointer;transition:all .15s;position:relative;white-space:nowrap;display:flex;align-items:center;gap:9px;text-align:left;border-radius:0;}
+.tab-btn .nav-icon{font-size:13px;flex-shrink:0;width:16px;text-align:center;opacity:.7;}
+.tab-btn:hover{color:#9bb8cc;background:rgba(0,212,255,0.05);border-left-color:rgba(0,212,255,0.3);}
+.tab-btn.active{color:#00d4ff;background:rgba(0,212,255,0.1);border-left-color:var(--accent);}
+.tab-btn.active .nav-icon{opacity:1;}
+.tab-btn:first-child{border-left:3px solid transparent;}
 .tab-btn.tab-pulse{animation:tabPulse 1s ease-in-out infinite;}
 @keyframes tabPulse{0%,100%{color:rgba(16,185,129,0.6)}50%{color:var(--low)}}
 .tab-content{flex:1;overflow:hidden;display:flex;flex-direction:column;}
@@ -317,15 +450,21 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .delay-banner-text strong{color:#00d4ff;font-weight:700;}
 .delay-banner-btn{flex-shrink:0;padding:6px 16px;background:#00d4ff;color:#000;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:none;transition:background .15s;border-radius:3px;white-space:nowrap;}
 .delay-banner-btn:hover{background:#0099cc;}
-/* ── Inline feed ad (logo cyan) ── */
-.feed-ad-card{padding:12px 20px;background:rgba(0,212,255,0.05);border-top:1px solid rgba(0,212,255,0.2);border-bottom:1px solid rgba(0,212,255,0.2);border-left:4px solid #00d4ff;cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:14px;}
-.feed-ad-card:hover{background:rgba(0,212,255,0.1);}
-.feed-ad-badge{font-size:8px;font-weight:800;letter-spacing:0.18em;color:#00d4ff;text-transform:uppercase;border:1px solid rgba(0,212,255,0.4);padding:2px 6px;border-radius:2px;flex-shrink:0;}
+/* ── Inline feed ad ── */
+.feed-ad-card{cursor:pointer;transition:opacity .15s;position:relative;overflow:hidden;}
+.feed-ad-card:hover{opacity:.9;}
+/* Image banner mode */
+.feed-ad-img{display:block;width:100%;height:auto;line-height:0;}
+.feed-ad-img img{width:100%;height:auto;display:block;}
+/* Text fallback mode */
+.feed-ad-text{padding:12px 20px;background:rgba(245,158,11,0.07);border-top:1px solid rgba(245,158,11,0.2);border-bottom:1px solid rgba(245,158,11,0.2);border-left:4px solid #f59e0b;display:flex;align-items:center;gap:14px;}
+.feed-ad-badge{font-size:8px;font-weight:800;letter-spacing:.18em;color:#f59e0b;text-transform:uppercase;border:1px solid rgba(245,158,11,0.4);padding:2px 6px;border-radius:2px;flex-shrink:0;}
 .feed-ad-body{flex:1;}
 .feed-ad-headline{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;}
-.feed-ad-sub{font-size:10px;color:rgba(0,212,255,0.65);}
-.feed-ad-cta{flex-shrink:0;padding:6px 14px;background:#00d4ff;color:#000;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:background .15s;}
-.feed-ad-card:hover .feed-ad-cta{background:#0099cc;color:#fff;}
+.feed-ad-sub{font-size:10px;color:rgba(245,158,11,0.7);}
+.feed-ad-cta{flex-shrink:0;padding:6px 14px;background:#f59e0b;color:#000;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:all .15s;}
+.feed-ad-card:hover .feed-ad-cta{background:#fbbf24;}
+.feed-ad-sponsored{position:absolute;top:5px;right:8px;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);background:rgba(0,0,0,.45);padding:2px 6px;border-radius:2px;pointer-events:none;}
 
 /* ── Empty ── */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;color:var(--text-muted);gap:12px;}
@@ -568,6 +707,11 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .sc-fbtn:hover{background:#00d4aa33;}
 .sc-fbtn.rst{background:transparent;border-color:#223;color:#445;}
 .sc-fbtn.rst:hover{color:#889;border-color:#445;}
+.sc-search-wrap{display:flex;align-items:center;gap:4px;margin-left:6px;}
+.sc-search{background:#0a1628;border:1px solid #1e3a5f;color:#c8d6e5;font-size:11px;padding:3px 8px 3px 26px;border-radius:4px;outline:none;width:150px;transition:border-color .15s,width .2s;}
+.sc-search:focus{border-color:#00d4aa55;width:200px;}
+.sc-search::placeholder{color:#334;}
+.sc-search-wrap svg{position:absolute;margin-left:7px;pointer-events:none;opacity:.4;}
 .sc-meta{margin-left:auto;font-size:10px;color:#334;white-space:nowrap;display:flex;align-items:center;gap:6px;}
 .sc-refresh-btn{padding:2px 7px;background:transparent;border:1px solid #1a2030;color:#445;font-size:10px;border-radius:4px;cursor:pointer;transition:all .15s;}
 .sc-refresh-btn:hover{color:#00d4aa;border-color:#00d4aa44;}
@@ -664,6 +808,46 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 <div class="main">
   <!-- SIDEBAR -->
   <aside class="sidebar">
+
+    <!-- Vertical Navigation Menu -->
+    <nav class="sidebar-nav">
+      <span class="sidebar-nav-label">Menu</span>
+      <button class="tab-btn active" id="tab-news-btn" onclick="switchTab('news')"><span class="nav-icon">≡</span>News Feed</button>
+      <button class="tab-btn" id="tab-calendar-btn" onclick="switchTab('calendar')"><span class="nav-icon">▦</span>Calendar</button>
+      <button class="tab-btn" id="tab-tv-btn" onclick="IS_PRO ? switchTab('tv') : showUpgrade('Live Financial TV')"><span class="nav-icon">▶</span>Live TV<span class="tab-pro-lock" id="tv-lock-badge">PRO</span></button>
+      <button class="tab-btn" id="tab-fx-btn" onclick="IS_PRO ? switchTab('fx') : showUpgrade('FX Rates')"><span class="nav-icon">⇄</span>FX Rates<span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-crypto-btn" onclick="IS_PRO ? switchTab('crypto') : showUpgrade('Crypto Markets')"><span class="nav-icon">◈</span>Crypto<span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-commodities-btn" onclick="IS_PRO ? switchTab('commodities') : showUpgrade('Commodities')"><span class="nav-icon">◆</span>Commodities<span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-macro-btn" onclick="IS_PRO ? switchTab('macro') : showUpgrade('Macro Dashboard')"><span class="nav-icon">∿</span>Macro<span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-sentiment-btn" onclick="IS_PRO ? switchTab('sentiment') : showUpgrade('Market Sentiment')"><span class="nav-icon">◎</span>Sentiment<span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-earnings-btn" onclick="IS_PRO ? switchTab('earnings') : showUpgrade('Earnings Calendar')"><span class="nav-icon">$</span>Earnings<span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-centralbanks-btn" onclick="IS_PRO ? switchTab('centralbanks') : showUpgrade('Central Bank News')"><span class="nav-icon">♦</span>Central Banks<span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-screener-btn" onclick="IS_PRO ? switchTab('screener') : showUpgrade('Market Screener')"><span class="nav-icon">⊞</span>Screener<span class="tab-pro-lock">PRO</span></button>
+    </nav>
+
+    <!-- ── Tracker FX Ad (basic users only) ── -->
+    <div class="sidebar-tfx-ad" id="sidebarTfxAd">
+      <div class="sidebar-tfx-ad-inner">
+        <!-- Image banner: replace src with your 380×290px image URL -->
+        <a class="tfx-ad-img-wrap" href="https://www.trackerfx.com" target="_blank" rel="noopener" id="tfxAdImgLink" style="display:none">
+          <img src="/ads/sidebar-trackerfx.png" alt="Tracker FX"
+            onerror="this.classList.add('broken');document.getElementById('tfxAdImgLink').style.display='none';document.getElementById('tfxAdTextBody').style.display='block'">
+        </a>
+        <!-- Text fallback (shown when no image is set) -->
+        <div id="tfxAdTextBody">
+          <div class="tfx-ad-eyebrow">Also from us</div>
+          <div class="tfx-ad-title"><span>Tracker FX</span> — Professional FX Terminal</div>
+          <div class="tfx-ad-sub">Advanced charting, signals &amp; real-time data for forex traders.</div>
+          <div class="tfx-ad-features">
+            <div class="tfx-ad-feat">Live spreads &amp; depth of market</div>
+            <div class="tfx-ad-feat">COT reports &amp; positioning data</div>
+            <div class="tfx-ad-feat">Economic calendar integration</div>
+          </div>
+          <a class="tfx-ad-btn" href="https://www.trackerfx.com" target="_blank" rel="noopener">Explore Tracker FX →</a>
+        </div>
+      </div>
+    </div>
+
     <div class="sidebar-section">
       <div class="sidebar-label" data-i18n="sidebar.impact">Impact</div>
       <button class="filter-btn active" onclick="setImpact('ALL',this)"><div class="filter-dot dot-all"></div><span data-i18n="sidebar.all_news">All News</span><span class="filter-count" id="count-all">0</span></button>
@@ -672,33 +856,12 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       <button class="filter-btn" onclick="setImpact('LOW',this)"><div class="filter-dot dot-low"></div><span data-i18n="sidebar.low">Low</span><span class="filter-count" id="count-low">0</span></button>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-label" data-i18n="sidebar.watchlist_label">My News — Watchlist</div>
-      <div class="my-news-hint" data-i18n="sidebar.watchlist_hint">Select assets to pin to MY NEWS</div>
-      <div class="watchlist-grid" style="margin-top:8px;">
-        <button class="watch-btn" data-asset="USD"   onclick="toggleWatch('USD',this)" ondblclick="openChart('USD')"   title="Double-click to open chart">USD</button>
-        <button class="watch-btn" data-asset="EUR"   onclick="toggleWatch('EUR',this)" ondblclick="openChart('EUR')"   title="Double-click to open chart">EUR</button>
-        <button class="watch-btn" data-asset="GBP"   onclick="toggleWatch('GBP',this)" ondblclick="openChart('GBP')"   title="Double-click to open chart">GBP</button>
-        <button class="watch-btn" data-asset="JPY"   onclick="toggleWatch('JPY',this)" ondblclick="openChart('JPY')"   title="Double-click to open chart">JPY</button>
-        <button class="watch-btn" data-asset="GOLD"  onclick="toggleWatch('GOLD',this)" ondblclick="openChart('GOLD')"  title="Double-click to open chart">XAU</button>
-        <button class="watch-btn" data-asset="OIL"   onclick="toggleWatch('OIL',this)" ondblclick="openChart('OIL')"   title="Double-click to open chart">OIL</button>
-        <button class="watch-btn" data-asset="SP500" onclick="toggleWatch('SP500',this)" ondblclick="openChart('SP500')" title="Double-click to open chart">SPX</button>
-        <button class="watch-btn" data-asset="BTC"   onclick="toggleWatch('BTC',this)" ondblclick="openChart('BTC')"   title="Double-click to open chart">BTC</button>
-      </div>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-label" id="quick-charts-label">Quick Charts</div>
-      <div class="watchlist-grid" style="margin-top:8px;" id="quick-charts-grid">
-        <button class="watch-btn" onclick="openChart('EURUSD')" title="EUR/USD chart">EUR/USD</button>
-        <button class="watch-btn" onclick="openChart('GBPUSD')" title="GBP/USD chart">GBP/USD</button>
-        <button class="watch-btn" onclick="openChart('USDJPY')" title="USD/JPY chart">USD/JPY</button>
-        <button class="watch-btn" onclick="openChart('GOLD')"   title="Gold chart">XAU</button>
-        <button class="watch-btn" onclick="openChart('OIL')"    title="WTI Oil chart">WTI</button>
-        <button class="watch-btn" onclick="openChart('SPX')"    title="S&P 500 chart">SPX</button>
-        <button class="watch-btn" onclick="openChart('BTC')"    title="Bitcoin chart">BTC</button>
-        <button class="watch-btn" onclick="openChart('ETH')"    title="Ethereum chart">ETH</button>
-        <button class="watch-btn" onclick="openChart('DXY')"    title="DXY chart">DXY</button>
-        <button class="watch-btn" onclick="openChart('US10Y')"  title="US 10Y chart">US10Y</button>
-      </div>
+      <div class="sidebar-label">★ My News Feed</div>
+      <div class="mynews-summary" id="mynewsSummary">No filters active</div>
+      <button class="mynews-config-btn" onclick="openMyNewsConfig()">
+        ⚙ Configure Feed
+        <span class="mynews-badge" id="mynewsBadge">0</span>
+      </button>
     </div>
     <div class="pack-info">
       <div class="pack-info-header">
@@ -741,20 +904,8 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="tab-bar">
-      <button class="tab-btn active" id="tab-news-btn" onclick="switchTab('news')">News Feed</button>
-      <button class="tab-btn" id="tab-calendar-btn" onclick="switchTab('calendar')">Calendar</button>
-      <button class="tab-btn" id="tab-tv-btn" onclick="IS_PRO ? switchTab('tv') : showUpgrade('Live Financial TV')">Live TV<span class="tab-pro-lock" id="tv-lock-badge">·PRO</span></button>
-      <button class="tab-btn" id="tab-fx-btn" onclick="IS_PRO ? switchTab('fx') : showUpgrade('FX Rates')">FX Rates<span class="tab-pro-lock">·PRO</span></button>
-      <button class="tab-btn" id="tab-crypto-btn" onclick="IS_PRO ? switchTab('crypto') : showUpgrade('Crypto Markets')">Crypto<span class="tab-pro-lock">·PRO</span></button>
-      <button class="tab-btn" id="tab-commodities-btn" onclick="IS_PRO ? switchTab('commodities') : showUpgrade('Commodities')">Commodities<span class="tab-pro-lock">·PRO</span></button>
-      <button class="tab-btn" id="tab-macro-btn" onclick="IS_PRO ? switchTab('macro') : showUpgrade('Macro Dashboard')">Macro<span class="tab-pro-lock">·PRO</span></button>
-      <button class="tab-btn" id="tab-sentiment-btn" onclick="IS_PRO ? switchTab('sentiment') : showUpgrade('Market Sentiment')">Sentiment<span class="tab-pro-lock">·PRO</span></button>
-      <button class="tab-btn" id="tab-earnings-btn" onclick="IS_PRO ? switchTab('earnings') : showUpgrade('Earnings Calendar')">Earnings<span class="tab-pro-lock">·PRO</span></button>
-      <button class="tab-btn" id="tab-centralbanks-btn" onclick="IS_PRO ? switchTab('centralbanks') : showUpgrade('Central Bank News')">Central Banks<span class="tab-pro-lock">·PRO</span></button>
-      <button class="tab-btn" id="tab-screener-btn" onclick="IS_PRO ? switchTab('screener') : showUpgrade('Market Screener')">Screener<span class="tab-pro-lock">·PRO</span></button>
-    </div>
+    <!-- Tabs (moved to sidebar — kept for fallback layout, hidden via CSS) -->
+    <div class="tab-bar"></div>
 
     <!-- NEWS TAB -->
     <div class="tab-content" id="tab-news">
@@ -1049,7 +1200,9 @@ let lastSoundTime    = 0;         // throttle: 1 sound per 60s max
 let audioCtx         = null;
 let ws               = null;
 let wsReconnectTimer = null;
-let myWatchlist      = JSON.parse(localStorage.getItem('myWatchlist') || '[]');
+let myWatchlist      = JSON.parse(localStorage.getItem('myWatchlist')    || '[]');
+let myCatWatch       = JSON.parse(localStorage.getItem('myCatWatch')     || '[]');
+let myCalCountries   = JSON.parse(localStorage.getItem('myCalCountries') || '[]');
 
 const COUNTRY_ASSET  = {US:'USD',EU:'EUR',GB:'GBP',JP:'JPY',CH:'CHF',AU:'AUD',CA:'CAD',NZ:'NZD',CN:'CNY',DE:'EUR',FR:'EUR'};
 const ASSET_COUNTRIES= {USD:['US'],EUR:['EU','DE','FR'],GBP:['GB'],JPY:['JP'],AUD:['AU'],CAD:['CA'],CNY:['CN'],CHF:['CH'],NZD:['NZ']};
@@ -1254,6 +1407,21 @@ const CATEGORY_KEYWORDS = {
     calCountries:['US','CN'], // US energy reports + China demand data
   },
   MARKET_MOVING:{impactOnly:'HIGH'},
+  SENTIMENT:{
+    assets:[],
+    keywords:['sentiment','fear','greed','risk on','risk off','positioning','cot','commitment of traders','put call','vix','volatility index','investor sentiment','bull','bear','speculative','net long','net short','flows'],
+    calCountries:[],
+  },
+  EARNINGS:{
+    assets:[],
+    keywords:['earnings','quarterly results','eps','revenue','guidance','profit','loss','beat','miss','forecast','q1','q2','q3','q4','annual results','full year','half year','results','outlook','income'],
+    calCountries:['US'],
+  },
+  CENTRALBANKS:{
+    assets:[],
+    keywords:['federal reserve','fed','ecb','boj','boe','rba','rbnz','snb','pboc','bank of canada','boc','norges bank','riksbank','rate decision','monetary policy','fomc','mpc','powell','lagarde','bailey','ueda','minutes','statement','presser','press conference','hawkish','dovish','rate hike','rate cut','quantitative','qe','qt'],
+    calCountries:null,
+  },
 };
 
 // Agricultural/soft commodity terms — these belong ONLY in COMMODITIES/MACRO/ALL
@@ -1271,14 +1439,25 @@ function calItemMatchesCat(n, catDef) {
 function newsMatchesCategory(n, cat) {
   if (cat === 'ALL') return true;
   if (cat === 'MY_NEWS') {
-    if (myWatchlist.length === 0) return false;
-    if (n._calRelease) {
-      const calAsset = COUNTRY_ASSET[n._calCountry];
-      const impactOk = impactFilter === 'ALL' || n.impact === impactFilter;
-      return calAsset && myWatchlist.includes(calAsset) && impactOk;
+    const hasCal = myCalCountries.length > 0;
+    const hasCat = myCatWatch.length > 0;
+    const hasAsset = myWatchlist.length > 0;
+    if (!hasCal && !hasCat && !hasAsset) return false;
+    // Calendar country subscriptions
+    if (hasCal && n._calRelease && myCalCountries.includes(n._calCountry)) return true;
+    // News category subscriptions
+    if (hasCat && myCatWatch.some(c => newsMatchesCategory(n, c))) return true;
+    // Asset subscriptions
+    if (hasAsset) {
+      if (n._calRelease) {
+        const calAsset = COUNTRY_ASSET[n._calCountry];
+        const impactOk = impactFilter === 'ALL' || n.impact === impactFilter;
+        if (calAsset && myWatchlist.includes(calAsset) && impactOk) return true;
+      }
+      const a = (n.assets||'').split(',').map(x=>x.trim());
+      if (myWatchlist.some(w => a.includes(w))) return true;
     }
-    const a = (n.assets||'').split(',').map(x=>x.trim());
-    return myWatchlist.some(w => a.includes(w));
+    return false;
   }
   const def = CATEGORY_KEYWORDS[cat];
   if (!def) return true;
@@ -1308,14 +1487,164 @@ function updateClock() {
 }
 setInterval(updateClock,1000); updateClock();
 
-// ─── Watchlist ────────────────────────────────────────────────────
-function toggleWatch(asset, btn) {
-  if (myWatchlist.includes(asset)) { myWatchlist = myWatchlist.filter(a=>a!==asset); btn.classList.remove('selected'); }
-  else { myWatchlist.push(asset); btn.classList.add('selected'); }
+// ─── My News Config Modal ────────────────────────────────────────
+function openMyNewsConfig() {
+  const panel = document.querySelector('.mynews-panel');
+  panel.dataset.plan = IS_PRO ? 'pro' : 'basic';
+  // Basic users: strip any PRO-only assets that may be stored from a previous PRO session
+  if (!IS_PRO) {
+    const before = myWatchlist.length;
+    myWatchlist = myWatchlist.filter(a => _BASIC_ASSETS.has(a));
+    myCatWatch  = [];
+    myCalCountries = [];
+    if (myWatchlist.length !== before) localStorage.setItem('myWatchlist', JSON.stringify(myWatchlist));
+    localStorage.removeItem('myCatWatch');
+    localStorage.removeItem('myCalCountries');
+  }
+  document.getElementById('mynewsOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  setMyNewsTab('assets');
+  _syncModalSelections();
+  _updateMyNewsCount();
+}
+function closeMyNewsConfig() {
+  document.getElementById('mynewsOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+function setMyNewsTab(tab) {
+  // Block PRO tabs for basic users
+  if (!IS_PRO && (tab === 'categories' || tab === 'calendar')) {
+    showUpgrade('My News ' + (tab === 'categories' ? 'Categories' : 'Calendar Countries'));
+    return;
+  }
+  document.querySelectorAll('.mynews-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.mynews-pane').forEach(p => p.classList.toggle('active', p.id === 'mnt-'+tab));
+}
+// FX Majors allowed for basic plan
+const _BASIC_ASSETS = new Set(['USD','EUR','GBP','JPY','CHF','AUD','CAD','NZD','DXY']);
+
+// Known preset assets — used to identify custom tickers
+const _PRESET_ASSETS = new Set([
+  'USD','EUR','GBP','JPY','CHF','AUD','CAD','NZD','DXY',
+  'SEK','NOK','DKK','CNY','HKD','SGD','MXN','TRY','ZAR','BRL','INR','KRW','PLN',
+  'CZK','HUF','ILS','RUB','THB','MYR','IDR','PHP',
+  'BTC','ETH','XRP','SOL','BNB','DOGE','ADA','TRX','TON','SUI',
+  'AVAX','LINK','DOT','LTC','ATOM','UNI','XLM','NEAR','APT','ARB','OP','INJ','FIL','MATIC','AAVE','PEPE',
+  'SP500','NDX','DOW','DAX','FTSE','CAC','IBEX','FTSEMIB','NIKKEI','HSI','ASX200','VIX',
+  'AAPL','MSFT','NVDA','GOOGL','META','AMZN','TSLA','NFLX','AMD','INTC','AVGO','CRM','ADBE','NOW','ORCL','UBER',
+  'JPM','GS','BAC','MS','V','MA','BRK-B','XOM','CVX','UNH','WMT','COIN','MSTR','ARM','PLTR',
+  'GOLD','SILVER','PLATINUM','PALLADIUM','COPPER','OIL','BRENT','NATGAS','WHEAT','CORN','SOYBEAN','COFFEE','COCOA','COTTON'
+]);
+
+function _syncModalSelections() {
+  document.querySelectorAll('.mnt-chip[data-asset]').forEach(c   => c.classList.toggle('sel', myWatchlist.includes(c.dataset.asset)));
+  document.querySelectorAll('.mnt-cat-chip[data-cat]').forEach(c => c.classList.toggle('sel', myCatWatch.includes(c.dataset.cat)));
+  document.querySelectorAll('.mnt-cal-chip[data-country]').forEach(c => c.classList.toggle('sel', myCalCountries.includes(c.dataset.country)));
+  _renderCustomChips();
+}
+function _renderCustomChips() {
+  const box = document.getElementById('mntCustomChips');
+  if (!box) return;
+  const customs = myWatchlist.filter(a => !_PRESET_ASSETS.has(a));
+  box.innerHTML = customs.map(a =>
+    `<span class="mnt-chip-custom">${a}<button class="rm" onclick="removeCustomTicker('${a}')" title="Remove">✕</button></span>`
+  ).join('');
+}
+function addCustomTicker(val) {
+  const ticker = val.trim().toUpperCase().replace(/[^A-Z0-9.\-]/g,'');
+  const inp = document.getElementById('mntCustomInput');
+  if (!ticker) return;
+  if (!myWatchlist.includes(ticker)) {
+    myWatchlist.push(ticker);
+    localStorage.setItem('myWatchlist', JSON.stringify(myWatchlist));
+    _updateMyNewsCount();
+    if (selectedCategories.has('MY_NEWS')) renderNews();
+  }
+  _renderCustomChips();
+  if (inp) inp.value = '';
+}
+function removeCustomTicker(ticker) {
+  myWatchlist = myWatchlist.filter(a => a !== ticker);
   localStorage.setItem('myWatchlist', JSON.stringify(myWatchlist));
+  _renderCustomChips();
+  _updateMyNewsCount();
   if (selectedCategories.has('MY_NEWS')) renderNews();
 }
-document.querySelectorAll('.watch-btn').forEach(btn => { if (myWatchlist.includes(btn.dataset.asset)) btn.classList.add('selected'); });
+function _updateMyNewsCount() {
+  const total  = myWatchlist.length + myCatWatch.length + myCalCountries.length;
+  const badge  = document.getElementById('mynewsBadge');
+  const summary= document.getElementById('mynewsSummary');
+  const fc     = document.getElementById('mynewsFooterCount');
+  if (badge) { badge.textContent = total; badge.classList.toggle('show', total > 0); }
+  if (summary) {
+    if (total === 0) {
+      summary.textContent = IS_PRO ? 'No filters active' : 'Select major FX currencies below';
+    } else {
+      const parts = [];
+      if (myWatchlist.length)    parts.push(myWatchlist.length    + ' asset'    + (myWatchlist.length    > 1 ? 's' : ''));
+      if (myCatWatch.length)     parts.push(myCatWatch.length     + ' categor'  + (myCatWatch.length     > 1 ? 'ies' : 'y'));
+      if (myCalCountries.length) parts.push(myCalCountries.length + ' countr'   + (myCalCountries.length > 1 ? 'ies' : 'y'));
+      summary.textContent = parts.join(' · ');
+    }
+  }
+  if (fc) fc.innerHTML = '<strong>' + total + '</strong> filter' + (total !== 1 ? 's' : '') + ' active';
+}
+// ─── Sidebar ad visibility ────────────────────────────────────────
+(function() {
+  const ad = document.getElementById('sidebarTfxAd');
+  if (!ad) return;
+  // Hide for PRO users (they paid, no ads)
+  if (IS_PRO) {
+    ad.style.display = 'none';
+  }
+})();
+
+// ─── Watchlist ────────────────────────────────────────────────────
+function toggleWatch(asset) {
+  if (!IS_PRO && !_BASIC_ASSETS.has(asset)) { showUpgrade('Pro Features — My News'); return; }
+  if (myWatchlist.includes(asset)) { myWatchlist = myWatchlist.filter(a => a !== asset); }
+  else { myWatchlist.push(asset); }
+  localStorage.setItem('myWatchlist', JSON.stringify(myWatchlist));
+  document.querySelectorAll('[data-asset="'+asset+'"]').forEach(el => {
+    el.classList.toggle('selected', myWatchlist.includes(asset));
+    el.classList.toggle('sel',      myWatchlist.includes(asset));
+  });
+  _updateMyNewsCount();
+  if (selectedCategories.has('MY_NEWS')) renderNews();
+}
+function toggleCatWatch(cat) {
+  if (!IS_PRO) { showUpgrade('Pro Features — My News'); return; }
+  if (myCatWatch.includes(cat)) { myCatWatch = myCatWatch.filter(c => c !== cat); }
+  else { myCatWatch.push(cat); }
+  localStorage.setItem('myCatWatch', JSON.stringify(myCatWatch));
+  document.querySelectorAll('[data-cat="'+cat+'"]').forEach(el => {
+    el.classList.toggle('selected', myCatWatch.includes(cat));
+    el.classList.toggle('sel',      myCatWatch.includes(cat));
+  });
+  _updateMyNewsCount();
+  if (selectedCategories.has('MY_NEWS')) renderNews();
+}
+function toggleCalCountry(country) {
+  if (!IS_PRO) { showUpgrade('Pro Features — My News'); return; }
+  if (myCalCountries.includes(country)) { myCalCountries = myCalCountries.filter(c => c !== country); }
+  else { myCalCountries.push(country); }
+  localStorage.setItem('myCalCountries', JSON.stringify(myCalCountries));
+  document.querySelectorAll('[data-country="'+country+'"]').forEach(el => el.classList.toggle('sel', myCalCountries.includes(country)));
+  _updateMyNewsCount();
+  if (selectedCategories.has('MY_NEWS')) renderNews();
+}
+function clearMyNewsFeed() {
+  myWatchlist = []; myCatWatch = []; myCalCountries = [];
+  localStorage.setItem('myWatchlist',    JSON.stringify(myWatchlist));
+  localStorage.setItem('myCatWatch',     JSON.stringify(myCatWatch));
+  localStorage.setItem('myCalCountries', JSON.stringify(myCalCountries));
+  _syncModalSelections();
+  _updateMyNewsCount();
+  if (selectedCategories.has('MY_NEWS')) renderNews();
+}
+// Initialise on load
+_syncModalSelections();
+_updateMyNewsCount();
 
 // ─── Squawk (Web Speech API) ─────────────────────────────────────
 // Pre-load voices as soon as possible (async on most browsers)
@@ -1961,14 +2290,23 @@ function renderNews() {
     </div>`;
 
     // Inject inline ad card every 15 items for Basic users
+    // Image banner: replace /ads/infeed-trackerfx.png with your 1456×180px image
+    const _adImg = '/ads/infeed-trackerfx.png';
     const adHtml = (!IS_PRO && idx > 0 && idx % 15 === 0)
-      ? `<div class="feed-ad-card" onclick="showUpgrade('Ad-Free Experience')">
-           <span class="feed-ad-badge">Sponsored</span>
-           <div class="feed-ad-body">
-             <div class="feed-ad-headline">Remove ads &amp; get real-time breaking news</div>
-             <div class="feed-ad-sub">Trading News Terminal Pro — real-time feed · live squawk · 7 TV channels · zero ads</div>
+      ? `<div class="feed-ad-card" onclick="showUpgrade('Tracker FX')">
+           <div class="feed-ad-img">
+             <img src="${_adImg}" alt="Tracker FX — Professional FX Terminal"
+               onerror="this.closest('.feed-ad-img').style.display='none';this.closest('.feed-ad-img').nextElementSibling.style.display='flex'">
            </div>
-           <button class="feed-ad-cta" onclick="event.stopPropagation();showUpgrade('Ad-Free Experience')">Upgrade →</button>
+           <div class="feed-ad-text" style="display:none">
+             <span class="feed-ad-badge">Sponsored</span>
+             <div class="feed-ad-body">
+               <div class="feed-ad-headline">Tracker FX — Professional FX Trading Terminal</div>
+               <div class="feed-ad-sub">Live spreads · COT reports · Economic calendar · Advanced charting</div>
+             </div>
+             <button class="feed-ad-cta" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">Explore →</button>
+           </div>
+           <span class="feed-ad-sponsored">Sponsored</span>
          </div>`
       : '';
     return adHtml + card;
@@ -3173,6 +3511,7 @@ initTVTickers();
 // ══════════════════════════════════════════════════════════
 let _scType = 'stocks';
 let _scData = [];
+let _scCache = {stocks:[], forex:[], crypto:[], commodities:[], multi:[]};
 let _scSort = {col: null, dir: 'desc'};
 let _scLoaded = {stocks:false, forex:false, crypto:false, commodities:false, multi:false};
 let _scTimer  = null;
@@ -3192,7 +3531,16 @@ function switchScreener(type) {
   const btn = document.getElementById('sc-tab-' + type);
   if (btn) btn.classList.add('active');
   _renderScFilters(type);
-  loadScreener(type, false);
+  const si = document.getElementById('sc-search-input');
+  if (si) si.value = '';
+  // If already loaded, re-render from per-type cache immediately without re-fetching
+  if (_scLoaded[type] && _scCache[type] && _scCache[type].length > 0) {
+    _scData = _scCache[type];
+    _scSort = {col: null, dir: 'desc'};
+    _renderScTable(type, _scData);
+  } else {
+    loadScreener(type, false);
+  }
 }
 
 async function loadScreener(type, force) {
@@ -3201,9 +3549,9 @@ async function loadScreener(type, force) {
   const content = document.getElementById('sc-content');
   content.innerHTML = `<div class="sc-loading"><div class="sc-spinner"></div><span>Loading ${type} data…</span></div>`;
   const params = _buildScParams(type);
-  const url = API_BASE + '/screener/' + type + (params ? '?' + params : '');
+  const url = BACKEND_URL + '/screener/' + type + (params ? '?' + params : '');
   try {
-    const r = await fetch(url, {headers:{'Authorization':'Bearer '+token}});
+    const r = await fetch(url, {headers: _authHeader()});
     if (!r.ok) throw new Error(r.status + ' ' + r.statusText);
     const json = await r.json();
 
@@ -3219,6 +3567,7 @@ async function loadScreener(type, force) {
     }
 
     _scData = json.data || [];
+    _scCache[type] = _scData;
     _scLoaded[type] = true;
     // Strength meter (Forex only)
     const sw = document.getElementById('sc-strength-wrap');
@@ -3334,6 +3683,10 @@ function _renderScFilters(type) {
   }
   h += `<button class="sc-fbtn" onclick="_applyScFilters()">Apply</button>
     <button class="sc-fbtn rst" onclick="_resetScFilters()">Reset</button>
+    <div class="sc-search-wrap">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="sc-search" id="sc-search-input" placeholder="Search symbol, name…" type="text" oninput="_scSearchFilter(this.value)">
+    </div>
     <div class="sc-meta">
       <span id="sc-meta-count">—</span>
       <span id="sc-meta-ts" style="color:#334;">—</span>
@@ -3343,7 +3696,28 @@ function _renderScFilters(type) {
 }
 
 function _applyScFilters()  { _scLoaded[_scType] = false; loadScreener(_scType, true); }
-function _resetScFilters()  { document.querySelectorAll('.sc-sel,.sc-inp').forEach(el=>el.value=''); _applyScFilters(); }
+function _resetScFilters()  {
+  document.querySelectorAll('.sc-sel,.sc-inp').forEach(el=>el.value='');
+  const si = document.getElementById('sc-search-input');
+  if (si) si.value = '';
+  _applyScFilters();
+}
+function _scSearchFilter(q) {
+  const term = (q || '').trim().toLowerCase();
+  if (!term) { _renderScTable(_scType, _scData); return; }
+  const cols = {
+    stocks:      d => (d.symbol+' '+(d.name||'')+' '+(d.sector||'')).toLowerCase(),
+    forex:       d => (d.pair+' '+(d.group||'')).toLowerCase(),
+    crypto:      d => (d.symbol+' '+(d.name||'')).toLowerCase(),
+    commodities: d => ((d.name||'')+' '+(d.group||'')).toLowerCase(),
+    multi:       d => (d.symbol+' '+(d.name||'')+' '+(d.sector||'')+' '+(d.asset_type||'')).toLowerCase(),
+  };
+  const fn = cols[_scType] || (d => JSON.stringify(d).toLowerCase());
+  const filtered = _scData.filter(d => fn(d).includes(term));
+  _renderScTable(_scType, filtered);
+  const mc = document.getElementById('sc-meta-count');
+  if (mc) mc.textContent = filtered.length + ' results';
+}
 
 function _renderStrengthMeter(strength) {
   const sorted = Object.entries(strength).sort((a,b)=>b[1]-a[1]);
@@ -3590,6 +3964,295 @@ function _fmtScTs(ts) {
     </div>
     <div style="font-size:10px;color:#4a6070;text-align:center;margin-bottom:12px;">excl. VAT where applicable · Billed in EUR</div>
     <button class="upgrade-btn-later" onclick="hideUpgrade()">Maybe later</button>
+  </div>
+</div>
+
+<!-- ── My News Config Modal ── -->
+<div class="mynews-overlay" id="mynewsOverlay" onclick="if(event.target===this)closeMyNewsConfig()">
+  <div class="mynews-panel">
+    <div class="mynews-hdr">
+      <div class="mynews-hdr-left">
+        <div class="mynews-hdr-title">★ My News Feed Configuration</div>
+        <div class="mynews-hdr-sub">Select assets, categories and calendar countries to personalise your news feed</div>
+      </div>
+      <button class="mynews-close" onclick="closeMyNewsConfig()">✕</button>
+    </div>
+    <div class="mynews-tabs">
+      <button class="mynews-tab active" data-tab="assets"     onclick="setMyNewsTab('assets')">📊 Assets</button>
+      <button class="mynews-tab"        data-tab="categories" onclick="setMyNewsTab('categories')" data-pro-tab="1">🗂 Categories</button>
+      <button class="mynews-tab"        data-tab="calendar"   onclick="setMyNewsTab('calendar')"   data-pro-tab="1">📅 Calendar</button>
+    </div>
+    <div class="mynews-body">
+
+      <!-- ── ASSETS PANE ── -->
+      <div class="mynews-pane active" id="mnt-assets">
+        <div class="mynews-basic-notice">
+          <strong>Basic Plan</strong> — you can follow up to 9 major FX currencies.<br>
+          Upgrade to <strong>PRO</strong> to unlock crypto, stocks, indices, commodities and custom tickers.
+        </div>
+        <div class="mnt-group">
+          <div class="mnt-group-lbl">FX — Major Currencies</div>
+          <div class="mnt-chips">
+            <button class="mnt-chip" data-asset="USD" onclick="toggleWatch('USD',this)">USD</button>
+            <button class="mnt-chip" data-asset="EUR" onclick="toggleWatch('EUR',this)">EUR</button>
+            <button class="mnt-chip" data-asset="GBP" onclick="toggleWatch('GBP',this)">GBP</button>
+            <button class="mnt-chip" data-asset="JPY" onclick="toggleWatch('JPY',this)">JPY</button>
+            <button class="mnt-chip" data-asset="CHF" onclick="toggleWatch('CHF',this)">CHF</button>
+            <button class="mnt-chip" data-asset="AUD" onclick="toggleWatch('AUD',this)">AUD</button>
+            <button class="mnt-chip" data-asset="CAD" onclick="toggleWatch('CAD',this)">CAD</button>
+            <button class="mnt-chip" data-asset="NZD" onclick="toggleWatch('NZD',this)">NZD</button>
+            <button class="mnt-chip" data-asset="DXY" onclick="toggleWatch('DXY',this)">DXY</button>
+          </div>
+        </div>
+        <div class="mnt-group mnt-pro-section">
+          <div class="mnt-gate" onclick="showUpgrade('Pro Features — My News')"><span class="mnt-gate-icon">🔒</span><span class="mnt-gate-text">✦ PRO — Upgrade to unlock</span><span class="mnt-gate-sub">Click to see plans</span></div>
+          <div class="mnt-group-lbl">FX — Minor &amp; Exotic Currencies</div>
+          <div class="mnt-chips">
+            <button class="mnt-chip" data-asset="SEK" onclick="toggleWatch('SEK',this)">SEK</button>
+            <button class="mnt-chip" data-asset="NOK" onclick="toggleWatch('NOK',this)">NOK</button>
+            <button class="mnt-chip" data-asset="DKK" onclick="toggleWatch('DKK',this)">DKK</button>
+            <button class="mnt-chip" data-asset="CNY" onclick="toggleWatch('CNY',this)">CNY</button>
+            <button class="mnt-chip" data-asset="HKD" onclick="toggleWatch('HKD',this)">HKD</button>
+            <button class="mnt-chip" data-asset="SGD" onclick="toggleWatch('SGD',this)">SGD</button>
+            <button class="mnt-chip" data-asset="MXN" onclick="toggleWatch('MXN',this)">MXN</button>
+            <button class="mnt-chip" data-asset="TRY" onclick="toggleWatch('TRY',this)">TRY</button>
+            <button class="mnt-chip" data-asset="ZAR" onclick="toggleWatch('ZAR',this)">ZAR</button>
+            <button class="mnt-chip" data-asset="BRL" onclick="toggleWatch('BRL',this)">BRL</button>
+            <button class="mnt-chip" data-asset="INR" onclick="toggleWatch('INR',this)">INR</button>
+            <button class="mnt-chip" data-asset="KRW" onclick="toggleWatch('KRW',this)">KRW</button>
+            <button class="mnt-chip" data-asset="PLN" onclick="toggleWatch('PLN',this)">PLN</button>
+            <button class="mnt-chip" data-asset="CZK" onclick="toggleWatch('CZK',this)">CZK</button>
+            <button class="mnt-chip" data-asset="HUF" onclick="toggleWatch('HUF',this)">HUF</button>
+            <button class="mnt-chip" data-asset="ILS" onclick="toggleWatch('ILS',this)">ILS</button>
+            <button class="mnt-chip" data-asset="RUB" onclick="toggleWatch('RUB',this)">RUB</button>
+            <button class="mnt-chip" data-asset="THB" onclick="toggleWatch('THB',this)">THB</button>
+            <button class="mnt-chip" data-asset="MYR" onclick="toggleWatch('MYR',this)">MYR</button>
+            <button class="mnt-chip" data-asset="IDR" onclick="toggleWatch('IDR',this)">IDR</button>
+            <button class="mnt-chip" data-asset="PHP" onclick="toggleWatch('PHP',this)">PHP</button>
+          </div>
+        </div>
+        <div class="mnt-group mnt-pro-section">
+          <div class="mnt-gate" onclick="showUpgrade('Pro Features — My News')"><span class="mnt-gate-icon">🔒</span><span class="mnt-gate-text">✦ PRO — Upgrade to unlock</span><span class="mnt-gate-sub">Click to see plans</span></div>
+          <div class="mnt-group-lbl">Cryptocurrency — Large Cap</div>
+          <div class="mnt-chips">
+            <button class="mnt-chip" data-asset="BTC"   onclick="toggleWatch('BTC',this)">BTC</button>
+            <button class="mnt-chip" data-asset="ETH"   onclick="toggleWatch('ETH',this)">ETH</button>
+            <button class="mnt-chip" data-asset="XRP"   onclick="toggleWatch('XRP',this)">XRP</button>
+            <button class="mnt-chip" data-asset="SOL"   onclick="toggleWatch('SOL',this)">SOL</button>
+            <button class="mnt-chip" data-asset="BNB"   onclick="toggleWatch('BNB',this)">BNB</button>
+            <button class="mnt-chip" data-asset="DOGE"  onclick="toggleWatch('DOGE',this)">DOGE</button>
+            <button class="mnt-chip" data-asset="ADA"   onclick="toggleWatch('ADA',this)">ADA</button>
+            <button class="mnt-chip" data-asset="TRX"   onclick="toggleWatch('TRX',this)">TRX</button>
+            <button class="mnt-chip" data-asset="TON"   onclick="toggleWatch('TON',this)">TON</button>
+            <button class="mnt-chip" data-asset="SUI"   onclick="toggleWatch('SUI',this)">SUI</button>
+          </div>
+        </div>
+        <div class="mnt-group mnt-pro-section">
+          <div class="mnt-gate" onclick="showUpgrade('Pro Features — My News')"><span class="mnt-gate-icon">🔒</span><span class="mnt-gate-text">✦ PRO — Upgrade to unlock</span><span class="mnt-gate-sub">Click to see plans</span></div>
+          <div class="mnt-group-lbl">Cryptocurrency — Mid Cap</div>
+          <div class="mnt-chips">
+            <button class="mnt-chip" data-asset="AVAX"  onclick="toggleWatch('AVAX',this)">AVAX</button>
+            <button class="mnt-chip" data-asset="LINK"  onclick="toggleWatch('LINK',this)">LINK</button>
+            <button class="mnt-chip" data-asset="DOT"   onclick="toggleWatch('DOT',this)">DOT</button>
+            <button class="mnt-chip" data-asset="LTC"   onclick="toggleWatch('LTC',this)">LTC</button>
+            <button class="mnt-chip" data-asset="ATOM"  onclick="toggleWatch('ATOM',this)">ATOM</button>
+            <button class="mnt-chip" data-asset="UNI"   onclick="toggleWatch('UNI',this)">UNI</button>
+            <button class="mnt-chip" data-asset="XLM"   onclick="toggleWatch('XLM',this)">XLM</button>
+            <button class="mnt-chip" data-asset="NEAR"  onclick="toggleWatch('NEAR',this)">NEAR</button>
+            <button class="mnt-chip" data-asset="APT"   onclick="toggleWatch('APT',this)">APT</button>
+            <button class="mnt-chip" data-asset="ARB"   onclick="toggleWatch('ARB',this)">ARB</button>
+            <button class="mnt-chip" data-asset="OP"    onclick="toggleWatch('OP',this)">OP</button>
+            <button class="mnt-chip" data-asset="INJ"   onclick="toggleWatch('INJ',this)">INJ</button>
+            <button class="mnt-chip" data-asset="FIL"   onclick="toggleWatch('FIL',this)">FIL</button>
+            <button class="mnt-chip" data-asset="MATIC" onclick="toggleWatch('MATIC',this)">POL</button>
+            <button class="mnt-chip" data-asset="AAVE"  onclick="toggleWatch('AAVE',this)">AAVE</button>
+            <button class="mnt-chip" data-asset="PEPE"  onclick="toggleWatch('PEPE',this)">PEPE</button>
+          </div>
+        </div>
+        <div class="mnt-group mnt-pro-section">
+          <div class="mnt-gate" onclick="showUpgrade('Pro Features — My News')"><span class="mnt-gate-icon">🔒</span><span class="mnt-gate-text">✦ PRO — Upgrade to unlock</span><span class="mnt-gate-sub">Click to see plans</span></div>
+          <div class="mnt-group-lbl">Indices</div>
+          <div class="mnt-chips">
+            <button class="mnt-chip" data-asset="SP500"  onclick="toggleWatch('SP500',this)">S&amp;P 500</button>
+            <button class="mnt-chip" data-asset="NDX"    onclick="toggleWatch('NDX',this)">NASDAQ</button>
+            <button class="mnt-chip" data-asset="DOW"    onclick="toggleWatch('DOW',this)">DOW</button>
+            <button class="mnt-chip" data-asset="DAX"    onclick="toggleWatch('DAX',this)">DAX</button>
+            <button class="mnt-chip" data-asset="FTSE"   onclick="toggleWatch('FTSE',this)">FTSE</button>
+            <button class="mnt-chip" data-asset="CAC"    onclick="toggleWatch('CAC',this)">CAC 40</button>
+            <button class="mnt-chip" data-asset="IBEX"   onclick="toggleWatch('IBEX',this)">IBEX</button>
+            <button class="mnt-chip" data-asset="FTSEMIB" onclick="toggleWatch('FTSEMIB',this)">FTSE MIB</button>
+            <button class="mnt-chip" data-asset="NIKKEI" onclick="toggleWatch('NIKKEI',this)">NK225</button>
+            <button class="mnt-chip" data-asset="HSI"    onclick="toggleWatch('HSI',this)">HSI</button>
+            <button class="mnt-chip" data-asset="ASX200" onclick="toggleWatch('ASX200',this)">ASX 200</button>
+            <button class="mnt-chip" data-asset="VIX"    onclick="toggleWatch('VIX',this)">VIX</button>
+          </div>
+        </div>
+        <div class="mnt-group mnt-pro-section">
+          <div class="mnt-gate" onclick="showUpgrade('Pro Features — My News')"><span class="mnt-gate-icon">🔒</span><span class="mnt-gate-text">✦ PRO — Upgrade to unlock</span><span class="mnt-gate-sub">Click to see plans</span></div>
+          <div class="mnt-group-lbl">Stocks — US Tech &amp; Growth</div>
+          <div class="mnt-chips">
+            <button class="mnt-chip" data-asset="AAPL"   onclick="toggleWatch('AAPL',this)">AAPL</button>
+            <button class="mnt-chip" data-asset="MSFT"   onclick="toggleWatch('MSFT',this)">MSFT</button>
+            <button class="mnt-chip" data-asset="NVDA"   onclick="toggleWatch('NVDA',this)">NVDA</button>
+            <button class="mnt-chip" data-asset="GOOGL"  onclick="toggleWatch('GOOGL',this)">GOOGL</button>
+            <button class="mnt-chip" data-asset="META"   onclick="toggleWatch('META',this)">META</button>
+            <button class="mnt-chip" data-asset="AMZN"   onclick="toggleWatch('AMZN',this)">AMZN</button>
+            <button class="mnt-chip" data-asset="TSLA"   onclick="toggleWatch('TSLA',this)">TSLA</button>
+            <button class="mnt-chip" data-asset="NFLX"   onclick="toggleWatch('NFLX',this)">NFLX</button>
+            <button class="mnt-chip" data-asset="AMD"    onclick="toggleWatch('AMD',this)">AMD</button>
+            <button class="mnt-chip" data-asset="INTC"   onclick="toggleWatch('INTC',this)">INTC</button>
+            <button class="mnt-chip" data-asset="AVGO"   onclick="toggleWatch('AVGO',this)">AVGO</button>
+            <button class="mnt-chip" data-asset="CRM"    onclick="toggleWatch('CRM',this)">CRM</button>
+            <button class="mnt-chip" data-asset="ADBE"   onclick="toggleWatch('ADBE',this)">ADBE</button>
+            <button class="mnt-chip" data-asset="NOW"    onclick="toggleWatch('NOW',this)">NOW</button>
+            <button class="mnt-chip" data-asset="ORCL"   onclick="toggleWatch('ORCL',this)">ORCL</button>
+            <button class="mnt-chip" data-asset="UBER"   onclick="toggleWatch('UBER',this)">UBER</button>
+          </div>
+        </div>
+        <div class="mnt-group mnt-pro-section">
+          <div class="mnt-gate" onclick="showUpgrade('Pro Features — My News')"><span class="mnt-gate-icon">🔒</span><span class="mnt-gate-text">✦ PRO — Upgrade to unlock</span><span class="mnt-gate-sub">Click to see plans</span></div>
+          <div class="mnt-group-lbl">Stocks — Finance, Energy &amp; Others</div>
+          <div class="mnt-chips">
+            <button class="mnt-chip" data-asset="JPM"    onclick="toggleWatch('JPM',this)">JPM</button>
+            <button class="mnt-chip" data-asset="GS"     onclick="toggleWatch('GS',this)">GS</button>
+            <button class="mnt-chip" data-asset="BAC"    onclick="toggleWatch('BAC',this)">BAC</button>
+            <button class="mnt-chip" data-asset="MS"     onclick="toggleWatch('MS',this)">MS</button>
+            <button class="mnt-chip" data-asset="V"      onclick="toggleWatch('V',this)">V</button>
+            <button class="mnt-chip" data-asset="MA"     onclick="toggleWatch('MA',this)">MA</button>
+            <button class="mnt-chip" data-asset="BRK-B"  onclick="toggleWatch('BRK-B',this)">BRK.B</button>
+            <button class="mnt-chip" data-asset="XOM"    onclick="toggleWatch('XOM',this)">XOM</button>
+            <button class="mnt-chip" data-asset="CVX"    onclick="toggleWatch('CVX',this)">CVX</button>
+            <button class="mnt-chip" data-asset="UNH"    onclick="toggleWatch('UNH',this)">UNH</button>
+            <button class="mnt-chip" data-asset="WMT"    onclick="toggleWatch('WMT',this)">WMT</button>
+            <button class="mnt-chip" data-asset="COIN"   onclick="toggleWatch('COIN',this)">COIN</button>
+            <button class="mnt-chip" data-asset="MSTR"   onclick="toggleWatch('MSTR',this)">MSTR</button>
+            <button class="mnt-chip" data-asset="ARM"    onclick="toggleWatch('ARM',this)">ARM</button>
+            <button class="mnt-chip" data-asset="PLTR"   onclick="toggleWatch('PLTR',this)">PLTR</button>
+          </div>
+        </div>
+        <div class="mnt-group mnt-pro-section">
+          <div class="mnt-gate" onclick="showUpgrade('Pro Features — My News')"><span class="mnt-gate-icon">🔒</span><span class="mnt-gate-text">✦ PRO — Upgrade to unlock</span><span class="mnt-gate-sub">Click to see plans</span></div>
+          <div class="mnt-group-lbl">Commodities</div>
+          <div class="mnt-chips">
+            <button class="mnt-chip" data-asset="GOLD"     onclick="toggleWatch('GOLD',this)">Gold · XAU</button>
+            <button class="mnt-chip" data-asset="SILVER"   onclick="toggleWatch('SILVER',this)">Silver · XAG</button>
+            <button class="mnt-chip" data-asset="PLATINUM" onclick="toggleWatch('PLATINUM',this)">Platinum</button>
+            <button class="mnt-chip" data-asset="PALLADIUM" onclick="toggleWatch('PALLADIUM',this)">Palladium</button>
+            <button class="mnt-chip" data-asset="COPPER"   onclick="toggleWatch('COPPER',this)">Copper</button>
+            <button class="mnt-chip" data-asset="OIL"      onclick="toggleWatch('OIL',this)">WTI Oil</button>
+            <button class="mnt-chip" data-asset="BRENT"    onclick="toggleWatch('BRENT',this)">Brent</button>
+            <button class="mnt-chip" data-asset="NATGAS"   onclick="toggleWatch('NATGAS',this)">Nat. Gas</button>
+            <button class="mnt-chip" data-asset="WHEAT"    onclick="toggleWatch('WHEAT',this)">Wheat</button>
+            <button class="mnt-chip" data-asset="CORN"     onclick="toggleWatch('CORN',this)">Corn</button>
+            <button class="mnt-chip" data-asset="SOYBEAN"  onclick="toggleWatch('SOYBEAN',this)">Soybean</button>
+            <button class="mnt-chip" data-asset="COFFEE"   onclick="toggleWatch('COFFEE',this)">Coffee</button>
+            <button class="mnt-chip" data-asset="COCOA"    onclick="toggleWatch('COCOA',this)">Cocoa</button>
+            <button class="mnt-chip" data-asset="COTTON"   onclick="toggleWatch('COTTON',this)">Cotton</button>
+          </div>
+        </div>
+
+        <!-- Custom ticker search -->
+        <div class="mnt-group mnt-pro-section" style="margin-bottom:8px;">
+          <div class="mnt-gate" onclick="showUpgrade('Pro Features — My News')"><span class="mnt-gate-icon">🔒</span><span class="mnt-gate-text">✦ PRO — Upgrade to unlock</span><span class="mnt-gate-sub">Click to see plans</span></div>
+          <div class="mnt-group-lbl">Custom — Add Any Ticker</div>
+          <div class="mnt-search-wrap">
+            <span class="mnt-search-icon">⊕</span>
+            <input class="mnt-search-input" id="mntCustomInput" type="text" maxlength="12"
+              placeholder="Type a ticker and press Enter — e.g. SHOP, EURUSD, CORN..."
+              onkeydown="if(event.key==='Enter')addCustomTicker(this.value)">
+          </div>
+          <div class="mnt-search-hint">Press Enter to add · Any ticker that appears in financial news headlines works</div>
+          <div class="mnt-custom-chips" id="mntCustomChips"></div>
+        </div>
+      </div>
+
+      <!-- ── CATEGORIES PANE ── -->
+      <div class="mynews-pane mynews-pane-locked" id="mnt-categories">
+        <div class="mnt-lock-overlay">
+          <div class="mnt-lock-icon">🔒</div>
+          <div class="mnt-lock-text">PRO Feature</div>
+          <div class="mnt-lock-sub">Subscribe to news categories — Forex, Crypto, Macro, Bonds, Market Moving and more.</div>
+          <button class="mnt-lock-btn" onclick="closeMyNewsConfig();showUpgrade('News Categories')">Upgrade to PRO →</button>
+        </div>
+        <div class="mnt-group">
+          <div class="mnt-group-lbl">Market Categories</div>
+          <div class="mnt-chips">
+            <button class="mnt-cat-chip" data-cat="FOREX"         onclick="toggleCatWatch('FOREX',this)">💱 Forex</button>
+            <button class="mnt-cat-chip" data-cat="CRYPTO"        onclick="toggleCatWatch('CRYPTO',this)">₿ Crypto</button>
+            <button class="mnt-cat-chip" data-cat="MACRO"         onclick="toggleCatWatch('MACRO',this)">🌐 Macro</button>
+            <button class="mnt-cat-chip" data-cat="BONDS"         onclick="toggleCatWatch('BONDS',this)">📈 Bonds</button>
+            <button class="mnt-cat-chip" data-cat="EQUITIES"      onclick="toggleCatWatch('EQUITIES',this)">🏦 Equities</button>
+            <button class="mnt-cat-chip" data-cat="INDEXES"       onclick="toggleCatWatch('INDEXES',this)">📊 Indexes</button>
+            <button class="mnt-cat-chip" data-cat="COMMODITIES"   onclick="toggleCatWatch('COMMODITIES',this)">🛢 Commodities</button>
+          </div>
+        </div>
+        <div class="mnt-group">
+          <div class="mnt-group-lbl">Special Alerts</div>
+          <div class="mnt-chips">
+            <button class="mnt-cat-chip" data-cat="MARKET_MOVING" onclick="toggleCatWatch('MARKET_MOVING',this)">🔴 Market Moving</button>
+            <button class="mnt-cat-chip" data-cat="SENTIMENT"     onclick="toggleCatWatch('SENTIMENT',this)">🧭 Sentiment</button>
+            <button class="mnt-cat-chip" data-cat="EARNINGS"      onclick="toggleCatWatch('EARNINGS',this)">💰 Earnings</button>
+            <button class="mnt-cat-chip" data-cat="CENTRALBANKS"  onclick="toggleCatWatch('CENTRALBANKS',this)">🏛 Central Banks</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CALENDAR PANE ── -->
+      <div class="mynews-pane mynews-pane-locked" id="mnt-calendar">
+        <div class="mnt-lock-overlay">
+          <div class="mnt-lock-icon">🔒</div>
+          <div class="mnt-lock-text">PRO Feature</div>
+          <div class="mnt-lock-sub">Filter My News by economic calendar country — US, EU, UK, JP, CN and 15 more.</div>
+          <button class="mnt-lock-btn" onclick="closeMyNewsConfig();showUpgrade('Calendar Countries')">Upgrade to PRO →</button>
+        </div>
+        <div class="mnt-group">
+          <div class="mnt-group-lbl">Major Economies</div>
+          <div class="mnt-chips">
+            <button class="mnt-cal-chip" data-country="US" onclick="toggleCalCountry('US')"><span class="cal-flag">🇺🇸</span><span class="cal-code">USD</span><span class="cal-name">United States</span></button>
+            <button class="mnt-cal-chip" data-country="EU" onclick="toggleCalCountry('EU')"><span class="cal-flag">🇪🇺</span><span class="cal-code">EUR</span><span class="cal-name">Euro Zone</span></button>
+            <button class="mnt-cal-chip" data-country="GB" onclick="toggleCalCountry('GB')"><span class="cal-flag">🇬🇧</span><span class="cal-code">GBP</span><span class="cal-name">United Kingdom</span></button>
+            <button class="mnt-cal-chip" data-country="JP" onclick="toggleCalCountry('JP')"><span class="cal-flag">🇯🇵</span><span class="cal-code">JPY</span><span class="cal-name">Japan</span></button>
+            <button class="mnt-cal-chip" data-country="CA" onclick="toggleCalCountry('CA')"><span class="cal-flag">🇨🇦</span><span class="cal-code">CAD</span><span class="cal-name">Canada</span></button>
+            <button class="mnt-cal-chip" data-country="AU" onclick="toggleCalCountry('AU')"><span class="cal-flag">🇦🇺</span><span class="cal-code">AUD</span><span class="cal-name">Australia</span></button>
+            <button class="mnt-cal-chip" data-country="NZ" onclick="toggleCalCountry('NZ')"><span class="cal-flag">🇳🇿</span><span class="cal-code">NZD</span><span class="cal-name">New Zealand</span></button>
+            <button class="mnt-cal-chip" data-country="CH" onclick="toggleCalCountry('CH')"><span class="cal-flag">🇨🇭</span><span class="cal-code">CHF</span><span class="cal-name">Switzerland</span></button>
+            <button class="mnt-cal-chip" data-country="CN" onclick="toggleCalCountry('CN')"><span class="cal-flag">🇨🇳</span><span class="cal-code">CNY</span><span class="cal-name">China</span></button>
+          </div>
+        </div>
+        <div class="mnt-group">
+          <div class="mnt-group-lbl">Europe</div>
+          <div class="mnt-chips">
+            <button class="mnt-cal-chip" data-country="DE" onclick="toggleCalCountry('DE')"><span class="cal-flag">🇩🇪</span><span class="cal-code">EUR</span><span class="cal-name">Germany</span></button>
+            <button class="mnt-cal-chip" data-country="FR" onclick="toggleCalCountry('FR')"><span class="cal-flag">🇫🇷</span><span class="cal-code">EUR</span><span class="cal-name">France</span></button>
+            <button class="mnt-cal-chip" data-country="NO" onclick="toggleCalCountry('NO')"><span class="cal-flag">🇳🇴</span><span class="cal-code">NOK</span><span class="cal-name">Norway</span></button>
+            <button class="mnt-cal-chip" data-country="SE" onclick="toggleCalCountry('SE')"><span class="cal-flag">🇸🇪</span><span class="cal-code">SEK</span><span class="cal-name">Sweden</span></button>
+            <button class="mnt-cal-chip" data-country="DK" onclick="toggleCalCountry('DK')"><span class="cal-flag">🇩🇰</span><span class="cal-code">DKK</span><span class="cal-name">Denmark</span></button>
+            <button class="mnt-cal-chip" data-country="IT" onclick="toggleCalCountry('IT')"><span class="cal-flag">🇮🇹</span><span class="cal-code">EUR</span><span class="cal-name">Italy</span></button>
+            <button class="mnt-cal-chip" data-country="ES" onclick="toggleCalCountry('ES')"><span class="cal-flag">🇪🇸</span><span class="cal-code">EUR</span><span class="cal-name">Spain</span></button>
+            <button class="mnt-cal-chip" data-country="PL" onclick="toggleCalCountry('PL')"><span class="cal-flag">🇵🇱</span><span class="cal-code">PLN</span><span class="cal-name">Poland</span></button>
+          </div>
+        </div>
+        <div class="mnt-group">
+          <div class="mnt-group-lbl">Emerging Markets</div>
+          <div class="mnt-chips">
+            <button class="mnt-cal-chip" data-country="BR" onclick="toggleCalCountry('BR')"><span class="cal-flag">🇧🇷</span><span class="cal-code">BRL</span><span class="cal-name">Brazil</span></button>
+            <button class="mnt-cal-chip" data-country="MX" onclick="toggleCalCountry('MX')"><span class="cal-flag">🇲🇽</span><span class="cal-code">MXN</span><span class="cal-name">Mexico</span></button>
+            <button class="mnt-cal-chip" data-country="IN" onclick="toggleCalCountry('IN')"><span class="cal-flag">🇮🇳</span><span class="cal-code">INR</span><span class="cal-name">India</span></button>
+            <button class="mnt-cal-chip" data-country="KR" onclick="toggleCalCountry('KR')"><span class="cal-flag">🇰🇷</span><span class="cal-code">KRW</span><span class="cal-name">South Korea</span></button>
+            <button class="mnt-cal-chip" data-country="ZA" onclick="toggleCalCountry('ZA')"><span class="cal-flag">🇿🇦</span><span class="cal-code">ZAR</span><span class="cal-name">South Africa</span></button>
+            <button class="mnt-cal-chip" data-country="TR" onclick="toggleCalCountry('TR')"><span class="cal-flag">🇹🇷</span><span class="cal-code">TRY</span><span class="cal-name">Turkey</span></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="mynews-footer">
+      <div class="mynews-footer-count" id="mynewsFooterCount"><strong>0</strong> filters active</div>
+      <div class="mynews-footer-actions">
+        <button class="mnf-clear" onclick="clearMyNewsFeed()">Clear All</button>
+        <button class="mnf-done"  onclick="closeMyNewsConfig()">Done ✓</button>
+      </div>
+    </div>
   </div>
 </div>
 
