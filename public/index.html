@@ -910,6 +910,13 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
         <span class="mynews-badge" id="mynewsBadge">0</span>
       </button>
     </div>
+    <div class="sidebar-section" id="squawkSidebarSection">
+      <div class="sidebar-label">🔊 Squawk</div>
+      <div class="mynews-summary" id="squawkSidebarStatus">Off</div>
+      <button class="mynews-config-btn" id="squawkSidebarBtn" onclick="openSquawkFromSidebar(this)">
+        ⚙ Configure Squawk
+      </button>
+    </div>
     <div class="pack-info">
       <div class="pack-info-header">
         <div class="pack-badge" data-i18n="pack.badge">Basic Pack</div>
@@ -1789,34 +1796,64 @@ function toggleSquawk() {
 
 function updateSquawkBtn() {
   const btn = document.getElementById('squawkBtn');
+  const sideStatus = document.getElementById('squawkSidebarStatus');
+  const sideSection = document.getElementById('squawkSidebarSection');
   if (!btn) return;
   if (!IS_PRO) {
     btn.innerHTML = '🔒 Squawk <span style="font-size:8px;color:#a78bfa;border:1px solid rgba(167,139,250,0.4);padding:1px 4px;border-radius:2px;margin-left:4px;">PRO</span>';
     btn.className = 'squawk-btn';
+    if (sideSection) sideSection.style.display = 'none';
     return;
   }
-  if (!squawkEnabled)      { btn.textContent = t('squawk.off');      btn.className = 'squawk-btn'; }
-  else if (squawkSpeaking) { btn.textContent = t('squawk.speaking'); btn.className = 'squawk-btn active speaking'; }
-  else                     { btn.textContent = t('squawk.on');       btn.className = 'squawk-btn active'; }
+  if (sideSection) sideSection.style.display = '';
+  if (!squawkEnabled) {
+    btn.textContent = t('squawk.off'); btn.className = 'squawk-btn';
+    if (sideStatus) sideStatus.textContent = 'Off';
+  } else if (squawkSpeaking) {
+    btn.textContent = t('squawk.speaking'); btn.className = 'squawk-btn active speaking';
+    if (sideStatus) sideStatus.textContent = '🔊 Speaking…';
+  } else {
+    btn.textContent = t('squawk.on'); btn.className = 'squawk-btn active';
+    const filterLabel = squawkFilters.has('ALL') ? 'All news'
+      : [...squawkFilters].map(f => f === 'HIGH' ? 'High' : f === 'MEDIUM' ? 'Medium' : 'My News').join(' + ');
+    if (sideStatus) sideStatus.textContent = '🟢 On — ' + filterLabel;
+  }
 }
 
 // ─── Squawk Config Panel ──────────────────────────────────────────
+function _openSquawkDd(anchorEl, alignRight) {
+  const dd = document.getElementById('squawkDd');
+  const r  = anchorEl.getBoundingClientRect();
+  dd.style.top  = (r.bottom + 6) + 'px';
+  if (alignRight) {
+    dd.style.right = (window.innerWidth - r.right) + 'px';
+    dd.style.left  = 'auto';
+  } else {
+    dd.style.left  = r.left + 'px';
+    dd.style.right = 'auto';
+  }
+  dd.classList.add('open');
+  document.getElementById('squawkCfgBtn')?.classList.add('open');
+  populateSquawkVoices();
+  const ri = document.getElementById('squawkRateInput');
+  if (ri) { ri.value = squawkRate; document.getElementById('squawkRateVal').textContent = squawkRate.toFixed(1) + '×'; }
+  document.querySelectorAll('.squawk-chip').forEach(c => c.classList.toggle('sel', squawkFilters.has(c.dataset.sf)));
+}
+function _closeSquawkDd() {
+  document.getElementById('squawkDd')?.classList.remove('open');
+  document.getElementById('squawkCfgBtn')?.classList.remove('open');
+}
 function toggleSquawkCfg(e) {
   e.stopPropagation();
-  const dd  = document.getElementById('squawkDd');
-  const btn = document.getElementById('squawkCfgBtn');
-  const open = dd.classList.toggle('open');
-  btn.classList.toggle('open', open);
-  if (open) {
-    // Position dropdown below the gear button using fixed coords
-    const r = btn.getBoundingClientRect();
-    dd.style.top  = (r.bottom + 6) + 'px';
-    dd.style.right = (window.innerWidth - r.right) + 'px';
-    populateSquawkVoices();
-    const ri = document.getElementById('squawkRateInput');
-    if (ri) { ri.value = squawkRate; document.getElementById('squawkRateVal').textContent = squawkRate.toFixed(1) + '×'; }
-    document.querySelectorAll('.squawk-chip').forEach(c => c.classList.toggle('sel', squawkFilters.has(c.dataset.sf)));
-  }
+  const dd = document.getElementById('squawkDd');
+  if (dd.classList.contains('open')) { _closeSquawkDd(); return; }
+  _openSquawkDd(document.getElementById('squawkCfgBtn'), true);
+}
+function openSquawkFromSidebar(btn) {
+  if (!IS_PRO) { showUpgrade('Live Squawk'); return; }
+  const dd = document.getElementById('squawkDd');
+  if (dd.classList.contains('open')) { _closeSquawkDd(); return; }
+  _openSquawkDd(btn, false);
 }
 function populateSquawkVoices() {
   const sel = document.getElementById('squawkVoiceSel');
@@ -1871,10 +1908,12 @@ function testSquawkVoice() {
 }
 // Close squawk dropdown on outside click
 document.addEventListener('click', e => {
-  const wrap = document.getElementById('squawkWrap');
-  if (wrap && !wrap.contains(e.target)) {
-    document.getElementById('squawkDd')?.classList.remove('open');
-    document.getElementById('squawkCfgBtn')?.classList.remove('open');
+  const dd = document.getElementById('squawkDd');
+  if (!dd || !dd.classList.contains('open')) return;
+  const wrap    = document.getElementById('squawkWrap');
+  const sideBtn = document.getElementById('squawkSidebarBtn');
+  if ((!wrap || !wrap.contains(e.target)) && (!sideBtn || !sideBtn.contains(e.target)) && !dd.contains(e.target)) {
+    _closeSquawkDd();
   }
 });
 
