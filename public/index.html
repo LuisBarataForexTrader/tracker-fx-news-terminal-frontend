@@ -828,9 +828,10 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
         <div class="squawk-dd-row">
           <span class="squawk-dd-lbl">Read news</span>
           <div class="squawk-chips">
-            <button class="squawk-chip sel" data-sf="ALL"      onclick="setSquawkFilter('ALL',this)">All</button>
-            <button class="squawk-chip"     data-sf="HIGH"     onclick="setSquawkFilter('HIGH',this)">High Impact only</button>
-            <button class="squawk-chip"     data-sf="MY_NEWS"  onclick="setSquawkFilter('MY_NEWS',this)">My News</button>
+            <button class="squawk-chip sel" data-sf="ALL"     onclick="setSquawkFilter('ALL',this)">All</button>
+            <button class="squawk-chip"     data-sf="HIGH"    onclick="setSquawkFilter('HIGH',this)">🔴 High Impact</button>
+            <button class="squawk-chip"     data-sf="MEDIUM"  onclick="setSquawkFilter('MEDIUM',this)">🟡 Medium Impact</button>
+            <button class="squawk-chip"     data-sf="MY_NEWS" onclick="setSquawkFilter('MY_NEWS',this)">★ My News</button>
           </div>
         </div>
         <button class="squawk-test-btn" onclick="testSquawkVoice()">▶ Test Voice</button>
@@ -1241,7 +1242,7 @@ let squawkEnabled    = false;
 let squawkQueue      = [];
 let squawkSpeaking   = false;
 let squawkRate       = parseFloat(localStorage.getItem('squawkRate') || '1.0');
-let squawkFilter     = localStorage.getItem('squawkFilter') || 'ALL';
+let squawkFilters    = new Set(JSON.parse(localStorage.getItem('squawkFilters') || '["ALL"]'));
 let squawkVoiceName  = localStorage.getItem('squawkVoiceName') || '';
 let recentNewUrls    = new Set(); // URLs arrived in last 3 min → show NEW badge
 let newItemsCount    = 0;         // count for notification badge
@@ -1723,9 +1724,13 @@ function _getBestVoice() {
 
 function squawkSpeak(text, url, newsItem) {
   if (!squawkEnabled || !text) return;
-  // Apply squawk filter
-  if (squawkFilter === 'HIGH' && newsItem && newsItem.impact !== 'HIGH') return;
-  if (squawkFilter === 'MY_NEWS' && newsItem && !newsMatchesCategory(newsItem, 'MY_NEWS')) return;
+  // Apply squawk filters (multi-select): if ALL not active, news must match at least one selected filter
+  if (newsItem && !squawkFilters.has('ALL')) {
+    const impactOk = (squawkFilters.has('HIGH') && newsItem.impact === 'HIGH')
+                  || (squawkFilters.has('MEDIUM') && newsItem.impact === 'MEDIUM');
+    const myNewsOk = squawkFilters.has('MY_NEWS') && newsMatchesCategory(newsItem, 'MY_NEWS');
+    if (!impactOk && !myNewsOk) return;
+  }
   const clean = text.replace(/<[^>]*>/g,'').replace(/[🟢🔴🟡▲▼●★◈▶]/gu,'').replace(/\s+/g,' ').trim();
   if (!clean) return;
   squawkQueue.push({text: clean, url: url||''});
@@ -1806,7 +1811,7 @@ function toggleSquawkCfg(e) {
     populateSquawkVoices();
     const ri = document.getElementById('squawkRateInput');
     if (ri) { ri.value = squawkRate; document.getElementById('squawkRateVal').textContent = squawkRate.toFixed(1) + '×'; }
-    document.querySelectorAll('.squawk-chip').forEach(c => c.classList.toggle('sel', c.dataset.sf === squawkFilter));
+    document.querySelectorAll('.squawk-chip').forEach(c => c.classList.toggle('sel', squawkFilters.has(c.dataset.sf)));
   }
 }
 function populateSquawkVoices() {
@@ -1832,10 +1837,22 @@ function setSquawkRate(val) {
   localStorage.setItem('squawkRate', squawkRate.toString());
   document.getElementById('squawkRateVal').textContent = squawkRate.toFixed(1) + '×';
 }
-function setSquawkFilter(f, btn) {
-  squawkFilter = f;
-  localStorage.setItem('squawkFilter', f);
-  document.querySelectorAll('.squawk-chip').forEach(c => c.classList.toggle('sel', c.dataset.sf === f));
+function setSquawkFilter(f) {
+  if (f === 'ALL') {
+    // ALL clears everything else
+    squawkFilters = new Set(['ALL']);
+  } else {
+    squawkFilters.delete('ALL');
+    if (squawkFilters.has(f)) {
+      squawkFilters.delete(f);
+      // If nothing left, fall back to ALL
+      if (squawkFilters.size === 0) squawkFilters.add('ALL');
+    } else {
+      squawkFilters.add(f);
+    }
+  }
+  localStorage.setItem('squawkFilters', JSON.stringify([...squawkFilters]));
+  document.querySelectorAll('.squawk-chip').forEach(c => c.classList.toggle('sel', squawkFilters.has(c.dataset.sf)));
 }
 function testSquawkVoice() {
   if (!window.speechSynthesis) return;
