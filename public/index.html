@@ -748,6 +748,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .sc-table thead th.sc-sorted .sar{opacity:1;}
 .sc-table tbody tr{border-bottom:1px solid #0a0e14;transition:background .1s;}
 .sc-table tbody tr:hover{background:#0d1420!important;cursor:pointer;}
+.sc-table tbody tr:hover .sc-sym::after{content:' ↗';font-size:9px;color:#00d4aa;opacity:.7;}
 .sc-table tbody tr:nth-child(even){background:#080b10;}
 .sc-table td{padding:5px 10px;white-space:nowrap;vertical-align:middle;}
 .sc-sym{font-weight:700;color:#e0e8ff;font-size:12px;letter-spacing:.3px;}
@@ -3554,18 +3555,247 @@ const CHART_MAP = {
   'UNI':     {symbol:'CRYPTO:UNIUSD',    label:'Uniswap · UNI/USD'},
   'ATOM':    {symbol:'CRYPTO:ATOMUSD',   label:'Cosmos · ATOM/USD'},
   'NEAR':    {symbol:'CRYPTO:NEARUSD',   label:'NEAR Protocol'},
-  // Equities
-  'AAPL':    {symbol:'NASDAQ:AAPL',      label:'Apple Inc.'},
-  'NVDA':    {symbol:'NASDAQ:NVDA',      label:'NVIDIA Corp.'},
-  'MSFT':    {symbol:'NASDAQ:MSFT',      label:'Microsoft Corp.'},
-  'AMZN':    {symbol:'NASDAQ:AMZN',      label:'Amazon.com'},
-  'GOOGL':   {symbol:'NASDAQ:GOOGL',     label:'Alphabet Inc.'},
-  'GOOG':    {symbol:'NASDAQ:GOOGL',     label:'Alphabet Inc.'},
-  'TSLA':    {symbol:'NASDAQ:TSLA',      label:'Tesla Inc.'},
-  'JPM':     {symbol:'NYSE:JPM',         label:'JPMorgan Chase'},
-  'GS':      {symbol:'NYSE:GS',          label:'Goldman Sachs'},
-  'META':    {symbol:'NASDAQ:META',      label:'Meta Platforms'},
-  'NFLX':    {symbol:'NASDAQ:NFLX',      label:'Netflix'},
+  // Equities — Technology (NASDAQ)
+  'AAPL':  {symbol:'NASDAQ:AAPL',  label:'Apple Inc.'},
+  'NVDA':  {symbol:'NASDAQ:NVDA',  label:'NVIDIA Corp.'},
+  'MSFT':  {symbol:'NASDAQ:MSFT',  label:'Microsoft Corp.'},
+  'AMZN':  {symbol:'NASDAQ:AMZN',  label:'Amazon.com'},
+  'GOOGL': {symbol:'NASDAQ:GOOGL', label:'Alphabet Inc.'},
+  'GOOG':  {symbol:'NASDAQ:GOOGL', label:'Alphabet Inc.'},
+  'TSLA':  {symbol:'NASDAQ:TSLA',  label:'Tesla Inc.'},
+  'META':  {symbol:'NASDAQ:META',  label:'Meta Platforms'},
+  'NFLX':  {symbol:'NASDAQ:NFLX',  label:'Netflix'},
+  'AVGO':  {symbol:'NASDAQ:AVGO',  label:'Broadcom Inc.'},
+  'ORCL':  {symbol:'NYSE:ORCL',    label:'Oracle Corp.'},
+  'ADBE':  {symbol:'NASDAQ:ADBE',  label:'Adobe Inc.'},
+  'CRM':   {symbol:'NYSE:CRM',     label:'Salesforce'},
+  'AMD':   {symbol:'NASDAQ:AMD',   label:'AMD'},
+  'INTC':  {symbol:'NASDAQ:INTC',  label:'Intel Corp.'},
+  'QCOM':  {symbol:'NASDAQ:QCOM',  label:'QUALCOMM'},
+  'TXN':   {symbol:'NASDAQ:TXN',   label:'Texas Instruments'},
+  'NOW':   {symbol:'NYSE:NOW',     label:'ServiceNow'},
+  'AMAT':  {symbol:'NASDAQ:AMAT',  label:'Applied Materials'},
+  'MU':    {symbol:'NASDAQ:MU',    label:'Micron Technology'},
+  'LRCX':  {symbol:'NASDAQ:LRCX',  label:'Lam Research'},
+  'KLAC':  {symbol:'NASDAQ:KLAC',  label:'KLA Corp.'},
+  'PANW':  {symbol:'NASDAQ:PANW',  label:'Palo Alto Networks'},
+  'SNPS':  {symbol:'NASDAQ:SNPS',  label:'Synopsys'},
+  'CDNS':  {symbol:'NASDAQ:CDNS',  label:'Cadence Design'},
+  'CSCO':  {symbol:'NASDAQ:CSCO',  label:'Cisco Systems'},
+  'ACN':   {symbol:'NYSE:ACN',     label:'Accenture'},
+  'IBM':   {symbol:'NYSE:IBM',     label:'IBM'},
+  'INTU':  {symbol:'NASDAQ:INTU',  label:'Intuit Inc.'},
+  'FTNT':  {symbol:'NASDAQ:FTNT',  label:'Fortinet'},
+  'MRVL':  {symbol:'NASDAQ:MRVL',  label:'Marvell Technology'},
+  'MSI':   {symbol:'NYSE:MSI',     label:'Motorola Solutions'},
+  'ROP':   {symbol:'NASDAQ:ROP',   label:'Roper Technologies'},
+  'CARR':  {symbol:'NYSE:CARR',    label:'Carrier Global'},
+  'PLTR':  {symbol:'NYSE:PLTR',    label:'Palantir'},
+  'FICO':  {symbol:'NYSE:FICO',    label:'Fair Isaac Corp.'},
+  // Equities — Financials (NYSE)
+  'JPM':   {symbol:'NYSE:JPM',     label:'JPMorgan Chase'},
+  'GS':    {symbol:'NYSE:GS',      label:'Goldman Sachs'},
+  'BAC':   {symbol:'NYSE:BAC',     label:'Bank of America'},
+  'WFC':   {symbol:'NYSE:WFC',     label:'Wells Fargo'},
+  'MS':    {symbol:'NYSE:MS',      label:'Morgan Stanley'},
+  'BLK':   {symbol:'NYSE:BLK',     label:'BlackRock'},
+  'SCHW':  {symbol:'NYSE:SCHW',    label:'Charles Schwab'},
+  'AXP':   {symbol:'NYSE:AXP',     label:'American Express'},
+  'V':     {symbol:'NYSE:V',       label:'Visa Inc.'},
+  'MA':    {symbol:'NYSE:MA',      label:'Mastercard'},
+  'BRK-B': {symbol:'NYSE:BRK.B',   label:'Berkshire Hathaway B'},
+  'BRKB':  {symbol:'NYSE:BRK.B',   label:'Berkshire Hathaway B'},
+  'C':     {symbol:'NYSE:C',       label:'Citigroup'},
+  'CB':    {symbol:'NYSE:CB',      label:'Chubb Ltd.'},
+  'PGR':   {symbol:'NYSE:PGR',     label:'Progressive Corp.'},
+  'MMC':   {symbol:'NYSE:MMC',     label:'Marsh McLennan'},
+  'AON':   {symbol:'NYSE:AON',     label:'Aon plc'},
+  'MET':   {symbol:'NYSE:MET',     label:'MetLife'},
+  'TRV':   {symbol:'NYSE:TRV',     label:'Travelers Cos.'},
+  'SPGI':  {symbol:'NYSE:SPGI',    label:'S&P Global'},
+  'MCO':   {symbol:'NYSE:MCO',     label:'Moody\'s Corp.'},
+  'ICE':   {symbol:'NYSE:ICE',     label:'Intercontinental Exchange'},
+  'CME':   {symbol:'NASDAQ:CME',   label:'CME Group'},
+  'COF':   {symbol:'NYSE:COF',     label:'Capital One'},
+  'USB':   {symbol:'NYSE:USB',     label:'U.S. Bancorp'},
+  'PNC':   {symbol:'NYSE:PNC',     label:'PNC Financial'},
+  'TFC':   {symbol:'NYSE:TFC',     label:'Truist Financial'},
+  'PYPL':  {symbol:'NASDAQ:PYPL',  label:'PayPal'},
+  'FI':    {symbol:'NYSE:FI',      label:'Fiserv'},
+  'FIS':   {symbol:'NYSE:FIS',     label:'FIS'},
+  'AIG':   {symbol:'NYSE:AIG',     label:'American International'},
+  // Equities — Healthcare
+  'LLY':   {symbol:'NYSE:LLY',     label:'Eli Lilly'},
+  'UNH':   {symbol:'NYSE:UNH',     label:'UnitedHealth'},
+  'JNJ':   {symbol:'NYSE:JNJ',     label:'Johnson & Johnson'},
+  'ABT':   {symbol:'NYSE:ABT',     label:'Abbott Laboratories'},
+  'MRK':   {symbol:'NYSE:MRK',     label:'Merck & Co.'},
+  'PFE':   {symbol:'NYSE:PFE',     label:'Pfizer'},
+  'ABBV':  {symbol:'NYSE:ABBV',    label:'AbbVie'},
+  'TMO':   {symbol:'NYSE:TMO',     label:'Thermo Fisher'},
+  'DHR':   {symbol:'NYSE:DHR',     label:'Danaher Corp.'},
+  'BMY':   {symbol:'NYSE:BMY',     label:'Bristol-Myers Squibb'},
+  'AMGN':  {symbol:'NASDAQ:AMGN',  label:'Amgen'},
+  'GILD':  {symbol:'NASDAQ:GILD',  label:'Gilead Sciences'},
+  'ISRG':  {symbol:'NASDAQ:ISRG',  label:'Intuitive Surgical'},
+  'VRTX':  {symbol:'NASDAQ:VRTX',  label:'Vertex Pharma'},
+  'REGN':  {symbol:'NASDAQ:REGN',  label:'Regeneron'},
+  'BIIB':  {symbol:'NASDAQ:BIIB',  label:'Biogen'},
+  'HUM':   {symbol:'NYSE:HUM',     label:'Humana'},
+  'CVS':   {symbol:'NYSE:CVS',     label:'CVS Health'},
+  'CI':    {symbol:'NYSE:CI',      label:'Cigna'},
+  'ELV':   {symbol:'NYSE:ELV',     label:'Elevance Health'},
+  'ZTS':   {symbol:'NYSE:ZTS',     label:'Zoetis'},
+  'DXCM':  {symbol:'NASDAQ:DXCM',  label:'DexCom'},
+  'IQV':   {symbol:'NYSE:IQV',     label:'IQVIA Holdings'},
+  'BSX':   {symbol:'NYSE:BSX',     label:'Boston Scientific'},
+  'SYK':   {symbol:'NYSE:SYK',     label:'Stryker Corp.'},
+  'MDT':   {symbol:'NYSE:MDT',     label:'Medtronic'},
+  'BDX':   {symbol:'NYSE:BDX',     label:'Becton Dickinson'},
+  'BAX':   {symbol:'NYSE:BAX',     label:'Baxter International'},
+  // Equities — Consumer Discretionary
+  'MCD':   {symbol:'NYSE:MCD',     label:'McDonald\'s'},
+  'SBUX':  {symbol:'NASDAQ:SBUX',  label:'Starbucks'},
+  'NKE':   {symbol:'NYSE:NKE',     label:'Nike'},
+  'TGT':   {symbol:'NYSE:TGT',     label:'Target'},
+  'HD':    {symbol:'NYSE:HD',      label:'Home Depot'},
+  'LOW':   {symbol:'NYSE:LOW',     label:'Lowe\'s Cos.'},
+  'BKNG':  {symbol:'NASDAQ:BKNG',  label:'Booking Holdings'},
+  'MAR':   {symbol:'NASDAQ:MAR',   label:'Marriott International'},
+  'HLT':   {symbol:'NYSE:HLT',     label:'Hilton Worldwide'},
+  'F':     {symbol:'NYSE:F',       label:'Ford Motor'},
+  'GM':    {symbol:'NYSE:GM',      label:'General Motors'},
+  'RIVN':  {symbol:'NASDAQ:RIVN',  label:'Rivian Automotive'},
+  'LCID':  {symbol:'NASDAQ:LCID',  label:'Lucid Motors'},
+  'ABNB':  {symbol:'NASDAQ:ABNB',  label:'Airbnb'},
+  'EBAY':  {symbol:'NASDAQ:EBAY',  label:'eBay'},
+  'ETSY':  {symbol:'NASDAQ:ETSY',  label:'Etsy'},
+  'ORLY':  {symbol:'NASDAQ:ORLY',  label:'O\'Reilly Auto'},
+  'AZO':   {symbol:'NYSE:AZO',     label:'AutoZone'},
+  'GPC':   {symbol:'NYSE:GPC',     label:'Genuine Parts'},
+  'DHI':   {symbol:'NYSE:DHI',     label:'D.R. Horton'},
+  'LEN':   {symbol:'NYSE:LEN',     label:'Lennar Corp.'},
+  'PHM':   {symbol:'NYSE:PHM',     label:'PulteGroup'},
+  'RCL':   {symbol:'NYSE:RCL',     label:'Royal Caribbean'},
+  'CCL':   {symbol:'NYSE:CCL',     label:'Carnival Corp.'},
+  // Equities — Communication Services
+  'GOOGL': {symbol:'NASDAQ:GOOGL', label:'Alphabet Inc.'},
+  'DIS':   {symbol:'NYSE:DIS',     label:'Walt Disney'},
+  'CMCSA': {symbol:'NASDAQ:CMCSA', label:'Comcast'},
+  'VZ':    {symbol:'NYSE:VZ',      label:'Verizon'},
+  'T':     {symbol:'NYSE:T',       label:'AT&T'},
+  'TMUS':  {symbol:'NASDAQ:TMUS',  label:'T-Mobile US'},
+  'CHTR':  {symbol:'NASDAQ:CHTR',  label:'Charter Communications'},
+  'PARA':  {symbol:'NASDAQ:PARA',  label:'Paramount Global'},
+  'WBD':   {symbol:'NASDAQ:WBD',   label:'Warner Bros. Discovery'},
+  'TTWO':  {symbol:'NASDAQ:TTWO',  label:'Take-Two Interactive'},
+  'EA':    {symbol:'NASDAQ:EA',    label:'Electronic Arts'},
+  'RBLX':  {symbol:'NYSE:RBLX',    label:'Roblox'},
+  // Equities — Industrials
+  'CAT':   {symbol:'NYSE:CAT',     label:'Caterpillar'},
+  'DE':    {symbol:'NYSE:DE',      label:'John Deere'},
+  'HON':   {symbol:'NASDAQ:HON',   label:'Honeywell'},
+  'BA':    {symbol:'NYSE:BA',      label:'Boeing'},
+  'LMT':   {symbol:'NYSE:LMT',     label:'Lockheed Martin'},
+  'RTX':   {symbol:'NYSE:RTX',     label:'RTX Corp.'},
+  'GE':    {symbol:'NYSE:GE',      label:'GE Aerospace'},
+  'UPS':   {symbol:'NYSE:UPS',     label:'UPS'},
+  'FDX':   {symbol:'NYSE:FDX',     label:'FedEx'},
+  'MMM':   {symbol:'NYSE:MMM',     label:'3M'},
+  'EMR':   {symbol:'NYSE:EMR',     label:'Emerson Electric'},
+  'ETN':   {symbol:'NYSE:ETN',     label:'Eaton Corp.'},
+  'PH':    {symbol:'NYSE:PH',      label:'Parker-Hannifin'},
+  'GD':    {symbol:'NYSE:GD',      label:'General Dynamics'},
+  'NOC':   {symbol:'NYSE:NOC',     label:'Northrop Grumman'},
+  'WM':    {symbol:'NYSE:WM',      label:'Waste Management'},
+  'RSG':   {symbol:'NYSE:RSG',     label:'Republic Services'},
+  'CTAS':  {symbol:'NASDAQ:CTAS',  label:'Cintas Corp.'},
+  'FAST':  {symbol:'NASDAQ:FAST',  label:'Fastenal'},
+  'ODFL':  {symbol:'NASDAQ:ODFL',  label:'Old Dominion Freight'},
+  // Equities — Consumer Staples
+  'PG':    {symbol:'NYSE:PG',      label:'Procter & Gamble'},
+  'KO':    {symbol:'NYSE:KO',      label:'Coca-Cola'},
+  'PEP':   {symbol:'NASDAQ:PEP',   label:'PepsiCo'},
+  'WMT':   {symbol:'NYSE:WMT',     label:'Walmart'},
+  'COST':  {symbol:'NASDAQ:COST',  label:'Costco Wholesale'},
+  'CL':    {symbol:'NYSE:CL',      label:'Colgate-Palmolive'},
+  'KMB':   {symbol:'NYSE:KMB',     label:'Kimberly-Clark'},
+  'GIS':   {symbol:'NYSE:GIS',     label:'General Mills'},
+  'K':     {symbol:'NYSE:K',       label:'Kellanova'},
+  'MO':    {symbol:'NYSE:MO',      label:'Altria Group'},
+  'PM':    {symbol:'NYSE:PM',      label:'Philip Morris'},
+  'STZ':   {symbol:'NYSE:STZ',     label:'Constellation Brands'},
+  'BG':    {symbol:'NYSE:BG',      label:'Bunge Global'},
+  'TSN':   {symbol:'NYSE:TSN',     label:'Tyson Foods'},
+  'HRL':   {symbol:'NYSE:HRL',     label:'Hormel Foods'},
+  'SJM':   {symbol:'NYSE:SJM',     label:'J.M. Smucker'},
+  // Equities — Energy
+  'XOM':   {symbol:'NYSE:XOM',     label:'ExxonMobil'},
+  'CVX':   {symbol:'NYSE:CVX',     label:'Chevron'},
+  'COP':   {symbol:'NYSE:COP',     label:'ConocoPhillips'},
+  'SLB':   {symbol:'NYSE:SLB',     label:'SLB'},
+  'EOG':   {symbol:'NYSE:EOG',     label:'EOG Resources'},
+  'PXD':   {symbol:'NYSE:PXD',     label:'Pioneer Natural Resources'},
+  'MPC':   {symbol:'NYSE:MPC',     label:'Marathon Petroleum'},
+  'PSX':   {symbol:'NYSE:PSX',     label:'Phillips 66'},
+  'VLO':   {symbol:'NYSE:VLO',     label:'Valero Energy'},
+  'HAL':   {symbol:'NYSE:HAL',     label:'Halliburton'},
+  'BKR':   {symbol:'NASDAQ:BKR',   label:'Baker Hughes'},
+  'DVN':   {symbol:'NYSE:DVN',     label:'Devon Energy'},
+  'OXY':   {symbol:'NYSE:OXY',     label:'Occidental Petroleum'},
+  'FANG':  {symbol:'NASDAQ:FANG',  label:'Diamondback Energy'},
+  // Equities — Materials
+  'LIN':   {symbol:'NASDAQ:LIN',   label:'Linde plc'},
+  'APD':   {symbol:'NYSE:APD',     label:'Air Products'},
+  'SHW':   {symbol:'NYSE:SHW',     label:'Sherwin-Williams'},
+  'FCX':   {symbol:'NYSE:FCX',     label:'Freeport-McMoRan'},
+  'NEM':   {symbol:'NYSE:NEM',     label:'Newmont Corp.'},
+  'NUE':   {symbol:'NYSE:NUE',     label:'Nucor Corp.'},
+  'DOW':   {symbol:'NYSE:DOW',     label:'Dow Inc.'},
+  'DD':    {symbol:'NYSE:DD',      label:'DuPont'},
+  'IFF':   {symbol:'NYSE:IFF',     label:'Intl Flavors'},
+  'PPG':   {symbol:'NYSE:PPG',     label:'PPG Industries'},
+  'ALB':   {symbol:'NYSE:ALB',     label:'Albemarle Corp.'},
+  'MOS':   {symbol:'NYSE:MOS',     label:'Mosaic Company'},
+  // Equities — Utilities
+  'NEE':   {symbol:'NYSE:NEE',     label:'NextEra Energy'},
+  'DUK':   {symbol:'NYSE:DUK',     label:'Duke Energy'},
+  'SO':    {symbol:'NYSE:SO',      label:'Southern Company'},
+  'D':     {symbol:'NYSE:D',       label:'Dominion Energy'},
+  'AEP':   {symbol:'NASDAQ:AEP',   label:'American Electric Power'},
+  'EXC':   {symbol:'NASDAQ:EXC',   label:'Exelon Corp.'},
+  'SRE':   {symbol:'NYSE:SRE',     label:'Sempra'},
+  'PCG':   {symbol:'NYSE:PCG',     label:'PG&E Corp.'},
+  'XEL':   {symbol:'NASDAQ:XEL',   label:'Xcel Energy'},
+  'WEC':   {symbol:'NYSE:WEC',     label:'WEC Energy Group'},
+  'AWK':   {symbol:'NYSE:AWK',     label:'American Water Works'},
+  // Equities — Real Estate
+  'PLD':   {symbol:'NYSE:PLD',     label:'Prologis'},
+  'AMT':   {symbol:'NYSE:AMT',     label:'American Tower'},
+  'EQIX':  {symbol:'NASDAQ:EQIX',  label:'Equinix'},
+  'CCI':   {symbol:'NYSE:CCI',     label:'Crown Castle'},
+  'SPG':   {symbol:'NYSE:SPG',     label:'Simon Property Group'},
+  'SBAC':  {symbol:'NASDAQ:SBAC',  label:'SBA Communications'},
+  'DLR':   {symbol:'NYSE:DLR',     label:'Digital Realty'},
+  'WELL':  {symbol:'NYSE:WELL',    label:'Welltower'},
+  'PSA':   {symbol:'NYSE:PSA',     label:'Public Storage'},
+  'EQR':   {symbol:'NYSE:EQR',     label:'Equity Residential'},
+  'AVB':   {symbol:'NYSE:AVB',     label:'AvalonBay Communities'},
+  'O':     {symbol:'NYSE:O',       label:'Realty Income'},
+  'VICI':  {symbol:'NYSE:VICI',    label:'VICI Properties'},
+  // Commodity yfinance-ticker aliases (GC=F → GOLD etc.)
+  'GCF':   {symbol:'TVC:GOLD',     label:'Gold · XAU/USD'},
+  'SIF':   {symbol:'TVC:SILVER',   label:'Silver · XAG/USD'},
+  'CLF':   {symbol:'NYMEX:CL1!',   label:'WTI Crude Oil'},
+  'NGF':   {symbol:'NYMEX:NG1!',   label:'Natural Gas'},
+  'HGF':   {symbol:'TVC:COPPER',   label:'Copper'},
+  'PLF':   {symbol:'TVC:PLATINUM', label:'Platinum'},
+  'ZWF':   {symbol:'CBOT:ZW1!',    label:'Wheat'},
+  'ZCF':   {symbol:'CBOT:ZC1!',    label:'Corn'},
+  'ZSF':   {symbol:'CBOT:ZS1!',    label:'Soybeans'},
+  'CRUDEWTIOIL': {symbol:'NYMEX:CL1!', label:'WTI Crude Oil'},
+  'CRUDEOIL':    {symbol:'NYMEX:CL1!', label:'WTI Crude Oil'},
+  'NATURALGAS':  {symbol:'NYMEX:NG1!', label:'Natural Gas'},
   // Bonds
   'US10Y':   {symbol:'TVC:US10Y',        label:'US 10-Year Yield'},
   'US2Y':    {symbol:'TVC:US02Y',        label:'US 2-Year Yield'},
@@ -3582,6 +3812,37 @@ function openChart(assetKey) {
     return;
   }
   _openChartSymbol(entry.symbol, entry.label);
+}
+
+// ─── Screener → Chart ──────────────────────────────────────────
+function _scOpenChart(type, sym, name) {
+  sym  = (sym  || '').toUpperCase();
+  name = (name || sym);
+  if (type === 'forex') {
+    // "EUR/USD" → "EURUSD"
+    openChart(sym.replace('/',''));
+    return;
+  }
+  if (type === 'crypto') {
+    // BTC → try CHART_MAP["BTC"] first, then BTCUSD
+    const direct = CHART_MAP[sym];
+    if (direct) { _openChartSymbol(direct.symbol, direct.label); return; }
+    openChart(sym + 'USD');
+    return;
+  }
+  if (type === 'commodities') {
+    // Try name-based lookup (GOLD, WTI, NATGAS…)
+    const nameKey = name.toUpperCase().replace(/\s+/g,'').replace(/[^A-Z0-9]/g,'');
+    const cEntry = CHART_MAP[nameKey] || CHART_MAP[sym.replace('=F','').replace('1!','')];
+    if (cEntry) { _openChartSymbol(cEntry.symbol, cEntry.label); return; }
+    openChart(nameKey);
+    return;
+  }
+  // stocks / multi: use CHART_MAP or let TradingView auto-resolve by ticker
+  const entry = CHART_MAP[sym];
+  if (entry) { _openChartSymbol(entry.symbol, entry.label); return; }
+  // Fallback: pass ticker directly — TV resolves NASDAQ/NYSE automatically
+  _openChartSymbol(sym, name + ' · ' + sym);
 }
 
 function _openChartSymbol(tvSymbol, label) {
@@ -4058,7 +4319,14 @@ function _renderScTable(type, data) {
   }
   h += '</tr></thead><tbody>';
   for (const d of data) {
-    h += '<tr>';
+    // Build row onclick — symbols are always alphanumeric/safe for inline JS
+    let rowClick = '';
+    if (type === 'stocks')      rowClick = `_scOpenChart('stocks','${d.symbol}','${(d.name||d.symbol).replace(/'/g,'').replace(/"/g,'')}')`;
+    else if (type === 'forex')  rowClick = `_scOpenChart('forex','${(d.pair||'').replace(/'/g,'')}','${(d.pair||'')}')`;
+    else if (type === 'crypto') rowClick = `_scOpenChart('crypto','${d.symbol}','${(d.name||d.symbol).replace(/'/g,'')}')`;
+    else if (type === 'commodities') rowClick = `_scOpenChart('commodities','${(d.ticker||d.name||'').replace(/'/g,'').replace(/\s/g,'')}','${(d.name||'').replace(/'/g,'')}')`;
+    else if (type === 'multi')  rowClick = `_scOpenChart('${(d.asset_type||'stocks').toLowerCase()}','${(d.symbol||'').replace(/'/g,'')}','${(d.name||'').replace(/'/g,'')}')`;
+    h += `<tr onclick="${rowClick}" title="Open chart for ${d.symbol||d.pair||d.name}" style="cursor:pointer">`;
     if (type === 'stocks') {
       const _sym = `<td><span class="sc-sym">${d.symbol}</span></td>
             <td><span class="sc-name" title="${d.name}">${d.name}</span></td>
