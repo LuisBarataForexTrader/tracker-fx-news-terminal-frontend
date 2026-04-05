@@ -193,19 +193,21 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .mnf-done:hover{background:var(--accent);}
 
 /* ── Tracker FX Sidebar Ad ── */
-.sidebar-tfx-ad{margin:0 10px 2px;background:linear-gradient(150deg,rgba(245,158,11,0.13) 0%,rgba(10,12,15,0.95) 70%);border:1px solid rgba(245,158,11,0.3);border-radius:6px;overflow:hidden;position:relative;flex-shrink:0;}
-.sidebar-tfx-ad::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f59e0b 40%,#fcd34d 60%,transparent);}
-.sidebar-tfx-ad-inner{padding:11px 13px 12px;}
-.tfx-ad-eyebrow{font-size:8px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:#f59e0b;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
-.tfx-ad-eyebrow::before{content:'';width:5px;height:5px;border-radius:50%;background:#f59e0b;animation:blink 2s ease-in-out infinite;flex-shrink:0;}
-.tfx-ad-title{font-size:13px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:3px;}
-.tfx-ad-title span{color:#fbbf24;}
-.tfx-ad-sub{font-size:10px;color:#8a9ab0;line-height:1.45;margin-bottom:10px;}
-.tfx-ad-features{display:flex;flex-direction:column;gap:3px;margin-bottom:10px;}
-.tfx-ad-feat{font-size:10px;color:#c8a84b;display:flex;align-items:center;gap:6px;}
-.tfx-ad-feat::before{content:'✓';color:#f59e0b;font-weight:800;font-size:9px;flex-shrink:0;}
-.tfx-ad-btn{display:block;width:100%;padding:9px 12px;text-align:center;background:linear-gradient(135deg,#92400e,#d97706,#fbbf24);color:#000;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;border-radius:3px;text-decoration:none;transition:all .2s;box-shadow:0 3px 14px rgba(245,158,11,.3);}
-.tfx-ad-btn:hover{box-shadow:0 5px 20px rgba(245,158,11,.5);transform:translateY(-1px);}
+.sidebar-tfx-ad{margin:0 10px 2px;flex-shrink:0;}
+.sidebar-tfx-ad-inner{background:#22304A;border:1px solid rgba(252,65,74,0.3);border-radius:6px;overflow:hidden;position:relative;}
+.sidebar-tfx-ad-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#fc414a 40%,#ff6b74 60%,transparent);}
+.tfx-ad-body-wrap{padding:12px 13px 11px;}
+.tfx-ad-eyebrow{font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(252,65,74,.7);margin-bottom:7px;}
+.tfx-ad-logo-text{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1;margin-bottom:4px;}
+.tfx-ad-logo-text span{color:#fc414a;}
+.tfx-ad-tagline{font-size:10px;color:rgba(255,255,255,.55);line-height:1.45;margin-bottom:10px;}
+.tfx-ad-stats{display:flex;gap:5px;margin-bottom:10px;}
+.tfx-ad-stat{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:3px;padding:5px 3px;text-align:center;}
+.tfx-ad-stat-num{font-size:11px;font-weight:800;color:#fff;display:block;line-height:1;}
+.tfx-ad-stat-lbl{font-size:7.5px;color:rgba(255,255,255,.35);display:block;margin-top:2px;text-transform:uppercase;letter-spacing:.05em;}
+.tfx-ad-btn{display:block;width:100%;padding:8px 10px;text-align:center;background:#fc414a;color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;border-radius:3px;text-decoration:none;transition:all .2s;}
+.tfx-ad-btn:hover{background:#e02f38;transform:translateY(-1px);box-shadow:0 4px 16px rgba(252,65,74,.4);}
+.tfx-ad-footer-note{font-size:8px;color:rgba(255,255,255,.2);text-align:center;margin-top:6px;letter-spacing:.04em;}
 
 /* ── Modal PRO gating ── */
 .mynews-panel[data-plan="basic"] .mnt-pro-section{position:relative;overflow:hidden;border-radius:5px;}
@@ -230,20 +232,6 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .mynews-basic-notice{display:none;background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.15);border-radius:4px;padding:9px 12px;margin-bottom:16px;font-size:10.5px;color:#8a7ab0;line-height:1.5;}
 .mynews-panel[data-plan="basic"] .mynews-basic-notice{display:block;}
 .mynews-basic-notice strong{color:#a78bfa;}
-/* ── Sidebar ad image ── */
-.tfx-ad-img-wrap{display:block;width:100%;border-radius:4px;overflow:hidden;margin-bottom:8px;line-height:0;}
-.tfx-ad-img-wrap img{width:100%;height:auto;display:block;border-radius:4px;}
-.tfx-ad-img-fallback{display:none;}
-.tfx-ad-img-wrap img.broken + .tfx-ad-img-fallback{display:block;}
-/* ── In-feed ad banner ── */
-.infeed-ad{margin:8px 20px 4px;border-radius:5px;overflow:hidden;border:1px solid rgba(245,158,11,0.2);cursor:pointer;position:relative;line-height:0;background:#0a0c0f;}
-.infeed-ad img{width:100%;height:auto;display:block;border-radius:4px;}
-.infeed-ad-fallback{display:none;padding:10px 14px;background:linear-gradient(135deg,rgba(245,158,11,0.08),rgba(10,12,15,0.9));align-items:center;justify-content:space-between;gap:12px;}
-.infeed-ad img.broken ~ .infeed-ad-fallback{display:flex;}
-.infeed-ad-text{font-size:12px;font-weight:600;color:#c8a84b;line-height:1.4;}
-.infeed-ad-text strong{color:#fbbf24;display:block;font-size:13px;}
-.infeed-ad-cta{padding:7px 14px;background:linear-gradient(135deg,#92400e,#f59e0b);color:#000;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border:none;border-radius:3px;white-space:nowrap;cursor:pointer;flex-shrink:0;}
-.infeed-ad-label{position:absolute;top:5px;right:7px;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);background:rgba(0,0,0,.4);padding:2px 5px;border-radius:2px;}
 /* Custom ticker search */
 .mnt-search-wrap{display:flex;align-items:center;background:#0a0c0f;border:1px solid var(--border2);border-radius:5px;padding:0 4px;margin-top:4px;transition:border-color .15s;}
 .mnt-search-wrap:focus-within{border-color:var(--accent2);}
@@ -452,19 +440,19 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .delay-banner-btn:hover{background:#0099cc;}
 /* ── Inline feed ad ── */
 .feed-ad-card{cursor:pointer;transition:opacity .15s;position:relative;overflow:hidden;}
-.feed-ad-card:hover{opacity:.9;}
-/* Image banner mode */
-.feed-ad-img{display:block;width:100%;height:auto;line-height:0;}
-.feed-ad-img img{width:100%;height:auto;display:block;}
-/* Text fallback mode */
-.feed-ad-text{padding:12px 20px;background:rgba(245,158,11,0.07);border-top:1px solid rgba(245,158,11,0.2);border-bottom:1px solid rgba(245,158,11,0.2);border-left:4px solid #f59e0b;display:flex;align-items:center;gap:14px;}
-.feed-ad-badge{font-size:8px;font-weight:800;letter-spacing:.18em;color:#f59e0b;text-transform:uppercase;border:1px solid rgba(245,158,11,0.4);padding:2px 6px;border-radius:2px;flex-shrink:0;}
-.feed-ad-body{flex:1;}
-.feed-ad-headline{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;}
-.feed-ad-sub{font-size:10px;color:rgba(245,158,11,0.7);}
-.feed-ad-cta{flex-shrink:0;padding:6px 14px;background:#f59e0b;color:#000;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:all .15s;}
-.feed-ad-card:hover .feed-ad-cta{background:#fbbf24;}
-.feed-ad-sponsored{position:absolute;top:5px;right:8px;font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);background:rgba(0,0,0,.45);padding:2px 6px;border-radius:2px;pointer-events:none;}
+.feed-ad-card:hover{opacity:.92;}
+.feed-ad-banner{background:#22304A;border-top:2px solid #fc414a;border-bottom:1px solid rgba(252,65,74,.18);padding:11px 20px 11px 22px;display:flex;align-items:center;gap:14px;position:relative;}
+.feed-ad-brand{display:flex;flex-direction:column;gap:1px;flex-shrink:0;min-width:74px;}
+.feed-ad-brand-name{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.01em;line-height:1;}
+.feed-ad-brand-name span{color:#fc414a;}
+.feed-ad-brand-tag{font-size:8px;color:rgba(255,255,255,.35);letter-spacing:.07em;text-transform:uppercase;margin-top:2px;}
+.feed-ad-divider{width:1px;height:28px;background:rgba(255,255,255,.1);flex-shrink:0;}
+.feed-ad-copy{flex:1;min-width:0;}
+.feed-ad-headline{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.feed-ad-sub{font-size:10px;color:rgba(255,255,255,.4);}
+.feed-ad-cta{flex-shrink:0;padding:7px 16px;background:#fc414a;color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:all .15s;white-space:nowrap;}
+.feed-ad-card:hover .feed-ad-cta{background:#e02f38;}
+.feed-ad-sponsored{position:absolute;top:4px;right:8px;font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.2);pointer-events:none;}
 
 /* ── Empty ── */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;color:var(--text-muted);gap:12px;}
@@ -828,22 +816,26 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
     <!-- ── Tracker FX Ad (basic users only) ── -->
     <div class="sidebar-tfx-ad" id="sidebarTfxAd">
       <div class="sidebar-tfx-ad-inner">
-        <!-- Image banner: replace src with your 380×290px image URL -->
-        <a class="tfx-ad-img-wrap" href="https://www.trackerfx.com" target="_blank" rel="noopener" id="tfxAdImgLink" style="display:none">
-          <img src="/ads/sidebar-trackerfx.png" alt="Tracker FX"
-            onerror="this.classList.add('broken');document.getElementById('tfxAdImgLink').style.display='none';document.getElementById('tfxAdTextBody').style.display='block'">
-        </a>
-        <!-- Text fallback (shown when no image is set) -->
-        <div id="tfxAdTextBody">
-          <div class="tfx-ad-eyebrow">Also from us</div>
-          <div class="tfx-ad-title"><span>Tracker FX</span> — Professional FX Terminal</div>
-          <div class="tfx-ad-sub">Advanced charting, signals &amp; real-time data for forex traders.</div>
-          <div class="tfx-ad-features">
-            <div class="tfx-ad-feat">Live spreads &amp; depth of market</div>
-            <div class="tfx-ad-feat">COT reports &amp; positioning data</div>
-            <div class="tfx-ad-feat">Economic calendar integration</div>
+        <div class="tfx-ad-body-wrap">
+          <div class="tfx-ad-eyebrow">Sponsored</div>
+          <div class="tfx-ad-logo-text">Tracker<span>FX</span></div>
+          <div class="tfx-ad-tagline">The Master Key to<br>Profitable Trading</div>
+          <div class="tfx-ad-stats">
+            <div class="tfx-ad-stat">
+              <span class="tfx-ad-stat-num">1200+</span>
+              <span class="tfx-ad-stat-lbl">Brokers</span>
+            </div>
+            <div class="tfx-ad-stat">
+              <span class="tfx-ad-stat-num">MT4/5</span>
+              <span class="tfx-ad-stat-lbl">Auto Sync</span>
+            </div>
+            <div class="tfx-ad-stat">
+              <span class="tfx-ad-stat-num">Free</span>
+              <span class="tfx-ad-stat-lbl">Trial</span>
+            </div>
           </div>
-          <a class="tfx-ad-btn" href="https://www.trackerfx.com" target="_blank" rel="noopener">Explore Tracker FX →</a>
+          <a class="tfx-ad-btn" href="https://www.trackerfx.com" target="_blank" rel="noopener">Start Free →</a>
+          <div class="tfx-ad-footer-note">Automated Trading Journal</div>
         </div>
       </div>
     </div>
@@ -2291,22 +2283,21 @@ function renderNews() {
 
     // Inject inline ad card every 15 items for Basic users
     // Image banner: replace /ads/infeed-trackerfx.png with your 1456×180px image
-    const _adImg = '/ads/infeed-trackerfx.png';
     const adHtml = (!IS_PRO && idx > 0 && idx % 15 === 0)
-      ? `<div class="feed-ad-card" onclick="showUpgrade('Tracker FX')">
-           <div class="feed-ad-img">
-             <img src="${_adImg}" alt="Tracker FX — Professional FX Terminal"
-               onerror="this.closest('.feed-ad-img').style.display='none';this.closest('.feed-ad-img').nextElementSibling.style.display='flex'">
-           </div>
-           <div class="feed-ad-text" style="display:none">
-             <span class="feed-ad-badge">Sponsored</span>
-             <div class="feed-ad-body">
-               <div class="feed-ad-headline">Tracker FX — Professional FX Trading Terminal</div>
-               <div class="feed-ad-sub">Live spreads · COT reports · Economic calendar · Advanced charting</div>
+      ? `<div class="feed-ad-card" onclick="window.open('https://www.trackerfx.com','_blank')">
+           <div class="feed-ad-banner">
+             <div class="feed-ad-brand">
+               <div class="feed-ad-brand-name">Tracker<span>FX</span></div>
+               <div class="feed-ad-brand-tag">Trading Journal</div>
              </div>
-             <button class="feed-ad-cta" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">Explore →</button>
+             <div class="feed-ad-divider"></div>
+             <div class="feed-ad-copy">
+               <div class="feed-ad-headline">The Master Key to Profitable Trading</div>
+               <div class="feed-ad-sub">Automated Journal · 1200+ Brokers · MT4/MT5 · Free Trial</div>
+             </div>
+             <button class="feed-ad-cta" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">Start Free →</button>
+             <span class="feed-ad-sponsored">Sponsored</span>
            </div>
-           <span class="feed-ad-sponsored">Sponsored</span>
          </div>`
       : '';
     return adHtml + card;
