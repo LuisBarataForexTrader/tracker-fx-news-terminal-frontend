@@ -3814,22 +3814,38 @@ function openChart(assetKey) {
   _openChartSymbol(entry.symbol, entry.label);
 }
 
-// ─── Commodity yfinance-ticker → TradingView symbol (exact, no ambiguity) ───
+// ─── Commodity maps: full ticker (GC=F) AND stripped (GC) → TradingView ────
 const _COMM_TV = {
-  'GC=F': {symbol:'TVC:GOLD',       label:'Gold · XAU/USD'},
-  'SI=F': {symbol:'TVC:SILVER',     label:'Silver · XAG/USD'},
-  'HG=F': {symbol:'TVC:COPPER',     label:'Copper'},
-  'PL=F': {symbol:'TVC:PLATINUM',   label:'Platinum'},
-  'PA=F': {symbol:'TVC:PALLADIUM',  label:'Palladium'},
-  'CL=F': {symbol:'NYMEX:CL1!',     label:'WTI Crude Oil'},
-  'BZ=F': {symbol:'ICEEUR:BRN1!',   label:'Brent Crude Oil'},
-  'NG=F': {symbol:'NYMEX:NG1!',     label:'Natural Gas'},
-  'ZC=F': {symbol:'CBOT:ZC1!',      label:'Corn'},
-  'ZW=F': {symbol:'CBOT:ZW1!',      label:'Wheat'},
-  'ZS=F': {symbol:'CBOT:ZS1!',      label:'Soybeans'},
-  'CC=F': {symbol:'ICEUS:CC1!',     label:'Cocoa'},
-  'KC=F': {symbol:'ICEUS:KC1!',     label:'Coffee'},
-  'CT=F': {symbol:'ICEUS:CT1!',     label:'Cotton'},
+  // Full yfinance tickers (used by Commodities screener tab)
+  'GC=F': {symbol:'TVC:GOLD',       label:'Gold · XAU/USD',     short:'GOLD'},
+  'SI=F': {symbol:'TVC:SILVER',     label:'Silver · XAG/USD',   short:'SILVER'},
+  'HG=F': {symbol:'TVC:COPPER',     label:'Copper',             short:'COPPER'},
+  'PL=F': {symbol:'TVC:PLATINUM',   label:'Platinum',           short:'PLAT'},
+  'PA=F': {symbol:'TVC:PALLADIUM',  label:'Palladium',          short:'PALL'},
+  'CL=F': {symbol:'NYMEX:CL1!',     label:'WTI Crude Oil',      short:'WTI'},
+  'BZ=F': {symbol:'ICEEUR:BRN1!',   label:'Brent Crude Oil',    short:'BRENT'},
+  'NG=F': {symbol:'NYMEX:NG1!',     label:'Natural Gas',        short:'NATGAS'},
+  'ZC=F': {symbol:'CBOT:ZC1!',      label:'Corn',               short:'CORN'},
+  'ZW=F': {symbol:'CBOT:ZW1!',      label:'Wheat',              short:'WHEAT'},
+  'ZS=F': {symbol:'CBOT:ZS1!',      label:'Soybeans',           short:'SOY'},
+  'CC=F': {symbol:'ICEUS:CC1!',     label:'Cocoa',              short:'COCOA'},
+  'KC=F': {symbol:'ICEUS:KC1!',     label:'Coffee',             short:'COFFEE'},
+  'CT=F': {symbol:'ICEUS:CT1!',     label:'Cotton',             short:'COTTON'},
+  // Stripped tickers (used by Multi-Asset view: GC=F → GC)
+  'GC':   {symbol:'TVC:GOLD',       label:'Gold · XAU/USD',     short:'GOLD'},
+  'SI':   {symbol:'TVC:SILVER',     label:'Silver · XAG/USD',   short:'SILVER'},
+  'HG':   {symbol:'TVC:COPPER',     label:'Copper',             short:'COPPER'},
+  'PL':   {symbol:'TVC:PLATINUM',   label:'Platinum',           short:'PLAT'},
+  'PA':   {symbol:'TVC:PALLADIUM',  label:'Palladium',          short:'PALL'},
+  'CL':   {symbol:'NYMEX:CL1!',     label:'WTI Crude Oil',      short:'WTI'},
+  'BZ':   {symbol:'ICEEUR:BRN1!',   label:'Brent Crude Oil',    short:'BRENT'},
+  'NG':   {symbol:'NYMEX:NG1!',     label:'Natural Gas',        short:'NATGAS'},
+  'ZC':   {symbol:'CBOT:ZC1!',      label:'Corn',               short:'CORN'},
+  'ZW':   {symbol:'CBOT:ZW1!',      label:'Wheat',              short:'WHEAT'},
+  'ZS':   {symbol:'CBOT:ZS1!',      label:'Soybeans',           short:'SOY'},
+  'CC':   {symbol:'ICEUS:CC1!',     label:'Cocoa',              short:'COCOA'},
+  'KC':   {symbol:'ICEUS:KC1!',     label:'Coffee',             short:'COFFEE'},
+  'CT':   {symbol:'ICEUS:CT1!',     label:'Cotton',             short:'COTTON'},
 };
 
 // ─── Screener → Chart ──────────────────────────────────────────
@@ -3846,18 +3862,18 @@ function _scOpenChart(type, sym, name) {
     openChart(sym.toUpperCase() + 'USD');
     return;
   }
-  if (type === 'commodities') {
-    // Exact yfinance-ticker lookup — fully avoids stock symbol collisions
-    const cEntry = _COMM_TV[sym];
+  // 'commodities' tab OR 'commodity' from multi-asset — both handled here
+  if (type === 'commodities' || type === 'commodity') {
+    const cEntry = _COMM_TV[sym] || _COMM_TV[sym.toUpperCase()];
     if (cEntry) { _openChartSymbol(cEntry.symbol, cEntry.label); return; }
-    // Fallback: name-based (GOLD, SILVER, etc.)
+    // Last-resort name lookup
     const nameKey = name.toUpperCase().replace(/\s+/g,'').replace(/[^A-Z0-9]/g,'');
     const nEntry  = CHART_MAP[nameKey];
     if (nEntry) { _openChartSymbol(nEntry.symbol, nEntry.label); return; }
     _openChartSymbol(nameKey, name);
     return;
   }
-  // stocks / multi
+  // stocks / multi (non-commodity)
   const entry = CHART_MAP[sym.toUpperCase()];
   if (entry) { _openChartSymbol(entry.symbol, entry.label); return; }
   _openChartSymbol(sym.toUpperCase(), name + ' · ' + sym.toUpperCase());
@@ -4420,15 +4436,19 @@ function _renderScTable(type, data) {
             <td>${_scRange(d.week52_pct)}</td>
             <td>${_scRsi(d.rsi)}</td><td>${_scSig(d.signal)}</td>`;
     } else if (type === 'multi') {
+      // For commodities show readable short name (GOLD, WTI, BRENT…) not raw stripped ticker (GC, CL, BZ…)
+      const multiSym = d.asset_type === 'Commodity'
+        ? (_COMM_TV[d.symbol]?.short || d.name.toUpperCase().replace(/\s+/g,'').slice(0,8))
+        : d.symbol;
       h += `<td><span class="sc-atype at-${d.asset_type}">${d.asset_type}</span></td>
-            <td><span class="sc-sym">${d.symbol}</span></td>
+            <td><span class="sc-sym">${multiSym}</span></td>
             <td><span class="sc-name" title="${d.name}">${d.name}</span></td>
             <td><span class="sc-tag">${d.sector||'—'}</span></td>
             <td class="sc-price">${d.price<0.1?d.price.toFixed(6):'$'+_fmtN(d.price)}</td>
             <td>${_scChg(d.change_pct)}</td>
             <td>${_scMcap(d.market_cap,null)}</td>
             <td>${_scRsi(d.rsi)}</td><td>${_scSig(d.signal)}</td>
-            <td class="sc-flat" style="font-size:10px;color:#445;">${d.extra||'—'}</td>`;
+            <td class="sc-flat" style="font-size:10px;color:#8a9bb0;">${d.extra||'—'}</td>`;
     }
     h += '</tr>';
   }
