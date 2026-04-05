@@ -398,10 +398,16 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .news-item.is-fresh.cal-negative{background:rgba(255,59,92,0.14);}
 .news-item.is-fresh.cal-neutral{background:rgba(245,158,11,0.13);}
 /* Squawk: item currently being read aloud */
-.news-item.squawk-reading{animation:squawkPulse .75s ease-in-out infinite!important;}
+.news-item.squawk-reading{animation:squawkPulse .7s ease-in-out infinite!important;border-left-color:#00d4ff!important;}
 @keyframes squawkPulse{
-  0%,100%{box-shadow:inset 0 0 0 2px rgba(0,212,255,0.3),0 0 10px rgba(0,212,255,0.15);}
-  50%{box-shadow:inset 0 0 0 2px rgba(0,212,255,0.9),0 0 22px rgba(0,212,255,0.45);}
+  0%,100%{box-shadow:inset 0 0 0 2px rgba(0,212,255,0.35),0 0 12px rgba(0,212,255,0.15);background:rgba(0,212,255,0.04);}
+  50%{box-shadow:inset 0 0 0 2px rgba(0,212,255,1),0 0 28px rgba(0,212,255,0.55);background:rgba(0,212,255,0.1);}
+}
+/* Squawk: news tab blinks while reading */
+.tab-btn.tab-squawk-reading{animation:tabSquawk .7s ease-in-out infinite!important;}
+@keyframes tabSquawk{
+  0%,100%{color:#00d4ff;background:rgba(0,212,255,0.06);border-left-color:rgba(0,212,255,0.4);}
+  50%{color:#fff;background:rgba(0,212,255,0.2);border-left-color:#00d4ff;}
 }
 /* Age fade — ::before dark overlay dims background, text stays full white */
 .news-item{position:relative;}
@@ -1726,10 +1732,25 @@ function squawkSpeak(text, url, newsItem) {
   if (!squawkSpeaking) drainSquawkQueue();
 }
 
+function _setSquawkTabBlink(on) {
+  const btn = document.getElementById('tab-news-btn');
+  if (!btn) return;
+  btn.classList.toggle('tab-squawk-reading', on);
+  // Don't interfere with active state when user is already on news tab
+  if (!on) btn.classList.remove('tab-squawk-reading');
+}
+
 function drainSquawkQueue() {
   document.querySelectorAll('.squawk-reading').forEach(el => el.classList.remove('squawk-reading'));
-  if (!squawkQueue.length || !squawkEnabled) { squawkSpeaking = false; updateSquawkBtn(); return; }
-  squawkSpeaking = true; updateSquawkBtn();
+  if (!squawkQueue.length || !squawkEnabled) {
+    squawkSpeaking = false;
+    _setSquawkTabBlink(false);
+    updateSquawkBtn();
+    return;
+  }
+  squawkSpeaking = true;
+  _setSquawkTabBlink(true);
+  updateSquawkBtn();
   const item = squawkQueue.shift();
   const utter = new SpeechSynthesisUtterance(item.text);
   utter.lang  = 'en-US'; // News content is always English — pt-PT TTS is unintelligible
@@ -1754,6 +1775,7 @@ function toggleSquawk() {
   squawkEnabled = !squawkEnabled;
   if (!squawkEnabled) {
     speechSynthesis.cancel(); squawkQueue = []; squawkSpeaking = false;
+    _setSquawkTabBlink(false);
   } else {
     squawkSpeak('Squawk enabled. Listening for new headlines.', '', null);
   }
