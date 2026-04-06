@@ -637,6 +637,7 @@ select.ctrl-sel:focus{border-color:var(--accent)}
     <div id="modal-title">Edit User</div>
     <div id="modal-body"></div>
     <div class="modal-btns">
+      <div id="modal-inline-err" style="display:none;font-size:11px;color:var(--red);padding:6px 10px;background:rgba(255,59,92,.08);border:1px solid rgba(255,59,92,.25);border-radius:3px;flex:1;margin-right:10px"></div>
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-save"   onclick="saveModal()">Save</button>
     </div>
@@ -844,6 +845,11 @@ async function api(path, opts={}) {
   if (!r.ok) {
     let detail = r.status.toString();
     try { const d = await r.json(); detail = d.detail || detail; } catch(e){}
+    // Auto-logout on auth failure (expired/invalid session)
+    if (r.status === 403 && path !== '/admin/auth/login') {
+      showToast('Session expired — please sign in again', 'error');
+      setTimeout(() => logout(), 1500);
+    }
     throw new Error(detail);
   }
   return r.json();
@@ -1532,7 +1538,22 @@ async function deleteUser(id, email) {
   } catch { showToast('Delete failed','error'); }
 }
 function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); _modalAction=null; }
-async function saveModal() { if (_modalAction) try { await _modalAction(); } catch(e){ showToast(e.message,'error'); } }
+async function saveModal() {
+  if (!_modalAction) return;
+  const btn = document.querySelector('#modal .btn-save');
+  if (btn) { btn.disabled=true; btn.textContent='Saving…'; }
+  // Clear any previous inline error
+  const errEl = document.getElementById('modal-inline-err');
+  if (errEl) errEl.style.display='none';
+  try {
+    await _modalAction();
+  } catch(e) {
+    if (errEl) { errEl.textContent = e.message; errEl.style.display='block'; }
+    else showToast(e.message,'error');
+  } finally {
+    if (btn) { btn.disabled=false; btn.textContent='Save'; }
+  }
+}
 
 // ── Toast ──────────────────────────────────────────────────────
 function showToast(msg, type='') {
