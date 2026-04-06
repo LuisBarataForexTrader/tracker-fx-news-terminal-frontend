@@ -1554,13 +1554,43 @@ const COUNTRY_ASSET  = {US:'USD',EU:'EUR',GB:'GBP',JP:'JPY',CH:'CHF',AU:'AUD',CA
 const ASSET_COUNTRIES= {USD:['US'],EUR:['EU','DE','FR'],GBP:['GB'],JPY:['JP'],AUD:['AU'],CAD:['CA'],CNY:['CN'],CHF:['CH'],NZD:['NZ']};
 const FLAGS          = {US:'🇺🇸',EU:'🇪🇺',GB:'🇬🇧',JP:'🇯🇵',CH:'🇨🇭',AU:'🇦🇺',CA:'🇨🇦',NZ:'🇳🇿',CN:'🇨🇳',DE:'🇩🇪',FR:'🇫🇷'};
 const ASSET_FLAG = {
+  // Forex
   USD:'🇺🇸',EUR:'🇪🇺',GBP:'🇬🇧',JPY:'🇯🇵',CHF:'🇨🇭',AUD:'🇦🇺',CAD:'🇨🇦',NZD:'🇳🇿',
   CNY:'🇨🇳',HKD:'🇭🇰',SGD:'🇸🇬',SEK:'🇸🇪',NOK:'🇳🇴',DKK:'🇩🇰',
   MXN:'🇲🇽',BRL:'🇧🇷',ZAR:'🇿🇦',TRY:'🇹🇷',INR:'🇮🇳',KRW:'🇰🇷',PLN:'🇵🇱',HUF:'🇭🇺',CZK:'🇨🇿',
-  XAU:'🟡',XAG:'⚪',
-  BTC:'₿',ETH:'Ξ',XRP:'◎',GOLD:'🟡',OIL:'🛢',SPX:'🇺🇸',SP500:'🇺🇸',NDX:'🇺🇸',DAX:'🇩🇪',FTSE:'🇬🇧',NKY:'🇯🇵'
+  ILS:'🇮🇱',RUB:'🇷🇺',THB:'🇹🇭',MYR:'🇲🇾',IDR:'🇮🇩',PHP:'🇵🇭',
+  // Metals & Commodities
+  XAU:'🟡',XAG:'⚪',GOLD:'🟡',SILVER:'⚪',PLATINUM:'⬜',PALLADIUM:'⬜',COPPER:'🟠',
+  OIL:'🛢️',BRENT:'🛢️',NATGAS:'🔥',WHEAT:'🌾',CORN:'🌽',SOYBEAN:'🫘',COFFEE:'☕',COCOA:'🍫',COTTON:'🏳️',
+  // Indices
+  SP500:'🇺🇸',SPX:'🇺🇸',NDX:'🇺🇸',DOW:'🇺🇸',DAX:'🇩🇪',FTSE:'🇬🇧',CAC:'🇫🇷',
+  IBEX:'🇪🇸',FTSEMIB:'🇮🇹',NIKKEI:'🇯🇵',NKY:'🇯🇵',HSI:'🇭🇰',ASX200:'🇦🇺',VIX:'📊',
+  // Crypto
+  BTC:'₿',ETH:'Ξ',XRP:'◎',SOL:'◆',BNB:'◆',DOGE:'🐕',ADA:'◆',LINK:'◆',DOT:'◆',
+  LTC:'◆',AVAX:'◆',UNI:'◆',ATOM:'◆',NEAR:'◆',MATIC:'◆',AAVE:'◆',PEPE:'🐸',CRYPTO:'◆',
+  // US Stocks
+  AAPL:'🍎',MSFT:'',NVDA:'',GOOGL:'',META:'',AMZN:'',TSLA:'',NFLX:'',
+  AMD:'',INTC:'',AVGO:'',CRM:'',ADBE:'',ORCL:'',UBER:'',PLTR:'',ARM:'',COIN:'',MSTR:'',
+  JPM:'🏦',GS:'🏦',BAC:'🏦',MS:'🏦',V:'💳',MA:'💳','BRK-B':'',XOM:'',CVX:'',UNH:'',WMT:''
 };
-const ASSET_NAME = {USD:'USA',EUR:'EURO',GBP:'UK',JPY:'JAPAN',CHF:'SWISS',AUD:'AUS',CAD:'CANADA',NZD:'N.ZEALAND',CNY:'CHINA',BTC:'BITCOIN',ETH:'ETHEREUM',XRP:'RIPPLE',GOLD:'GOLD',OIL:'OIL',SPX:'S&P 500',SP500:'S&P 500',NDX:'NASDAQ',DOW:'DOW JONES',DAX:'DAX',FTSE:'FTSE',NKY:'NIKKEI'};
+const ASSET_NAME = {
+  // Forex
+  USD:'USD',EUR:'EUR',GBP:'GBP',JPY:'JPY',CHF:'CHF',AUD:'AUD',CAD:'CAD',NZD:'NZD',CNY:'CNY',
+  SEK:'SEK',NOK:'NOK',DKK:'DKK',MXN:'MXN',BRL:'BRL',ZAR:'ZAR',TRY:'TRY',INR:'INR',KRW:'KRW',PLN:'PLN',
+  // Metals & Commodities
+  GOLD:'GOLD',SILVER:'SILVER',PLATINUM:'PLATINUM',PALLADIUM:'PALLADIUM',COPPER:'COPPER',
+  OIL:'OIL',BRENT:'BRENT',NATGAS:'NAT GAS',WHEAT:'WHEAT',CORN:'CORN',SOYBEAN:'SOYBEAN',COFFEE:'COFFEE',COCOA:'COCOA',COTTON:'COTTON',
+  // Indices
+  SP500:'S&P 500',SPX:'S&P 500',NDX:'NASDAQ',DOW:'DOW JONES',DAX:'DAX',FTSE:'FTSE',CAC:'CAC 40',
+  IBEX:'IBEX',FTSEMIB:'FTSE MIB',NIKKEI:'NIKKEI',NKY:'NIKKEI',HSI:'HSI',ASX200:'ASX 200',VIX:'VIX',
+  // Crypto
+  BTC:'BTC',ETH:'ETH',XRP:'XRP',SOL:'SOL',BNB:'BNB',DOGE:'DOGE',ADA:'ADA',LINK:'LINK',DOT:'DOT',
+  LTC:'LTC',AVAX:'AVAX',UNI:'UNI',ATOM:'ATOM',NEAR:'NEAR',MATIC:'POL',AAVE:'AAVE',PEPE:'PEPE',CRYPTO:'CRYPTO',
+  // US Stocks
+  AAPL:'AAPL',MSFT:'MSFT',NVDA:'NVDA',GOOGL:'GOOGL',META:'META',AMZN:'AMZN',TSLA:'TSLA',NFLX:'NFLX',
+  AMD:'AMD',INTC:'INTC',AVGO:'AVGO',CRM:'CRM',ADBE:'ADBE',ORCL:'ORCL',UBER:'UBER',PLTR:'PLTR',ARM:'ARM',COIN:'COIN',MSTR:'MSTR',
+  JPM:'JPM',GS:'GS',BAC:'BAC',MS:'MS',V:'VISA',MA:'MASTERCARD','BRK-B':'BRK.B',XOM:'EXXON',CVX:'CHEVRON',UNH:'UNH',WMT:'WALMART'
+};
 
 // ─── i18n ────────────────────────────────────────────────────────
 const STRINGS = {
