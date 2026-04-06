@@ -1428,56 +1428,192 @@ function translatePT(text) {
 const CATEGORY_KEYWORDS = {
   FOREX: {
     assets:['USD','EUR','GBP','JPY','AUD','CAD','CHF','NZD','CNY'],
-    // Removed dangerous substring matches:
-    // "franc" → matches "France","franchise" | "cable" → "cable TV" | "fiber" → "fiber optic"
-    // "aussie" broad | "yen" narrow enough to keep
-    keywords:['forex','fx market','currency pair','exchange rate','dollar','euro','pound sterling','yen','swiss franc','usd/','eur/','gbp/','jpy/','dxy','greenback','aussie dollar','loonie','kiwi dollar'],
-    calCountries:['US','EU','GB','JP','AU','CA','CH','NZ','CN','DE','FR'], // all major FX countries
+    keywords:[
+      // Generic FX
+      'forex','fx market','currency pair','exchange rate','foreign exchange','currency market',
+      // USD
+      'dollar index','dxy','greenback','dollar rally','dollar drops','dollar gains','dollar weakens',
+      // EUR
+      'euro','eur/usd','eurusd','euro zone','eurozone currency',
+      // GBP
+      'pound sterling','gbp/usd','gbpusd','sterling rally','sterling drops',
+      // JPY
+      'yen','jpy','usd/jpy','usdjpy','dollar/yen','yen weakens','yen strengthens',
+      // Other majors
+      'swiss franc','usd/chf','australian dollar','aud/usd','audusd','canadian dollar','usd/cad',
+      'new zealand dollar','nzd/usd','kiwi dollar','aussie dollar','loonie',
+      // CNY
+      'yuan','renminbi','cny','offshore yuan',
+      // FX dynamics
+      'currency intervention','safe haven currency','carry trade','dollar strength','dollar weakness',
+    ],
+    calCountries:['US','EU','GB','JP','AU','CA','CH','NZ','CN','DE','FR'],
   },
   CRYPTO: {
     assets:['BTC'],
-    keywords:['bitcoin','btc','crypto','ethereum','eth','blockchain','defi','altcoin','digital asset','coinbase','binance','token','stablecoin','nft','web3','solana','xrp','ripple','dogecoin'],
-    calCountries:[], // NO calendar releases in crypto — there are no crypto economic events
+    keywords:[
+      'bitcoin','btc','crypto','cryptocurrency','ethereum','eth','blockchain','defi',
+      'altcoin','digital asset','coinbase','binance','kraken','bybit','token',
+      'stablecoin','usdt','usdc','nft','web3','solana','sol','xrp','ripple',
+      'dogecoin','doge','cardano','ada','polkadot','dot','avalanche','avax',
+      'chainlink','link','litecoin','ltc','bnb','shiba','pepe','meme coin',
+      'crypto regulation','sec crypto','crypto etf','spot bitcoin etf',
+      'crypto market','digital currency','virtual currency','crypto crash','crypto rally',
+      'mining','hash rate','halving','layer 2','defi protocol','yield farming',
+    ],
+    calCountries:[],
   },
   MACRO: {
     assets:[],
-    keywords:['fed','federal reserve','ecb','boj','boe','central bank','interest rate','rate hike','rate cut','cpi','inflation','gdp','nfp','non-farm','unemployment','recession','monetary','fiscal','stimulus','tariff','sanction','powell','lagarde','yellen','fomc','pmi','retail sales','trade balance','housing','manufacturing','imf','world bank','g7','g20','geopolitical'],
-    calCountries:null, // ALL calendar releases (macro covers everything)
+    keywords:[
+      // Central banks (generic)
+      'central bank','interest rate','rate decision','rate hike','rate cut','rate hold',
+      'monetary policy','quantitative easing','qe','qt','quantitative tightening',
+      'basis points','bps','policy rate','benchmark rate',
+      // Inflation / prices
+      'cpi','inflation','deflation','pce','core inflation','producer price','ppi',
+      'price index','cost of living','hyperinflation',
+      // Growth / activity
+      'gdp','gross domestic product','economic growth','recession','contraction','expansion',
+      'pmi','purchasing managers','manufacturing output','industrial production',
+      'retail sales','consumer spending','consumer confidence',
+      // Labour
+      'nfp','non-farm payroll','jobs report','unemployment','jobless claims',
+      'labor market','labour market','payrolls','wage growth','wages',
+      // Trade / geopolitics
+      'trade balance','trade deficit','trade surplus','current account','tariff',
+      'trade war','trade deal','sanctions','geopolitical','geopolitics',
+      'g7','g20','imf','world bank','oecd','wto','supply chain',
+      // Fiscal
+      'fiscal policy','government spending','deficit','surplus','debt ceiling',
+      'budget','austerity','stimulus','bailout',
+      // Other macro
+      'powell','lagarde','yellen','janet yellen','fomc','mpc',
+    ],
+    calCountries:null,
   },
   BONDS: {
     assets:[],
-    keywords:['bond','yield','treasury','10-year','2-year','30-year','gilt','bund','spread','debt','sovereign','fixed income','auction','coupon','t-bill','note','curve','inversion'],
-    calCountries:['US','EU','GB','JP','AU','CA','CH','DE','FR'], // major bond markets only
+    keywords:[
+      // Rates & yields
+      'bond','yield','treasury','10-year','2-year','30-year','5-year','yield curve',
+      'yield inversion','inverted yield','spread','credit spread','oas',
+      // Bond types
+      'gilt','bund','jgb','oat','btp','bonos','treasury note','t-note','t-bond','t-bill',
+      'sovereign bond','government bond','corporate bond','high yield','junk bond',
+      'investment grade','ig bond','hy bond','municipal bond','muni',
+      // Fixed income dynamics
+      'fixed income','debt market','bond market','rate sensitive','duration',
+      'coupon','auction','issuance','redemption','maturity','default',
+      'credit rating','moody','fitch','s&p rating','downgrade rating',
+    ],
+    calCountries:['US','EU','GB','JP','AU','CA','CH','DE','FR'],
   },
   EQUITIES: {
     assets:['SP500'],
-    keywords:['stock','shares','equity','equities','earnings','ipo','dividend','s&p','nasdaq','dow','nyse','listed','quarterly results','profit','revenue','guidance','upgrade','downgrade','buyback','merger','acquisition','ipo'],
-    calCountries:['US'], // only US economic data relevant to equities (earnings, GDP, jobs)
+    keywords:[
+      // Earnings & results
+      'earnings','quarterly results','annual results','q1 earnings','q2 earnings',
+      'q3 earnings','q4 earnings','eps','earnings per share','revenue','profit',
+      'net income','operating income','ebitda','guidance','outlook','forecast',
+      'beat expectations','missed expectations','earnings beat','earnings miss',
+      // Corporate actions
+      'ipo','initial public offering','listing','direct listing','spac',
+      'merger','acquisition','takeover','buyout','m&a','buyback','share repurchase',
+      'dividend','special dividend','dividend cut','rights issue','capital raise',
+      // Stock movements
+      'stock rally','shares surge','shares drop','stock crash','market cap',
+      'upgrade','downgrade','price target','analyst rating','wall street',
+      'nyse','listed company','publicly traded','shareholder',
+      // Sectors
+      'tech stocks','bank stocks','energy stocks','healthcare stocks',
+    ],
+    calCountries:['US'],
   },
   INDEXES: {
     assets:['SP500'],
-    keywords:['s&p','sp500','nasdaq','dow jones','dax','ftse','nikkei','cac','asx','hang seng','index','indices','vix','russell','stoxx'],
-    calCountries:['US','DE','GB','JP'], // S&P/NASDAQ=US, DAX=DE, FTSE=GB, Nikkei=JP
+    keywords:[
+      // US indices
+      's&p 500','s&p500','sp500','dow jones','nasdaq composite','nasdaq 100',
+      'russell 2000','russell 1000','wilshire','vix','fear index',
+      // European
+      'dax','ftse 100','ftse250','cac 40','cac40','mib','ibex','stoxx 600','euro stoxx',
+      'aex','bel20','smi','omx',
+      // Asian
+      'nikkei','topix','hang seng','kospi','sensex','nifty','asx 200','asx200',
+      'sti','set index','psei',
+      // Generic
+      'stock index','market index','indices','index futures','index rebalancing',
+    ],
+    calCountries:['US','DE','GB','JP'],
   },
   COMMODITIES: {
-    assets:['GOLD','OIL'],
-    keywords:['gold','silver','crude','oil','opec','brent','wti','copper','wheat','corn','natural gas','energy','commodity','commodities','precious metals','platinum','palladium','lithium','iron ore'],
-    calCountries:['US','CN'], // US energy reports + China demand data
+    assets:['GOLD','SILVER','COPPER','OIL','NATGAS'],
+    keywords:[
+      // Metals
+      'gold','xau','bullion','gold price','spot gold','gold rally','gold drops',
+      'silver','xag','silver price','platinum','palladium','rhodium','copper price',
+      'lme copper','iron ore','steel','aluminium','aluminum','zinc','nickel','tin',
+      'lithium','cobalt','rare earth','precious metals','base metals',
+      // Energy
+      'crude oil','oil price','brent crude','wti crude','opec','opec+',
+      'natural gas','nat gas','lng','henry hub','ttf gas','gasoline','diesel','fuel',
+      'energy price','oil rally','oil drops','oil production','oil output',
+      'oil inventory','eia report','oil demand','oil supply',
+      // Agricultural
+      'wheat','corn','soy','soybean','sugar','coffee','cocoa','cotton',
+      'palm oil','rice','agricultural','crop','harvest',
+      // Generic
+      'commodity','commodities','raw materials','futures market',
+    ],
+    calCountries:['US','CN'],
   },
   MARKET_MOVING:{impactOnly:'HIGH'},
   SENTIMENT:{
     assets:[],
-    keywords:['sentiment','fear','greed','risk on','risk off','positioning','cot','commitment of traders','put call','vix','volatility index','investor sentiment','bull','bear','speculative','net long','net short','flows'],
+    keywords:[
+      'sentiment','market sentiment','investor sentiment',
+      'fear','greed','fear and greed','risk on','risk off','risk appetite','risk aversion',
+      'positioning','cot report','commitment of traders','net long','net short',
+      'put call ratio','vix','volatility','implied volatility','vol spike',
+      'bull market','bear market','bull run','bear run',
+      'overbought','oversold','correction','technical analysis',
+      'flows','fund flows','capital flows','money market','safe haven',
+    ],
     calCountries:[],
   },
   EARNINGS:{
     assets:[],
-    keywords:['earnings','quarterly results','eps','revenue','guidance','profit','loss','beat','miss','forecast','q1','q2','q3','q4','annual results','full year','half year','results','outlook','income'],
+    keywords:[
+      'earnings','quarterly results','annual results','full year results',
+      'eps','earnings per share','revenue','net income','operating profit',
+      'ebitda','guidance','outlook','forecast','beat','miss',
+      'q1','q2','q3','q4','fiscal year','fiscal quarter',
+      'results season','earnings season','reporting season',
+      'pre-market results','after-hours results','profit warning',
+    ],
     calCountries:['US'],
   },
   CENTRALBANKS:{
     assets:[],
-    keywords:['federal reserve','fed','ecb','boj','boe','rba','rbnz','snb','pboc','bank of canada','boc','norges bank','riksbank','rate decision','monetary policy','fomc','mpc','powell','lagarde','bailey','ueda','minutes','statement','presser','press conference','hawkish','dovish','rate hike','rate cut','quantitative','qe','qt'],
+    keywords:[
+      // Institutions
+      'federal reserve','fed reserve','fomc','ecb','boj','boe','rba','rbnz',
+      'snb','pboc','bank of canada','boc','norges bank','riksbank','bce',
+      'bank of england','bank of japan','reserve bank','central bank',
+      // Key people
+      'powell','jerome powell','lagarde','christine lagarde','bailey','andrew bailey',
+      'ueda','kazuo ueda','bullock','michele bullock','macklem','tiff macklem',
+      // Actions
+      'rate decision','rate hike','rate cut','rate hold','rate pause',
+      'interest rate decision','monetary policy','policy meeting','mpc meeting',
+      'fomc meeting','fomc minutes','ecb minutes','boe minutes',
+      'press conference','presser','statement','forward guidance',
+      // FX market terms for CB
+      'hawkish','dovish','neutral stance','data dependent',
+      'quantitative easing','qe','qt','asset purchase','tapering',
+      'balance sheet','reserve requirement','open market',
+    ],
     calCountries:null,
   },
 };
