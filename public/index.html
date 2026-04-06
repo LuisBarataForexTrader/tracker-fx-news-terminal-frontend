@@ -478,6 +478,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .asset-tag{font-size:12px;font-weight:700;padding:4px 9px;background:rgba(0,212,255,0.12);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:3px;letter-spacing:0.04em;text-shadow:0 1px 3px rgba(0,0,0,0.5);display:inline-flex;align-items:center;gap:5px;font-family:var(--font),sans-serif;}
 .asset-tag .flag{font-size:15px;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif;line-height:1;}
 img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1px;}
+.asset-tag img.emoji{width:14px;height:14px;vertical-align:baseline;margin:0;flex-shrink:0;}
+.asset-tag .flag img.emoji{width:16px;height:16px;}
 .cal-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;border:1px solid rgba(255,255,255,0.35);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.5);}
 .cal-tag-positive{background:rgba(16,185,129,0.25);}
 .cal-tag-negative{background:rgba(255,59,92,0.25);}
@@ -1561,7 +1563,7 @@ const ASSET_FLAG = {
   ILS:'🇮🇱',RUB:'🇷🇺',THB:'🇹🇭',MYR:'🇲🇾',IDR:'🇮🇩',PHP:'🇵🇭',
   // Metals & Commodities
   XAU:'🟡',XAG:'⚪',GOLD:'🟡',SILVER:'⚪',PLATINUM:'⬜',PALLADIUM:'⬜',COPPER:'🟠',
-  OIL:'🛢️',BRENT:'🛢️',NATGAS:'🔥',WHEAT:'🌾',CORN:'🌽',SOYBEAN:'🫘',COFFEE:'☕',COCOA:'🍫',COTTON:'🏳️',
+  OIL:'🛢️',BRENT:'🛢️',NATGAS:'🔥',WHEAT:'🌾',CORN:'🌽',SOYBEAN:'🌱',COFFEE:'☕',COCOA:'🍫',COTTON:'',
   // Indices
   SP500:'🇺🇸',SPX:'🇺🇸',NDX:'🇺🇸',DOW:'🇺🇸',DAX:'🇩🇪',FTSE:'🇬🇧',CAC:'🇫🇷',
   IBEX:'🇪🇸',FTSEMIB:'🇮🇹',NIKKEI:'🇯🇵',NKY:'🇯🇵',HSI:'🇭🇰',ASX200:'🇦🇺',VIX:'📊',
