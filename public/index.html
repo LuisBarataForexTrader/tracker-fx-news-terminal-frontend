@@ -2566,12 +2566,12 @@ const _authHeader = () => {
 };
 // Trigger backend fetch every 30s
 setInterval(async () => { try { await fetch(BACKEND_URL+'/fetch'); } catch(e){} }, 30000);
-// Fallback poll every 60s
+// Fallback poll every 60s (treat as init — squawk only via WebSocket live updates)
 setInterval(async () => {
   try {
     const r = await fetch(BACKEND_URL+'/news?limit=500', {headers: _authHeader()});
     const data = await r.json();
-    if (data && data.length) handleNewsData(data);
+    if (data && data.length) handleNewsData(data, true);
   } catch(e){}
 }, 60000);
 
