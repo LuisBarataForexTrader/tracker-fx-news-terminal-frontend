@@ -1300,29 +1300,26 @@ function doLogout() {
 
 // ─── Plan change monitor ─────────────────────────────────────────
 // Polls /auth/me every 30s — if backend plan differs from cache, update and reload
+const _BE_URL = 'https://tracker-fx-news-terminal-backend-production.up.railway.app';
 async function _checkPlanChanged() {
   try {
     const token = localStorage.getItem('tnt_token');
     if (!token) return;
-    const r = await fetch(BACKEND_URL + '/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+    const r = await fetch(_BE_URL + '/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
     if (!r.ok) return;
     const data = await r.json();
     if (!data.plan) return;
     let cached;
     try { cached = JSON.parse(localStorage.getItem('tnt_user') || '{}'); } catch(e) { cached = {}; }
-    const cachedPlan = cached.plan || 'free';
-    if (data.plan !== cachedPlan) {
+    if (data.plan !== (cached.plan || 'free')) {
       cached.plan = data.plan;
       localStorage.setItem('tnt_user', JSON.stringify(cached));
-      showToast('🔄 O teu plano foi atualizado. A recarregar…');
-      setTimeout(() => window.location.reload(), 2000);
+      window.location.reload();
     }
   } catch(e) { /* non-critical */ }
 }
-// Check on load (after 5s to let app settle) and every 30 seconds
-setTimeout(_checkPlanChanged, 5000);
+// Check every 30 seconds and when user returns to the tab
 setInterval(_checkPlanChanged, 30000);
-// Also check immediately when user returns to the tab
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') _checkPlanChanged();
 });
