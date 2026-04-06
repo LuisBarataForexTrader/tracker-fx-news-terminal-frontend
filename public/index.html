@@ -1225,7 +1225,7 @@ const UPGRADE_URL   = 'https://www.tradingnewsterminal.com/#pricing';
 const _cachedUser   = (() => { try { return JSON.parse(localStorage.getItem('tnt_user')||'{}'); } catch(e){ return {}; } })();
 const USER_PLAN     = (_cachedUser.plan === 'pro') ? 'pro' : 'free'; // 'pro' or 'free'
 const IS_PRO        = USER_PLAN === 'pro';
-const PAGE_SIZE     = 30;
+const PAGE_SIZE     = 50;
 
 // ─── State ──────────────────────────────────────────────────────
 let lang             = 'en';
@@ -2054,6 +2054,11 @@ function handleNewsData(data) {
   document.getElementById('lastUpdate').textContent = '(cached)';
 }());
 
+// ─── Track page visit (admin analytics) ─────────────────────────
+(function trackVisit() {
+  fetch(BACKEND_URL + '/admin/track/visit', { method: 'POST' }).catch(()=>{});
+}());
+
 // ─── Startup HTTP fetch (WS fallback) ────────────────────────────
 // Fetch news via HTTP immediately so data appears even if WS is slow/down
 (async function startupFetch() {
@@ -2063,7 +2068,7 @@ function handleNewsData(data) {
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       if (attempt > 0) await new Promise(r => setTimeout(r, 4000));
-      const r = await fetch(BACKEND_URL + '/news?limit=100', { headers });
+      const r = await fetch(BACKEND_URL + '/news?limit=500', { headers });
       if (!r.ok) continue;
       const data = await r.json();
       if (Array.isArray(data) && data.length) { handleNewsData(data); return; }
@@ -2100,7 +2105,7 @@ setInterval(async () => { try { await fetch(BACKEND_URL+'/fetch'); } catch(e){} 
 // Fallback poll every 60s
 setInterval(async () => {
   try {
-    const r = await fetch(BACKEND_URL+'/news?limit=100', {headers: _authHeader()});
+    const r = await fetch(BACKEND_URL+'/news?limit=500', {headers: _authHeader()});
     const data = await r.json();
     if (data && data.length) handleNewsData(data);
   } catch(e){}
@@ -2127,7 +2132,7 @@ const LIVE_STREAM_IDS = {
   'bloomberg':  {type:'channel', id:'UCIALMKvObZNtJ6AmdCLP7Lg'},  // Bloomberg TV
   'cnbc':       {type:'channel', id:'UCvJJ_dzjViJCoLf5uKUTwoA'},  // CNBC
   'aljazeera':  {type:'video',   id:'gCNeDWCI0vo'},                // Al Jazeera English live
-  'skynews':    {type:'video',   id:'93vKtGys6HY'},                // Sky News live
+  'skynews':    {type:'video',   id:'YDvsBbKfLPA'},               // Sky News 24/7 live
   'dw':         {type:'channel', id:'UCknLrEdhRCp1aegoMqRaCZg'},  // DW News
   'france24':   {type:'channel', id:'UCQfwfsi5VrQ8yKZ-UWmAEFg'},  // France 24 English
   'wion':       {type:'channel', id:'UCJYifGXaZCXxBIY0YkNFBiw'},  // WION
@@ -3516,8 +3521,8 @@ const CHART_MAP = {
   'OIL':     {symbol:'TVC:USOIL',         label:'WTI Crude Oil'},
   'WTI':     {symbol:'TVC:USOIL',         label:'WTI Crude Oil'},
   'BRENT':   {symbol:'TVC:UKOIL',         label:'Brent Crude Oil'},
-  'NATGAS':  {symbol:'TVC:NATGAS',        label:'Natural Gas'},
-  'COPPER':  {symbol:'TVC:COPPER',        label:'Copper'},
+  'NATGAS':  {symbol:'CAPITALCOM:NATURALGAS',        label:'Natural Gas'},
+  'COPPER':  {symbol:'CAPITALCOM:COPPER',        label:'Copper'},
   'PLATINUM':{symbol:'TVC:PLATINUM',      label:'Platinum'},
   'WHEAT':   {symbol:'CAPITALCOM:WHEAT',  label:'Wheat'},
   'CORN':    {symbol:'CAPITALCOM:CORN',   label:'Corn'},
@@ -3787,15 +3792,15 @@ const CHART_MAP = {
   'GCF':   {symbol:'TVC:GOLD',     label:'Gold · XAU/USD'},
   'SIF':   {symbol:'TVC:SILVER',   label:'Silver · XAG/USD'},
   'CLF':   {symbol:'TVC:USOIL',           label:'WTI Crude Oil'},
-  'NGF':   {symbol:'TVC:NATGAS',          label:'Natural Gas'},
-  'HGF':   {symbol:'TVC:COPPER',          label:'Copper'},
+  'NGF':   {symbol:'CAPITALCOM:NATURALGAS',          label:'Natural Gas'},
+  'HGF':   {symbol:'CAPITALCOM:COPPER',          label:'Copper'},
   'PLF':   {symbol:'TVC:PLATINUM',        label:'Platinum'},
   'ZWF':   {symbol:'CAPITALCOM:WHEAT',    label:'Wheat'},
   'ZCF':   {symbol:'CAPITALCOM:CORN',     label:'Corn'},
-  'ZSF':   {symbol:'CAPITALCOM:SOYBEANS', label:'Soybeans'},
+  'ZSF':   {symbol:'CAPITALCOM:SOYBEAN', label:'Soybeans'},
   'CRUDEWTIOIL': {symbol:'TVC:USOIL',     label:'WTI Crude Oil'},
   'CRUDEOIL':    {symbol:'TVC:USOIL',     label:'WTI Crude Oil'},
-  'NATURALGAS':  {symbol:'TVC:NATGAS',    label:'Natural Gas'},
+  'NATURALGAS':  {symbol:'CAPITALCOM:NATURALGAS',    label:'Natural Gas'},
   // Bonds
   'US10Y':   {symbol:'TVC:US10Y',        label:'US 10-Year Yield'},
   'US2Y':    {symbol:'TVC:US02Y',        label:'US 2-Year Yield'},
@@ -3821,33 +3826,33 @@ const _COMM_TV = {
   // Full yfinance tickers (Commodities tab)
   'GC=F': {symbol:'TVC:GOLD',            label:'Gold · XAU/USD',    short:'GOLD'},
   'SI=F': {symbol:'TVC:SILVER',          label:'Silver · XAG/USD',  short:'SILVER'},
-  'HG=F': {symbol:'TVC:COPPER',          label:'Copper',            short:'COPPER'},
+  'HG=F': {symbol:'CAPITALCOM:COPPER',          label:'Copper',            short:'COPPER'},
   'PL=F': {symbol:'TVC:PLATINUM',        label:'Platinum',          short:'PLAT'},
   'PA=F': {symbol:'TVC:PALLADIUM',       label:'Palladium',         short:'PALL'},
   'CL=F': {symbol:'TVC:USOIL',           label:'WTI Crude Oil',     short:'WTI'},
   'BZ=F': {symbol:'TVC:UKOIL',           label:'Brent Crude Oil',   short:'BRENT'},
-  'NG=F': {symbol:'TVC:NATGAS',          label:'Natural Gas',       short:'NATGAS'},
+  'NG=F': {symbol:'CAPITALCOM:NATURALGAS',          label:'Natural Gas',       short:'NATGAS'},
   'ZC=F': {symbol:'CAPITALCOM:CORN',     label:'Corn',              short:'CORN'},
   'ZW=F': {symbol:'CAPITALCOM:WHEAT',    label:'Wheat',             short:'WHEAT'},
-  'ZS=F': {symbol:'CAPITALCOM:SOYBEANS', label:'Soybeans',          short:'SOY'},
-  'CC=F': {symbol:'CAPITALCOM:COCOA',    label:'Cocoa',             short:'COCOA'},
-  'KC=F': {symbol:'CAPITALCOM:COFFEE',   label:'Coffee',            short:'COFFEE'},
-  'CT=F': {symbol:'CAPITALCOM:COTTON',   label:'Cotton',            short:'COTTON'},
+  'ZS=F': {symbol:'CAPITALCOM:SOYBEAN', label:'Soybeans',          short:'SOY'},
+  'CC=F': {symbol:'CAPITALCOM:USCOCOA',    label:'Cocoa',             short:'COCOA'},
+  'KC=F': {symbol:'CAPITALCOM:COFFEEARABICA',   label:'Coffee',            short:'COFFEE'},
+  'CT=F': {symbol:'CAPITALCOM:USCOTTON',   label:'Cotton',            short:'COTTON'},
   // Stripped tickers (Multi-Asset view)
   'GC':   {symbol:'TVC:GOLD',            label:'Gold · XAU/USD',    short:'GOLD'},
   'SI':   {symbol:'TVC:SILVER',          label:'Silver · XAG/USD',  short:'SILVER'},
-  'HG':   {symbol:'TVC:COPPER',          label:'Copper',            short:'COPPER'},
+  'HG':   {symbol:'CAPITALCOM:COPPER',          label:'Copper',            short:'COPPER'},
   'PL':   {symbol:'TVC:PLATINUM',        label:'Platinum',          short:'PLAT'},
   'PA':   {symbol:'TVC:PALLADIUM',       label:'Palladium',         short:'PALL'},
   'CL':   {symbol:'TVC:USOIL',           label:'WTI Crude Oil',     short:'WTI'},
   'BZ':   {symbol:'TVC:UKOIL',           label:'Brent Crude Oil',   short:'BRENT'},
-  'NG':   {symbol:'TVC:NATGAS',          label:'Natural Gas',       short:'NATGAS'},
+  'NG':   {symbol:'CAPITALCOM:NATURALGAS',          label:'Natural Gas',       short:'NATGAS'},
   'ZC':   {symbol:'CAPITALCOM:CORN',     label:'Corn',              short:'CORN'},
   'ZW':   {symbol:'CAPITALCOM:WHEAT',    label:'Wheat',             short:'WHEAT'},
-  'ZS':   {symbol:'CAPITALCOM:SOYBEANS', label:'Soybeans',          short:'SOY'},
-  'CC':   {symbol:'CAPITALCOM:COCOA',    label:'Cocoa',             short:'COCOA'},
-  'KC':   {symbol:'CAPITALCOM:COFFEE',   label:'Coffee',            short:'COFFEE'},
-  'CT':   {symbol:'CAPITALCOM:COTTON',   label:'Cotton',            short:'COTTON'},
+  'ZS':   {symbol:'CAPITALCOM:SOYBEAN', label:'Soybeans',          short:'SOY'},
+  'CC':   {symbol:'CAPITALCOM:USCOCOA',    label:'Cocoa',             short:'COCOA'},
+  'KC':   {symbol:'CAPITALCOM:COFFEEARABICA',   label:'Coffee',            short:'COFFEE'},
+  'CT':   {symbol:'CAPITALCOM:USCOTTON',   label:'Cotton',            short:'COTTON'},
 };
 
 // ─── Screener → Chart ──────────────────────────────────────────
@@ -4007,9 +4012,9 @@ function initTVTickers() {
     {proName:'NYSE:JPM',title:'JPM'},{proName:'NYSE:GS',title:'GS'},
     // Commodities & Bonds
     {proName:'TVC:GOLD',title:'GOLD'},{proName:'TVC:SILVER',title:'SILVER'},
-    {proName:'TVC:USOIL',title:'WTI OIL'},{proName:'TVC:NATGAS',title:'NAT GAS'},
+    {proName:'TVC:USOIL',title:'WTI OIL'},{proName:'CAPITALCOM:NATURALGAS',title:'NAT GAS'},
     {proName:'CAPITALCOM:WHEAT',title:'WHEAT'},{proName:'CAPITALCOM:CORN',title:'CORN'},
-    {proName:'TVC:COPPER',title:'COPPER'},{proName:'TVC:PLATINUM',title:'PLATINUM'},
+    {proName:'CAPITALCOM:COPPER',title:'COPPER'},{proName:'TVC:PLATINUM',title:'PLATINUM'},
     {proName:'TVC:US10Y',title:'US 10Y'},{proName:'TVC:US02Y',title:'US 2Y'},
     {proName:'TVC:DE10Y',title:'BUND 10Y'},{proName:'TVC:JP10Y',title:'JGB 10Y'}
   ]);

@@ -647,19 +647,19 @@ function _statusBadge(status) {
   return `<span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;letter-spacing:.08em;padding:2px 8px;border-radius:3px;background:${m.color}18;color:${m.color};border:1px solid ${m.color}44">${m.icon} ${m.label}</span>`;
 }
 
-function _updateFeedsKPIs(feeds) {
+function _updateFeedsKPIs(feeds, realTotal) {
   const total   = feeds.length;
   const ok      = feeds.filter(f=>f.status==='ok').length;
   const empty   = feeds.filter(f=>f.status==='empty').length;
   const errors  = feeds.filter(f=>f.status==='error'||f.status==='timeout').length;
-  const notRun  = feeds.filter(f=>!f.status||f.status==='unknown').length;
-  const totalDB = feeds.reduce((s,f)=>(s+(f.db_count||0)),0);
+  // Use real_total_articles from backend (avoids double-counting shared source names)
+  const dbLabel = realTotal != null ? realTotal.toLocaleString() : '—';
   document.getElementById('feeds-kpis').innerHTML =
     `<div class="kpi-card"><div class="kpi-label">Total Sources</div><div class="kpi-value">${total}</div></div>` +
     `<div class="kpi-card"><div class="kpi-label" style="color:#4ade80">✓ OK</div><div class="kpi-value" style="color:#4ade80">${ok||'—'}</div></div>` +
     `<div class="kpi-card"><div class="kpi-label" style="color:#f59e0b">⚠ Empty</div><div class="kpi-value" style="color:#f59e0b">${empty||'—'}</div></div>` +
     `<div class="kpi-card"><div class="kpi-label" style="color:#f87171">✕ Errors</div><div class="kpi-value" style="color:#f87171">${errors||'—'}</div></div>` +
-    `<div class="kpi-card"><div class="kpi-label">Articles in DB</div><div class="kpi-value">${totalDB>0?totalDB.toLocaleString():'—'}</div></div>`;
+    `<div class="kpi-card"><div class="kpi-label">Unique Articles in DB</div><div class="kpi-value">${dbLabel}</div></div>`;
 }
 
 async function loadFeeds() {
@@ -669,7 +669,7 @@ async function loadFeeds() {
   try {
     const data = await api('/admin/feeds');
     _allFeeds = data.feeds || [];
-    _updateFeedsKPIs(_allFeeds);
+    _updateFeedsKPIs(_allFeeds, data.real_total_articles);
     renderFeeds(_allFeeds);
   } catch(e) {
     document.getElementById('feeds-tbody').innerHTML = `<tr><td colspan="8" style="text-align:center;padding:30px;color:#f87171">Error loading feeds</td></tr>`;
@@ -717,7 +717,7 @@ async function runHealthCheck() {
     // If list was empty (first run), populate from results
     if (_allFeeds.length === 0) _allFeeds = data.results || [];
 
-    _updateFeedsKPIs(_allFeeds);
+    _updateFeedsKPIs(_allFeeds, null);
     renderFeeds(_allFeeds);
 
     const ts = new Date().toUTCString();
