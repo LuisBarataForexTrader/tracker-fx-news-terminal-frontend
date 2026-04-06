@@ -609,20 +609,21 @@ let _healthRunning = false;
 
 function _feedCategory(url) {
   const u = url.toLowerCase();
-  if (/crypto|bitcoin|coin|block|decrypt|btc/.test(u)) return 'Crypto';
-  if (/forex|fx|currency|currencies|exchange/.test(u)) return 'Forex';
+  if (/crypto|bitcoin|coin|block|decrypt|btc|cryptoslate/.test(u)) return 'Crypto';
+  if (/forex|fx|currency|currencies|exchange|forexcrunch/.test(u)) return 'Forex';
   if (/oil|energy|gas|eia|opec|rigzone|petro/.test(u)) return 'Energy';
-  if (/central.bank|fed|ecb|boe|boj|bis|imf|worldbank|frbsf|frbatl|chicago.fed|newyork.fed|cepr|libertystreet/.test(u)) return 'Central Banks';
+  if (/central.bank|fed|ecb|boe|boj|bis|imf|worldbank|frbsf|frbatl|chicago.fed|newyork.fed|cepr|libertystreet|bankofengland|bankofcanada|rba\.gov|rbnz\.govt/.test(u)) return 'Central Banks';
   if (/wsj|dowjones|barrons|marketwatch|bloomberg|reuters|ft\.com|financial.times/.test(u)) return 'Premium Wire';
-  if (/cnbc|bbc|guardian|telegraph|politico|axios|atlantic/.test(u)) return 'News';
+  if (/cnbc|bbc|guardian|telegraph|politico|axios|atlantic|nytimes|washingtonpost|npr\.org|fortune\.com|businessinsider|ibtimes/.test(u)) return 'News';
   if (/seeking.alpha|thestreet|investopedia|motley.fool|investors\.com|tipranks|benzinga/.test(u)) return 'Stock Analysis';
   if (/globenewswire|businesswire|prnewswire/.test(u)) return 'Press Releases';
   if (/forexlive|fxstreet|dailyfx|myfxbook|actionforex|forexfactory/.test(u)) return 'FX Analysis';
+  if (/etftrends|etfdb|etf\.com/.test(u)) return 'ETFs';
   if (/youtube\.com/.test(u)) return 'YouTube';
   if (/investing\.com/.test(u)) return 'Investing.com';
   if (/yahoo|nasdaq|briefing|fool|thestreet/.test(u)) return 'Markets';
-  if (/nikkei|scmp|xinhua|dw\.com|rte\.ie|aawsat|tass|anadolu|irna|mehr|tasnim/.test(u)) return 'International';
-  if (/kitco|oilprice|etf\.com|trading.economics/.test(u)) return 'Commodities';
+  if (/nikkei|scmp|xinhua|dw\.com|rte\.ie|aawsat|tass|anadolu|irna|mehr|tasnim|livemint|economictimes|straitstimes|businesstimes\.com\.sg/.test(u)) return 'International';
+  if (/kitco|oilprice|trading.economics/.test(u)) return 'Commodities';
   return 'General';
 }
 
@@ -631,7 +632,7 @@ const CAT_COLORS = {
   'Premium Wire':'#facc15','News':'#60a5fa','Stock Analysis':'#f472b6',
   'Press Releases':'#94a3b8','FX Analysis':'#34d399','YouTube':'#f87171',
   'Investing.com':'#e879f9','Markets':'#fbbf24','International':'#67e8f9',
-  'Commodities':'#a3e635','General':'#64748b'
+  'Commodities':'#a3e635','ETFs':'#2dd4bf','General':'#64748b'
 };
 
 const STATUS_META = {
