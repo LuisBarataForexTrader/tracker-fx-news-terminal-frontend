@@ -1274,6 +1274,20 @@ const LOGIN_URL = 'https://www.tradingnewsterminal.com/login.html';
     }
     if (settingsBtn) settingsBtn.style.display = '';
     window._tntPlan = user.plan || 'free';
+    // Sync plan from backend immediately on load
+    const _BE = 'https://tracker-fx-news-terminal-backend-production.up.railway.app';
+    (async () => {
+      try {
+        const _r = await fetch(_BE + '/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        if (!_r.ok) return;
+        const _d = await _r.json();
+        if (_d.plan && _d.plan !== (user.plan || 'free')) {
+          user.plan = _d.plan;
+          localStorage.setItem('tnt_user', JSON.stringify(user));
+          window.location.reload();
+        }
+      } catch(e) {}
+    })();
   } catch(e) {}
 })();
 
