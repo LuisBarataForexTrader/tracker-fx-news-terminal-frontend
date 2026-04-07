@@ -107,15 +107,16 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .upgrade-close{position:absolute;top:14px;right:16px;background:none;border:none;color:#7a9ab0;cursor:pointer;font-size:18px;line-height:1;}
 .upgrade-icon{font-size:36px;margin-bottom:16px;}
 .upgrade-title{font-size:22px;font-weight:800;margin-bottom:8px;}
-.upgrade-desc{font-size:14px;color:#c8d8e8;line-height:1.6;margin-bottom:28px;}
+.upgrade-desc{font-size:14px;color:#dde8f4;line-height:1.6;margin-bottom:28px;}
 .upgrade-feature{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a78bfa;border:1px solid rgba(167,139,250,0.3);background:rgba(167,139,250,0.08);padding:4px 12px;border-radius:2px;margin-bottom:20px;}
 .upgrade-benefits{display:flex;flex-direction:column;gap:8px;text-align:left;margin-bottom:28px;}
-.upgrade-benefit{display:flex;align-items:center;gap:10px;font-size:13px;color:#c8d8e8;}
+.upgrade-benefit{display:flex;align-items:center;gap:10px;font-size:13px;color:#ffffff;}
 .upgrade-benefit::before{content:'✓';color:#a78bfa;font-weight:700;flex-shrink:0;}
 .upgrade-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-family:var(--font);font-size:13px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;border:none;cursor:pointer;border-radius:3px;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(167,139,250,0.3);}
 .upgrade-btn:hover{box-shadow:0 6px 28px rgba(167,139,250,0.5);transform:translateY(-1px);}
-.upgrade-btn-later{display:block;margin-top:12px;font-size:12px;color:#7a9ab0;cursor:pointer;background:none;border:none;width:100%;text-align:center;}
-.upgrade-btn-later:hover{color:#c8d8e8;}
+.upgrade-btn-later{display:block;margin-top:12px;font-size:12px;color:#8aa4bc;cursor:pointer;background:none;border:none;width:100%;text-align:center;}
+.upgrade-btn-later:hover{color:#dde8f4;}
+.upgrade-vat{font-size:11px;color:#c8a84a;background:rgba(200,168,74,0.1);border:1px solid rgba(200,168,74,0.25);border-radius:3px;text-align:center;padding:7px 12px;margin-bottom:12px;letter-spacing:0.01em;}
 /* ── Plan chooser cards ── */
 .plan-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;align-items:stretch;}
 .plan-card{background:#141820;border:1px solid #2a3444;border-radius:5px;padding:18px 14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;display:flex;flex-direction:column;}
@@ -124,13 +125,13 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .plan-card.annual:hover{background:linear-gradient(160deg,rgba(124,58,237,0.28),rgba(167,139,250,0.14));box-shadow:0 0 40px rgba(167,139,250,0.3),inset 0 1px 0 rgba(167,139,250,0.2);}
 .plan-card.annual::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#a78bfa,#c4b5fd,#a78bfa,transparent);}
 .plan-card-badge{display:inline-block;font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#10b981;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);padding:3px 10px;border-radius:2px;margin-bottom:10px;}
-.plan-card-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7a9ab0;margin-bottom:8px;}
+.plan-card-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a0b8cc;margin-bottom:8px;}
 .annual .plan-card-label{color:#c4b5fd;font-size:11px;}
 .plan-card-price{font-size:28px;font-weight:800;color:#fff;line-height:1;}
 .annual .plan-card-price{font-size:38px;color:#e9d5ff;text-shadow:0 0 20px rgba(167,139,250,0.5);}
 .plan-card-price span{font-size:14px;font-weight:500;color:#7a9ab0;}
 .annual .plan-card-price span{font-size:15px;color:#a78bfa;}
-.plan-card-sub{font-size:10px;color:#7a9ab0;margin-top:4px;margin-bottom:14px;min-height:28px;flex:1;}
+.plan-card-sub{font-size:10px;color:#a0b8cc;margin-top:4px;margin-bottom:14px;min-height:28px;flex:1;}
 .annual .plan-card-sub{font-size:11px;color:#c4b5fd;}
 .plan-card-sub s{color:#4a6070;}
 .plan-card-btn{width:100%;padding:9px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;border:none;cursor:pointer;border-radius:3px;transition:all .2s;box-shadow:0 2px 12px rgba(167,139,250,0.25);margin-top:auto;}
@@ -1855,6 +1856,18 @@ const STRINGS = {
     'mnf.n_category':'category','mnf.n_categories':'categories',
     'mnf.n_country':'country','mnf.n_countries':'countries',
     'mnf.n_filter_active':'filter active','mnf.n_filters_active':'filters active',
+    'upgrade.title':'Upgrade to Pro',
+    'upgrade.benefit1':'Real-time news feed — zero delay',
+    'upgrade.benefit2':'Live squawk — instant voice alerts',
+    'upgrade.benefit3':'Live financial TV — 7 channels',
+    'upgrade.benefit4':'Comprehensive source coverage',
+    'upgrade.benefit5':'100% ad-free experience',
+    'upgrade.monthly':'Monthly','upgrade.annual':'Annual',
+    'upgrade.best_value':'💰 Best Value',
+    'upgrade.billed_monthly':'Billed monthly','upgrade.cancel_anytime':'Cancel anytime',
+    'upgrade.save':'Save €120 (25% off)',
+    'upgrade.choose':'Choose →','upgrade.maybe_later':'Maybe later',
+    'upgrade.vat':'ℹ excl. VAT where applicable · Billed in EUR',
   },
   pt:{
     'logo.sub':'Inteligência de Mercado em Tempo Real',
@@ -2003,6 +2016,18 @@ const STRINGS = {
     'mnf.n_category':'categoria','mnf.n_categories':'categorias',
     'mnf.n_country':'país','mnf.n_countries':'países',
     'mnf.n_filter_active':'filtro ativo','mnf.n_filters_active':'filtros ativos',
+    'upgrade.title':'Mudar para Pro',
+    'upgrade.benefit1':'Feed em tempo real — sem atraso',
+    'upgrade.benefit2':'Squawk ao vivo — alertas de voz instantâneos',
+    'upgrade.benefit3':'TV financeira ao vivo — 7 canais',
+    'upgrade.benefit4':'Cobertura completa de fontes',
+    'upgrade.benefit5':'100% sem anúncios',
+    'upgrade.monthly':'Mensal','upgrade.annual':'Anual',
+    'upgrade.best_value':'💰 Melhor Valor',
+    'upgrade.billed_monthly':'Faturado mensalmente','upgrade.cancel_anytime':'Cancela quando queres',
+    'upgrade.save':'Poupa €120 (25% off)',
+    'upgrade.choose':'Escolher →','upgrade.maybe_later':'Talvez mais tarde',
+    'upgrade.vat':'ℹ IVA não incluído onde aplicável · Faturado em EUR',
   },
   es:{
     'logo.sub':'Inteligencia de Mercado en Tiempo Real',
@@ -2151,6 +2176,18 @@ const STRINGS = {
     'mnf.n_category':'categoría','mnf.n_categories':'categorías',
     'mnf.n_country':'país','mnf.n_countries':'países',
     'mnf.n_filter_active':'filtro activo','mnf.n_filters_active':'filtros activos',
+    'upgrade.title':'Actualizar a Pro',
+    'upgrade.benefit1':'Feed de noticias en tiempo real — sin retraso',
+    'upgrade.benefit2':'Squawk en vivo — alertas de voz instantáneas',
+    'upgrade.benefit3':'TV financiera en vivo — 7 canales',
+    'upgrade.benefit4':'Cobertura completa de fuentes',
+    'upgrade.benefit5':'100% sin anuncios',
+    'upgrade.monthly':'Mensual','upgrade.annual':'Anual',
+    'upgrade.best_value':'💰 Mejor Valor',
+    'upgrade.billed_monthly':'Facturado mensualmente','upgrade.cancel_anytime':'Cancela cuando quieras',
+    'upgrade.save':'Ahorra €120 (25% off)',
+    'upgrade.choose':'Elegir →','upgrade.maybe_later':'Quizás más tarde',
+    'upgrade.vat':'ℹ IVA no incluido donde aplique · Facturado en EUR',
   },
   fr:{
     'logo.sub':'Intelligence de Marché en Temps Réel',
@@ -2299,6 +2336,18 @@ const STRINGS = {
     'mnf.n_category':'catégorie','mnf.n_categories':'catégories',
     'mnf.n_country':'pays','mnf.n_countries':'pays',
     'mnf.n_filter_active':'filtre actif','mnf.n_filters_active':'filtres actifs',
+    'upgrade.title':'Passer à Pro',
+    'upgrade.benefit1':'Flux d\'actualités en temps réel — sans délai',
+    'upgrade.benefit2':'Squawk en direct — alertes vocales instantanées',
+    'upgrade.benefit3':'TV financière en direct — 7 chaînes',
+    'upgrade.benefit4':'Couverture complète des sources',
+    'upgrade.benefit5':'100% sans publicité',
+    'upgrade.monthly':'Mensuel','upgrade.annual':'Annuel',
+    'upgrade.best_value':'💰 Meilleur Rapport',
+    'upgrade.billed_monthly':'Facturé mensuellement','upgrade.cancel_anytime':'Annulez à tout moment',
+    'upgrade.save':'Économisez €120 (25% off)',
+    'upgrade.choose':'Choisir →','upgrade.maybe_later':'Peut-être plus tard',
+    'upgrade.vat':'ℹ TVA excl. si applicable · Facturé en EUR',
   },
   de:{
     'logo.sub':'Markt-Intelligenz in Echtzeit',
@@ -2447,6 +2496,18 @@ const STRINGS = {
     'mnf.n_category':'Kategorie','mnf.n_categories':'Kategorien',
     'mnf.n_country':'Land','mnf.n_countries':'Länder',
     'mnf.n_filter_active':'aktiver Filter','mnf.n_filters_active':'aktive Filter',
+    'upgrade.title':'Upgrade auf Pro',
+    'upgrade.benefit1':'Echtzeit-Newsfeed — ohne Verzögerung',
+    'upgrade.benefit2':'Live Squawk — sofortige Sprachmeldungen',
+    'upgrade.benefit3':'Live-Finanz-TV — 7 Kanäle',
+    'upgrade.benefit4':'Umfassende Quellenabdeckung',
+    'upgrade.benefit5':'100% werbefrei',
+    'upgrade.monthly':'Monatlich','upgrade.annual':'Jährlich',
+    'upgrade.best_value':'💰 Bestes Angebot',
+    'upgrade.billed_monthly':'Monatliche Abrechnung','upgrade.cancel_anytime':'Jederzeit kündbar',
+    'upgrade.save':'Spare €120 (25% off)',
+    'upgrade.choose':'Wählen →','upgrade.maybe_later':'Vielleicht später',
+    'upgrade.vat':'ℹ zzgl. MwSt. wenn anwendbar · Abrechnung in EUR',
   },
   it:{
     'logo.sub':'Intelligence di Mercato in Tempo Reale',
@@ -2595,6 +2656,18 @@ const STRINGS = {
     'mnf.n_category':'categoria','mnf.n_categories':'categorie',
     'mnf.n_country':'paese','mnf.n_countries':'paesi',
     'mnf.n_filter_active':'filtro attivo','mnf.n_filters_active':'filtri attivi',
+    'upgrade.title':'Passa a Pro',
+    'upgrade.benefit1':'Feed notizie in tempo reale — zero ritardo',
+    'upgrade.benefit2':'Squawk live — avvisi vocali istantanei',
+    'upgrade.benefit3':'TV finanziaria live — 7 canali',
+    'upgrade.benefit4':'Copertura completa delle fonti',
+    'upgrade.benefit5':'100% senza pubblicità',
+    'upgrade.monthly':'Mensile','upgrade.annual':'Annuale',
+    'upgrade.best_value':'💰 Miglior Valore',
+    'upgrade.billed_monthly':'Fatturazione mensile','upgrade.cancel_anytime':'Disdici quando vuoi',
+    'upgrade.save':'Risparmia €120 (25% off)',
+    'upgrade.choose':'Scegli →','upgrade.maybe_later':'Forse più tardi',
+    'upgrade.vat':'ℹ IVA esclusa dove applicabile · Fatturato in EUR',
   }
 };
 function t(key) { return (STRINGS[lang]||STRINGS.en)[key]||key; }
@@ -5120,6 +5193,7 @@ function showUpgrade(featureName) {
   document.getElementById('upgrade-feature-name').textContent = featureName;
   document.getElementById('upgrade-feature-desc').textContent = desc;
   document.getElementById('upgrade-overlay').classList.add('show');
+  applyTranslations();
 }
 function hideUpgrade() {
   document.getElementById('upgrade-overlay').classList.remove('show');
@@ -6349,32 +6423,32 @@ function _fmtScTs(ts) {
     <button class="upgrade-close" onclick="hideUpgrade()">✕</button>
     <div class="upgrade-icon">🔒</div>
     <div class="upgrade-feature" id="upgrade-feature-name">Pro Feature</div>
-    <h2 class="upgrade-title">Upgrade to Pro</h2>
+    <h2 class="upgrade-title" data-i18n="upgrade.title">Upgrade to Pro</h2>
     <p class="upgrade-desc" id="upgrade-feature-desc"></p>
     <div class="upgrade-benefits">
-      <div class="upgrade-benefit">Real-time news feed — zero delay</div>
-      <div class="upgrade-benefit">Live squawk — instant voice alerts</div>
-      <div class="upgrade-benefit">Live financial TV — 7 channels</div>
-      <div class="upgrade-benefit">Comprehensive source coverage</div>
-      <div class="upgrade-benefit">100% ad-free experience</div>
+      <div class="upgrade-benefit" data-i18n="upgrade.benefit1">Real-time news feed — zero delay</div>
+      <div class="upgrade-benefit" data-i18n="upgrade.benefit2">Live squawk — instant voice alerts</div>
+      <div class="upgrade-benefit" data-i18n="upgrade.benefit3">Live financial TV — 7 channels</div>
+      <div class="upgrade-benefit" data-i18n="upgrade.benefit4">Comprehensive source coverage</div>
+      <div class="upgrade-benefit" data-i18n="upgrade.benefit5">100% ad-free experience</div>
     </div>
     <div class="plan-cards">
       <div class="plan-card">
-        <div class="plan-card-label">Monthly</div>
+        <div class="plan-card-label" data-i18n="upgrade.monthly">Monthly</div>
         <div class="plan-card-price">€40<span>/mo</span></div>
-        <div class="plan-card-sub">Billed monthly<br>Cancel anytime</div>
-        <button class="plan-card-btn" onclick="goToPro(this,'price_1THo43PgXWxcInoUGZJGT1Ti')">Choose →</button>
+        <div class="plan-card-sub"><span data-i18n="upgrade.billed_monthly">Billed monthly</span><br><span data-i18n="upgrade.cancel_anytime">Cancel anytime</span></div>
+        <button class="plan-card-btn" onclick="goToPro(this,'price_1THo43PgXWxcInoUGZJGT1Ti')" data-i18n="upgrade.choose">Choose →</button>
       </div>
       <div class="plan-card annual">
-        <div class="plan-card-badge">💰 Best Value</div>
-        <div class="plan-card-label">Annual</div>
+        <div class="plan-card-badge" data-i18n="upgrade.best_value">💰 Best Value</div>
+        <div class="plan-card-label" data-i18n="upgrade.annual">Annual</div>
         <div class="plan-card-price">€30<span>/mo</span></div>
-        <div class="plan-card-sub">€360/year · <s>€480</s><br>Save €120 (25% off)</div>
-        <button class="plan-card-btn" onclick="goToPro(this,'price_1THo41PgXWxcInoUF3o6fKDh')">Choose →</button>
+        <div class="plan-card-sub">€360/year · <s>€480</s><br><span data-i18n="upgrade.save">Save €120 (25% off)</span></div>
+        <button class="plan-card-btn" onclick="goToPro(this,'price_1THo41PgXWxcInoUF3o6fKDh')" data-i18n="upgrade.choose">Choose →</button>
       </div>
     </div>
-    <div style="font-size:10px;color:#4a6070;text-align:center;margin-bottom:12px;">excl. VAT where applicable · Billed in EUR</div>
-    <button class="upgrade-btn-later" onclick="hideUpgrade()">Maybe later</button>
+    <div class="upgrade-vat" data-i18n="upgrade.vat">excl. VAT where applicable · Billed in EUR</div>
+    <button class="upgrade-btn-later" onclick="hideUpgrade()" data-i18n="upgrade.maybe_later">Maybe later</button>
   </div>
 </div>
 
