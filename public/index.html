@@ -803,7 +803,9 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .sc-table thead th.sc-sorted .sar{opacity:1;}
 .sc-table tbody tr{border-bottom:1px solid #0a0e14;transition:background .1s;}
 .sc-table tbody tr:hover{background:#0d1420!important;cursor:pointer;}
-.sc-table tbody tr:hover .sc-sym::after{content:' ↗';font-size:9px;color:#00d4aa;opacity:.7;}
+.sc-table .sc-sym{position:relative;}
+.sc-table .sc-sym::after{content:'↗';position:absolute;right:-11px;top:50%;transform:translateY(-50%);font-size:9px;color:#00d4aa;opacity:0;transition:opacity .1s;pointer-events:none;}
+.sc-table tbody tr:hover .sc-sym::after{opacity:.7;}
 .sc-table tbody tr:nth-child(even){background:#080b10;}
 .sc-table td{padding:5px 10px;white-space:nowrap;vertical-align:middle;}
 .sc-sym{font-weight:700;color:#e0e8ff;font-size:12px;letter-spacing:.3px;}
