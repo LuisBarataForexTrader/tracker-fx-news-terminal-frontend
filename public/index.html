@@ -1859,7 +1859,7 @@ const STRINGS = {
     'upgrade.title':'Upgrade to Pro',
     'upgrade.desc.tv':'Watch Bloomberg, CNBC, Al Jazeera and more live channels directly inside the terminal.',
     'upgrade.desc.squawk':'Hands-free voice alerts for every breaking headline the instant it arrives — zero delay.',
-    'upgrade.desc.news':'Pro delivers every headline in real time. Basic plan receives news with a 2-minute delay.',
+    'upgrade.desc.news':'Pro delivers every headline in real time. Basic plan receives news with a 2-minute delay and uses substantially fewer news sources.',
     'upgrade.desc.adfree':'Pro removes all ads and upgrade prompts. Pure market intelligence, zero distractions.',
     'upgrade.desc.default':'This feature is available on the Pro plan.',
     'upgrade.benefit1':'Real-time news feed — zero delay',
@@ -2025,7 +2025,7 @@ const STRINGS = {
     'upgrade.title':'Mudar para Pro',
     'upgrade.desc.tv':'Vê Bloomberg, CNBC, Al Jazeera e mais canais ao vivo diretamente no terminal.',
     'upgrade.desc.squawk':'Alertas de voz automáticos para cada notícia breaking no instante em que chega — sem atraso.',
-    'upgrade.desc.news':'O Pro entrega cada notícia em tempo real. O plano Básico recebe notícias com 2 minutos de atraso.',
+    'upgrade.desc.news':'O Pro entrega cada notícia em tempo real. O plano Básico recebe notícias com 2 minutos de atraso e usa substancialmente menos fontes de notícias.',
     'upgrade.desc.adfree':'O Pro remove todos os anúncios e avisos de upgrade. Inteligência de mercado pura, sem distrações.',
     'upgrade.desc.default':'Esta funcionalidade está disponível no plano Pro.',
     'upgrade.benefit1':'Feed em tempo real — sem atraso',
@@ -2191,7 +2191,7 @@ const STRINGS = {
     'upgrade.title':'Actualizar a Pro',
     'upgrade.desc.tv':'Ve Bloomberg, CNBC, Al Jazeera y más canales en vivo directamente en el terminal.',
     'upgrade.desc.squawk':'Alertas de voz automáticas para cada titular al instante en que llega — sin retraso.',
-    'upgrade.desc.news':'Pro entrega cada titular en tiempo real. El plan Básico recibe noticias con 2 minutos de retraso.',
+    'upgrade.desc.news':'Pro entrega cada titular en tiempo real. El plan Básico recibe noticias con 2 minutos de retraso y usa sustancialmente menos fuentes de noticias.',
     'upgrade.desc.adfree':'Pro elimina todos los anuncios y avisos de actualización. Inteligencia de mercado pura, sin distracciones.',
     'upgrade.desc.default':'Esta función está disponible en el plan Pro.',
     'upgrade.benefit1':'Feed de noticias en tiempo real — sin retraso',
@@ -2357,7 +2357,7 @@ const STRINGS = {
     'upgrade.title':'Passer à Pro',
     'upgrade.desc.tv':'Regardez Bloomberg, CNBC, Al Jazeera et plus en direct dans le terminal.',
     'upgrade.desc.squawk':'Alertes vocales automatiques pour chaque breaking news dès son arrivée — sans délai.',
-    'upgrade.desc.news':'Pro livre chaque titre en temps réel. Le plan Basic reçoit les nouvelles avec 2 minutes de délai.',
+    'upgrade.desc.news':'Pro livre chaque titre en temps réel. Le plan Basic reçoit les nouvelles avec 2 minutes de délai et utilise bien moins de sources d\'actualités.',
     'upgrade.desc.adfree':'Pro supprime toutes les publicités et invites de mise à niveau. Intelligence de marché pure, zéro distraction.',
     'upgrade.desc.default':'Cette fonctionnalité est disponible avec le plan Pro.',
     'upgrade.benefit1':'Flux d\'actualités en temps réel — sans délai',
@@ -2523,7 +2523,7 @@ const STRINGS = {
     'upgrade.title':'Upgrade auf Pro',
     'upgrade.desc.tv':'Schau Bloomberg, CNBC, Al Jazeera und mehr live direkt im Terminal.',
     'upgrade.desc.squawk':'Automatische Sprachmeldungen für jede Breaking-News im Moment des Eintreffens — ohne Verzögerung.',
-    'upgrade.desc.news':'Pro liefert jede Meldung in Echtzeit. Basic-Plan empfängt Nachrichten mit 2 Minuten Verzögerung.',
+    'upgrade.desc.news':'Pro liefert jede Meldung in Echtzeit. Basic-Plan empfängt Nachrichten mit 2 Minuten Verzögerung und nutzt deutlich weniger Nachrichtenquellen.',
     'upgrade.desc.adfree':'Pro entfernt alle Werbung und Upgrade-Hinweise. Reine Marktintelligenz, null Ablenkung.',
     'upgrade.desc.default':'Diese Funktion ist im Pro-Plan verfügbar.',
     'upgrade.benefit1':'Echtzeit-Newsfeed — ohne Verzögerung',
@@ -2689,7 +2689,7 @@ const STRINGS = {
     'upgrade.title':'Passa a Pro',
     'upgrade.desc.tv':'Guarda Bloomberg, CNBC, Al Jazeera e altri canali live direttamente nel terminal.',
     'upgrade.desc.squawk':'Avvisi vocali automatici per ogni notizia breaking nel momento in cui arriva — zero ritardo.',
-    'upgrade.desc.news':'Pro consegna ogni titolo in tempo reale. Il piano Basic riceve notizie con 2 minuti di ritardo.',
+    'upgrade.desc.news':'Pro consegna ogni titolo in tempo reale. Il piano Basic riceve notizie con 2 minuti di ritardo e usa sostanzialmente meno fonti di notizie.',
     'upgrade.desc.adfree':'Pro rimuove tutta la pubblicità e i prompt di upgrade. Intelligenza di mercato pura, zero distrazioni.',
     'upgrade.desc.default':'Questa funzionalità è disponibile nel piano Pro.',
     'upgrade.benefit1':'Feed notizie in tempo reale — zero ritardo',
@@ -3296,9 +3296,9 @@ function squawkSpeak(text, url, newsItem) {
   // Dedup: don't queue the same item twice (prevents looping on repeated API data)
   const dedupeKey = (url || clean).slice(0, 80);
   if (squawkQueue.some(q => (q.url || q.text).slice(0, 80) === dedupeKey)) return;
-  // Max queue depth: if already 4+ items pending, drop the oldest to stay current
-  // This prevents squawk falling minutes behind when many items arrive at once
-  if (squawkQueue.length >= 4) squawkQueue.shift();
+  // Max queue depth: if already 2+ items pending, drop the oldest to stay current
+  // Keeps squawk ≤1 item behind real-time at any point
+  if (squawkQueue.length >= 2) squawkQueue.shift();
   squawkQueue.push({
     text: clean,
     url: url||'',
@@ -3351,9 +3351,9 @@ function _pinSquawkCard(item) {
 function drainSquawkQueue() {
   document.querySelectorAll('.squawk-reading').forEach(el => el.classList.remove('squawk-reading'));
   _removeSquawkBanner();
-  // Drop stale items (queued >45 seconds ago) to stay current — prevents minutes-long backlog
+  // Drop stale items (queued >20 seconds ago) to stay current — prevents lag buildup
   const _now = Date.now();
-  while (squawkQueue.length > 0 && squawkQueue[0].queuedAt && (_now - squawkQueue[0].queuedAt) > 45000) {
+  while (squawkQueue.length > 0 && squawkQueue[0].queuedAt && (_now - squawkQueue[0].queuedAt) > 20000) {
     squawkQueue.shift();
   }
   if (!squawkQueue.length || !squawkEnabled) {
@@ -3668,6 +3668,7 @@ function handleNewsData(data, isInit) {
   const now = Date.now();
   const fiveMinAgo   = now - 5*60*1000;   // visual "new" window
   const squawkMaxAge = now - 90*1000;     // squawk only for items <=90s old
+  const squawkHighAge = now - 2*60*1000; // HIGH impact: allow up to 2 min (was 5 min — caused 5-min lag)
   let hasRecentNew = false;
   let genuineNewCount = 0;
 
@@ -3683,10 +3684,10 @@ function handleNewsData(data, isInit) {
         hasRecentNew = true;
         soundNewItems.push(n);  // collect for sound filter check
         // Only queue for squawk if this is a live update AND the news is truly fresh.
-        // HIGH impact: allow up to 5 min old (RSS feeds can lag before delivering breaking HIGH news).
+        // HIGH impact: allow up to 2 min old (RSS feeds can lag slightly on breaking news).
         // Other items: strict 90s window to avoid stale squawks.
         if (!isInit) {
-          const squawkCutoff = (n.impact === 'HIGH') ? fiveMinAgo : squawkMaxAge;
+          const squawkCutoff = (n.impact === 'HIGH') ? squawkHighAge : squawkMaxAge;
           if (itemTime >= squawkCutoff) squawkItems.push(n);
         }
         setTimeout(() => recentNewUrls.delete(n.url), 10*60*1000);
@@ -3694,7 +3695,9 @@ function handleNewsData(data, isInit) {
     }
   });
   // Squawk new headlines — only from live updates, never from init/reload
-  squawkItems.reverse().forEach(n => squawkSpeak(n.headline_en, n.url, n));
+  // Process newest-first (data arrives newest-first from server) so the most
+  // recent headline starts speaking immediately — older items get queued/dropped
+  squawkItems.forEach(n => squawkSpeak(n.headline_en, n.url, n));
 
   // Sound: fire only if at least one new item matches the user's sound filters, throttled to max 1 per 60s
   if (soundEnabled && soundNewItems.some(_soundMatchesFilters)) {
