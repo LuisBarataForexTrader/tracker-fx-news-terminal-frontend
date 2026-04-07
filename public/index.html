@@ -2533,7 +2533,9 @@ function mergeNewsArrays(existing, incoming) {
 
 // ─── News data handler ────────────────────────────────────────────
 function handleNewsData(data, isInit) {
-  const fiveMinAgo = Date.now() - 5*60*1000;
+  const now = Date.now();
+  const fiveMinAgo   = now - 5*60*1000;   // visual "new" window
+  const squawkMaxAge = now - 90*1000;     // squawk only for items <=90s old
   let hasRecentNew = false;
   let genuineNewCount = 0;
 
@@ -2546,8 +2548,9 @@ function handleNewsData(data, isInit) {
         recentNewUrls.add(n.url);
         genuineNewCount++;
         hasRecentNew = true;
-        // Only queue for squawk if this is a live update, not initial load
-        if (!isInit) squawkItems.push(n);
+        // Only queue for squawk if this is a live update AND the news is truly fresh (<=90s old)
+        // Prevents squawking items whose RSS publish timestamp is already minutes old by the time we fetch them
+        if (!isInit && itemTime >= squawkMaxAge) squawkItems.push(n);
         setTimeout(() => recentNewUrls.delete(n.url), 10*60*1000);
       }
     }
