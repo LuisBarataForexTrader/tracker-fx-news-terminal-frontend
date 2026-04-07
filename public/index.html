@@ -1573,7 +1573,12 @@ const ASSET_FLAG = {
   // US Stocks
   AAPL:'🍎',MSFT:'',NVDA:'',GOOGL:'',META:'',AMZN:'',TSLA:'',NFLX:'',
   AMD:'',INTC:'',AVGO:'',CRM:'',ADBE:'',ORCL:'',UBER:'',PLTR:'',ARM:'',COIN:'',MSTR:'',
-  JPM:'🏦',GS:'🏦',BAC:'🏦',MS:'🏦',V:'💳',MA:'💳','BRK-B':'',XOM:'',CVX:'',UNH:'',WMT:''
+  JPM:'🏦',GS:'🏦',BAC:'🏦',MS:'🏦',V:'💳',MA:'💳','BRK-B':'',XOM:'',CVX:'',UNH:'',WMT:'',
+  // Macro Events / Indicators
+  FOMC:'🏛️',ECB:'🏛️',BOE:'🏛️',CPI:'📈',GDP:'📊',NFP:'💼',
+  // Geopolitical / Themes
+  EUROPE:'🇪🇺',IRAN:'🇮🇷',RUSSIA:'🇷🇺',CHINA:'🇨🇳',UKRAINE:'🇺🇦',ISRAEL:'🇮🇱',
+  MIDEAST:'🕌',WAR:'⚔️',TRUMP:'🇺🇸',BIDEN:'🇺🇸',TARIFF:'📦',SANCTIONS:'🚫',OPEC:'🛢️'
 };
 const ASSET_NAME = {
   // Forex
@@ -1591,7 +1596,12 @@ const ASSET_NAME = {
   // US Stocks
   AAPL:'AAPL',MSFT:'MSFT',NVDA:'NVDA',GOOGL:'GOOGL',META:'META',AMZN:'AMZN',TSLA:'TSLA',NFLX:'NFLX',
   AMD:'AMD',INTC:'INTC',AVGO:'AVGO',CRM:'CRM',ADBE:'ADBE',ORCL:'ORCL',UBER:'UBER',PLTR:'PLTR',ARM:'ARM',COIN:'COIN',MSTR:'MSTR',
-  JPM:'JPM',GS:'GS',BAC:'BAC',MS:'MS',V:'VISA',MA:'MASTERCARD','BRK-B':'BRK.B',XOM:'EXXON',CVX:'CHEVRON',UNH:'UNH',WMT:'WALMART'
+  JPM:'JPM',GS:'GS',BAC:'BAC',MS:'MS',V:'VISA',MA:'MASTERCARD','BRK-B':'BRK.B',XOM:'EXXON',CVX:'CHEVRON',UNH:'UNH',WMT:'WALMART',
+  // Macro Events / Indicators
+  FOMC:'FOMC',ECB:'ECB',BOE:'BoE',CPI:'CPI',GDP:'GDP',NFP:'NFP',
+  // Geopolitical / Themes
+  EUROPE:'EUROPE',IRAN:'IRAN',RUSSIA:'RUSSIA',CHINA:'CHINA',UKRAINE:'UKRAINE',ISRAEL:'ISRAEL',
+  MIDEAST:'MID-EAST',WAR:'WAR',TRUMP:'TRUMP',BIDEN:'BIDEN',TARIFF:'TARIFFS',SANCTIONS:'SANCTIONS',OPEC:'OPEC'
 };
 
 // ─── i18n ────────────────────────────────────────────────────────
@@ -2937,17 +2947,44 @@ function renderNews() {
       'usdnok':['usd','nok'],'btcusd':['btc','usd'],'ethusd':['eth','usd'],
       'xauusd':['gold','usd'],'xagusd':['silver','usd'],
     };
+    // Synonym expansion — map friendly search terms to asset tag tokens
+    const SEARCH_SYNONYMS = {
+      'gold':'gold','xau':'gold','bullion':'gold',
+      'silver':'silver','xag':'silver',
+      'oil':'oil','crude':'oil','wti':'oil','brent':'brent',
+      'gas':'natgas','natgas':'natgas','lng':'natgas',
+      'bitcoin':'btc','btc':'btc','ethereum':'eth','eth':'eth',
+      'sp500':'sp500','spx':'sp500','s&p':'sp500','s&p500':'sp500',
+      'nasdaq':'ndx','ndx':'ndx','dow':'dow','djia':'dow',
+      'fed':'fomc','fomc':'fomc','powell':'fomc',
+      'ecb':'ecb','lagarde':'ecb','boe':'boe','bank of england':'boe','bailey':'boe',
+      'cpi':'cpi','inflation':'cpi','gdp':'gdp','nfp':'nfp','payrolls':'nfp','jobs':'nfp',
+      'iran':'iran','russia':'russia','china':'china','ukraine':'ukraine','israel':'israel',
+      'europe':'europe','european':'europe','eurozone':'europe',
+      'war':'war','tariff':'tariff','tariffs':'tariff','sanctions':'sanctions','opec':'oil',
+      'trump':'trump','biden':'biden',
+    };
     const expanded = PAIR_EXPAND[searchQuery];
+    // Tokenize: split on whitespace/commas — all tokens must match (AND)
+    const tokens = searchQuery.split(/[\s,]+/).filter(Boolean);
     filtered = filtered.filter(n => {
       const h = (n.headline_en||'').toLowerCase();
       const s = (n.source||'').toLowerCase();
-      const a = (n.assets||'').toLowerCase();
-      if (h.includes(searchQuery) || s.includes(searchQuery)) return true;
-      if (a.includes(searchQuery)) return true;
-      // Match asset tags (e.g. "eurusd" → news tagged EUR and USD)
-      if (expanded && expanded.every(part => a.includes(part))) return true;
-      // Also match single currency (e.g. "eur" matches EUR-tagged news)
-      if (a.split(',').map(x=>x.trim().toLowerCase()).includes(searchQuery)) return true;
+      const aRaw = (n.assets||'').toLowerCase();
+      const aList = aRaw.split(',').map(x=>x.trim()).filter(Boolean);
+      // Full query substring match on headline/source/assets
+      if (h.includes(searchQuery) || s.includes(searchQuery) || aRaw.includes(searchQuery)) return true;
+      // Forex pair expand: "eurusd" → ["eur","usd"]
+      if (expanded && expanded.every(part => aList.includes(part))) return true;
+      // Exact asset tag match
+      if (aList.includes(searchQuery)) return true;
+      // Multi-token AND: each token must be found in headline, assets, or via synonym
+      if (tokens.length >= 1 && tokens.every(tok => {
+        if (h.includes(tok) || s.includes(tok) || aRaw.includes(tok)) return true;
+        const syn = SEARCH_SYNONYMS[tok];
+        if (syn && aList.includes(syn)) return true;
+        return false;
+      })) return true;
       return false;
     });
   }
