@@ -3343,7 +3343,7 @@ async function loadFxRates(force=false){
   if(fxLoaded&&!force) return;
   const body=document.getElementById('fx-body');
   if(!body) return;
-  if(!fxLoaded) body.innerHTML='<div class="data-loading">⟳ Loading FX rates (ECB)...</div>';
+  if(!fxLoaded) body.innerHTML='<div class="data-loading">⟳ Loading FX rates...</div>';
   try{
     const r=await fetch(BACKEND_URL+'/fx-rates?base=USD&symbols=EUR,GBP,JPY,CHF,AUD,CAD,NZD,SEK,NOK,DKK,HKD,SGD,CNY,BRL,MXN,ZAR,TRY,INR,KRW,PLN,HUF,CZK');
     const data=await r.json();
@@ -3378,7 +3378,7 @@ async function loadFxRates(force=false){
       if(!cards) continue;
       html+=`<div class="fx-section-header">${label}</div><div class="fx-grid">${cards}</div>`;
     }
-    html+=`<div class="data-source-footer">Source: European Central Bank (ECB) via Frankfurter API · ${date} · ${FX_PAIRS.length} pairs · Auto-refreshes every ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
+    html+=`<div class="data-source-footer">${date} · ${FX_PAIRS.length} pairs · Auto-refreshes every ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
 
     body.innerHTML=html;
     fxLoaded=true;
@@ -3397,7 +3397,7 @@ async function loadCrypto(force=false){
   if(cryptoLoaded&&!force) return;
   const body=document.getElementById('crypto-body');
   if(!body) return;
-  if(!cryptoLoaded) body.innerHTML='<div class="data-loading">⟳ Loading crypto markets (CoinGecko)...</div>';
+  if(!cryptoLoaded) body.innerHTML='<div class="data-loading">⟳ Loading crypto markets...</div>';
   try{
     const [cr,gr]=await Promise.all([
       fetch(BACKEND_URL+'/crypto?coins=bitcoin,ethereum,tether,binancecoin,ripple,solana,usd-coin,staked-ether,dogecoin,cardano,avalanche-2,shiba-inu,tron,chainlink,polkadot,bitcoin-cash,near,litecoin,uniswap,dai,internet-computer,fetch-ai,hedera-hashgraph,stellar,monero,ethereum-classic,okb,aptos,arbitrum,filecoin,vechain,the-open-network,injective-protocol,optimism,cosmos,render-token,kaspa,sei-network,celestia,sui,pepe,worldcoin-wld,stacks,pyth-network,jito,bonk,jupiter-exchange-solana,wormhole,ethena,ondo-finance'),
@@ -3438,7 +3438,7 @@ async function loadCrypto(force=false){
       </div>`;
     }).join('');
 
-    body.innerHTML=globalBar+`<div class="crypto-grid">${cards}</div><div class="data-source-footer">Source: CoinGecko · ${coins.length} coins · No API key required · Auto-refreshes every ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
+    body.innerHTML=globalBar+`<div class="crypto-grid">${cards}</div><div class="data-source-footer">${coins.length} coins · Auto-refreshes every ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
     cryptoLoaded=true;
     if(cryptoTimer) clearInterval(cryptoTimer);
     cryptoTimer=setInterval(()=>{if(currentTab==='crypto') loadCrypto(true);}, IS_PRO ? 15000 : 60000);
@@ -3455,7 +3455,7 @@ async function loadCommodities(force=false){
   if(commLoaded&&!force) return;
   const body=document.getElementById('commodities-body');
   if(!body) return;
-  if(!commLoaded) body.innerHTML='<div class="data-loading">⟳ Loading commodity prices (Yahoo Finance)...</div>';
+  if(!commLoaded) body.innerHTML='<div class="data-loading">⟳ Loading commodity prices...</div>';
   try{
     const r=await fetch(BACKEND_URL+'/commodities');
     const data=await r.json();
@@ -3484,7 +3484,7 @@ async function loadCommodities(force=false){
         <table class="data-table"><thead><tr><th>Commodity</th><th>Price</th><th>Unit</th><th>24h Chg</th><th>CCY</th><th>Date</th></tr></thead>
         <tbody>${rows}</tbody></table></div>`;
     }
-    html+=`<div class="data-source-footer">Source: Yahoo Finance (real-time) · Auto-refreshes every ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
+    html+=`<div class="data-source-footer">Real-time · Auto-refreshes every ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
     body.innerHTML=html;
     commLoaded=true;
     if(commTimer) clearInterval(commTimer);
@@ -3502,7 +3502,7 @@ async function loadMacro(force=false){
   if(macroLoaded&&!force) return;
   const body=document.getElementById('macro-body');
   if(!body) return;
-  body.innerHTML='<div class="data-loading">⟳ Loading macro indicators (FRED/World Bank)...</div>';
+  body.innerHTML='<div class="data-loading">⟳ Loading macro indicators...</div>';
   try{
     const r=await fetch(BACKEND_URL+'/macro?series=fed_rate,cpi_us,cpi_yoy,unemployment,10y_yield,2y_yield,30y_yield,vix,dxy,eur_rate,uk_rate,jp_rate,gdp_us,gdp_eu,gdp_cn,gdp_jp,gdp_uk,m2,oil_wti,gold,trade_balance,pce,retail_sales');
     const data=await r.json();
@@ -3561,14 +3561,12 @@ async function loadMacro(force=false){
         const cls=diff>=0?'pos':'neg';
         chgHtml=`<div class="macro-card-change ${cls}">${diff>=0?'+':''}${fmtMacroDiff(diff,ind.unit)} vs prev</div>`;
       }
-      const srcLabel=ind.source||src;
       return `<div class="macro-card">
         <div class="macro-card-label">${ind.label||k}</div>
         <div class="macro-card-value">${valStr}</div>
         <div class="macro-card-unit">${ind.unit||''}</div>
         ${chgHtml}
         <div class="macro-card-date">As of ${ind.date||'—'}</div>
-        <div class="macro-card-source">${srcLabel}</div>
       </div>`;
     }
 
@@ -3582,7 +3580,7 @@ async function loadMacro(force=false){
     // Any remaining indicators not in groups
     const remaining = Object.keys(inds).filter(k=>!rendered.has(k)).map(macroCard).join('');
     if(remaining) html += `<div class="fx-section-header">Other Indicators</div><div class="macro-grid" style="padding:0 20px 8px;">${remaining}</div>`;
-    html += `<div class="data-source-footer">Sources: ${src} · Updates every hour</div>`;
+    html += `<div class="data-source-footer">Updates every hour</div>`;
 
     body.innerHTML = html || '<div class="data-loading">No macro data available</div>';
     macroLoaded=true;
@@ -3640,14 +3638,14 @@ async function loadSentiment(force=false){
           <div class="fg-sparkline-title">Last 20 readings</div>
           <div class="fg-spark-bar-wrap">${sparkBars}</div>
         </div>
-        <div style="font-size:10px;color:#4a6070;margin-top:14px;">CNN Fear &amp; Greed · Updated every 5 min</div>`;
+        <div style="font-size:10px;color:#4a6070;margin-top:14px;">Updated every 5 min</div>`;
     }
 
     // COT panel
     let cotHtml=`<div style="text-align:center;padding:32px 20px;">
       <div style="font-size:28px;margin-bottom:12px;">📊</div>
       <div style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px;">COT Data Loading...</div>
-      <div style="font-size:11px;color:#4a6070;line-height:1.7;">CFTC Commitments of Traders — published every <strong style="color:var(--text-muted)">Friday after market close</strong>.<br>Data is fetched directly from the CFTC weekly report file.</div>
+      <div style="font-size:11px;color:#4a6070;line-height:1.7;">Commitments of Traders — published every <strong style="color:var(--text-muted)">Friday after market close</strong>.</div>
     </div>`;
     if(cot&&Object.keys(cot).length){
       const rows=Object.entries(cot).map(([cur,row])=>{
@@ -3786,7 +3784,7 @@ async function loadEarnings(){
     _earningsAll=data.earnings||[];
     _earningsCount=data.count||0;
     document.getElementById('earnings-search-meta').textContent=
-      `${_earningsCount} companies · 3-month horizon · Alpha Vantage`;
+      `${_earningsCount} companies · 3-month horizon`;
     _renderEarnings('');
     earningsLoaded=true;
   } catch(e){
@@ -3936,7 +3934,7 @@ async function openCompanyDetail(ticker, name){
 
     // Chart link
     const chartHtml=`<div style="text-align:center;padding:8px 0;">
-      <button onclick="openChart('${ticker}');closeCompany();" style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:var(--accent);font-family:var(--font);font-size:12px;font-weight:600;padding:8px 24px;border-radius:3px;cursor:pointer;letter-spacing:0.06em;">📈 Open TradingView Chart</button>
+      <button onclick="openChart('${ticker}');closeCompany();" style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:var(--accent);font-family:var(--font);font-size:12px;font-weight:600;padding:8px 24px;border-radius:3px;cursor:pointer;letter-spacing:0.06em;">📈 Open Advanced Chart</button>
     </div>`;
 
     body.innerHTML=`
