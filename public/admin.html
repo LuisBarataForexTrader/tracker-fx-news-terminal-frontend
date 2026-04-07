@@ -402,6 +402,7 @@ select.ctrl-sel:focus{border-color:var(--accent)}
               <option value="basic">Basic</option>
               <option value="pro">Pro</option>
               <option value="trial">Trial</option>
+              <option value="had_trial">Had Trial</option>
             </select>
             <span id="users-count" class="table-count"></span>
           </div>
@@ -455,6 +456,22 @@ select.ctrl-sel:focus{border-color:var(--accent)}
             <table class="data-table">
               <thead><tr><th>ID</th><th>Email</th><th>Name</th><th>Step</th><th>Registered</th><th>Actions</th></tr></thead>
               <tbody id="funnel-tbody"><tr><td colspan="6" class="empty-state">–</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Trial Conversion -->
+        <div class="sec-hdr" style="margin-top:32px">
+          <h2>Trial Conversion</h2><div class="sec-hdr-line"></div>
+        </div>
+        <div id="trial-conv-kpis" class="kpi-row" style="margin-bottom:20px">
+          <div class="empty-state"><span class="spinner"></span> Loading…</div>
+        </div>
+        <div class="table-wrap">
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead><tr><th>ID</th><th>Email</th><th>Name</th><th>Country</th><th>Status</th><th>Trial Started</th><th>Plan Changed</th></tr></thead>
+              <tbody id="trial-conv-tbody"><tr><td colspan="7" class="empty-state">–</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -1265,19 +1282,27 @@ function userRow(u) {
   const name    = (u.name||'').replace(/'/g,'').replace(/"/g,'');
   const COUNTRY_FLAGS = {PT:'🇵🇹',BR:'🇧🇷',US:'🇺🇸',GB:'🇬🇧',DE:'🇩🇪',FR:'🇫🇷',ES:'🇪🇸',IT:'🇮🇹',NL:'🇳🇱',BE:'🇧🇪',CH:'🇨🇭',AT:'🇦🇹',PL:'🇵🇱',SE:'🇸🇪',NO:'🇳🇴',DK:'🇩🇰',FI:'🇫🇮',IE:'🇮🇪',CA:'🇨🇦',AU:'🇦🇺',NZ:'🇳🇿',ZA:'🇿🇦',AE:'🇦🇪',SG:'🇸🇬',HK:'🇭🇰',JP:'🇯🇵',IN:'🇮🇳',MX:'🇲🇽',AR:'🇦🇷',CL:'🇨🇱',CO:'🇨🇴'};
   const flagStr = u.country ? (COUNTRY_FLAGS[u.country]||'🌍') + ' ' + u.country : '<span style="color:var(--border2)">—</span>';
+  // HAD TRIAL badge — shown for non-trial users who once had a trial
+  const hadTrialBadge = (u.had_trial == 1 && plan !== 'trial')
+    ? `<span style="font-size:9px;font-weight:700;letter-spacing:.08em;background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3);border-radius:3px;padding:1px 5px;margin-left:5px;vertical-align:middle">HAD TRIAL</span>`
+    : '';
+  // Show ✕ Trial button for active trial OR for users who ever had trial (to clear their history if needed)
+  const cancelTrialBtn = (plan === 'trial' || u.had_trial == 1)
+    ? `<button class="act-btn" style="background:rgba(245,158,11,.15);color:var(--amber);border-color:rgba(245,158,11,.3)" onclick="cancelTrial(${u.id},'${email}')">✕ Trial</button>`
+    : '';
   return `<tr>
     <td><span class="num">${u.id}</span></td>
     <td>${u.email}</td>
     <td style="color:var(--text-muted)">${u.name||'–'}</td>
     <td style="font-size:12px">${flagStr}</td>
-    <td>${planBadge}</td>
+    <td>${planBadge}${hadTrialBadge}</td>
     <td style="text-align:center">${activeTd}</td>
     <td><span class="num">${trial}</span></td>
     <td><span class="num">${created}</span></td>
     <td><span class="num">${seen}</span></td>
     <td style="white-space:nowrap">
       <button class="act-btn" onclick="openTrialModal(${u.id},'${email}')">Trial</button>
-      ${plan === 'trial' ? `<button class="act-btn" style="background:rgba(245,158,11,.15);color:var(--amber);border-color:rgba(245,158,11,.3)" onclick="cancelTrial(${u.id},'${email}')">✕ Trial</button>` : ''}
+      ${cancelTrialBtn}
       <button class="act-btn danger" onclick="deleteUser(${u.id},'${email}')">✕</button>
     </td>
   </tr>`;
@@ -1423,6 +1448,66 @@ async function loadFunnel() {
           </td>
         </tr>`).join('');
   } catch(e){ showToast('Funnel error','error'); console.error(e); }
+
+  // Trial conversion section
+  try {
+    const tc = await api('/admin/stats/trial-conversion');
+    const total = tc.total_had_trial || 0;
+    const converted = tc.converted || 0;
+    const stillTrial = tc.still_trial || 0;
+    const didNot = tc.did_not_convert || 0;
+    const rate = tc.conversion_rate || 0;
+
+    document.getElementById('trial-conv-kpis').innerHTML = `
+      <div class="kpi-card">
+        <div class="kpi-label">Tiveram Trial</div>
+        <div class="kpi-value" style="color:#a78bfa">${total}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Converteram → Pro</div>
+        <div class="kpi-value" style="color:var(--accent)">${converted}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Ainda em Trial</div>
+        <div class="kpi-value" style="color:var(--amber)">${stillTrial}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Não Converteram</div>
+        <div class="kpi-value" style="color:var(--red)">${didNot}</div>
+      </div>
+      <div class="kpi-card" style="background:rgba(0,212,255,.04);border-color:rgba(0,212,255,.2)">
+        <div class="kpi-label">Taxa Conversão</div>
+        <div class="kpi-value" style="color:var(--accent)">${rate}%</div>
+      </div>
+    `;
+
+    const COUNTRY_FLAGS2 = {PT:'🇵🇹',BR:'🇧🇷',US:'🇺🇸',GB:'🇬🇧',DE:'🇩🇪',FR:'🇫🇷',ES:'🇪🇸',IT:'🇮🇹',NL:'🇳🇱',BE:'🇧🇪',CH:'🇨🇭',AT:'🇦🇹',PL:'🇵🇱',SE:'🇸🇪',NO:'🇳🇴',DK:'🇩🇰',FI:'🇫🇮',IE:'🇮🇪',CA:'🇨🇦',AU:'🇦🇺',NZ:'🇳🇿',ZA:'🇿🇦',AE:'🇦🇪',SG:'🇸🇬',HK:'🇭🇰',JP:'🇯🇵',IN:'🇮🇳',MX:'🇲🇽',AR:'🇦🇷',CL:'🇨🇱',CO:'🇨🇴'};
+    const tcTbody = document.getElementById('trial-conv-tbody');
+    if (!tc.users || !tc.users.length) {
+      tcTbody.innerHTML = '<tr><td colspan="7" class="empty-state">Nenhum utilizador com trial</td></tr>';
+    } else {
+      tcTbody.innerHTML = tc.users.map(u => {
+        const flagStr = u.country ? (COUNTRY_FLAGS2[u.country]||'🌍') + ' ' + u.country : '<span style="color:var(--border2)">—</span>';
+        let statusBadge;
+        if (u.plan === 'pro') {
+          statusBadge = `<span class="badge badge-pro" style="color:var(--accent)">✓ Converteu → Pro</span>`;
+        } else if (u.plan === 'trial') {
+          statusBadge = `<span class="badge badge-trial" style="color:var(--amber)">Em Trial</span>`;
+        } else {
+          statusBadge = `<span class="badge" style="background:rgba(239,68,68,.1);color:var(--red);border-color:rgba(239,68,68,.3)">Não Converteu</span>`;
+        }
+        return `<tr>
+          <td><span class="num">${u.id}</span></td>
+          <td>${u.email}</td>
+          <td style="color:var(--text-muted)">${u.name||'–'}</td>
+          <td style="font-size:12px">${flagStr}</td>
+          <td>${statusBadge}</td>
+          <td><span class="num">${(u.trial_started_at||'–').slice(0,10)}</span></td>
+          <td><span class="num">${(u.plan_changed_at||'–').slice(0,10)}</span></td>
+        </tr>`;
+      }).join('');
+    }
+  } catch(e){ console.error('Trial conversion error', e); }
 }
 
 // ── Customers Map ──────────────────────────────────────────────

@@ -1174,7 +1174,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
           <button class="tv-ch-btn" data-ch="skynews"   onclick="switchChannel('skynews',this)">Sky News</button>
           <button class="tv-ch-btn" data-ch="dw"        onclick="switchChannel('dw',this)">DW News</button>
           <button class="tv-ch-btn" data-ch="france24"  onclick="switchChannel('france24',this)">France 24</button>
-          <button class="tv-ch-btn" data-ch="yahoofinance" onclick="switchChannel('yahoofinance',this)">Yahoo Finance</button>
+          <button class="tv-ch-btn" data-ch="schwab" onclick="switchChannel('schwab',this)">Schwab Network</button>
         </div>
       </div>
       <div class="tv-body">
@@ -1217,9 +1217,9 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
               <div class="tv-ch-info"><div class="tv-ch-name">France 24</div><div class="tv-ch-desc">International News English</div></div>
               <div class="tv-live-badge">LIVE</div>
             </div>
-            <div class="tv-ch-item" data-ch="yahoofinance" onclick="switchChannel('yahoofinance',this)">
+            <div class="tv-ch-item" data-ch="schwab" onclick="switchChannel('schwab',this)">
               <div class="tv-ch-dot"></div>
-              <div class="tv-ch-info"><div class="tv-ch-name">Yahoo Finance</div><div class="tv-ch-desc">Markets & Financial News 24/7</div></div>
+              <div class="tv-ch-info"><div class="tv-ch-name">Schwab Network</div><div class="tv-ch-desc">Markets & Financial Analysis</div></div>
               <div class="tv-live-badge">LIVE</div>
             </div>
           </div>
@@ -3693,7 +3693,7 @@ const LIVE_STREAM_IDS = {
   'france24':   {type:'channel', id:'UCQfwfsi5VrQ8yKZ-UWmAEFg'},  // France 24 English
   'wion':       {type:'channel', id:'UCJYifGXaZCXxBIY0YkNFBiw'},  // WION
   'euronews':   {type:'channel', id:'UCg2PveIFoQEg2DVwTiT1wYA'},  // Euronews English
-  'yahoofinance':{type:'channel', id:'UCEAZeUIeJs0IjQiqTCdVSIg'},  // Yahoo Finance — Markets & Financial News 24/7
+  'schwab':      {type:'channel', id:'UCqoSrYgusd8ZddtMoWhjHYA'},  // Schwab Network (formerly TD Ameritrade Network) — Markets & Financial Analysis
 };
 
 function openLiveStream(key, chipEl) {
@@ -3734,7 +3734,7 @@ const TV_CHANNELS = {
   reuters:    'https://www.youtube.com/embed/live_stream?channel=UChqUTb7kYRX8-EiaN3XFrSQ&autoplay=1&mute=0',
   foxbiz:     'https://www.youtube.com/embed/live_stream?channel=UC5xQMo6rBuZHRNKnBhCi3Dw&autoplay=1&mute=0',
   aljazeera:  'https://www.youtube.com/embed/live_stream?channel=UCNye-wNBqNL5ZzHSJj3l8Bg&autoplay=1&mute=0',
-  yahoo:      'https://www.youtube.com/embed/live_stream?channel=UCEAZeUIeJs0IjQiqTCdVSIg&autoplay=1&mute=0',
+  schwab:     'https://www.youtube.com/embed/live_stream?channel=UCqoSrYgusd8ZddtMoWhjHYA&autoplay=1&mute=0',
 };
 let currentChannel = 'bloomberg';
 
