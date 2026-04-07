@@ -909,10 +909,12 @@ async function api(path, opts={}) {
     let detail = r.status.toString();
     try { const d = await r.json(); detail = d.detail || detail; } catch(e){}
     // Auto-logout on auth failure (expired/invalid session)
-    // _freshLogin guard prevents race: verifyToken(old_token)->403 firing after a fresh login
+    // Check _freshLogin both now AND inside the setTimeout callback — the 403 from a stale
+    // verifyToken() call may fire before doLogin() sets _freshLogin, so we must re-check
+    // at execution time (1.5 s later) to avoid kicking out a freshly logged-in session.
     if (r.status === 403 && path !== '/admin/auth/login' && !_freshLogin) {
       showToast('Session expired — please sign in again', 'error');
-      setTimeout(() => logout(), 1500);
+      setTimeout(() => { if (!_freshLogin) logout(); }, 1500);
     }
     throw new Error(detail);
   }
