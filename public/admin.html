@@ -540,6 +540,12 @@ select.ctrl-sel:focus{border-color:var(--accent)}
               <option value="timeout">⏱ Timeout</option>
               <option value="unknown">— Not checked</option>
             </select>
+            <select id="feeds-tier-filter" onchange="filterFeeds()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:6px 10px;border-radius:3px;font-family:var(--font);font-size:12px;cursor:pointer">
+              <option value="">All tiers</option>
+              <option value="fast">🔴 Fast (10s)</option>
+              <option value="medium">🟡 Medium (60s)</option>
+              <option value="slow">🟢 Slow (5min)</option>
+            </select>
             <span id="feeds-count" class="table-count"></span>
           </div>
           <table class="data-table">
@@ -548,13 +554,14 @@ select.ctrl-sel:focus{border-color:var(--accent)}
               <th>Status</th>
               <th>Source</th>
               <th>URL</th>
+              <th>Tier</th>
               <th>Category</th>
               <th style="text-align:right">Latency</th>
               <th style="text-align:right">Entries</th>
               <th style="text-align:right">In DB</th>
             </tr></thead>
             <tbody id="feeds-tbody">
-              <tr><td colspan="8" style="text-align:center;padding:30px;color:var(--text-muted);font-size:12px">Click <strong style="color:var(--accent)">↻ List</strong> to load sources, or <strong style="color:var(--accent)">⚡ Run Health Check</strong> to test all feeds.</td></tr>
+              <tr><td colspan="9" style="text-align:center;padding:30px;color:var(--text-muted);font-size:12px">Click <strong style="color:var(--accent)">↻ List</strong> to load sources, or <strong style="color:var(--accent)">⚡ Run Health Check</strong> to test all feeds.</td></tr>
             </tbody>
           </table>
         </div>
@@ -1053,6 +1060,16 @@ async function runHealthCheck() {
   }
 }
 
+const TIER_META = {
+  fast:   { label:'🔴 Fast',   sub:'10s',   color:'#f87171' },
+  medium: { label:'🟡 Medium', sub:'60s',   color:'#fbbf24' },
+  slow:   { label:'🟢 Slow',   sub:'5min',  color:'#4ade80' },
+};
+function _tierBadge(tier) {
+  const m = TIER_META[tier] || { label:'—', sub:'', color:'#607080' };
+  return `<span style="display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:3px;background:${m.color}18;color:${m.color};border:1px solid ${m.color}44" title="Polled every ${m.sub}">${m.label} <span style="opacity:.6;font-weight:400">${m.sub}</span></span>`;
+}
+
 function renderFeeds(feeds) {
   document.getElementById('feeds-count').textContent = feeds.length + ' feeds';
   document.getElementById('feeds-tbody').innerHTML = feeds.map((f,i)=>{
@@ -1070,24 +1087,27 @@ function renderFeeds(feeds) {
       <td style="color:#607080;font-size:10px">${i+1}</td>
       <td>${_statusBadge(status)}</td>
       <td style="font-weight:600;color:var(--accent);white-space:nowrap">${f.source||host}</td>
-      <td style="font-size:11px;color:var(--text-dim);max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${f.url}"><span style="color:#607080">${host}</span>${path}</td>
+      <td style="font-size:11px;color:var(--text-dim);max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${f.url}"><span style="color:#607080">${host}</span>${path}</td>
+      <td>${_tierBadge(f.tier)}</td>
       <td><span style="font-size:9px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:3px;background:${catColor}18;color:${catColor};border:1px solid ${catColor}33">${cat}</span></td>
       <td style="text-align:right;font-family:var(--font-mono);font-size:11px;color:${latColor}">${latency}</td>
       <td style="text-align:right;font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">${entries}</td>
       <td style="text-align:right;font-family:var(--font-mono);font-size:11px;color:${f.db_count>0?'var(--accent)':'#607080'}">${dbCount}</td>
     </tr>`;
-  }).join('') || '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--text-muted)">No results</td></tr>';
+  }).join('') || '<tr><td colspan="9" style="text-align:center;padding:20px;color:var(--text-muted)">No results</td></tr>';
 }
 
 function filterFeeds() {
   const q  = document.getElementById('feeds-search').value.toLowerCase();
   const st = document.getElementById('feeds-status-filter').value;
+  const tr = document.getElementById('feeds-tier-filter').value;
   const filtered = _allFeeds.filter(f => {
-    const matchQ  = !q  || f.url.toLowerCase().includes(q) || (f.source||'').toLowerCase().includes(q) || _feedCategory(f.url).toLowerCase().includes(q);
+    const matchQ    = !q  || f.url.toLowerCase().includes(q) || (f.source||'').toLowerCase().includes(q) || _feedCategory(f.url).toLowerCase().includes(q);
     // 'error' filter matches both 'error' and 'timeout' (KPI counts both as errors)
     const fSt = f.status || 'unknown';
-    const matchSt = !st || fSt === st || (st === 'error' && fSt === 'timeout');
-    return matchQ && matchSt;
+    const matchSt   = !st || fSt === st || (st === 'error' && fSt === 'timeout');
+    const matchTier = !tr || f.tier === tr;
+    return matchQ && matchSt && matchTier;
   });
   renderFeeds(filtered);
 }
