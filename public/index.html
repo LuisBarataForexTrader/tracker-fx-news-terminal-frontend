@@ -56,7 +56,9 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .lang-picker{position:relative;}
 .lang-cur{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg3);border:1px solid var(--border);color:#fff;font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .15s;}
 .lang-cur:hover{background:rgba(255,255,255,0.06);border-color:var(--accent);}
-.lang-flag{font-size:14px;line-height:1;}
+.lang-flag{font-size:14px;line-height:1;display:inline-flex;align-items:center;}
+.lang-flag img.emoji{width:16px;height:16px;vertical-align:middle;}
+.lang-opt-flag img.emoji{width:18px;height:18px;vertical-align:middle;}
 .lang-code{line-height:1;}
 .lang-caret{font-size:9px;opacity:0.7;line-height:1;}
 .lang-menu{position:absolute;top:calc(100% + 4px);right:0;background:#0a0e15;border:1px solid var(--border);border-radius:6px;padding:4px;z-index:9999;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,0.7);}
@@ -1209,16 +1211,16 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
     <div class="tab-content hidden" id="tab-screener">
       <div id="screener-body">
         <div class="sc-subtabs">
-          <button class="sc-stab active" id="sc-tab-stocks"      onclick="switchScreener('stocks')">📈 Stocks</button>
-          <button class="sc-stab"        id="sc-tab-forex"       onclick="switchScreener('forex')">💱 Forex</button>
-          <button class="sc-stab"        id="sc-tab-crypto"      onclick="switchScreener('crypto')">₿ Crypto</button>
-          <button class="sc-stab"        id="sc-tab-commodities" onclick="switchScreener('commodities')">🛢 Commodities</button>
-          <button class="sc-stab"        id="sc-tab-multi"       onclick="switchScreener('multi')">🌐 Multi-Asset</button>
+          <button class="sc-stab active" id="sc-tab-stocks"      onclick="switchScreener('stocks')"><span data-i18n="sc.tab.stocks">📈 Stocks</span></button>
+          <button class="sc-stab"        id="sc-tab-forex"       onclick="switchScreener('forex')"><span data-i18n="sc.tab.forex">💱 Forex</span></button>
+          <button class="sc-stab"        id="sc-tab-crypto"      onclick="switchScreener('crypto')"><span data-i18n="sc.tab.crypto">₿ Crypto</span></button>
+          <button class="sc-stab"        id="sc-tab-commodities" onclick="switchScreener('commodities')"><span data-i18n="sc.tab.commodities">🛢 Commodities</span></button>
+          <button class="sc-stab"        id="sc-tab-multi"       onclick="switchScreener('multi')"><span data-i18n="sc.tab.multi">🌐 Multi-Asset</span></button>
         </div>
         <div id="sc-strength-wrap" style="display:none;"></div>
         <div id="sc-filters-wrap"></div>
         <div id="sc-content" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
-          <div class="sc-loading"><div class="sc-spinner"></div><span>Select a screener above</span></div>
+          <div class="sc-loading"><div class="sc-spinner"></div><span data-i18n="sc.loading_select">Select a screener above</span></div>
         </div>
       </div>
     </div>
@@ -1698,6 +1700,55 @@ const STRINGS = {
     'settings.update_pwd':'Update Password',
     'settings.subscription':'Subscription','settings.current_plan':'Current Plan',
     'settings.upgrade':'Upgrade to Pro →','settings.manage':'Manage Subscription',
+    'load.fx':'⟳ Loading FX rates...','load.crypto':'⟳ Loading crypto markets...',
+    'load.commodities':'⟳ Loading commodity prices...','load.macro':'⟳ Loading macro indicators...',
+    'load.sentiment':'⟳ Loading sentiment data...','load.earnings':'⟳ Loading earnings calendar...',
+    'load.cb':'⟳ Loading central bank news...','load.company':'⟳ Loading company data...',
+    'load.error':'Error',
+    'common.refresh_every':'Auto-refreshes every','common.real_time':'Real-time',
+    'common.updates_hourly':'Updates every hour','common.no_data':'No data available',
+    'common.tap_chart':'📈 Tap to chart','common.failed':'Failed to load',
+    'crypto.market_cap':'Market Cap','crypto.volume_24h':'24h Volume','crypto.btc_dom':'BTC Dom.',
+    'crypto.eth_dom':'ETH Dom.','crypto.chg_24h':'24h Chg','crypto.active_coins':'Active Coins',
+    'crypto.coins_meta':'coins','crypto.mcap_label':'MCap',
+    'comm.precious':'🥇 Precious Metals','comm.energy':'⛽ Energy','comm.industrial':'🏭 Industrial & Agricultural',
+    'comm.col.commodity':'Commodity','comm.col.price':'Price','comm.col.unit':'Unit',
+    'comm.col.chg_24h':'24h Chg','comm.col.ccy':'CCY','comm.col.date':'Date',
+    'macro.market_indicators':'Market Indicators','macro.rates_yields':'Interest Rates & Yields',
+    'macro.commodities':'Commodities','macro.economic_data':'Economic Data','macro.other':'Other Indicators',
+    'macro.as_of':'As of','macro.vs_prev':'vs prev','macro.no_data':'No macro data available',
+    'sent.fg_title':'Fear & Greed Index','sent.fg_unavailable':'Fear & Greed data unavailable',
+    'sent.fg_fear':'Fear','sent.fg_neutral':'Neutral','sent.fg_greed':'Greed',
+    'sent.fg_last20':'Last 20 readings','sent.fg_updated':'Updated every 5 min',
+    'sent.cot_title':'CFTC COT — Non-Commercial Net Positions',
+    'sent.cot_loading_title':'COT Data Loading...',
+    'sent.cot_loading_sub':'Commitments of Traders — published every <strong>Friday after market close</strong>.',
+    'sent.cot.currency':'Currency','sent.cot.long':'Long','sent.cot.short':'Short','sent.cot.net':'Net',
+    'sent.cot.trend':'Trend','sent.cot.date':'Date',
+    'sent.cot_footer':'CFTC Commitments of Traders · Published weekly (Friday)',
+    'earn.search_ph':'Search ticker or company name…','earn.loading_meta':'Loading…',
+    'earn.companies_3m':'companies · 3-month horizon','earn.no_results':'No results for',
+    'earn.results_for':'results for','earn.no_upcoming':'No upcoming earnings data','earn.today':'📅 TODAY —',
+    'earn.col.ticker':'Ticker','earn.col.company':'Company','earn.col.report_date':'Report Date',
+    'earn.col.eps_est':'EPS Est.','earn.col.fy_end':'FY End',
+    'cb.title':'Central Bank News','cb.live':'LIVE','cb.no_news':'No central bank news found',
+    'cb.items_meta':'items · Fed · ECB · BOE · BOJ · IMF',
+    'sc.tab.stocks':'📈 Stocks','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Crypto',
+    'sc.tab.commodities':'🛢 Commodities','sc.tab.multi':'🌐 Multi-Asset',
+    'sc.loading_select':'Select a screener above','sc.loading_data':'Loading data…',
+    'sc.preparing':'Preparing data…','sc.first_load_hint':'This takes ~30s on first load. Retrying automatically…',
+    'sc.no_match':'No results match your filters.','sc.failed':'⚠ Failed to load screener.',
+    'sc.btn_apply':'Apply','sc.btn_reset':'Reset','sc.search_ph':'Search symbol, name…',
+    'sc.results':'results','sc.updated':'Updated',
+    'sc.tt_company_card':'View company card','sc.tt_open_chart':'Open chart',
+    'sc.view.overview':'Overview','sc.view.performance':'Performance',
+    'sc.view.valuation':'Valuation','sc.view.dividends':'Dividends',
+    'sc.fl.all':'All','sc.fl.min':'min','sc.fl.max':'max',
+    'sc.fl.sector':'Sector','sc.fl.cap':'Cap','sc.fl.chg':'Chg%','sc.fl.rsi':'RSI',
+    'sc.fl.pe':'P/E','sc.fl.beta':'Beta','sc.fl.div':'Div%','sc.fl.roe':'ROE%',
+    'sc.fl.analyst':'Analyst','sc.fl.signal':'Signal','sc.fl.group':'Group',
+    'sc.fl.period':'Period','sc.fl.type':'Type',
+    'sc.strength_title':'Currency Strength (24h)',
   },
   pt:{
     'logo.sub':'Inteligência de Mercado em Tempo Real',
@@ -1768,6 +1819,55 @@ const STRINGS = {
     'settings.update_pwd':'Atualizar Palavra-passe',
     'settings.subscription':'Subscrição','settings.current_plan':'Plano Atual',
     'settings.upgrade':'Mudar para Pro →','settings.manage':'Gerir Subscrição',
+    'load.fx':'⟳ A carregar câmbios...','load.crypto':'⟳ A carregar mercados cripto...',
+    'load.commodities':'⟳ A carregar matérias-primas...','load.macro':'⟳ A carregar indicadores macro...',
+    'load.sentiment':'⟳ A carregar sentimento...','load.earnings':'⟳ A carregar calendário de resultados...',
+    'load.cb':'⟳ A carregar notícias dos bancos centrais...','load.company':'⟳ A carregar dados da empresa...',
+    'load.error':'Erro',
+    'common.refresh_every':'Atualiza automaticamente a cada','common.real_time':'Tempo real',
+    'common.updates_hourly':'Atualiza a cada hora','common.no_data':'Sem dados disponíveis',
+    'common.tap_chart':'📈 Toca para ver gráfico','common.failed':'Falha ao carregar',
+    'crypto.market_cap':'Cap. de Mercado','crypto.volume_24h':'Volume 24h','crypto.btc_dom':'Dom. BTC',
+    'crypto.eth_dom':'Dom. ETH','crypto.chg_24h':'Var 24h','crypto.active_coins':'Moedas Ativas',
+    'crypto.coins_meta':'moedas','crypto.mcap_label':'CapM',
+    'comm.precious':'🥇 Metais Preciosos','comm.energy':'⛽ Energia','comm.industrial':'🏭 Industriais e Agrícolas',
+    'comm.col.commodity':'Matéria-Prima','comm.col.price':'Preço','comm.col.unit':'Unidade',
+    'comm.col.chg_24h':'Var 24h','comm.col.ccy':'Moeda','comm.col.date':'Data',
+    'macro.market_indicators':'Indicadores de Mercado','macro.rates_yields':'Taxas de Juro e Yields',
+    'macro.commodities':'Matérias-Primas','macro.economic_data':'Dados Económicos','macro.other':'Outros Indicadores',
+    'macro.as_of':'Em','macro.vs_prev':'vs ant','macro.no_data':'Sem dados macro disponíveis',
+    'sent.fg_title':'Índice de Medo & Ganância','sent.fg_unavailable':'Dados de Medo & Ganância indisponíveis',
+    'sent.fg_fear':'Medo','sent.fg_neutral':'Neutro','sent.fg_greed':'Ganância',
+    'sent.fg_last20':'Últimas 20 leituras','sent.fg_updated':'Atualiza a cada 5 min',
+    'sent.cot_title':'CFTC COT — Posições Líquidas Não Comerciais',
+    'sent.cot_loading_title':'A carregar dados COT...',
+    'sent.cot_loading_sub':'Commitments of Traders — publicado todas as <strong>sextas após o fecho</strong>.',
+    'sent.cot.currency':'Moeda','sent.cot.long':'Longo','sent.cot.short':'Curto','sent.cot.net':'Líquido',
+    'sent.cot.trend':'Tendência','sent.cot.date':'Data',
+    'sent.cot_footer':'CFTC Commitments of Traders · Publicado semanalmente (sexta)',
+    'earn.search_ph':'Pesquisar ticker ou empresa…','earn.loading_meta':'A carregar…',
+    'earn.companies_3m':'empresas · horizonte 3 meses','earn.no_results':'Sem resultados para',
+    'earn.results_for':'resultados para','earn.no_upcoming':'Sem próximos resultados','earn.today':'📅 HOJE —',
+    'earn.col.ticker':'Ticker','earn.col.company':'Empresa','earn.col.report_date':'Data Relatório',
+    'earn.col.eps_est':'EPS Est.','earn.col.fy_end':'Fim Ano',
+    'cb.title':'Notícias dos Bancos Centrais','cb.live':'AO VIVO','cb.no_news':'Sem notícias dos bancos centrais',
+    'cb.items_meta':'itens · Fed · BCE · BOE · BOJ · FMI',
+    'sc.tab.stocks':'📈 Ações','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Cripto',
+    'sc.tab.commodities':'🛢 Matérias-Primas','sc.tab.multi':'🌐 Multi-Ativo',
+    'sc.loading_select':'Seleciona um screener acima','sc.loading_data':'A carregar dados…',
+    'sc.preparing':'A preparar dados…','sc.first_load_hint':'Demora ~30s no primeiro carregamento. A tentar novamente…',
+    'sc.no_match':'Nenhum resultado corresponde aos filtros.','sc.failed':'⚠ Falha ao carregar screener.',
+    'sc.btn_apply':'Aplicar','sc.btn_reset':'Repor','sc.search_ph':'Pesquisar símbolo, nome…',
+    'sc.results':'resultados','sc.updated':'Atualizado',
+    'sc.tt_company_card':'Ver ficha da empresa','sc.tt_open_chart':'Abrir gráfico',
+    'sc.view.overview':'Visão Geral','sc.view.performance':'Desempenho',
+    'sc.view.valuation':'Avaliação','sc.view.dividends':'Dividendos',
+    'sc.fl.all':'Todos','sc.fl.min':'mín','sc.fl.max':'máx',
+    'sc.fl.sector':'Setor','sc.fl.cap':'Cap','sc.fl.chg':'Var%','sc.fl.rsi':'RSI',
+    'sc.fl.pe':'P/E','sc.fl.beta':'Beta','sc.fl.div':'Div%','sc.fl.roe':'ROE%',
+    'sc.fl.analyst':'Analista','sc.fl.signal':'Sinal','sc.fl.group':'Grupo',
+    'sc.fl.period':'Período','sc.fl.type':'Tipo',
+    'sc.strength_title':'Força das Moedas (24h)',
   },
   es:{
     'logo.sub':'Inteligencia de Mercado en Tiempo Real',
@@ -1838,6 +1938,55 @@ const STRINGS = {
     'settings.update_pwd':'Actualizar Contraseña',
     'settings.subscription':'Suscripción','settings.current_plan':'Plan Actual',
     'settings.upgrade':'Pásate a Pro →','settings.manage':'Gestionar Suscripción',
+    'load.fx':'⟳ Cargando tipos FX...','load.crypto':'⟳ Cargando mercados cripto...',
+    'load.commodities':'⟳ Cargando materias primas...','load.macro':'⟳ Cargando indicadores macro...',
+    'load.sentiment':'⟳ Cargando sentimiento...','load.earnings':'⟳ Cargando calendario de resultados...',
+    'load.cb':'⟳ Cargando noticias de bancos centrales...','load.company':'⟳ Cargando datos de la empresa...',
+    'load.error':'Error',
+    'common.refresh_every':'Se actualiza automáticamente cada','common.real_time':'Tiempo real',
+    'common.updates_hourly':'Se actualiza cada hora','common.no_data':'Sin datos disponibles',
+    'common.tap_chart':'📈 Toca para ver gráfico','common.failed':'Error al cargar',
+    'crypto.market_cap':'Cap. de Mercado','crypto.volume_24h':'Volumen 24h','crypto.btc_dom':'Dom. BTC',
+    'crypto.eth_dom':'Dom. ETH','crypto.chg_24h':'Var 24h','crypto.active_coins':'Monedas Activas',
+    'crypto.coins_meta':'monedas','crypto.mcap_label':'CapM',
+    'comm.precious':'🥇 Metales Preciosos','comm.energy':'⛽ Energía','comm.industrial':'🏭 Industriales y Agrícolas',
+    'comm.col.commodity':'Materia Prima','comm.col.price':'Precio','comm.col.unit':'Unidad',
+    'comm.col.chg_24h':'Var 24h','comm.col.ccy':'Moneda','comm.col.date':'Fecha',
+    'macro.market_indicators':'Indicadores de Mercado','macro.rates_yields':'Tipos de Interés y Rendimientos',
+    'macro.commodities':'Materias Primas','macro.economic_data':'Datos Económicos','macro.other':'Otros Indicadores',
+    'macro.as_of':'A','macro.vs_prev':'vs ant','macro.no_data':'Sin datos macro disponibles',
+    'sent.fg_title':'Índice de Miedo y Codicia','sent.fg_unavailable':'Datos de Miedo y Codicia no disponibles',
+    'sent.fg_fear':'Miedo','sent.fg_neutral':'Neutral','sent.fg_greed':'Codicia',
+    'sent.fg_last20':'Últimas 20 lecturas','sent.fg_updated':'Se actualiza cada 5 min',
+    'sent.cot_title':'CFTC COT — Posiciones Netas No Comerciales',
+    'sent.cot_loading_title':'Cargando datos COT...',
+    'sent.cot_loading_sub':'Commitments of Traders — publicado todos los <strong>viernes tras el cierre</strong>.',
+    'sent.cot.currency':'Moneda','sent.cot.long':'Largo','sent.cot.short':'Corto','sent.cot.net':'Neto',
+    'sent.cot.trend':'Tendencia','sent.cot.date':'Fecha',
+    'sent.cot_footer':'CFTC Commitments of Traders · Publicado semanalmente (viernes)',
+    'earn.search_ph':'Buscar ticker o empresa…','earn.loading_meta':'Cargando…',
+    'earn.companies_3m':'empresas · horizonte 3 meses','earn.no_results':'Sin resultados para',
+    'earn.results_for':'resultados para','earn.no_upcoming':'Sin próximos resultados','earn.today':'📅 HOY —',
+    'earn.col.ticker':'Ticker','earn.col.company':'Empresa','earn.col.report_date':'Fecha Informe',
+    'earn.col.eps_est':'EPS Est.','earn.col.fy_end':'Fin AF',
+    'cb.title':'Noticias de Bancos Centrales','cb.live':'EN VIVO','cb.no_news':'Sin noticias de bancos centrales',
+    'cb.items_meta':'ítems · Fed · BCE · BOE · BOJ · FMI',
+    'sc.tab.stocks':'📈 Acciones','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Cripto',
+    'sc.tab.commodities':'🛢 Materias Primas','sc.tab.multi':'🌐 Multi-Activo',
+    'sc.loading_select':'Selecciona un screener arriba','sc.loading_data':'Cargando datos…',
+    'sc.preparing':'Preparando datos…','sc.first_load_hint':'Tarda ~30s en la primera carga. Reintentando…',
+    'sc.no_match':'Ningún resultado coincide con los filtros.','sc.failed':'⚠ Error al cargar el screener.',
+    'sc.btn_apply':'Aplicar','sc.btn_reset':'Restablecer','sc.search_ph':'Buscar símbolo, nombre…',
+    'sc.results':'resultados','sc.updated':'Actualizado',
+    'sc.tt_company_card':'Ver ficha de empresa','sc.tt_open_chart':'Abrir gráfico',
+    'sc.view.overview':'Resumen','sc.view.performance':'Rendimiento',
+    'sc.view.valuation':'Valoración','sc.view.dividends':'Dividendos',
+    'sc.fl.all':'Todos','sc.fl.min':'mín','sc.fl.max':'máx',
+    'sc.fl.sector':'Sector','sc.fl.cap':'Cap','sc.fl.chg':'Var%','sc.fl.rsi':'RSI',
+    'sc.fl.pe':'P/E','sc.fl.beta':'Beta','sc.fl.div':'Div%','sc.fl.roe':'ROE%',
+    'sc.fl.analyst':'Analista','sc.fl.signal':'Señal','sc.fl.group':'Grupo',
+    'sc.fl.period':'Período','sc.fl.type':'Tipo',
+    'sc.strength_title':'Fuerza de Divisas (24h)',
   },
   fr:{
     'logo.sub':'Intelligence de Marché en Temps Réel',
@@ -1908,6 +2057,55 @@ const STRINGS = {
     'settings.update_pwd':'Mettre à Jour le Mot de Passe',
     'settings.subscription':'Abonnement','settings.current_plan':'Plan Actuel',
     'settings.upgrade':'Passer à Pro →','settings.manage':'Gérer l\u2019Abonnement',
+    'load.fx':'⟳ Chargement des taux FX...','load.crypto':'⟳ Chargement des marchés crypto...',
+    'load.commodities':'⟳ Chargement des matières premières...','load.macro':'⟳ Chargement des indicateurs macro...',
+    'load.sentiment':'⟳ Chargement du sentiment...','load.earnings':'⟳ Chargement du calendrier des résultats...',
+    'load.cb':'⟳ Chargement des actualités banques centrales...','load.company':'⟳ Chargement des données société...',
+    'load.error':'Erreur',
+    'common.refresh_every':'Actualisation automatique toutes les','common.real_time':'Temps réel',
+    'common.updates_hourly':'Mise à jour toutes les heures','common.no_data':'Aucune donnée disponible',
+    'common.tap_chart':'📈 Toucher pour voir le graphique','common.failed':'Échec du chargement',
+    'crypto.market_cap':'Capitalisation','crypto.volume_24h':'Volume 24h','crypto.btc_dom':'Dom. BTC',
+    'crypto.eth_dom':'Dom. ETH','crypto.chg_24h':'Var 24h','crypto.active_coins':'Cryptos Actives',
+    'crypto.coins_meta':'cryptos','crypto.mcap_label':'CapM',
+    'comm.precious':'🥇 Métaux Précieux','comm.energy':'⛽ Énergie','comm.industrial':'🏭 Industriels & Agricoles',
+    'comm.col.commodity':'Matière Première','comm.col.price':'Prix','comm.col.unit':'Unité',
+    'comm.col.chg_24h':'Var 24h','comm.col.ccy':'Devise','comm.col.date':'Date',
+    'macro.market_indicators':'Indicateurs de Marché','macro.rates_yields':'Taux d\u2019Intérêt & Rendements',
+    'macro.commodities':'Matières Premières','macro.economic_data':'Données Économiques','macro.other':'Autres Indicateurs',
+    'macro.as_of':'Au','macro.vs_prev':'vs préc','macro.no_data':'Aucune donnée macro disponible',
+    'sent.fg_title':'Indice Peur & Avidité','sent.fg_unavailable':'Données Peur & Avidité indisponibles',
+    'sent.fg_fear':'Peur','sent.fg_neutral':'Neutre','sent.fg_greed':'Avidité',
+    'sent.fg_last20':'20 dernières lectures','sent.fg_updated':'Mise à jour toutes les 5 min',
+    'sent.cot_title':'CFTC COT — Positions Nettes Non Commerciales',
+    'sent.cot_loading_title':'Chargement des données COT...',
+    'sent.cot_loading_sub':'Commitments of Traders — publié chaque <strong>vendredi après clôture</strong>.',
+    'sent.cot.currency':'Devise','sent.cot.long':'Long','sent.cot.short':'Court','sent.cot.net':'Net',
+    'sent.cot.trend':'Tendance','sent.cot.date':'Date',
+    'sent.cot_footer':'CFTC Commitments of Traders · Publié hebdomadairement (vendredi)',
+    'earn.search_ph':'Rechercher ticker ou société…','earn.loading_meta':'Chargement…',
+    'earn.companies_3m':'sociétés · horizon 3 mois','earn.no_results':'Aucun résultat pour',
+    'earn.results_for':'résultats pour','earn.no_upcoming':'Aucun résultat à venir','earn.today':'📅 AUJOURD\u2019HUI —',
+    'earn.col.ticker':'Ticker','earn.col.company':'Société','earn.col.report_date':'Date Publication',
+    'earn.col.eps_est':'BPA Est.','earn.col.fy_end':'Fin Ex.',
+    'cb.title':'Actualités Banques Centrales','cb.live':'DIRECT','cb.no_news':'Aucune actualité de banque centrale',
+    'cb.items_meta':'éléments · Fed · BCE · BOE · BOJ · FMI',
+    'sc.tab.stocks':'📈 Actions','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Crypto',
+    'sc.tab.commodities':'🛢 Matières Premières','sc.tab.multi':'🌐 Multi-Actifs',
+    'sc.loading_select':'Sélectionnez un screener ci-dessus','sc.loading_data':'Chargement des données…',
+    'sc.preparing':'Préparation des données…','sc.first_load_hint':'~30s lors du premier chargement. Nouvelle tentative…',
+    'sc.no_match':'Aucun résultat ne correspond aux filtres.','sc.failed':'⚠ Échec du chargement du screener.',
+    'sc.btn_apply':'Appliquer','sc.btn_reset':'Réinitialiser','sc.search_ph':'Rechercher symbole, nom…',
+    'sc.results':'résultats','sc.updated':'Mis à jour',
+    'sc.tt_company_card':'Voir la fiche société','sc.tt_open_chart':'Ouvrir le graphique',
+    'sc.view.overview':'Aperçu','sc.view.performance':'Performance',
+    'sc.view.valuation':'Valorisation','sc.view.dividends':'Dividendes',
+    'sc.fl.all':'Tous','sc.fl.min':'min','sc.fl.max':'max',
+    'sc.fl.sector':'Secteur','sc.fl.cap':'Cap','sc.fl.chg':'Var%','sc.fl.rsi':'RSI',
+    'sc.fl.pe':'P/E','sc.fl.beta':'Bêta','sc.fl.div':'Div%','sc.fl.roe':'ROE%',
+    'sc.fl.analyst':'Analyste','sc.fl.signal':'Signal','sc.fl.group':'Groupe',
+    'sc.fl.period':'Période','sc.fl.type':'Type',
+    'sc.strength_title':'Force des Devises (24h)',
   },
   de:{
     'logo.sub':'Markt-Intelligenz in Echtzeit',
@@ -1978,6 +2176,55 @@ const STRINGS = {
     'settings.update_pwd':'Passwort aktualisieren',
     'settings.subscription':'Abonnement','settings.current_plan':'Aktueller Plan',
     'settings.upgrade':'Auf Pro upgraden →','settings.manage':'Abonnement verwalten',
+    'load.fx':'⟳ FX-Kurse werden geladen...','load.crypto':'⟳ Krypto-Märkte werden geladen...',
+    'load.commodities':'⟳ Rohstoffpreise werden geladen...','load.macro':'⟳ Makro-Indikatoren werden geladen...',
+    'load.sentiment':'⟳ Sentiment wird geladen...','load.earnings':'⟳ Ergebniskalender wird geladen...',
+    'load.cb':'⟳ Zentralbank-Nachrichten werden geladen...','load.company':'⟳ Unternehmensdaten werden geladen...',
+    'load.error':'Fehler',
+    'common.refresh_every':'Automatische Aktualisierung alle','common.real_time':'Echtzeit',
+    'common.updates_hourly':'Stündliche Aktualisierung','common.no_data':'Keine Daten verfügbar',
+    'common.tap_chart':'📈 Tippen für Chart','common.failed':'Laden fehlgeschlagen',
+    'crypto.market_cap':'Marktkapitalisierung','crypto.volume_24h':'Volumen 24h','crypto.btc_dom':'BTC Dom.',
+    'crypto.eth_dom':'ETH Dom.','crypto.chg_24h':'Änd 24h','crypto.active_coins':'Aktive Coins',
+    'crypto.coins_meta':'Coins','crypto.mcap_label':'MCap',
+    'comm.precious':'🥇 Edelmetalle','comm.energy':'⛽ Energie','comm.industrial':'🏭 Industrie & Agrar',
+    'comm.col.commodity':'Rohstoff','comm.col.price':'Preis','comm.col.unit':'Einheit',
+    'comm.col.chg_24h':'Änd 24h','comm.col.ccy':'Währung','comm.col.date':'Datum',
+    'macro.market_indicators':'Marktindikatoren','macro.rates_yields':'Zinsen & Renditen',
+    'macro.commodities':'Rohstoffe','macro.economic_data':'Wirtschaftsdaten','macro.other':'Weitere Indikatoren',
+    'macro.as_of':'Stand','macro.vs_prev':'vs. vorher','macro.no_data':'Keine Makro-Daten verfügbar',
+    'sent.fg_title':'Angst & Gier Index','sent.fg_unavailable':'Angst & Gier Daten nicht verfügbar',
+    'sent.fg_fear':'Angst','sent.fg_neutral':'Neutral','sent.fg_greed':'Gier',
+    'sent.fg_last20':'Letzte 20 Werte','sent.fg_updated':'Aktualisierung alle 5 Min',
+    'sent.cot_title':'CFTC COT — Nicht-kommerzielle Nettopositionen',
+    'sent.cot_loading_title':'COT-Daten werden geladen...',
+    'sent.cot_loading_sub':'Commitments of Traders — wird jeden <strong>Freitag nach Börsenschluss</strong> veröffentlicht.',
+    'sent.cot.currency':'Währung','sent.cot.long':'Long','sent.cot.short':'Short','sent.cot.net':'Netto',
+    'sent.cot.trend':'Trend','sent.cot.date':'Datum',
+    'sent.cot_footer':'CFTC Commitments of Traders · Wöchentlich (Freitag) veröffentlicht',
+    'earn.search_ph':'Ticker oder Firmenname suchen…','earn.loading_meta':'Laden…',
+    'earn.companies_3m':'Unternehmen · 3-Monats-Horizont','earn.no_results':'Keine Ergebnisse für',
+    'earn.results_for':'Ergebnisse für','earn.no_upcoming':'Keine bevorstehenden Ergebnisse','earn.today':'📅 HEUTE —',
+    'earn.col.ticker':'Ticker','earn.col.company':'Unternehmen','earn.col.report_date':'Berichtsdatum',
+    'earn.col.eps_est':'EPS Schätz.','earn.col.fy_end':'GJ-Ende',
+    'cb.title':'Zentralbank-Nachrichten','cb.live':'LIVE','cb.no_news':'Keine Zentralbank-Nachrichten gefunden',
+    'cb.items_meta':'Einträge · Fed · EZB · BOE · BOJ · IWF',
+    'sc.tab.stocks':'📈 Aktien','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Krypto',
+    'sc.tab.commodities':'🛢 Rohstoffe','sc.tab.multi':'🌐 Multi-Asset',
+    'sc.loading_select':'Wähle einen Screener oben','sc.loading_data':'Daten werden geladen…',
+    'sc.preparing':'Daten werden vorbereitet…','sc.first_load_hint':'Erste Ladung dauert ~30s. Erneuter Versuch…',
+    'sc.no_match':'Keine Ergebnisse entsprechen den Filtern.','sc.failed':'⚠ Screener-Ladung fehlgeschlagen.',
+    'sc.btn_apply':'Anwenden','sc.btn_reset':'Zurücksetzen','sc.search_ph':'Symbol, Name suchen…',
+    'sc.results':'Ergebnisse','sc.updated':'Aktualisiert',
+    'sc.tt_company_card':'Unternehmenskarte ansehen','sc.tt_open_chart':'Chart öffnen',
+    'sc.view.overview':'Übersicht','sc.view.performance':'Performance',
+    'sc.view.valuation':'Bewertung','sc.view.dividends':'Dividenden',
+    'sc.fl.all':'Alle','sc.fl.min':'min','sc.fl.max':'max',
+    'sc.fl.sector':'Sektor','sc.fl.cap':'Cap','sc.fl.chg':'Änd%','sc.fl.rsi':'RSI',
+    'sc.fl.pe':'P/E','sc.fl.beta':'Beta','sc.fl.div':'Div%','sc.fl.roe':'ROE%',
+    'sc.fl.analyst':'Analyst','sc.fl.signal':'Signal','sc.fl.group':'Gruppe',
+    'sc.fl.period':'Zeitraum','sc.fl.type':'Typ',
+    'sc.strength_title':'Währungsstärke (24h)',
   },
   it:{
     'logo.sub':'Intelligence di Mercato in Tempo Reale',
@@ -2048,6 +2295,55 @@ const STRINGS = {
     'settings.update_pwd':'Aggiorna Password',
     'settings.subscription':'Abbonamento','settings.current_plan':'Piano Attuale',
     'settings.upgrade':'Passa a Pro →','settings.manage':'Gestisci Abbonamento',
+    'load.fx':'⟳ Caricamento tassi FX...','load.crypto':'⟳ Caricamento mercati cripto...',
+    'load.commodities':'⟳ Caricamento materie prime...','load.macro':'⟳ Caricamento indicatori macro...',
+    'load.sentiment':'⟳ Caricamento sentiment...','load.earnings':'⟳ Caricamento calendario risultati...',
+    'load.cb':'⟳ Caricamento notizie banche centrali...','load.company':'⟳ Caricamento dati azienda...',
+    'load.error':'Errore',
+    'common.refresh_every':'Si aggiorna automaticamente ogni','common.real_time':'Tempo reale',
+    'common.updates_hourly':'Aggiornamento ogni ora','common.no_data':'Nessun dato disponibile',
+    'common.tap_chart':'📈 Tocca per il grafico','common.failed':'Caricamento fallito',
+    'crypto.market_cap':'Cap. di Mercato','crypto.volume_24h':'Volume 24h','crypto.btc_dom':'Dom. BTC',
+    'crypto.eth_dom':'Dom. ETH','crypto.chg_24h':'Var 24h','crypto.active_coins':'Monete Attive',
+    'crypto.coins_meta':'monete','crypto.mcap_label':'CapM',
+    'comm.precious':'🥇 Metalli Preziosi','comm.energy':'⛽ Energia','comm.industrial':'🏭 Industriali e Agricole',
+    'comm.col.commodity':'Materia Prima','comm.col.price':'Prezzo','comm.col.unit':'Unità',
+    'comm.col.chg_24h':'Var 24h','comm.col.ccy':'Valuta','comm.col.date':'Data',
+    'macro.market_indicators':'Indicatori di Mercato','macro.rates_yields':'Tassi e Rendimenti',
+    'macro.commodities':'Materie Prime','macro.economic_data':'Dati Economici','macro.other':'Altri Indicatori',
+    'macro.as_of':'Al','macro.vs_prev':'vs prec','macro.no_data':'Nessun dato macro disponibile',
+    'sent.fg_title':'Indice Paura e Avidità','sent.fg_unavailable':'Dati Paura e Avidità non disponibili',
+    'sent.fg_fear':'Paura','sent.fg_neutral':'Neutro','sent.fg_greed':'Avidità',
+    'sent.fg_last20':'Ultime 20 letture','sent.fg_updated':'Aggiornamento ogni 5 min',
+    'sent.cot_title':'CFTC COT — Posizioni Nette Non Commerciali',
+    'sent.cot_loading_title':'Caricamento dati COT...',
+    'sent.cot_loading_sub':'Commitments of Traders — pubblicato ogni <strong>venerdì dopo la chiusura</strong>.',
+    'sent.cot.currency':'Valuta','sent.cot.long':'Long','sent.cot.short':'Short','sent.cot.net':'Netto',
+    'sent.cot.trend':'Tendenza','sent.cot.date':'Data',
+    'sent.cot_footer':'CFTC Commitments of Traders · Pubblicato settimanalmente (venerdì)',
+    'earn.search_ph':'Cerca ticker o nome azienda…','earn.loading_meta':'Caricamento…',
+    'earn.companies_3m':'aziende · orizzonte 3 mesi','earn.no_results':'Nessun risultato per',
+    'earn.results_for':'risultati per','earn.no_upcoming':'Nessun risultato in arrivo','earn.today':'📅 OGGI —',
+    'earn.col.ticker':'Ticker','earn.col.company':'Azienda','earn.col.report_date':'Data Report',
+    'earn.col.eps_est':'EPS Stim.','earn.col.fy_end':'Fine AF',
+    'cb.title':'Notizie Banche Centrali','cb.live':'LIVE','cb.no_news':'Nessuna notizia banche centrali',
+    'cb.items_meta':'elementi · Fed · BCE · BOE · BOJ · FMI',
+    'sc.tab.stocks':'📈 Azioni','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Cripto',
+    'sc.tab.commodities':'🛢 Materie Prime','sc.tab.multi':'🌐 Multi-Asset',
+    'sc.loading_select':'Seleziona uno screener sopra','sc.loading_data':'Caricamento dati…',
+    'sc.preparing':'Preparazione dati…','sc.first_load_hint':'~30s al primo caricamento. Nuovo tentativo…',
+    'sc.no_match':'Nessun risultato corrisponde ai filtri.','sc.failed':'⚠ Caricamento screener fallito.',
+    'sc.btn_apply':'Applica','sc.btn_reset':'Reimposta','sc.search_ph':'Cerca simbolo, nome…',
+    'sc.results':'risultati','sc.updated':'Aggiornato',
+    'sc.tt_company_card':'Vedi scheda azienda','sc.tt_open_chart':'Apri grafico',
+    'sc.view.overview':'Panoramica','sc.view.performance':'Performance',
+    'sc.view.valuation':'Valutazione','sc.view.dividends':'Dividendi',
+    'sc.fl.all':'Tutti','sc.fl.min':'min','sc.fl.max':'max',
+    'sc.fl.sector':'Settore','sc.fl.cap':'Cap','sc.fl.chg':'Var%','sc.fl.rsi':'RSI',
+    'sc.fl.pe':'P/E','sc.fl.beta':'Beta','sc.fl.div':'Div%','sc.fl.roe':'ROE%',
+    'sc.fl.analyst':'Analista','sc.fl.signal':'Segnale','sc.fl.group':'Gruppo',
+    'sc.fl.period':'Periodo','sc.fl.type':'Tipo',
+    'sc.strength_title':'Forza delle Valute (24h)',
   }
 };
 function t(key) { return (STRINGS[lang]||STRINGS.en)[key]||key; }
@@ -3162,6 +3458,11 @@ function _updateLangPickerUI(l){
   document.querySelectorAll('.lang-opt').forEach(b => {
     b.classList.toggle('active', b.getAttribute('data-lang') === l);
   });
+  // Re-parse with Twemoji so flag emojis render on Windows (which lacks native flag support)
+  if (window.twemoji) {
+    const p = document.getElementById('langPicker');
+    if (p) twemoji.parse(p, {folder:'svg', ext:'.svg'});
+  }
 }
 function toggleLangMenu(e){
   if (e) e.stopPropagation();
@@ -3174,6 +3475,32 @@ function setLang(l) {
   _updateLangPickerUI(l);
   const m = document.getElementById('langMenu'); if (m) m.hidden = true;
   applyTranslations(); renderNews(); renderCalendar();
+  // Invalidate dynamic tab caches and re-render the active one with new language
+  try { fxLoaded = false; } catch {}
+  try { cryptoLoaded = false; } catch {}
+  try { commLoaded = false; } catch {}
+  try { macroLoaded = false; } catch {}
+  try { sentimentLoaded = false; } catch {}
+  try { earningsLoaded = false; } catch {}
+  try { cbLoaded = false; } catch {}
+  try {
+    if (typeof _scLoaded === 'object') {
+      Object.keys(_scLoaded).forEach(k => _scLoaded[k] = false);
+    }
+  } catch {}
+  try {
+    if (currentTab === 'fx')           loadFxRates(true);
+    else if (currentTab === 'crypto')  loadCrypto(true);
+    else if (currentTab === 'commodities') loadCommodities(true);
+    else if (currentTab === 'macro')   loadMacro(true);
+    else if (currentTab === 'sentiment') loadSentiment(true);
+    else if (currentTab === 'earnings') loadEarnings();
+    else if (currentTab === 'centralbanks') loadCentralBanks(true);
+    else if (currentTab === 'screener' && typeof _scType !== 'undefined') {
+      if (typeof _renderScFilters === 'function') _renderScFilters(_scType);
+      if (typeof loadScreener === 'function') loadScreener(_scType, true);
+    }
+  } catch (e) { console.warn('[setLang] re-render error', e); }
   _savePrefs({lang: l});
 }
 // Close language menu on outside click
@@ -3744,7 +4071,7 @@ async function loadFxRates(force=false){
   if(fxLoaded&&!force) return;
   const body=document.getElementById('fx-body');
   if(!body) return;
-  if(!fxLoaded) body.innerHTML='<div class="data-loading">⟳ Loading FX rates...</div>';
+  if(!fxLoaded) body.innerHTML=`<div class="data-loading">${t('load.fx')}</div>`;
   try{
     const r=await fetch(BACKEND_URL+'/fx-rates?base=USD&symbols=EUR,GBP,JPY,CHF,AUD,CAD,NZD,SEK,NOK,DKK,HKD,SGD,CNY,BRL,MXN,ZAR,TRY,INR,KRW,PLN,HUF,CZK');
     const data=await r.json();
@@ -3769,7 +4096,7 @@ async function loadFxRates(force=false){
       return `<div class="fx-card" onclick="openChart('${chartKey}')" title="Open ${from}/${to} chart">
         <div class="fx-card-pair"><span class="fx-card-flags">${f1}${f2}</span>${from}/${to}</div>
         <div class="fx-card-rate">${display}</div>
-        <div class="fx-card-chart">📈 Tap to chart</div>
+        <div class="fx-card-chart">${t('common.tap_chart')}</div>
       </div>`;
     }
 
@@ -3779,14 +4106,14 @@ async function loadFxRates(force=false){
       if(!cards) continue;
       html+=`<div class="fx-section-header">${label}</div><div class="fx-grid">${cards}</div>`;
     }
-    html+=`<div class="data-source-footer">${date} · ${FX_PAIRS.length} pairs · Auto-refreshes every ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
+    html+=`<div class="data-source-footer">${date} · ${FX_PAIRS.length} pairs · ${t('common.refresh_every')} ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
 
     body.innerHTML=html;
     fxLoaded=true;
     if(fxRefreshTimer) clearInterval(fxRefreshTimer);
     fxRefreshTimer=setInterval(()=>{if(currentTab==='fx') loadFxRates(true);}, IS_PRO ? 15000 : 60000);
   } catch(e){
-    document.getElementById('fx-body').innerHTML=`<div class="data-loading">Error: ${e.message}</div>`;
+    document.getElementById('fx-body').innerHTML=`<div class="data-loading">${t('load.error')}: ${e.message}</div>`;
     fxLoaded=false;
   }
 }
@@ -3798,7 +4125,7 @@ async function loadCrypto(force=false){
   if(cryptoLoaded&&!force) return;
   const body=document.getElementById('crypto-body');
   if(!body) return;
-  if(!cryptoLoaded) body.innerHTML='<div class="data-loading">⟳ Loading crypto markets...</div>';
+  if(!cryptoLoaded) body.innerHTML=`<div class="data-loading">${t('load.crypto')}</div>`;
   try{
     const [cr,gr]=await Promise.all([
       fetch(BACKEND_URL+'/crypto?coins=bitcoin,ethereum,tether,binancecoin,ripple,solana,usd-coin,staked-ether,dogecoin,cardano,avalanche-2,shiba-inu,tron,chainlink,polkadot,bitcoin-cash,near,litecoin,uniswap,dai,internet-computer,fetch-ai,hedera-hashgraph,stellar,monero,ethereum-classic,okb,aptos,arbitrum,filecoin,vechain,the-open-network,injective-protocol,optimism,cosmos,render-token,kaspa,sei-network,celestia,sui,pepe,worldcoin-wld,stacks,pyth-network,jito,bonk,jupiter-exchange-solana,wormhole,ethena,ondo-finance'),
@@ -3808,12 +4135,12 @@ async function loadCrypto(force=false){
     const coins=cd.coins||[];
 
     const globalBar=`<div class="crypto-global-bar">
-      <div class="crypto-global-item"><div class="crypto-global-label">Market Cap</div><div class="crypto-global-value">${fmtMoney(gd.total_market_cap_usd)}</div></div>
-      <div class="crypto-global-item"><div class="crypto-global-label">24h Volume</div><div class="crypto-global-value">${fmtMoney(gd.total_volume_usd)}</div></div>
-      <div class="crypto-global-item"><div class="crypto-global-label">BTC Dom.</div><div class="crypto-global-value" style="color:var(--accent)">${gd.btc_dominance?gd.btc_dominance.toFixed(1)+'%':'—'}</div></div>
-      <div class="crypto-global-item"><div class="crypto-global-label">ETH Dom.</div><div class="crypto-global-value" style="color:#a78bfa">${gd.eth_dominance?gd.eth_dominance.toFixed(1)+'%':'—'}</div></div>
-      <div class="crypto-global-item"><div class="crypto-global-label">24h Chg</div><div class="crypto-global-value ${(gd.market_cap_change_24h||0)>=0?'pos':'neg'}">${fmtPct(gd.market_cap_change_24h)}</div></div>
-      <div class="crypto-global-item" style="margin-left:auto;"><div class="crypto-global-label">Active Coins</div><div class="crypto-global-value">${(gd.active_coins||0).toLocaleString()}</div></div>
+      <div class="crypto-global-item"><div class="crypto-global-label">${t('crypto.market_cap')}</div><div class="crypto-global-value">${fmtMoney(gd.total_market_cap_usd)}</div></div>
+      <div class="crypto-global-item"><div class="crypto-global-label">${t('crypto.volume_24h')}</div><div class="crypto-global-value">${fmtMoney(gd.total_volume_usd)}</div></div>
+      <div class="crypto-global-item"><div class="crypto-global-label">${t('crypto.btc_dom')}</div><div class="crypto-global-value" style="color:var(--accent)">${gd.btc_dominance?gd.btc_dominance.toFixed(1)+'%':'—'}</div></div>
+      <div class="crypto-global-item"><div class="crypto-global-label">${t('crypto.eth_dom')}</div><div class="crypto-global-value" style="color:#a78bfa">${gd.eth_dominance?gd.eth_dominance.toFixed(1)+'%':'—'}</div></div>
+      <div class="crypto-global-item"><div class="crypto-global-label">${t('crypto.chg_24h')}</div><div class="crypto-global-value ${(gd.market_cap_change_24h||0)>=0?'pos':'neg'}">${fmtPct(gd.market_cap_change_24h)}</div></div>
+      <div class="crypto-global-item" style="margin-left:auto;"><div class="crypto-global-label">${t('crypto.active_coins')}</div><div class="crypto-global-value">${(gd.active_coins||0).toLocaleString()}</div></div>
     </div>`;
 
     const cards=coins.map(c=>{
@@ -3835,16 +4162,16 @@ async function loadCrypto(force=false){
           <div class="crypto-card-change ${(ch24||0)>=0?'pos':'neg'}">${fmtPct(ch24)} 24h</div>
           ${chg7Html}
         </div>
-        <div class="crypto-card-cap">MCap: ${fmtMoney(c.market_cap)}</div>
+        <div class="crypto-card-cap">${t('crypto.mcap_label')}: ${fmtMoney(c.market_cap)}</div>
       </div>`;
     }).join('');
 
-    body.innerHTML=globalBar+`<div class="crypto-grid">${cards}</div><div class="data-source-footer">${coins.length} coins · Auto-refreshes every ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
+    body.innerHTML=globalBar+`<div class="crypto-grid">${cards}</div><div class="data-source-footer">${coins.length} ${t('crypto.coins_meta')} · ${t('common.refresh_every')} ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
     cryptoLoaded=true;
     if(cryptoTimer) clearInterval(cryptoTimer);
     cryptoTimer=setInterval(()=>{if(currentTab==='crypto') loadCrypto(true);}, IS_PRO ? 15000 : 60000);
   } catch(e){
-    document.getElementById('crypto-body').innerHTML=`<div class="data-loading">Error: ${e.message}</div>`;
+    document.getElementById('crypto-body').innerHTML=`<div class="data-loading">${t('load.error')}: ${e.message}</div>`;
     cryptoLoaded=false;
   }
 }
@@ -3856,16 +4183,16 @@ async function loadCommodities(force=false){
   if(commLoaded&&!force) return;
   const body=document.getElementById('commodities-body');
   if(!body) return;
-  if(!commLoaded) body.innerHTML='<div class="data-loading">⟳ Loading commodity prices...</div>';
+  if(!commLoaded) body.innerHTML=`<div class="data-loading">${t('load.commodities')}</div>`;
   try{
     const r=await fetch(BACKEND_URL+'/commodities');
     const data=await r.json();
     const comms=data.commodities||{};
 
     const GROUPS={
-      '🥇 Precious Metals':['gold','silver','platinum','palladium'],
-      '⛽ Energy':['oil_wti','oil_brent','natural_gas'],
-      '🏭 Industrial & Agricultural':['copper','wheat','corn','soybeans','coffee','cocoa','sugar','lumber'],
+      [t('comm.precious')]:['gold','silver','platinum','palladium'],
+      [t('comm.energy')]:['oil_wti','oil_brent','natural_gas'],
+      [t('comm.industrial')]:['copper','wheat','corn','soybeans','coffee','cocoa','sugar','lumber'],
     };
 
     let html='';
@@ -3882,16 +4209,16 @@ async function loadCommodities(force=false){
         return `<tr style="cursor:pointer;" onclick="openChart('${chartK}')" title="Open ${c.label||k} chart"><td class="sym">${c.label||k}</td><td class="num" style="font-size:14px;font-weight:700;">${pStr}</td><td class="dim">${c.unit||''}</td><td class="num ${cls}">${chgStr}</td><td class="dim">${c.currency||'USD'}</td><td class="dim" style="color:var(--accent);font-size:9px;letter-spacing:0.06em;">📈 CHART</td></tr>`;
       }).join('');
       html+=`<div class="data-section"><div class="data-section-title">${gname}</div>
-        <table class="data-table"><thead><tr><th>Commodity</th><th>Price</th><th>Unit</th><th>24h Chg</th><th>CCY</th><th>Date</th></tr></thead>
+        <table class="data-table"><thead><tr><th>${t('comm.col.commodity')}</th><th>${t('comm.col.price')}</th><th>${t('comm.col.unit')}</th><th>${t('comm.col.chg_24h')}</th><th>${t('comm.col.ccy')}</th><th>${t('comm.col.date')}</th></tr></thead>
         <tbody>${rows}</tbody></table></div>`;
     }
-    html+=`<div class="data-source-footer">Real-time · Auto-refreshes every ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
+    html+=`<div class="data-source-footer">${t('common.real_time')} · ${t('common.refresh_every')} ${IS_PRO ? '15s ⚡ Pro' : '60s'}</div>`;
     body.innerHTML=html;
     commLoaded=true;
     if(commTimer) clearInterval(commTimer);
     commTimer=setInterval(()=>{if(currentTab==='commodities') loadCommodities(true);}, IS_PRO ? 15000 : 60000);
   } catch(e){
-    document.getElementById('commodities-body').innerHTML=`<div class="data-loading">Error: ${e.message}</div>`;
+    document.getElementById('commodities-body').innerHTML=`<div class="data-loading">${t('load.error')}: ${e.message}</div>`;
     commLoaded=false;
   }
 }
@@ -3903,7 +4230,7 @@ async function loadMacro(force=false){
   if(macroLoaded&&!force) return;
   const body=document.getElementById('macro-body');
   if(!body) return;
-  body.innerHTML='<div class="data-loading">⟳ Loading macro indicators...</div>';
+  body.innerHTML=`<div class="data-loading">${t('load.macro')}</div>`;
   try{
     const r=await fetch(BACKEND_URL+'/macro?series=fed_rate,cpi_us,cpi_yoy,unemployment,10y_yield,2y_yield,30y_yield,vix,dxy,eur_rate,uk_rate,jp_rate,gdp_us,gdp_eu,gdp_cn,gdp_jp,gdp_uk,m2,oil_wti,gold,trade_balance,pce,retail_sales');
     const data=await r.json();
@@ -3941,10 +4268,10 @@ async function loadMacro(force=false){
 
     // Group order for display
     const MACRO_GROUPS = [
-      { label:'Market Indicators', keys:['vix','dxy','spx','nasdaq'] },
-      { label:'Interest Rates & Yields', keys:['2y_yield','5y_yield','10y_yield','30y_yield','fed_rate','eur_rate','uk_rate','jp_rate'] },
-      { label:'Commodities', keys:['gold','oil_wti','brent','natgas','copper'] },
-      { label:'Economic Data', keys:['gdp_us','gdp_eu','gdp_cn','gdp_jp','gdp_uk','cpi_us','cpi_eu','cpi_yoy','unemp_us','unemployment','m2','pce','retail_sales','trade_balance'] },
+      { label:t('macro.market_indicators'), keys:['vix','dxy','spx','nasdaq'] },
+      { label:t('macro.rates_yields'), keys:['2y_yield','5y_yield','10y_yield','30y_yield','fed_rate','eur_rate','uk_rate','jp_rate'] },
+      { label:t('macro.commodities'), keys:['gold','oil_wti','brent','natgas','copper'] },
+      { label:t('macro.economic_data'), keys:['gdp_us','gdp_eu','gdp_cn','gdp_jp','gdp_uk','cpi_us','cpi_eu','cpi_yoy','unemp_us','unemployment','m2','pce','retail_sales','trade_balance'] },
     ];
     // Build ordered list: grouped first, then any remaining
     const orderedKeys = [];
@@ -3960,14 +4287,14 @@ async function loadMacro(force=false){
       if(val!=null&&prev!=null){
         const diff=val-prev;
         const cls=diff>=0?'pos':'neg';
-        chgHtml=`<div class="macro-card-change ${cls}">${diff>=0?'+':''}${fmtMacroDiff(diff,ind.unit)} vs prev</div>`;
+        chgHtml=`<div class="macro-card-change ${cls}">${diff>=0?'+':''}${fmtMacroDiff(diff,ind.unit)} ${t('macro.vs_prev')}</div>`;
       }
       return `<div class="macro-card">
         <div class="macro-card-label">${ind.label||k}</div>
         <div class="macro-card-value">${valStr}</div>
         <div class="macro-card-unit">${ind.unit||''}</div>
         ${chgHtml}
-        <div class="macro-card-date">As of ${ind.date||'—'}</div>
+        <div class="macro-card-date">${t('macro.as_of')} ${ind.date||'—'}</div>
       </div>`;
     }
 
@@ -3980,15 +4307,15 @@ async function loadMacro(force=false){
     });
     // Any remaining indicators not in groups
     const remaining = Object.keys(inds).filter(k=>!rendered.has(k)).map(macroCard).join('');
-    if(remaining) html += `<div class="fx-section-header">Other Indicators</div><div class="macro-grid" style="padding:0 20px 8px;">${remaining}</div>`;
-    html += `<div class="data-source-footer">Updates every hour</div>`;
+    if(remaining) html += `<div class="fx-section-header">${t('macro.other')}</div><div class="macro-grid" style="padding:0 20px 8px;">${remaining}</div>`;
+    html += `<div class="data-source-footer">${t('common.updates_hourly')}</div>`;
 
-    body.innerHTML = html || '<div class="data-loading">No macro data available</div>';
+    body.innerHTML = html || `<div class="data-loading">${t('macro.no_data')}</div>`;
     macroLoaded=true;
     if(macroTimer) clearInterval(macroTimer);
     macroTimer=setInterval(()=>{if(currentTab==='macro') loadMacro(true);}, IS_PRO ? 15000 : 120000);
   } catch(e){
-    document.getElementById('macro-body').innerHTML=`<div class="data-loading">Error: ${e.message}</div>`;
+    document.getElementById('macro-body').innerHTML=`<div class="data-loading">${t('load.error')}: ${e.message}</div>`;
     macroLoaded=false;
   }
 }
@@ -4008,7 +4335,7 @@ async function loadSentiment(force=false){
   if(sentimentLoaded&&!force) return;
   const body=document.getElementById('sentiment-body');
   if(!body) return;
-  body.innerHTML='<div class="data-loading">⟳ Loading sentiment data...</div>';
+  body.innerHTML=`<div class="data-loading">${t('load.sentiment')}</div>`;
   try{
     const r=await fetch(BACKEND_URL+'/sentiment');
     const data=await r.json();
@@ -4016,7 +4343,7 @@ async function loadSentiment(force=false){
     const cot=data.cot;
 
     // Fear & Greed panel
-    let fgHtml='<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:40px 0;">Fear &amp; Greed data unavailable</div>';
+    let fgHtml=`<div style="color:var(--text-muted);font-size:13px;text-align:center;padding:40px 0;">${t('sent.fg_unavailable')}</div>`;
     if(fg){
       const score=Math.round(fg.score||0);
       const col=fgColor(score);
@@ -4028,25 +4355,25 @@ async function loadSentiment(force=false){
         return `<div class="fg-spark-bar" style="height:${h}px;background:${c};opacity:0.7;" title="${s.date}: ${s.score}"></div>`;
       }).join('');
       fgHtml=`
-        <div class="fg-section-title">Fear &amp; Greed Index</div>
+        <div class="fg-section-title">${t('sent.fg_title')}</div>
         <div class="fg-score-wrap">
           <div class="fg-score" style="color:${col};">${score}</div>
           <div class="fg-rating" style="color:${col};">${(fg.rating||'').toUpperCase()}</div>
         </div>
         <div class="fg-bar-wrap"><div class="fg-bar-marker" style="left:${score}%;"></div></div>
-        <div class="fg-bar-labels"><span style="color:#ff3b5c">Fear</span><span>Neutral</span><span style="color:#10b981">Greed</span></div>
+        <div class="fg-bar-labels"><span style="color:#ff3b5c">${t('sent.fg_fear')}</span><span>${t('sent.fg_neutral')}</span><span style="color:#10b981">${t('sent.fg_greed')}</span></div>
         <div class="fg-sparkline-wrap">
-          <div class="fg-sparkline-title">Last 20 readings</div>
+          <div class="fg-sparkline-title">${t('sent.fg_last20')}</div>
           <div class="fg-spark-bar-wrap">${sparkBars}</div>
         </div>
-        <div style="font-size:10px;color:#4a6070;margin-top:14px;">Updated every 5 min</div>`;
+        <div style="font-size:10px;color:#4a6070;margin-top:14px;">${t('sent.fg_updated')}</div>`;
     }
 
     // COT panel
     let cotHtml=`<div style="text-align:center;padding:32px 20px;">
       <div style="font-size:28px;margin-bottom:12px;">📊</div>
-      <div style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px;">COT Data Loading...</div>
-      <div style="font-size:11px;color:#4a6070;line-height:1.7;">Commitments of Traders — published every <strong style="color:var(--text-muted)">Friday after market close</strong>.</div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px;">${t('sent.cot_loading_title')}</div>
+      <div style="font-size:11px;color:#4a6070;line-height:1.7;">${t('sent.cot_loading_sub')}</div>
     </div>`;
     if(cot&&Object.keys(cot).length){
       const rows=Object.entries(cot).map(([cur,row])=>{
@@ -4065,12 +4392,12 @@ async function loadSentiment(force=false){
         </tr>`;
       }).join('');
       cotHtml=`
-        <div class="cot-section-title">CFTC COT — Non-Commercial Net Positions</div>
+        <div class="cot-section-title">${t('sent.cot_title')}</div>
         <table class="data-table">
-          <thead><tr><th>Currency</th><th>Long</th><th>Short</th><th>Net</th><th>Trend</th><th>Date</th></tr></thead>
+          <thead><tr><th>${t('sent.cot.currency')}</th><th>${t('sent.cot.long')}</th><th>${t('sent.cot.short')}</th><th>${t('sent.cot.net')}</th><th>${t('sent.cot.trend')}</th><th>${t('sent.cot.date')}</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
-        <div style="font-size:10px;color:#4a6070;margin-top:8px;">CFTC Commitments of Traders · Published weekly (Friday)</div>`;
+        <div style="font-size:10px;color:#4a6070;margin-top:8px;">${t('sent.cot_footer')}</div>`;
     }
 
     body.innerHTML=`<div class="sentiment-layout">
@@ -4081,7 +4408,7 @@ async function loadSentiment(force=false){
     if(sentimentTimer) clearInterval(sentimentTimer);
     sentimentTimer=setInterval(()=>{if(currentTab==='sentiment') loadSentiment(true);}, IS_PRO ? 15000 : 300000);
   } catch(e){
-    document.getElementById('sentiment-body').innerHTML=`<div class="data-loading">Error: ${e.message}</div>`;
+    document.getElementById('sentiment-body').innerHTML=`<div class="data-loading">${t('load.error')}: ${e.message}</div>`;
     sentimentLoaded=false;
   }
 }
@@ -4117,14 +4444,14 @@ function _renderEarnings(query){
       (e.name||'').toLowerCase().includes(q)
     );
     if(!filtered.length){
-      results.innerHTML=`<div class="data-loading" style="min-height:120px;">No results for "<strong>${query}</strong>"</div>`;
+      results.innerHTML=`<div class="data-loading" style="min-height:120px;">${t('earn.no_results')} "<strong>${query}</strong>"</div>`;
       return;
     }
     const rows=filtered.slice(0,100).map(_earningsRow).join('');
     results.innerHTML=`<div class="data-section">
-      <div class="data-section-title" style="color:var(--accent);">🔍 ${filtered.length} result${filtered.length!==1?'s':''} for "${query}"</div>
+      <div class="data-section-title" style="color:var(--accent);">🔍 ${filtered.length} ${t('earn.results_for')} "${query}"</div>
       <table class="data-table">
-        <thead><tr><th>Ticker</th><th>Company</th><th>Report Date</th><th>EPS Est.</th><th>FY End</th><th></th></tr></thead>
+        <thead><tr><th>${t('earn.col.ticker')}</th><th>${t('earn.col.company')}</th><th>${t('earn.col.report_date')}</th><th>${t('earn.col.eps_est')}</th><th>${t('earn.col.fy_end')}</th><th></th></tr></thead>
         <tbody>${rows}</tbody>
       </table></div>`;
   } else {
@@ -4143,15 +4470,15 @@ function _renderEarnings(query){
       const rows=items.slice(0,30).map(_earningsRow).join('');
       html+=`<div class="data-section">
         <div class="data-section-title" style="${isToday?'color:var(--accent);':''}">
-          ${isToday?'📅 TODAY — ':''}${date}${items.length>30?' · '+items.length+' companies':''}
+          ${isToday?t('earn.today')+' ':''}${date}${items.length>30?' · '+items.length+' '+t('earn.companies_3m').split(' ')[0]:''}
         </div>
         <table class="data-table">
-          <thead><tr><th>Ticker</th><th>Company</th><th>Report Date</th><th>EPS Est.</th><th>FY End</th><th></th></tr></thead>
+          <thead><tr><th>${t('earn.col.ticker')}</th><th>${t('earn.col.company')}</th><th>${t('earn.col.report_date')}</th><th>${t('earn.col.eps_est')}</th><th>${t('earn.col.fy_end')}</th><th></th></tr></thead>
           <tbody>${rows}</tbody>
         </table></div>`;
       sections++;
     }
-    results.innerHTML=html||'<div class="data-loading">No upcoming earnings data</div>';
+    results.innerHTML=html||`<div class="data-loading">${t('earn.no_upcoming')}</div>`;
   }
 }
 
@@ -4166,13 +4493,13 @@ async function loadEarnings(){
       <div class="earnings-search-wrap">
         <span class="earnings-search-icon">🔍</span>
         <input class="earnings-search-input" id="earnings-search-input"
-          type="text" placeholder="Search ticker or company name…"
+          type="text" placeholder="${t('earn.search_ph')}"
           oninput="_renderEarnings(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
         <button class="earnings-search-clear" id="earnings-search-clear" onclick="document.getElementById('earnings-search-input').value='';_renderEarnings('');this.style.display='none';">✕</button>
       </div>
-      <div class="earnings-search-meta" id="earnings-search-meta">Loading…</div>
+      <div class="earnings-search-meta" id="earnings-search-meta">${t('earn.loading_meta')}</div>
     </div>
-    <div id="earnings-results" style="padding-bottom:40px;"><div class="data-loading">⟳ Loading earnings calendar...</div></div>`;
+    <div id="earnings-results" style="padding-bottom:40px;"><div class="data-loading">${t('load.earnings')}</div></div>`;
 
   // Show/hide clear button while typing
   const inp=document.getElementById('earnings-search-input');
@@ -4185,11 +4512,11 @@ async function loadEarnings(){
     _earningsAll=data.earnings||[];
     _earningsCount=data.count||0;
     document.getElementById('earnings-search-meta').textContent=
-      `${_earningsCount} companies · 3-month horizon`;
+      `${_earningsCount} ${t('earn.companies_3m')}`;
     _renderEarnings('');
     earningsLoaded=true;
   } catch(e){
-    document.getElementById('earnings-results').innerHTML=`<div class="data-loading">Error: ${e.message}</div>`;
+    document.getElementById('earnings-results').innerHTML=`<div class="data-loading">${t('load.error')}: ${e.message}</div>`;
   }
 }
 
@@ -4200,7 +4527,7 @@ async function loadCentralBanks(force=false){
   if(cbLoaded&&!force) return;
   const body=document.getElementById('centralbanks-body');
   if(!body) return;
-  body.innerHTML='<div class="data-loading">⟳ Loading central bank news...</div>';
+  body.innerHTML=`<div class="data-loading">${t('load.cb')}</div>`;
   try{
     const token=localStorage.getItem('tnt_token');
     const hdrs=token?{'Authorization':'Bearer '+token}:{};
@@ -4208,7 +4535,7 @@ async function loadCentralBanks(force=false){
     const data=await r.json();
     const items=data.items||[];
     if(!items.length){
-      body.innerHTML='<div class="data-loading">No central bank news found</div>';
+      body.innerHTML=`<div class="data-loading">${t('cb.no_news')}</div>`;
       return;
     }
     const rows=items.map(item=>{
@@ -4223,15 +4550,15 @@ async function loadCentralBanks(force=false){
     }).join('');
     body.innerHTML=`
       <div class="feed-header" style="flex-shrink:0;">
-        <div class="feed-title">Central Bank News <span class="feed-title-badge">LIVE</span></div>
-        <div class="feed-count">${items.length} items · Fed · ECB · BOE · BOJ · IMF</div>
+        <div class="feed-title">${t('cb.title')} <span class="feed-title-badge">${t('cb.live')}</span></div>
+        <div class="feed-count">${items.length} ${t('cb.items_meta')}</div>
       </div>
       <div class="feed-inner">${rows}</div>`;
     cbLoaded=true;
     if(cbTimer) clearInterval(cbTimer);
     cbTimer=setInterval(()=>{if(currentTab==='centralbanks') loadCentralBanks(true);}, IS_PRO ? 15000 : 120000);
   } catch(e){
-    document.getElementById('centralbanks-body').innerHTML=`<div class="data-loading">Error: ${e.message}</div>`;
+    document.getElementById('centralbanks-body').innerHTML=`<div class="data-loading">${t('load.error')}: ${e.message}</div>`;
     cbLoaded=false;
   }
 }
@@ -4248,7 +4575,7 @@ async function openCompanyDetail(ticker, name){
   document.getElementById('company-modal-ticker').textContent = ticker;
   document.getElementById('company-modal-name').textContent = name||'';
   document.getElementById('company-modal-sector').textContent = '';
-  body.innerHTML = '<div class="data-loading">⟳ Loading company data...</div>';
+  body.innerHTML = `<div class="data-loading">${t('load.company')}</div>`;
   overlay.classList.add('open');
 
   try {
@@ -4449,6 +4776,11 @@ function _savePrefs(patch) {
 // ─── Init ────────────────────────────────────────────────────────
 updateSquawkBtn();
 applyTranslations();
+// Parse flag emojis in the language picker through Twemoji so they render on Windows
+if (window.twemoji) {
+  const _lp = document.getElementById('langPicker');
+  if (_lp) twemoji.parse(_lp, {folder:'svg', ext:'.svg'});
+}
 // Re-render after translations are applied (bootFromCache runs before applyTranslations,
 // so this ensures counts/feed are correct after translation strings are ready)
 if (allNews.length > 0) { try { updateCounts(allNews); renderNews(); } catch(e) { console.error('[init] renderNews error:', e); } document.getElementById('totalCount').textContent = allNews.length; }
@@ -5054,7 +5386,7 @@ async function loadScreener(type, force) {
   if (!IS_PRO) { showUpgrade('Market Screener'); return; }
   if (_scLoaded[type] && !force) return;
   const content = document.getElementById('sc-content');
-  content.innerHTML = `<div class="sc-loading"><div class="sc-spinner"></div><span>Loading ${type} data…</span></div>`;
+  content.innerHTML = `<div class="sc-loading"><div class="sc-spinner"></div><span>${t('sc.loading_data')}</span></div>`;
   const params = _buildScParams(type);
   const url = BACKEND_URL + '/screener/' + type + (params ? '?' + params : '');
   try {
@@ -5066,8 +5398,8 @@ async function loadScreener(type, force) {
     if (json.loading || ((!json.data || json.data.length === 0) && !json.updated)) {
       content.innerHTML = `<div class="sc-loading">
         <div class="sc-spinner"></div>
-        <span style="color:#b8cce0;">Preparing ${type} data…</span>
-        <span style="font-size:10px;color:#8a9bb0;">This takes ~30s on first load. Retrying automatically…</span>
+        <span style="color:#b8cce0;">${t('sc.preparing')}</span>
+        <span style="font-size:10px;color:#8a9bb0;">${t('sc.first_load_hint')}</span>
       </div>`;
       setTimeout(() => loadScreener(type, true), 2500);
       return;
@@ -5085,9 +5417,9 @@ async function loadScreener(type, force) {
     _scSort = {col: null, dir: 'desc'};
     _renderScTable(type, _scData);
     const mc = document.getElementById('sc-meta-count');
-    if (mc) mc.textContent = _scData.length + ' results';
+    if (mc) mc.textContent = _scData.length + ' ' + t('sc.results');
     const mt = document.getElementById('sc-meta-ts');
-    if (mt && json.updated) mt.textContent = 'Updated ' + _fmtScTs(json.updated);
+    if (mt && json.updated) mt.textContent = t('sc.updated') + ' ' + _fmtScTs(json.updated);
     // Auto-refresh
     if (_scTimer) clearInterval(_scTimer);
     const ttl = {stocks:900, forex:120, crypto:300, commodities:300, multi:300}[type] || 300;
@@ -5109,13 +5441,13 @@ async function loadScreener(type, force) {
             clearInterval(_pollPerf);
             _scData = fresh; _scCache['stocks'] = fresh;
             _renderScTable('stocks', _scData);
-            if (mt && pj.updated) mt.textContent = 'Updated ' + _fmtScTs(pj.updated);
+            if (mt && pj.updated) mt.textContent = t('sc.updated') + ' ' + _fmtScTs(pj.updated);
           }
         } catch {}
       }, 20000);
     }
   } catch(e) {
-    content.innerHTML = `<div class="sc-loading" style="color:#ff4d6a;">⚠ Failed to load screener.<br><small style="color:#8a9bb0;">${e.message}</small></div>`;
+    content.innerHTML = `<div class="sc-loading" style="color:#ff4d6a;">${t('sc.failed')}<br><small style="color:#8a9bb0;">${e.message}</small></div>`;
   }
 }
 
@@ -5153,93 +5485,94 @@ function _renderScFilters(type) {
   if (type === 'stocks') {
     // View tabs row
     h += `<div class="sc-view-tabs">
-      <button class="sc-vtab${_scStocksView==='overview'?' active':''}" onclick="switchStocksView('overview')">Overview</button>
-      <button class="sc-vtab${_scStocksView==='performance'?' active':''}" onclick="switchStocksView('performance')">Performance</button>
-      <button class="sc-vtab${_scStocksView==='valuation'?' active':''}" onclick="switchStocksView('valuation')">Valuation</button>
-      <button class="sc-vtab${_scStocksView==='dividends'?' active':''}" onclick="switchStocksView('dividends')">Dividends</button>
+      <button class="sc-vtab${_scStocksView==='overview'?' active':''}" onclick="switchStocksView('overview')">${t('sc.view.overview')}</button>
+      <button class="sc-vtab${_scStocksView==='performance'?' active':''}" onclick="switchStocksView('performance')">${t('sc.view.performance')}</button>
+      <button class="sc-vtab${_scStocksView==='valuation'?' active':''}" onclick="switchStocksView('valuation')">${t('sc.view.valuation')}</button>
+      <button class="sc-vtab${_scStocksView==='dividends'?' active':''}" onclick="switchStocksView('dividends')">${t('sc.view.dividends')}</button>
     </div>`;
   }
   h += '<div class="sc-filters">';
+  const _ALL = t('sc.fl.all'), _MIN = t('sc.fl.min'), _MAX = t('sc.fl.max');
   if (type === 'stocks') {
-    h += `<div class="sc-fg"><span class="sc-fl">Sector</span>
-      <select class="sc-sel" id="sc-f-sector"><option value="">All</option>
+    h += `<div class="sc-fg"><span class="sc-fl">${t('sc.fl.sector')}</span>
+      <select class="sc-sel" id="sc-f-sector"><option value="">${_ALL}</option>
       <option>Technology</option><option>Financials</option><option>Healthcare</option>
       <option>Consumer Discretionary</option><option>Communication Services</option>
       <option>Industrials</option><option>Consumer Staples</option><option>Energy</option>
       <option>Materials</option><option>Utilities</option><option>Real Estate</option>
       </select></div>
-      <div class="sc-fg"><span class="sc-fl">Cap</span>
-      <select class="sc-sel" id="sc-f-cap"><option value="">All</option>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.cap')}</span>
+      <select class="sc-sel" id="sc-f-cap"><option value="">${_ALL}</option>
       <option>Mega</option><option>Large</option><option>Mid</option><option>Small</option><option>Micro</option>
       </select></div>
-      <div class="sc-fg"><span class="sc-fl">Chg%</span>
-      <input class="sc-inp" id="sc-f-minchg" placeholder="min" type="number" step="0.1">
-      <input class="sc-inp" id="sc-f-maxchg" placeholder="max" type="number" step="0.1"></div>
-      <div class="sc-fg"><span class="sc-fl">RSI</span>
-      <input class="sc-inp" id="sc-f-minrsi" placeholder="min" type="number" min="0" max="100">
-      <input class="sc-inp" id="sc-f-maxrsi" placeholder="max" type="number" min="0" max="100"></div>
-      <div class="sc-fg"><span class="sc-fl">P/E</span>
-      <input class="sc-inp" id="sc-f-minpe" placeholder="min" type="number">
-      <input class="sc-inp" id="sc-f-maxpe" placeholder="max" type="number"></div>
-      <div class="sc-fg"><span class="sc-fl">Beta</span>
-      <input class="sc-inp" id="sc-f-minbeta" placeholder="min" type="number" step="0.1">
-      <input class="sc-inp" id="sc-f-maxbeta" placeholder="max" type="number" step="0.1"></div>
-      <div class="sc-fg"><span class="sc-fl">Div%</span>
-      <input class="sc-inp" id="sc-f-mindiv" placeholder="min" type="number" step="0.1">
-      <input class="sc-inp" id="sc-f-maxdiv" placeholder="max" type="number" step="0.1"></div>
-      <div class="sc-fg"><span class="sc-fl">ROE%</span>
-      <input class="sc-inp" id="sc-f-minroe" placeholder="min" type="number" step="1">
-      <input class="sc-inp" id="sc-f-maxroe" placeholder="max" type="number" step="1"></div>
-      <div class="sc-fg"><span class="sc-fl">Analyst</span>
-      <select class="sc-sel" id="sc-f-maxanalyst"><option value="">All</option>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.chg')}</span>
+      <input class="sc-inp" id="sc-f-minchg" placeholder="${_MIN}" type="number" step="0.1">
+      <input class="sc-inp" id="sc-f-maxchg" placeholder="${_MAX}" type="number" step="0.1"></div>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.rsi')}</span>
+      <input class="sc-inp" id="sc-f-minrsi" placeholder="${_MIN}" type="number" min="0" max="100">
+      <input class="sc-inp" id="sc-f-maxrsi" placeholder="${_MAX}" type="number" min="0" max="100"></div>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.pe')}</span>
+      <input class="sc-inp" id="sc-f-minpe" placeholder="${_MIN}" type="number">
+      <input class="sc-inp" id="sc-f-maxpe" placeholder="${_MAX}" type="number"></div>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.beta')}</span>
+      <input class="sc-inp" id="sc-f-minbeta" placeholder="${_MIN}" type="number" step="0.1">
+      <input class="sc-inp" id="sc-f-maxbeta" placeholder="${_MAX}" type="number" step="0.1"></div>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.div')}</span>
+      <input class="sc-inp" id="sc-f-mindiv" placeholder="${_MIN}" type="number" step="0.1">
+      <input class="sc-inp" id="sc-f-maxdiv" placeholder="${_MAX}" type="number" step="0.1"></div>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.roe')}</span>
+      <input class="sc-inp" id="sc-f-minroe" placeholder="${_MIN}" type="number" step="1">
+      <input class="sc-inp" id="sc-f-maxroe" placeholder="${_MAX}" type="number" step="1"></div>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.analyst')}</span>
+      <select class="sc-sel" id="sc-f-maxanalyst"><option value="">${_ALL}</option>
       <option value="1.5">Strong Buy</option><option value="2.5">Buy+</option>
       <option value="3">Hold+</option><option value="4">Sell+</option></select></div>
-      <div class="sc-fg"><span class="sc-fl">Signal</span>
-      <select class="sc-sel" id="sc-f-signal"><option value="">All</option>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.signal')}</span>
+      <select class="sc-sel" id="sc-f-signal"><option value="">${_ALL}</option>
       <option>Oversold</option><option>Bullish</option><option>Neutral</option>
       <option>Bearish</option><option>Overbought</option></select></div>`;
   } else if (type === 'forex') {
-    h += `<div class="sc-fg"><span class="sc-fl">Group</span>
-      <select class="sc-sel" id="sc-f-grp"><option value="">All</option>
+    h += `<div class="sc-fg"><span class="sc-fl">${t('sc.fl.group')}</span>
+      <select class="sc-sel" id="sc-f-grp"><option value="">${_ALL}</option>
       <option>Majors</option><option>Crosses</option><option>EM</option></select></div>
-      <div class="sc-fg"><span class="sc-fl">Signal</span>
-      <select class="sc-sel" id="sc-f-signal"><option value="">All</option>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.signal')}</span>
+      <select class="sc-sel" id="sc-f-signal"><option value="">${_ALL}</option>
       <option>Oversold</option><option>Bullish</option><option>Neutral</option>
       <option>Bearish</option><option>Overbought</option></select></div>`;
   } else if (type === 'crypto') {
-    h += `<div class="sc-fg"><span class="sc-fl">Period</span>
+    h += `<div class="sc-fg"><span class="sc-fl">${t('sc.fl.period')}</span>
       <select class="sc-sel" id="sc-f-period">
       <option value="24h">24h</option><option value="1h">1h</option>
       <option value="7d">7D</option><option value="30d">30D</option></select></div>
-      <div class="sc-fg"><span class="sc-fl">Chg%</span>
-      <input class="sc-inp" id="sc-f-minchg" placeholder="min" type="number" step="0.1">
-      <input class="sc-inp" id="sc-f-maxchg" placeholder="max" type="number" step="0.1"></div>`;
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.chg')}</span>
+      <input class="sc-inp" id="sc-f-minchg" placeholder="${_MIN}" type="number" step="0.1">
+      <input class="sc-inp" id="sc-f-maxchg" placeholder="${_MAX}" type="number" step="0.1"></div>`;
   } else if (type === 'commodities') {
-    h += `<div class="sc-fg"><span class="sc-fl">Group</span>
-      <select class="sc-sel" id="sc-f-grp"><option value="">All</option>
+    h += `<div class="sc-fg"><span class="sc-fl">${t('sc.fl.group')}</span>
+      <select class="sc-sel" id="sc-f-grp"><option value="">${_ALL}</option>
       <option>Metals</option><option>Energy</option><option>Agriculture</option></select></div>
-      <div class="sc-fg"><span class="sc-fl">Signal</span>
-      <select class="sc-sel" id="sc-f-signal"><option value="">All</option>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.signal')}</span>
+      <select class="sc-sel" id="sc-f-signal"><option value="">${_ALL}</option>
       <option>Oversold</option><option>Bullish</option><option>Neutral</option>
       <option>Bearish</option><option>Overbought</option></select></div>`;
   } else if (type === 'multi') {
-    h += `<div class="sc-fg"><span class="sc-fl">Type</span>
-      <select class="sc-sel" id="sc-f-atype"><option value="">All</option>
+    h += `<div class="sc-fg"><span class="sc-fl">${t('sc.fl.type')}</span>
+      <select class="sc-sel" id="sc-f-atype"><option value="">${_ALL}</option>
       <option>Stock</option><option>Forex</option><option>Crypto</option><option>Commodity</option>
       </select></div>
-      <div class="sc-fg"><span class="sc-fl">Signal</span>
-      <select class="sc-sel" id="sc-f-signal"><option value="">All</option>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.signal')}</span>
+      <select class="sc-sel" id="sc-f-signal"><option value="">${_ALL}</option>
       <option>Oversold</option><option>Bullish</option><option>Neutral</option>
       <option>Bearish</option><option>Overbought</option></select></div>
-      <div class="sc-fg"><span class="sc-fl">Chg%</span>
-      <input class="sc-inp" id="sc-f-minchg" placeholder="min" type="number" step="0.1">
-      <input class="sc-inp" id="sc-f-maxchg" placeholder="max" type="number" step="0.1"></div>`;
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.chg')}</span>
+      <input class="sc-inp" id="sc-f-minchg" placeholder="${_MIN}" type="number" step="0.1">
+      <input class="sc-inp" id="sc-f-maxchg" placeholder="${_MAX}" type="number" step="0.1"></div>`;
   }
-  h += `<button class="sc-fbtn" onclick="_applyScFilters()">Apply</button>
-    <button class="sc-fbtn rst" onclick="_resetScFilters()">Reset</button>
+  h += `<button class="sc-fbtn" onclick="_applyScFilters()">${t('sc.btn_apply')}</button>
+    <button class="sc-fbtn rst" onclick="_resetScFilters()">${t('sc.btn_reset')}</button>
     <div class="sc-search-wrap">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00d4aa" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="sc-search" id="sc-search-input" placeholder="Search symbol, name…" type="text" oninput="_scSearchFilter(this.value)">
+      <input class="sc-search" id="sc-search-input" placeholder="${t('sc.search_ph')}" type="text" oninput="_scSearchFilter(this.value)">
     </div>
     <div class="sc-meta">
       <span id="sc-meta-count">—</span>
@@ -5270,13 +5603,13 @@ function _scSearchFilter(q) {
   const filtered = _scData.filter(d => fn(d).includes(term));
   _renderScTable(_scType, filtered);
   const mc = document.getElementById('sc-meta-count');
-  if (mc) mc.textContent = filtered.length + ' results';
+  if (mc) mc.textContent = filtered.length + ' ' + t('sc.results');
 }
 
 function _renderStrengthMeter(strength) {
   const sorted = Object.entries(strength).sort((a,b)=>b[1]-a[1]);
   const cols = {USD:'#60a5fa',EUR:'#34d399',GBP:'#a78bfa',JPY:'#fbbf24',CHF:'#f87171',AUD:'#fb923c',NZD:'#38bdf8',CAD:'#4ade80'};
-  let h = '<div class="sc-strength"><span class="sc-strength-lbl">Currency Strength (24h)</span>';
+  let h = `<div class="sc-strength"><span class="sc-strength-lbl">${t('sc.strength_title')}</span>`;
   for (const [cur, val] of sorted) {
     const col = cols[cur] || '#778';
     const pct = Math.max(4, val);
@@ -5292,7 +5625,7 @@ function _renderStrengthMeter(strength) {
 function _renderScTable(type, data) {
   const content = document.getElementById('sc-content');
   if (!data || data.length === 0) {
-    content.innerHTML = '<div class="sc-loading" style="color:#b8cce0;">No results match your filters.</div>';
+    content.innerHTML = `<div class="sc-loading" style="color:#b8cce0;">${t('sc.no_match')}</div>`;
     return;
   }
   let h = '<div class="sc-table-wrap"><table class="sc-table"><thead><tr>';
@@ -5346,7 +5679,7 @@ function _renderScTable(type, data) {
     else if (type === 'crypto') rowClick = `_scOpenChart('crypto','${d.symbol}','${(d.name||d.symbol).replace(/'/g,'')}')`;
     else if (type === 'commodities') rowClick = `_scOpenChart('commodities','${(d.ticker||d.name||'').replace(/'/g,'').replace(/\s/g,'')}','${(d.name||'').replace(/'/g,'')}')`;
     else if (type === 'multi')  rowClick = `_scOpenChart('${(d.asset_type||'stocks').toLowerCase()}','${(d.symbol||'').replace(/'/g,'')}','${(d.name||'').replace(/'/g,'')}')`;
-    const rowTitle = type === 'stocks' ? `View ${d.symbol} company card` : `Open chart for ${d.symbol||d.pair||d.name}`;
+    const rowTitle = type === 'stocks' ? t('sc.tt_company_card') : t('sc.tt_open_chart');
     h += `<tr onclick="${rowClick}" title="${rowTitle}" style="cursor:pointer">`;
     if (type === 'stocks') {
       const _sym = `<td><span class="sc-sym">${d.symbol}</span></td>
