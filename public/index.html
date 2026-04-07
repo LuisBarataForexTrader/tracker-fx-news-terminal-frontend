@@ -286,13 +286,16 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .mnf-done:hover{background:var(--accent);}
 
 /* ── Tracker FX Sidebar Ad ── */
-.sidebar-tfx-ad{margin:0 10px 2px;flex-shrink:0;}
-.sidebar-tfx-ad-inner{background:#22304A;border:1px solid rgba(107,92,231,0.3);border-radius:6px;overflow:hidden;position:relative;}
+@keyframes ad-glow-rotate { to { transform: rotate(360deg); } }
+.sidebar-tfx-ad{margin:0 10px 2px;flex-shrink:0;position:relative;overflow:hidden;border-radius:8px;padding:2px;}
+.sidebar-tfx-ad::before{content:'';position:absolute;width:200%;height:200%;top:-50%;left:-50%;background:conic-gradient(transparent 30%,rgba(107,92,231,.75) 42%,#9B8BFF 48%,#00d4ff 52%,#9B8BFF 58%,rgba(107,92,231,.75) 66%,transparent 76%);animation:ad-glow-rotate 4s linear infinite;z-index:0;pointer-events:none;}
+.sidebar-tfx-ad-inner{background:#22304A;border:1px solid rgba(107,92,231,0.3);border-radius:6px;overflow:hidden;position:relative;z-index:1;}
 .sidebar-tfx-ad-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#6B5CE7 40%,#9B8BFF 60%,transparent);}
 .tfx-ad-body-wrap{padding:12px 13px 11px;}
 .tfx-ad-eyebrow{font-size:7.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:7px;}
-.tfx-ad-logo-text{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1;margin-bottom:4px;}
-.tfx-ad-logo-text span{color:#9B8BFF;}
+.tfx-ad-logo-text{display:flex;align-items:baseline;gap:7px;line-height:1;margin-bottom:6px;}
+.tfx-word-tracker{font-size:11px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.65);}
+.tfx-word-fx{font-size:28px;font-weight:900;color:#9B8BFF;letter-spacing:-.02em;line-height:1;}
 .tfx-ad-tagline{font-size:10px;color:#fff;line-height:1.45;margin-bottom:10px;}
 .tfx-ad-stats{display:flex;gap:5px;margin-bottom:10px;}
 .tfx-ad-stat{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:5px 3px;text-align:center;}
@@ -541,14 +544,15 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .delay-banner{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid #6B5CE7;padding:9px 20px;flex-shrink:0;border-radius:3px;}
 .delay-banner-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
 .delay-banner-icon{font-size:14px;flex-shrink:0;}
-.delay-banner-text{font-size:11px;color:#374151;line-height:1.5;overflow:hidden;}
+.delay-banner-text{font-size:13px;color:#374151;line-height:1.5;overflow:hidden;}
 .delay-banner-text strong{color:#6B5CE7;font-weight:700;}
 .delay-banner-btn{flex-shrink:0;padding:6px 16px;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:none;transition:all .15s;border-radius:3px;white-space:nowrap;}
 .delay-banner-btn:hover{background:linear-gradient(135deg,#4A3ACC,#6B5BEF);}
 /* ── Inline feed ad ── */
-.feed-ad-card{cursor:pointer;transition:opacity .15s;position:relative;overflow:hidden;}
+.feed-ad-card{cursor:pointer;transition:opacity .15s;position:relative;overflow:hidden;padding:2px;}
+.feed-ad-card::before{content:'';position:absolute;width:200%;height:200%;top:-50%;left:-50%;background:conic-gradient(transparent 30%,rgba(107,92,231,.75) 42%,#9B8BFF 48%,#00d4ff 52%,#9B8BFF 58%,rgba(107,92,231,.75) 66%,transparent 76%);animation:ad-glow-rotate 4s linear infinite;z-index:0;pointer-events:none;}
 .feed-ad-card:hover{opacity:.92;}
-.feed-ad-banner{background:#22304A;border-top:2px solid #6B5CE7;border-bottom:1px solid rgba(107,92,231,.18);padding:11px 20px 11px 22px;display:flex;align-items:center;gap:14px;position:relative;}
+.feed-ad-banner{background:#22304A;border-top:2px solid #6B5CE7;border-bottom:1px solid rgba(107,92,231,.18);padding:11px 20px 11px 22px;display:flex;align-items:center;gap:14px;position:relative;z-index:1;}
 .feed-ad-brand{display:flex;flex-direction:column;gap:1px;flex-shrink:0;min-width:74px;}
 .feed-ad-brand-name{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.01em;line-height:1;}
 .feed-ad-brand-name span{color:#9B8BFF;}
@@ -1001,7 +1005,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       <div class="sidebar-tfx-ad-inner">
         <div class="tfx-ad-body-wrap">
           <div class="tfx-ad-eyebrow">Sponsored</div>
-          <div class="tfx-ad-logo-text">Tracker<span>FX</span></div>
+          <div class="tfx-ad-logo-text"><span class="tfx-word-tracker">TRACKER</span><span class="tfx-word-fx">FX</span></div>
           <div class="tfx-ad-tagline">The Master Key to<br>Profitable Trading</div>
           <div class="tfx-ad-stats">
             <div class="tfx-ad-stat">
@@ -1709,7 +1713,7 @@ const STRINGS = {
     'cal.high':'● High','cal.medium':'● Medium','cal.low':'● Low',
     'cal.all_assets':'All','cal.loading':'Loading calendar...','cal.no_events':'No events',
     'delay.notice':'Notice','delay.title':'2-min news delay',
-    'delay.sub':"You're on the <strong>Basic Plan</strong>. Pro users receive every headline in real time with zero delay, no ads, and live squawk.",
+    'delay.sub':"You're on the <strong>Basic Plan</strong>. Pro users receive every headline in real time with zero delay, no ads, and live squawk. Basic plan also uses substantially fewer news sources than Pro.",
     'delay.btn':'⚡ Upgrade to Pro',
     'status.status':'Status','status.connection':'Connection','status.updated':'Updated','status.items':'Items',
     'status.connecting':'Connecting...',
@@ -1853,7 +1857,7 @@ const STRINGS = {
     'cal.high':'● Alto','cal.medium':'● Médio','cal.low':'● Baixo',
     'cal.all_assets':'Todos','cal.loading':'A carregar...','cal.no_events':'Sem eventos',
     'delay.notice':'Aviso','delay.title':'Atraso de 2 min',
-    'delay.sub':"Estás no <strong>Plano Básico</strong>. Utilizadores Pro recebem todas as notícias em tempo real, sem atraso, sem anúncios e com squawk.",
+    'delay.sub':"Estás no <strong>Plano Básico</strong>. Utilizadores Pro recebem todas as notícias em tempo real, sem atraso, sem anúncios e com squawk. O Plano Básico utiliza substancialmente menos fontes de notícias do que o Pro.",
     'delay.btn':'⚡ Upgrade para Pro',
     'status.status':'Estado','status.connection':'Ligação','status.updated':'Atualizado','status.items':'Itens',
     'status.connecting':'A conectar...',
@@ -1997,7 +2001,7 @@ const STRINGS = {
     'cal.high':'● Alto','cal.medium':'● Medio','cal.low':'● Bajo',
     'cal.all_assets':'Todos','cal.loading':'Cargando calendario...','cal.no_events':'Sin eventos',
     'delay.notice':'Aviso','delay.title':'Retraso de 2 min',
-    'delay.sub':"Estás en el <strong>Plan Básico</strong>. Los usuarios Pro reciben cada titular en tiempo real, sin retraso, sin anuncios y con squawk en vivo.",
+    'delay.sub':"Estás en el <strong>Plan Básico</strong>. Los usuarios Pro reciben cada titular en tiempo real, sin retraso, sin anuncios y con squawk en vivo. El plan Básico utiliza sustancialmente menos fuentes de noticias que el Pro.",
     'delay.btn':'⚡ Pásate a Pro',
     'status.status':'Estado','status.connection':'Conexión','status.updated':'Actualizado','status.items':'Ítems',
     'status.connecting':'Conectando...',
@@ -2141,7 +2145,7 @@ const STRINGS = {
     'cal.high':'● Élevé','cal.medium':'● Moyen','cal.low':'● Faible',
     'cal.all_assets':'Tous','cal.loading':'Chargement du calendrier...','cal.no_events':'Aucun événement',
     'delay.notice':'Avis','delay.title':'Délai de 2 min',
-    'delay.sub':"Vous êtes sur le <strong>Plan Basique</strong>. Les utilisateurs Pro reçoivent chaque titre en temps réel, sans délai, sans publicité et avec squawk en direct.",
+    'delay.sub':"Vous êtes sur le <strong>Plan Basique</strong>. Les utilisateurs Pro reçoivent chaque titre en temps réel, sans délai, sans publicité et avec squawk en direct. Le plan Basique utilise beaucoup moins de sources d'actualités que le Pro.",
     'delay.btn':'⚡ Passer à Pro',
     'status.status':'Statut','status.connection':'Connexion','status.updated':'Mis à jour','status.items':'Éléments',
     'status.connecting':'Connexion...',
@@ -2285,7 +2289,7 @@ const STRINGS = {
     'cal.high':'● Hoch','cal.medium':'● Mittel','cal.low':'● Niedrig',
     'cal.all_assets':'Alle','cal.loading':'Kalender lädt...','cal.no_events':'Keine Ereignisse',
     'delay.notice':'Hinweis','delay.title':'2-Min Nachrichten-Verzögerung',
-    'delay.sub':"Du nutzt den <strong>Basis-Plan</strong>. Pro-Nutzer erhalten jede Schlagzeile in Echtzeit, ohne Verzögerung, ohne Werbung und mit Live-Squawk.",
+    'delay.sub':"Du nutzt den <strong>Basis-Plan</strong>. Pro-Nutzer erhalten jede Schlagzeile in Echtzeit, ohne Verzögerung, ohne Werbung und mit Live-Squawk. Der Basis-Plan verwendet deutlich weniger Nachrichtenquellen als der Pro-Plan.",
     'delay.btn':'⚡ Auf Pro upgraden',
     'status.status':'Status','status.connection':'Verbindung','status.updated':'Aktualisiert','status.items':'Einträge',
     'status.connecting':'Verbinden...',
@@ -2429,7 +2433,7 @@ const STRINGS = {
     'cal.high':'● Alto','cal.medium':'● Medio','cal.low':'● Basso',
     'cal.all_assets':'Tutti','cal.loading':'Caricamento calendario...','cal.no_events':'Nessun evento',
     'delay.notice':'Avviso','delay.title':'Ritardo di 2 min',
-    'delay.sub':"Sei sul <strong>Piano Base</strong>. Gli utenti Pro ricevono ogni titolo in tempo reale, senza ritardi, senza pubblicità e con squawk live.",
+    'delay.sub':"Sei sul <strong>Piano Base</strong>. Gli utenti Pro ricevono ogni titolo in tempo reale, senza ritardi, senza pubblicità e con squawk live. Il piano Base utilizza sostanzialmente meno fonti di notizie rispetto al Pro.",
     'delay.btn':'⚡ Passa a Pro',
     'status.status':'Stato','status.connection':'Connessione','status.updated':'Aggiornato','status.items':'Elementi',
     'status.connecting':'Connessione...',
@@ -3131,6 +3135,9 @@ function squawkSpeak(text, url, newsItem) {
   }
   const clean = text.replace(/<[^>]*>/g,'').replace(/[🟢🔴🟡▲▼●★◈▶]/gu,'').replace(/\s+/g,' ').trim();
   if (!clean) return;
+  // Dedup: don't queue the same item twice (prevents looping on repeated API data)
+  const dedupeKey = (url || clean).slice(0, 80);
+  if (squawkQueue.some(q => (q.url || q.text).slice(0, 80) === dedupeKey)) return;
   squawkQueue.push({
     text: clean,
     url: url||'',
@@ -3199,25 +3206,23 @@ function drainSquawkQueue() {
   const item = squawkQueue.shift();
   // "Attention:" prefix — gives the user a clear audio cue before each headline
   const spokenText = 'Attention. ' + _prepareSquawkText(item.text);
-  const utter = new SpeechSynthesisUtterance(spokenText);
-  utter.lang  = 'en-US'; // News content is always English — pt-PT TTS is unintelligible
-  utter.rate  = squawkRate;
-  utter.pitch = 1.05; // slight lift — less monotone
   const voice = _getBestVoice();
-  if (voice) utter.voice = voice;
   if (currentTab !== 'news') switchTab('news');
   // Pin the card at the top of the feed immediately
   setTimeout(() => _pinSquawkCard(item), 150);
-  // Chrome TTS warm-up: speak a silent zero-width utterance first to prevent
-  // the first word ("Attention") from being cut off after a period of silence.
-  try {
-    const warmup = new SpeechSynthesisUtterance('\u200B');
-    warmup.volume = 0;
-    speechSynthesis.speak(warmup);
-  } catch(e) {}
-  utter.onend   = () => drainSquawkQueue();
-  utter.onerror = () => { squawkSpeaking = false; drainSquawkQueue(); };
-  setTimeout(() => speechSynthesis.speak(utter), 80);
+  // Cancel any stuck TTS state before speaking (fixes Chrome hung-speech bug)
+  try { speechSynthesis.cancel(); } catch(e) {}
+  setTimeout(() => {
+    if (!squawkEnabled) return; // user may have toggled off while waiting
+    const utter = new SpeechSynthesisUtterance(spokenText);
+    utter.lang  = 'en-US'; // News content is always English
+    utter.rate  = squawkRate;
+    utter.pitch = 1.05;
+    if (voice) utter.voice = voice;
+    utter.onend   = () => drainSquawkQueue();
+    utter.onerror = () => { squawkSpeaking = false; drainSquawkQueue(); };
+    speechSynthesis.speak(utter);
+  }, 150);
 }
 
 function toggleSquawk() {
@@ -4123,9 +4128,8 @@ function renderNews() {
       <div class="news-impact"><span class="impact-badge ${badgeCls}">${badgeLbl}</span></div>
     </div>`;
 
-    // Inject inline ad card every 15 items for Basic users
-    // Image banner: replace /ads/infeed-trackerfx.png with your 1456×180px image
-    const adHtml = (!IS_PRO && idx > 0 && idx % 15 === 0)
+    // Inject inline ad: first ad pinned at position 3 (idx 2), then every 15 items
+    const adHtml = (!IS_PRO && (idx === 2 || (idx > 2 && (idx - 2) % 15 === 0)))
       ? `<div class="feed-ad-card" onclick="window.open('https://www.trackerfx.com','_blank')">
            <div class="feed-ad-banner">
              <div class="feed-ad-brand">
