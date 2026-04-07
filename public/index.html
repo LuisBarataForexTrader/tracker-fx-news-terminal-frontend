@@ -53,9 +53,18 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .clock{font-size:14px;font-weight:500;color:var(--text);font-family:var(--font-mono);font-variant-numeric:tabular-nums;}
 .tz-label{font-size:9px;font-weight:500;color:#fff;letter-spacing:0.1em;text-transform:uppercase;text-align:center;}
 .header-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.lang-toggle{display:flex;background:var(--bg3);border:1px solid var(--border);overflow:hidden;border-radius:3px;}
-.lang-btn{padding:6px 12px;font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:0.08em;border:none;background:transparent;color:#fff;cursor:pointer;transition:all .15s;text-transform:uppercase;}
-.lang-btn.active{background:var(--accent);color:#000;}
+.lang-picker{position:relative;}
+.lang-cur{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--bg3);border:1px solid var(--border);color:#fff;font-family:var(--font);font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .15s;}
+.lang-cur:hover{background:rgba(255,255,255,0.06);border-color:var(--accent);}
+.lang-flag{font-size:14px;line-height:1;}
+.lang-code{line-height:1;}
+.lang-caret{font-size:9px;opacity:0.7;line-height:1;}
+.lang-menu{position:absolute;top:calc(100% + 4px);right:0;background:#0a0e15;border:1px solid var(--border);border-radius:6px;padding:4px;z-index:9999;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,0.7);}
+.lang-menu[hidden]{display:none;}
+.lang-opt{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;background:transparent;border:none;color:#fff;font-family:var(--font);font-size:12px;font-weight:500;text-align:left;cursor:pointer;border-radius:4px;transition:background .1s;}
+.lang-opt:hover{background:rgba(0,212,170,0.1);}
+.lang-opt.active{background:rgba(0,212,170,0.18);color:var(--accent);}
+.lang-opt-flag{font-size:16px;line-height:1;}
 .sound-btn{padding:6px 12px;font-family:var(--font);font-size:11px;font-weight:500;border:1px solid var(--border);background:transparent;color:#fff;cursor:pointer;transition:all .15s;border-radius:3px;}
 .sound-btn.active{border-color:var(--low);color:var(--low);}
 .squawk-wrap{display:flex;align-items:center;gap:3px;position:relative;}
@@ -902,9 +911,20 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       </div>
     </div>
     <button class="sound-btn active" id="soundBtn" onclick="toggleSound()">🔔 Alerts ON</button>
-    <div class="lang-toggle">
-      <button class="lang-btn active" id="lang-en" onclick="setLang('en',this)">EN</button>
-      <button class="lang-btn" id="lang-pt" onclick="setLang('pt',this)">PT</button>
+    <div class="lang-picker" id="langPicker">
+      <button class="lang-cur" onclick="toggleLangMenu(event)" title="Language">
+        <span class="lang-flag" id="langFlag">🇬🇧</span>
+        <span class="lang-code" id="langCode">EN</span>
+        <span class="lang-caret">▾</span>
+      </button>
+      <div class="lang-menu" id="langMenu" hidden>
+        <button class="lang-opt active" data-lang="en" onclick="setLang('en')"><span class="lang-opt-flag">🇬🇧</span><span>English</span></button>
+        <button class="lang-opt" data-lang="pt" onclick="setLang('pt')"><span class="lang-opt-flag">🇵🇹</span><span>Português</span></button>
+        <button class="lang-opt" data-lang="es" onclick="setLang('es')"><span class="lang-opt-flag">🇪🇸</span><span>Español</span></button>
+        <button class="lang-opt" data-lang="fr" onclick="setLang('fr')"><span class="lang-opt-flag">🇫🇷</span><span>Français</span></button>
+        <button class="lang-opt" data-lang="de" onclick="setLang('de')"><span class="lang-opt-flag">🇩🇪</span><span>Deutsch</span></button>
+        <button class="lang-opt" data-lang="it" onclick="setLang('it')"><span class="lang-opt-flag">🇮🇹</span><span>Italiano</span></button>
+      </div>
     </div>
     <div class="user-avatar" id="userAvatarBtn" onclick="openSettings()" title="Account Settings" style="display:none"></div>
     <span id="userLabel" style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);cursor:pointer;" onclick="openSettings()"></span>
@@ -1702,6 +1722,194 @@ const STRINGS = {
     'cal.source':'Calendário Económico','cal.today':'Hoje','cal.tomorrow':'Amanhã',
     'cal.prev':'Ant','cal.fore':'Prev','cal.actual':'Atual',
     'cal.high_lbl':'ALTO','cal.med_lbl':'MÉD','cal.low_lbl':'BAIXO',
+  },
+  es:{
+    'logo.sub':'Inteligencia de Mercado en Tiempo Real',
+    'nav.live':'Feed en Vivo','nav.alerts_on':'🔔 Alertas ON','nav.alerts_off':'🔕 Alertas OFF',
+    'nav.login':'Entrar','nav.signup':'Registrarse',
+    'squawk.off':'🔇 Squawk OFF','squawk.on':'🔊 Squawk ON','squawk.speaking':'🔊 Hablando...',
+    'search.placeholder':'Buscar noticias, activos, palabras clave...',
+    'sidebar.impact':'Impacto','sidebar.all_news':'Todas las Noticias','sidebar.high_impact':'Alto Impacto',
+    'sidebar.medium':'Medio','sidebar.low':'Bajo',
+    'sidebar.watchlist_label':'Mis Noticias — Lista',
+    'sidebar.watchlist_hint':'Selecciona activos para fijar a MIS NOTICIAS',
+    'pack.badge':'Plan Básico','pack.plan_name':'Gratis',
+    'pack.feat1':'Noticias (retraso 2 min)','pack.feat1b':'Calendario económico',
+    'pack.feat2':'Feed en tiempo real','pack.feat3':'Squawk en vivo','pack.feat4':'TV en vivo — 7 canales','pack.feat5':'Sin anuncios',
+    'pack.cta_text':"Estás en el <strong>Plan Básico</strong>. Pásate a <strong>Pro</strong> para tiempo real, squawk, TV y sin anuncios.",
+    'pack.upgrade_btn':'⚡ Pásate a Pro →',
+    'cat.all':'Todas','cat.my_news':'★ Mis Noticias','cat.forex':'Forex','cat.crypto':'Cripto','cat.macro':'Macro',
+    'cat.bonds':'Bonos','cat.equities':'Acciones','cat.indexes':'Índices','cat.commodities':'Materias Primas',
+    'cat.market_moving':'🔴 Mueve Mercado',
+    'live.streams':'TV en Vivo','live.close':'✕ Cerrar','video.live':'EN VIVO',
+    'tab.news':'Noticias','tab.calendar':'Calendario','tab.tv':'TV en Vivo',
+    'tv.title':'TV Financiera en Vivo','tv.channels':'Canales','tv.disclaimer':'Stream proporcionado por YouTube. La disponibilidad puede variar.','tv.note':'💡 Los streams abren la transmisión en vivo de YouTube de cada canal. Usa pantalla completa para mejor experiencia.',
+    'feed.live':'EN VIVO','feed.connecting':'Conectando...','feed.items':'ítems',
+    'feed.load_more':'Cargar más','feed.more_items':'más',
+    'calendar.title':'Calendario Económico',
+    'cal.impact_label':'Impacto:','cal.asset_label':'Activos:',
+    'cal.high':'● Alto','cal.medium':'● Medio','cal.low':'● Bajo',
+    'cal.all_assets':'Todos','cal.loading':'Cargando calendario...','cal.no_events':'Sin eventos',
+    'delay.notice':'Aviso','delay.title':'Retraso de 2 min',
+    'delay.sub':"Estás en el <strong>Plan Básico</strong>. Los usuarios Pro reciben cada titular en tiempo real, sin retraso, sin anuncios y con squawk en vivo.",
+    'delay.btn':'⚡ Pásate a Pro',
+    'status.status':'Estado','status.connection':'Conexión','status.updated':'Actualizado','status.items':'Ítems',
+    'status.connecting':'Conectando...',
+    'empty.connecting':'Conectando','empty.connecting_sub':'Estableciendo conexión en tiempo real...',
+    'empty.no_news':'Sin noticias','empty.no_news_sub':'Cambia los filtros o espera la próxima actualización',
+    'share.btn':'⇪ Compartir','toast.link_copied':'Enlace copiado',
+    'toast.login':'Login próximamente','toast.signup':'Registro próximamente','toast.pro':'¡Plan Pro próximamente!',
+    'badge.positive':'▲ POSITIVO','badge.negative':'▼ NEGATIVO','badge.neutral':'● NEUTRAL','badge.new':'NUEVO',
+    'cal.tag.release':'📅 PUBLICACIÓN',
+    'feed.title.all':'Todas las Noticias','feed.title.high':'Alto Impacto','feed.title.medium':'Impacto Medio','feed.title.low':'Bajo Impacto',
+    'feed.title.my_news':'Mis Noticias','feed.title.forex':'Noticias Forex','feed.title.crypto':'Noticias Cripto',
+    'feed.title.macro':'Noticias Macro','feed.title.bonds':'Bonos y Rendimientos','feed.title.equities':'Noticias de Acciones',
+    'feed.title.indexes':'Noticias de Índices','feed.title.commodities':'Materias Primas','feed.title.market_moving':'Mueve Mercado',
+    'feed.title.multi':'Múltiples Categorías',
+    'cal.source':'Calendario Económico','cal.today':'Hoy','cal.tomorrow':'Mañana',
+    'cal.prev':'Ant','cal.fore':'Prev','cal.actual':'Actual',
+    'cal.high_lbl':'ALTO','cal.med_lbl':'MED','cal.low_lbl':'BAJO',
+  },
+  fr:{
+    'logo.sub':'Intelligence de Marché en Temps Réel',
+    'nav.live':'Flux en Direct','nav.alerts_on':'🔔 Alertes ON','nav.alerts_off':'🔕 Alertes OFF',
+    'nav.login':'Connexion','nav.signup':'S\u2019inscrire',
+    'squawk.off':'🔇 Squawk OFF','squawk.on':'🔊 Squawk ON','squawk.speaking':'🔊 En cours...',
+    'search.placeholder':'Rechercher actualités, actifs, mots-clés...',
+    'sidebar.impact':'Impact','sidebar.all_news':'Toutes les Actualités','sidebar.high_impact':'Impact Élevé',
+    'sidebar.medium':'Moyen','sidebar.low':'Faible',
+    'sidebar.watchlist_label':'Mes Actualités — Watchlist',
+    'sidebar.watchlist_hint':'Sélectionnez des actifs à épingler à MES ACTUALITÉS',
+    'pack.badge':'Plan Basique','pack.plan_name':'Gratuit',
+    'pack.feat1':'Actualités (délai 2 min)','pack.feat1b':'Calendrier économique',
+    'pack.feat2':'Flux en temps réel','pack.feat3':'Squawk en direct','pack.feat4':'TV en direct — 7 chaînes','pack.feat5':'Sans publicité',
+    'pack.cta_text':"Vous êtes sur le <strong>Plan Basique</strong>. Passez à <strong>Pro</strong> pour le temps réel, squawk, TV et sans pub.",
+    'pack.upgrade_btn':'⚡ Passer à Pro →',
+    'cat.all':'Toutes','cat.my_news':'★ Mes Actus','cat.forex':'Forex','cat.crypto':'Crypto','cat.macro':'Macro',
+    'cat.bonds':'Obligations','cat.equities':'Actions','cat.indexes':'Indices','cat.commodities':'Matières Premières',
+    'cat.market_moving':'🔴 Marché Actif',
+    'live.streams':'TV en Direct','live.close':'✕ Fermer','video.live':'DIRECT',
+    'tab.news':'Actualités','tab.calendar':'Calendrier','tab.tv':'TV en Direct',
+    'tv.title':'TV Financière en Direct','tv.channels':'Chaînes','tv.disclaimer':'Stream fourni par YouTube. La disponibilité peut varier.','tv.note':'💡 Les streams ouvrent la diffusion en direct YouTube de chaque chaîne. Utilisez le plein écran pour une meilleure expérience.',
+    'feed.live':'DIRECT','feed.connecting':'Connexion...','feed.items':'éléments',
+    'feed.load_more':'Charger plus','feed.more_items':'plus',
+    'calendar.title':'Calendrier Économique',
+    'cal.impact_label':'Impact :','cal.asset_label':'Actifs :',
+    'cal.high':'● Élevé','cal.medium':'● Moyen','cal.low':'● Faible',
+    'cal.all_assets':'Tous','cal.loading':'Chargement du calendrier...','cal.no_events':'Aucun événement',
+    'delay.notice':'Avis','delay.title':'Délai de 2 min',
+    'delay.sub':"Vous êtes sur le <strong>Plan Basique</strong>. Les utilisateurs Pro reçoivent chaque titre en temps réel, sans délai, sans publicité et avec squawk en direct.",
+    'delay.btn':'⚡ Passer à Pro',
+    'status.status':'Statut','status.connection':'Connexion','status.updated':'Mis à jour','status.items':'Éléments',
+    'status.connecting':'Connexion...',
+    'empty.connecting':'Connexion','empty.connecting_sub':'Établissement de la connexion en temps réel...',
+    'empty.no_news':'Aucune actualité','empty.no_news_sub':'Modifiez les filtres ou attendez la prochaine mise à jour',
+    'share.btn':'⇪ Partager','toast.link_copied':'Lien copié',
+    'toast.login':'Connexion bientôt','toast.signup':'Inscription bientôt','toast.pro':'Plan Pro bientôt !',
+    'badge.positive':'▲ POSITIF','badge.negative':'▼ NÉGATIF','badge.neutral':'● NEUTRE','badge.new':'NOUVEAU',
+    'cal.tag.release':'📅 PUBLICATION',
+    'feed.title.all':'Toutes les Actualités','feed.title.high':'Impact Élevé','feed.title.medium':'Impact Moyen','feed.title.low':'Impact Faible',
+    'feed.title.my_news':'Mes Actualités','feed.title.forex':'Actualités Forex','feed.title.crypto':'Actualités Crypto',
+    'feed.title.macro':'Actualités Macro','feed.title.bonds':'Obligations & Rendements','feed.title.equities':'Actualités Actions',
+    'feed.title.indexes':'Actualités Indices','feed.title.commodities':'Matières Premières','feed.title.market_moving':'Marché Actif',
+    'feed.title.multi':'Catégories Multiples',
+    'cal.source':'Calendrier Économique','cal.today':'Aujourd\u2019hui','cal.tomorrow':'Demain',
+    'cal.prev':'Préc','cal.fore':'Prév','cal.actual':'Actuel',
+    'cal.high_lbl':'ÉLEVÉ','cal.med_lbl':'MOY','cal.low_lbl':'FAIBLE',
+  },
+  de:{
+    'logo.sub':'Markt-Intelligenz in Echtzeit',
+    'nav.live':'Live-Feed','nav.alerts_on':'🔔 Alarme AN','nav.alerts_off':'🔕 Alarme AUS',
+    'nav.login':'Anmelden','nav.signup':'Registrieren',
+    'squawk.off':'🔇 Squawk AUS','squawk.on':'🔊 Squawk AN','squawk.speaking':'🔊 Spricht...',
+    'search.placeholder':'Nachrichten, Werte, Schlagwörter suchen...',
+    'sidebar.impact':'Impact','sidebar.all_news':'Alle Nachrichten','sidebar.high_impact':'Hoher Impact',
+    'sidebar.medium':'Mittel','sidebar.low':'Niedrig',
+    'sidebar.watchlist_label':'Meine Nachrichten — Watchlist',
+    'sidebar.watchlist_hint':'Werte auswählen um sie in MEINE NACHRICHTEN anzuheften',
+    'pack.badge':'Basis-Plan','pack.plan_name':'Gratis',
+    'pack.feat1':'Nachrichten (2 Min Verzögerung)','pack.feat1b':'Wirtschaftskalender',
+    'pack.feat2':'Echtzeit-Feed','pack.feat3':'Live-Squawk','pack.feat4':'Live-TV — 7 Kanäle','pack.feat5':'Werbefrei',
+    'pack.cta_text':"Du nutzt den <strong>Basis-Plan</strong>. Wechsle zu <strong>Pro</strong> für Echtzeit, Squawk, TV & ohne Werbung.",
+    'pack.upgrade_btn':'⚡ Auf Pro upgraden →',
+    'cat.all':'Alle','cat.my_news':'★ Meine','cat.forex':'Forex','cat.crypto':'Krypto','cat.macro':'Makro',
+    'cat.bonds':'Anleihen','cat.equities':'Aktien','cat.indexes':'Indizes','cat.commodities':'Rohstoffe',
+    'cat.market_moving':'🔴 Marktbewegend',
+    'live.streams':'Live-TV','live.close':'✕ Schließen','video.live':'LIVE',
+    'tab.news':'Nachrichten','tab.calendar':'Kalender','tab.tv':'Live-TV',
+    'tv.title':'Live-Finanz-TV','tv.channels':'Kanäle','tv.disclaimer':'Stream bereitgestellt von YouTube. Verfügbarkeit kann variieren.','tv.note':'💡 Streams öffnen die YouTube-Live-Übertragung für jeden Kanal. Vollbild für beste Erfahrung.',
+    'feed.live':'LIVE','feed.connecting':'Verbinden...','feed.items':'Einträge',
+    'feed.load_more':'Mehr laden','feed.more_items':'mehr',
+    'calendar.title':'Wirtschaftskalender',
+    'cal.impact_label':'Impact:','cal.asset_label':'Werte:',
+    'cal.high':'● Hoch','cal.medium':'● Mittel','cal.low':'● Niedrig',
+    'cal.all_assets':'Alle','cal.loading':'Kalender lädt...','cal.no_events':'Keine Ereignisse',
+    'delay.notice':'Hinweis','delay.title':'2-Min Nachrichten-Verzögerung',
+    'delay.sub':"Du nutzt den <strong>Basis-Plan</strong>. Pro-Nutzer erhalten jede Schlagzeile in Echtzeit, ohne Verzögerung, ohne Werbung und mit Live-Squawk.",
+    'delay.btn':'⚡ Auf Pro upgraden',
+    'status.status':'Status','status.connection':'Verbindung','status.updated':'Aktualisiert','status.items':'Einträge',
+    'status.connecting':'Verbinden...',
+    'empty.connecting':'Verbinden','empty.connecting_sub':'Echtzeit-Verbindung wird hergestellt...',
+    'empty.no_news':'Keine Nachrichten','empty.no_news_sub':'Filter ändern oder auf nächstes Update warten',
+    'share.btn':'⇪ Teilen','toast.link_copied':'Link kopiert',
+    'toast.login':'Login bald verfügbar','toast.signup':'Registrierung bald verfügbar','toast.pro':'Pro-Plan bald verfügbar!',
+    'badge.positive':'▲ POSITIV','badge.negative':'▼ NEGATIV','badge.neutral':'● NEUTRAL','badge.new':'NEU',
+    'cal.tag.release':'📅 VERÖFFENTLICHUNG',
+    'feed.title.all':'Alle Nachrichten','feed.title.high':'Hoher Impact','feed.title.medium':'Mittlerer Impact','feed.title.low':'Niedriger Impact',
+    'feed.title.my_news':'Meine Nachrichten','feed.title.forex':'Forex-Nachrichten','feed.title.crypto':'Krypto-Nachrichten',
+    'feed.title.macro':'Makro-Nachrichten','feed.title.bonds':'Anleihen & Renditen','feed.title.equities':'Aktien-Nachrichten',
+    'feed.title.indexes':'Indizes-Nachrichten','feed.title.commodities':'Rohstoff-Nachrichten','feed.title.market_moving':'Marktbewegend',
+    'feed.title.multi':'Mehrere Kategorien',
+    'cal.source':'Wirtschaftskalender','cal.today':'Heute','cal.tomorrow':'Morgen',
+    'cal.prev':'Vorh','cal.fore':'Prog','cal.actual':'Aktuell',
+    'cal.high_lbl':'HOCH','cal.med_lbl':'MITT','cal.low_lbl':'NIED',
+  },
+  it:{
+    'logo.sub':'Intelligence di Mercato in Tempo Reale',
+    'nav.live':'Feed Live','nav.alerts_on':'🔔 Avvisi ON','nav.alerts_off':'🔕 Avvisi OFF',
+    'nav.login':'Accedi','nav.signup':'Registrati',
+    'squawk.off':'🔇 Squawk OFF','squawk.on':'🔊 Squawk ON','squawk.speaking':'🔊 In corso...',
+    'search.placeholder':'Cerca notizie, asset, parole chiave...',
+    'sidebar.impact':'Impatto','sidebar.all_news':'Tutte le Notizie','sidebar.high_impact':'Alto Impatto',
+    'sidebar.medium':'Medio','sidebar.low':'Basso',
+    'sidebar.watchlist_label':'Le Mie Notizie — Watchlist',
+    'sidebar.watchlist_hint':'Seleziona asset da fissare a LE MIE NOTIZIE',
+    'pack.badge':'Piano Base','pack.plan_name':'Gratis',
+    'pack.feat1':'Notizie (ritardo 2 min)','pack.feat1b':'Calendario economico',
+    'pack.feat2':'Feed in tempo reale','pack.feat3':'Squawk live','pack.feat4':'TV live — 7 canali','pack.feat5':'Senza pubblicità',
+    'pack.cta_text':"Sei sul <strong>Piano Base</strong>. Passa a <strong>Pro</strong> per tempo reale, squawk, TV e niente pubblicità.",
+    'pack.upgrade_btn':'⚡ Passa a Pro →',
+    'cat.all':'Tutte','cat.my_news':'★ Le Mie','cat.forex':'Forex','cat.crypto':'Cripto','cat.macro':'Macro',
+    'cat.bonds':'Obbligazioni','cat.equities':'Azioni','cat.indexes':'Indici','cat.commodities':'Materie Prime',
+    'cat.market_moving':'🔴 Mercato in Movimento',
+    'live.streams':'TV Live','live.close':'✕ Chiudi','video.live':'LIVE',
+    'tab.news':'Notizie','tab.calendar':'Calendario','tab.tv':'TV Live',
+    'tv.title':'TV Finanziaria Live','tv.channels':'Canali','tv.disclaimer':'Stream fornito da YouTube. La disponibilità può variare.','tv.note':'💡 Gli stream aprono la diretta YouTube di ogni canale. Usa lo schermo intero per la migliore esperienza.',
+    'feed.live':'LIVE','feed.connecting':'Connessione...','feed.items':'elementi',
+    'feed.load_more':'Carica altro','feed.more_items':'altro',
+    'calendar.title':'Calendario Economico',
+    'cal.impact_label':'Impatto:','cal.asset_label':'Asset:',
+    'cal.high':'● Alto','cal.medium':'● Medio','cal.low':'● Basso',
+    'cal.all_assets':'Tutti','cal.loading':'Caricamento calendario...','cal.no_events':'Nessun evento',
+    'delay.notice':'Avviso','delay.title':'Ritardo di 2 min',
+    'delay.sub':"Sei sul <strong>Piano Base</strong>. Gli utenti Pro ricevono ogni titolo in tempo reale, senza ritardi, senza pubblicità e con squawk live.",
+    'delay.btn':'⚡ Passa a Pro',
+    'status.status':'Stato','status.connection':'Connessione','status.updated':'Aggiornato','status.items':'Elementi',
+    'status.connecting':'Connessione...',
+    'empty.connecting':'Connessione','empty.connecting_sub':'Connessione in tempo reale in corso...',
+    'empty.no_news':'Nessuna notizia','empty.no_news_sub':'Cambia i filtri o attendi il prossimo aggiornamento',
+    'share.btn':'⇪ Condividi','toast.link_copied':'Link copiato',
+    'toast.login':'Login presto disponibile','toast.signup':'Registrazione presto','toast.pro':'Piano Pro presto!',
+    'badge.positive':'▲ POSITIVO','badge.negative':'▼ NEGATIVO','badge.neutral':'● NEUTRO','badge.new':'NUOVO',
+    'cal.tag.release':'📅 PUBBLICAZIONE',
+    'feed.title.all':'Tutte le Notizie','feed.title.high':'Alto Impatto','feed.title.medium':'Impatto Medio','feed.title.low':'Basso Impatto',
+    'feed.title.my_news':'Le Mie Notizie','feed.title.forex':'Notizie Forex','feed.title.crypto':'Notizie Cripto',
+    'feed.title.macro':'Notizie Macro','feed.title.bonds':'Obbligazioni e Rendimenti','feed.title.equities':'Notizie Azioni',
+    'feed.title.indexes':'Notizie Indici','feed.title.commodities':'Materie Prime','feed.title.market_moving':'Mercato in Movimento',
+    'feed.title.multi':'Categorie Multiple',
+    'cal.source':'Calendario Economico','cal.today':'Oggi','cal.tomorrow':'Domani',
+    'cal.prev':'Prec','cal.fore':'Prev','cal.actual':'Attuale',
+    'cal.high_lbl':'ALTO','cal.med_lbl':'MED','cal.low_lbl':'BASSO',
   }
 };
 function t(key) { return (STRINGS[lang]||STRINGS.en)[key]||key; }
@@ -2771,7 +2979,10 @@ function pulseTab(tabId) {
 
 // ─── Filters ─────────────────────────────────────────────────────
 function getFeedTitle() {
-  if (searchQuery) return (lang==='pt'?'Pesquisa: "':'Search: "')+searchQuery+'"';
+  if (searchQuery) {
+    const _SEARCH_PFX = {en:'Search: "',pt:'Pesquisa: "',es:'Buscar: "',fr:'Rechercher : "',de:'Suche: "',it:'Cerca: "'};
+    return (_SEARCH_PFX[lang]||_SEARCH_PFX.en)+searchQuery+'"';
+  }
   if (selectedCategories.size > 1) return t('feed.title.multi');
   if (selectedCategories.size === 1) {
     const cat = [...selectedCategories][0];
@@ -2793,13 +3004,44 @@ function updateFeedTitle() {
   if (!node) return;
   node.childNodes[0].textContent = getFeedTitle() + ' ';
 }
-function setLang(l, btn) {
+const LANG_META = {
+  en:{flag:'🇬🇧',code:'EN',name:'English',  locale:'en-GB'},
+  pt:{flag:'🇵🇹',code:'PT',name:'Português',locale:'pt-PT'},
+  es:{flag:'🇪🇸',code:'ES',name:'Español',  locale:'es-ES'},
+  fr:{flag:'🇫🇷',code:'FR',name:'Français', locale:'fr-FR'},
+  de:{flag:'🇩🇪',code:'DE',name:'Deutsch',  locale:'de-DE'},
+  it:{flag:'🇮🇹',code:'IT',name:'Italiano', locale:'it-IT'},
+};
+function _updateLangPickerUI(l){
+  const meta = LANG_META[l] || LANG_META.en;
+  const f = document.getElementById('langFlag');
+  const c = document.getElementById('langCode');
+  if (f) f.textContent = meta.flag;
+  if (c) c.textContent = meta.code;
+  document.querySelectorAll('.lang-opt').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-lang') === l);
+  });
+}
+function toggleLangMenu(e){
+  if (e) e.stopPropagation();
+  const m = document.getElementById('langMenu');
+  if (m) m.hidden = !m.hidden;
+}
+function setLang(l) {
+  if (!STRINGS[l]) l = 'en';
   lang = l;
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+  _updateLangPickerUI(l);
+  const m = document.getElementById('langMenu'); if (m) m.hidden = true;
   applyTranslations(); renderNews(); renderCalendar();
   _savePrefs({lang: l});
 }
+// Close language menu on outside click
+document.addEventListener('click', (e) => {
+  const p = document.getElementById('langPicker');
+  if (p && !p.contains(e.target)) {
+    const m = document.getElementById('langMenu'); if (m) m.hidden = true;
+  }
+});
 function setImpact(impact, btn) {
   if (impact === 'ALL') {
     // Clear all, activate ALL
@@ -3175,7 +3417,8 @@ function renderCalendar() {
   const now=new Date(),todayStr=now.toISOString().split('T')[0];
   const tmrStr=new Date(now.getTime()+86400000).toISOString().split('T')[0];
   body.innerHTML=Object.entries(days).sort().map(([day,evs])=>{
-    const lbl=day===todayStr?t('cal.today'):day===tmrStr?t('cal.tomorrow'):new Date(day+'T00:00:00Z').toLocaleDateString(lang==='pt'?'pt-PT':'en-GB',{weekday:'long',month:'short',day:'numeric'});
+    const _loc=(LANG_META[lang]&&LANG_META[lang].locale)||'en-GB';
+    const lbl=day===todayStr?t('cal.today'):day===tmrStr?t('cal.tomorrow'):new Date(day+'T00:00:00Z').toLocaleDateString(_loc,{weekday:'long',month:'short',day:'numeric'});
     return`<div class="cal-day-header">${lbl}</div>`+evs.map(e=>{
       const ic=e.importance===1?'imp-high':e.importance===0?'imp-med':'imp-low';
       const bc=e.importance===1?'badge-high':e.importance===0?'badge-medium':'badge-low';
@@ -3990,9 +4233,9 @@ function _savePrefs(patch) {
   const p = _loadPrefs();
 
   // 1. Language
-  if (p.lang && p.lang !== 'en') {
-    const btn = document.getElementById('lang-' + p.lang);
-    if (btn) { lang = p.lang; document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); }
+  if (p.lang && STRINGS[p.lang]) {
+    lang = p.lang;
+    if (typeof _updateLangPickerUI === 'function') _updateLangPickerUI(p.lang);
   }
 
   // 2. Impact filter (multi-select)
