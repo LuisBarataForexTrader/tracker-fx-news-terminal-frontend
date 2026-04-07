@@ -2173,20 +2173,87 @@ if (window.speechSynthesis) {
   speechSynthesis.onvoiceschanged = () => { _loadVoices(); populateSquawkVoices(); };
 }
 
-// Pick the best available English voice — tier order: Neural/Online MS → Google → macOS named → default
+// Score a voice by quality — higher is more natural/human-sounding
+function _voiceScore(v) {
+  const n = (v.name || '').toLowerCase();
+  let score = 0;
+  // Tier 1 (best): Neural / Natural / Online cloud voices
+  if (/natural|neural|online|wavenet|studio/.test(n)) score += 100;
+  if (/premium|enhanced|siri/.test(n)) score += 90;
+  // Tier 2: known high-quality named voices per platform
+  //   macOS: Siri voices, Ava, Evan, Zoe, Allison, Tom, Samantha (enhanced)
+  //   Windows: Aria, Jenny, Guy, Davis, Jane, Jason, Nancy, Tony (all Neural)
+  //   Chrome: Google US/UK English
+  if (/\b(aria|jenny|guy|davis|jane|jason|nancy|tony|sara|michelle)\b/.test(n)) score += 60;
+  if (/\b(ava|evan|zoe|allison|tom|serena|kate|oliver|arthur)\b/.test(n)) score += 55;
+  if (/google\s+us\s+english|google\s+uk\s+english/.test(n)) score += 50;
+  // Tier 3: OS default good voices
+  if (/\b(samantha|alex|karen|daniel|moira|victoria|fiona)\b/.test(n)) score += 30;
+  // Prefer en-US slightly over en-GB/en-AU for financial news
+  if (v.lang === 'en-US') score += 5;
+  else if (v.lang === 'en-GB') score += 3;
+  // Penalise novelty/low-quality voices
+  if (/compact|eloquence|espeak/.test(n)) score -= 50;
+  if (/albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|pipe organ|trinoids|whisper|zarvox/.test(n)) score -= 80;
+  return score;
+}
+
+// Pick the best available English voice — scored by quality
 function _getBestVoice() {
   const voices = _squawkVoices.length ? _squawkVoices : (window.speechSynthesis ? speechSynthesis.getVoices() : []);
   if (squawkVoiceName) {
     const named = voices.find(v => v.name === squawkVoiceName);
     if (named) return named;
   }
-  const en = voices.filter(v => v.lang.startsWith('en'));
-  return en.find(v => /microsoft/i.test(v.name) && /natural|neural|online/i.test(v.name))
-      || en.find(v => /google/i.test(v.name))
-      || en.find(v => /samantha|alex|karen|daniel|moira|victoria/i.test(v.name))
-      || en.find(v => v.default)
-      || en[0]
-      || voices[0];
+  const en = voices.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+  if (!en.length) return voices[0] || null;
+  // Sort by score descending, pick best
+  en.sort((a, b) => _voiceScore(b) - _voiceScore(a));
+  return en[0];
+}
+
+// Pre-process text to improve TTS pronunciation and pacing
+function _prepareSquawkText(text) {
+  let t = text;
+  // Strip HTML entities / leftover tags
+  t = t.replace(/&amp;/g, ' and ').replace(/&nbsp;/g, ' ').replace(/&[a-z]+;/gi, ' ');
+  t = t.replace(/<[^>]*>/g, ' ');
+  // Strip emojis and symbols that TTS reads literally
+  t = t.replace(/[🟢🔴🟡🟠🟣🔵⚪⬜🇺🇸🇪🇺🇬🇧🇯🇵🇨🇭🇦🇺🇨🇦🇳🇿🇨🇳🇩🇪🇫🇷🇪🇸🇮🇹🇭🇰🛢🔥🌾🌽☕🍫🐕🐸🏦💳🍎▲▼●★◈▶↑↓]/gu, ' ');
+  // Currency symbols — read as words
+  t = t.replace(/\$(\d)/g, '$1 dollars ').replace(/\$/g, ' dollars ');
+  t = t.replace(/€(\d)/g, '$1 euros ').replace(/€/g, ' euros ');
+  t = t.replace(/£(\d)/g, '$1 pounds ').replace(/£/g, ' pounds ');
+  t = t.replace(/¥(\d)/g, '$1 yen ').replace(/¥/g, ' yen ');
+  // Percent — read as word
+  t = t.replace(/(\d)\s*%/g, '$1 percent');
+  // Common financial abbreviations
+  const abbr = {
+    '\\bFOMC\\b': 'F O M C', '\\bECB\\b': 'E C B', '\\bBoE\\b': 'Bank of England',
+    '\\bBOE\\b': 'Bank of England', '\\bBoJ\\b': 'Bank of Japan', '\\bBOJ\\b': 'Bank of Japan',
+    '\\bRBA\\b': 'R B A', '\\bRBNZ\\b': 'R B N Z', '\\bSNB\\b': 'S N B', '\\bPBOC\\b': 'P B O C',
+    '\\bFed\\b': 'Fed', '\\bCPI\\b': 'C P I', '\\bPPI\\b': 'P P I', '\\bGDP\\b': 'G D P',
+    '\\bNFP\\b': 'Non Farm Payrolls', '\\bPMI\\b': 'P M I', '\\bISM\\b': 'I S M',
+    '\\bIPO\\b': 'I P O', '\\bM&A\\b': 'mergers and acquisitions', '\\bESG\\b': 'E S G',
+    '\\bYoY\\b': 'year on year', '\\bMoM\\b': 'month on month', '\\bQoQ\\b': 'quarter on quarter',
+    '\\bbps\\b': 'basis points', '\\bbn\\b': 'billion', '\\btn\\b': 'trillion',
+    '\\bQ1\\b': 'Q one', '\\bQ2\\b': 'Q two', '\\bQ3\\b': 'Q three', '\\bQ4\\b': 'Q four',
+    '\\bS&P\\s*500\\b': 'S and P five hundred', '\\bS&P\\b': 'S and P',
+    '\\bEUR/USD\\b': 'Euro Dollar', '\\bGBP/USD\\b': 'Pound Dollar',
+    '\\bUSD/JPY\\b': 'Dollar Yen', '\\bUSD/CHF\\b': 'Dollar Swiss Franc',
+    '\\bAUD/USD\\b': 'Aussie Dollar', '\\bNZD/USD\\b': 'Kiwi Dollar', '\\bUSD/CAD\\b': 'Dollar Loonie',
+    '\\bXAU/USD\\b': 'Gold', '\\bXAG/USD\\b': 'Silver',
+    '\\bBTC\\b': 'Bitcoin', '\\bETH\\b': 'Ethereum',
+    '\\bU\\.S\\.\\b': 'U S', '\\bU\\.K\\.\\b': 'U K', '\\bU\\.N\\.\\b': 'U N',
+  };
+  for (const pat in abbr) { t = t.replace(new RegExp(pat, 'gi'), abbr[pat]); }
+  // Number formatting — remove thousand commas so TTS reads "1,234" as "one thousand two hundred thirty four"
+  t = t.replace(/(\d),(\d{3})/g, '$1$2').replace(/(\d),(\d{3})/g, '$1$2'); // twice for "1,234,567"
+  // Replace slashes/dashes with brief pauses for better pacing
+  t = t.replace(/\s*[–—]\s*/g, ', ').replace(/\s*\/\s*/g, ' ');
+  // Collapse whitespace
+  t = t.replace(/\s+/g, ' ').trim();
+  return t;
 }
 
 function squawkSpeak(text, url, newsItem) {
@@ -2224,10 +2291,11 @@ function drainSquawkQueue() {
   _setSquawkTabBlink(true);
   updateSquawkBtn();
   const item = squawkQueue.shift();
-  const utter = new SpeechSynthesisUtterance(item.text);
+  const spokenText = _prepareSquawkText(item.text);
+  const utter = new SpeechSynthesisUtterance(spokenText);
   utter.lang  = 'en-US'; // News content is always English — pt-PT TTS is unintelligible
   utter.rate  = squawkRate;
-  utter.pitch = 1.0;
+  utter.pitch = 1.05; // slight lift — less monotone
   const voice = _getBestVoice();
   if (voice) utter.voice = voice;
   if (item.url) {
@@ -2353,7 +2421,7 @@ function testSquawkVoice() {
   const utter = new SpeechSynthesisUtterance('Markets alert. Euro Dollar up zero point three percent. Gold hits two thousand seven hundred.');
   utter.lang  = 'en-US';
   utter.rate  = squawkRate;
-  utter.pitch = 1.0;
+  utter.pitch = 1.05;
   const voice = _getBestVoice();
   if (voice) utter.voice = voice;
   speechSynthesis.speak(utter);
