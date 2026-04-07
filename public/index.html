@@ -3149,13 +3149,16 @@ function _setSquawkTabBlink(on) {
   if (!on) btn.classList.remove('tab-squawk-reading');
 }
 
+let _squawkBannerItem = null; // tracks the item currently shown in the banner
+
 function _removeSquawkBanner() {
+  _squawkBannerItem = null;
   const b = document.getElementById('squawk-banner');
   if (b) b.remove();
 }
 
 function _showSquawkBanner(item) {
-  _removeSquawkBanner();
+  _squawkBannerItem = item;
   const feed = document.getElementById('newsFeed');
   if (!feed) return;
   const icon = item.isCal ? '📅' : '📢';
@@ -4144,6 +4147,8 @@ function renderNews() {
     <div class="scroll-sentinel" id="scrollSentinel"></div>` : '';
 
   document.getElementById('newsFeed').innerHTML = html + loadMoreHtml;
+  // Re-inject squawk banner if renderNews() wiped it while squawk was still reading
+  if (_squawkBannerItem) _showSquawkBanner(_squawkBannerItem);
   // Render flag emoji as images so they work on Windows
   if (window.twemoji) twemoji.parse(document.getElementById('newsFeed'), {folder:'svg',ext:'.svg'});
 
