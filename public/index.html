@@ -107,7 +107,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .upgrade-close{position:absolute;top:14px;right:16px;background:none;border:none;color:#7a9ab0;cursor:pointer;font-size:18px;line-height:1;}
 .upgrade-icon{font-size:36px;margin-bottom:16px;}
 .upgrade-title{font-size:22px;font-weight:800;margin-bottom:8px;}
-.upgrade-feature{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a78bfa;border:1px solid rgba(167,139,250,0.3);background:rgba(167,139,250,0.08);padding:4px 12px;border-radius:2px;margin-bottom:20px;}
+.upgrade-feature{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a78bfa;border:1px solid rgba(167,139,250,0.3);background:rgba(167,139,250,0.08);padding:4px 12px;border-radius:2px;margin-bottom:12px;}
+.upgrade-desc{font-size:13px;color:#dde8f4;line-height:1.55;margin-bottom:20px;}
 .upgrade-benefits{display:flex;flex-direction:column;gap:8px;text-align:left;margin-bottom:28px;}
 .upgrade-benefit{display:flex;align-items:center;gap:10px;font-size:13px;color:#ffffff;}
 .upgrade-benefit::before{content:'✓';color:#a78bfa;font-weight:700;flex-shrink:0;}
@@ -1856,6 +1857,11 @@ const STRINGS = {
     'mnf.n_country':'country','mnf.n_countries':'countries',
     'mnf.n_filter_active':'filter active','mnf.n_filters_active':'filters active',
     'upgrade.title':'Upgrade to Pro',
+    'upgrade.desc.tv':'Watch Bloomberg, CNBC, Al Jazeera and more live channels directly inside the terminal.',
+    'upgrade.desc.squawk':'Hands-free voice alerts for every breaking headline the instant it arrives — zero delay.',
+    'upgrade.desc.news':'Pro delivers every headline in real time. Basic plan receives news with a 2-minute delay.',
+    'upgrade.desc.adfree':'Pro removes all ads and upgrade prompts. Pure market intelligence, zero distractions.',
+    'upgrade.desc.default':'This feature is available on the Pro plan.',
     'upgrade.benefit1':'Real-time news feed — zero delay',
     'upgrade.benefit2':'Live squawk — instant voice alerts',
     'upgrade.benefit3':'Live financial TV — 7 channels',
@@ -2017,6 +2023,11 @@ const STRINGS = {
     'mnf.n_country':'país','mnf.n_countries':'países',
     'mnf.n_filter_active':'filtro ativo','mnf.n_filters_active':'filtros ativos',
     'upgrade.title':'Mudar para Pro',
+    'upgrade.desc.tv':'Vê Bloomberg, CNBC, Al Jazeera e mais canais ao vivo diretamente no terminal.',
+    'upgrade.desc.squawk':'Alertas de voz automáticos para cada notícia breaking no instante em que chega — sem atraso.',
+    'upgrade.desc.news':'O Pro entrega cada notícia em tempo real. O plano Básico recebe notícias com 2 minutos de atraso.',
+    'upgrade.desc.adfree':'O Pro remove todos os anúncios e avisos de upgrade. Inteligência de mercado pura, sem distrações.',
+    'upgrade.desc.default':'Esta funcionalidade está disponível no plano Pro.',
     'upgrade.benefit1':'Feed em tempo real — sem atraso',
     'upgrade.benefit2':'Squawk ao vivo — alertas de voz instantâneos',
     'upgrade.benefit3':'TV financeira ao vivo — 7 canais',
@@ -2178,6 +2189,11 @@ const STRINGS = {
     'mnf.n_country':'país','mnf.n_countries':'países',
     'mnf.n_filter_active':'filtro activo','mnf.n_filters_active':'filtros activos',
     'upgrade.title':'Actualizar a Pro',
+    'upgrade.desc.tv':'Ve Bloomberg, CNBC, Al Jazeera y más canales en vivo directamente en el terminal.',
+    'upgrade.desc.squawk':'Alertas de voz automáticas para cada titular al instante en que llega — sin retraso.',
+    'upgrade.desc.news':'Pro entrega cada titular en tiempo real. El plan Básico recibe noticias con 2 minutos de retraso.',
+    'upgrade.desc.adfree':'Pro elimina todos los anuncios y avisos de actualización. Inteligencia de mercado pura, sin distracciones.',
+    'upgrade.desc.default':'Esta función está disponible en el plan Pro.',
     'upgrade.benefit1':'Feed de noticias en tiempo real — sin retraso',
     'upgrade.benefit2':'Squawk en vivo — alertas de voz instantáneas',
     'upgrade.benefit3':'TV financiera en vivo — 7 canales',
@@ -2339,6 +2355,11 @@ const STRINGS = {
     'mnf.n_country':'pays','mnf.n_countries':'pays',
     'mnf.n_filter_active':'filtre actif','mnf.n_filters_active':'filtres actifs',
     'upgrade.title':'Passer à Pro',
+    'upgrade.desc.tv':'Regardez Bloomberg, CNBC, Al Jazeera et plus en direct dans le terminal.',
+    'upgrade.desc.squawk':'Alertes vocales automatiques pour chaque breaking news dès son arrivée — sans délai.',
+    'upgrade.desc.news':'Pro livre chaque titre en temps réel. Le plan Basic reçoit les nouvelles avec 2 minutes de délai.',
+    'upgrade.desc.adfree':'Pro supprime toutes les publicités et invites de mise à niveau. Intelligence de marché pure, zéro distraction.',
+    'upgrade.desc.default':'Cette fonctionnalité est disponible avec le plan Pro.',
     'upgrade.benefit1':'Flux d\'actualités en temps réel — sans délai',
     'upgrade.benefit2':'Squawk en direct — alertes vocales instantanées',
     'upgrade.benefit3':'TV financière en direct — 7 chaînes',
@@ -2500,6 +2521,11 @@ const STRINGS = {
     'mnf.n_country':'Land','mnf.n_countries':'Länder',
     'mnf.n_filter_active':'aktiver Filter','mnf.n_filters_active':'aktive Filter',
     'upgrade.title':'Upgrade auf Pro',
+    'upgrade.desc.tv':'Schau Bloomberg, CNBC, Al Jazeera und mehr live direkt im Terminal.',
+    'upgrade.desc.squawk':'Automatische Sprachmeldungen für jede Breaking-News im Moment des Eintreffens — ohne Verzögerung.',
+    'upgrade.desc.news':'Pro liefert jede Meldung in Echtzeit. Basic-Plan empfängt Nachrichten mit 2 Minuten Verzögerung.',
+    'upgrade.desc.adfree':'Pro entfernt alle Werbung und Upgrade-Hinweise. Reine Marktintelligenz, null Ablenkung.',
+    'upgrade.desc.default':'Diese Funktion ist im Pro-Plan verfügbar.',
     'upgrade.benefit1':'Echtzeit-Newsfeed — ohne Verzögerung',
     'upgrade.benefit2':'Live Squawk — sofortige Sprachmeldungen',
     'upgrade.benefit3':'Live-Finanz-TV — 7 Kanäle',
@@ -2661,6 +2687,11 @@ const STRINGS = {
     'mnf.n_country':'paese','mnf.n_countries':'paesi',
     'mnf.n_filter_active':'filtro attivo','mnf.n_filters_active':'filtri attivi',
     'upgrade.title':'Passa a Pro',
+    'upgrade.desc.tv':'Guarda Bloomberg, CNBC, Al Jazeera e altri canali live direttamente nel terminal.',
+    'upgrade.desc.squawk':'Avvisi vocali automatici per ogni notizia breaking nel momento in cui arriva — zero ritardo.',
+    'upgrade.desc.news':'Pro consegna ogni titolo in tempo reale. Il piano Basic riceve notizie con 2 minuti di ritardo.',
+    'upgrade.desc.adfree':'Pro rimuove tutta la pubblicità e i prompt di upgrade. Intelligenza di mercato pura, zero distrazioni.',
+    'upgrade.desc.default':'Questa funzionalità è disponibile nel piano Pro.',
     'upgrade.benefit1':'Feed notizie in tempo reale — zero ritardo',
     'upgrade.benefit2':'Squawk live — avvisi vocali istantanei',
     'upgrade.benefit3':'TV finanziaria live — 7 canali',
@@ -4500,11 +4531,11 @@ async function goToPro(btnEl, priceId) {
 }
 
 const PRO_FEATURES = {
-  'Live Financial TV':   'Watch Bloomberg TV, CNBC, Al Jazeera and more live financial channels directly inside the terminal.',
-  'Live Squawk':         'Hands-free voice reading of every breaking headline the instant it arrives — with zero delay.',
-  'Real-Time News Feed': 'Pro delivers every headline in real time. Basic plan receives news with a 2-minute delay.',
-  'Real-time News':      'Pro delivers every headline in real time. Basic plan receives news with a 2-minute delay.',
-  'Ad-Free Experience':  'Pro removes all ads and upgrade prompts from the terminal. Pure market intelligence, zero distractions.',
+  'Live Financial TV':   'upgrade.desc.tv',
+  'Live Squawk':         'upgrade.desc.squawk',
+  'Real-Time News Feed': 'upgrade.desc.news',
+  'Real-time News':      'upgrade.desc.news',
+  'Ad-Free Experience':  'upgrade.desc.adfree',
 };
 
 // ══════════════════════════════════════════════════════
@@ -5194,9 +5225,12 @@ async function openCompanyDetail(ticker, name){
 }
 
 function showUpgrade(featureName) {
+  const descKey = PRO_FEATURES[featureName] || 'upgrade.desc.default';
   document.getElementById('upgrade-feature-name').textContent = featureName;
+  document.getElementById('upgrade-feature-desc').textContent = t(descKey);
   document.getElementById('upgrade-overlay').classList.add('show');
   applyTranslations();
+  document.getElementById('upgrade-feature-desc').textContent = t(descKey);
 }
 function hideUpgrade() {
   document.getElementById('upgrade-overlay').classList.remove('show');
@@ -6427,6 +6461,7 @@ function _fmtScTs(ts) {
     <div class="upgrade-icon">🔒</div>
     <div class="upgrade-feature" id="upgrade-feature-name">Pro Feature</div>
     <h2 class="upgrade-title" data-i18n="upgrade.title">Upgrade to Pro</h2>
+    <p class="upgrade-desc" id="upgrade-feature-desc"></p>
     <div class="upgrade-benefits">
       <div class="upgrade-benefit" data-i18n="upgrade.benefit1">Real-time news feed — zero delay</div>
       <div class="upgrade-benefit" data-i18n="upgrade.benefit2">Live squawk — instant voice alerts</div>
