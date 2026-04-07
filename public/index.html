@@ -1096,7 +1096,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
           <button class="tv-ch-btn" data-ch="skynews"   onclick="switchChannel('skynews',this)">Sky News</button>
           <button class="tv-ch-btn" data-ch="dw"        onclick="switchChannel('dw',this)">DW News</button>
           <button class="tv-ch-btn" data-ch="france24"  onclick="switchChannel('france24',this)">France 24</button>
-          <button class="tv-ch-btn" data-ch="ap"        onclick="switchChannel('ap',this)">AP News</button>
+          <button class="tv-ch-btn" data-ch="yahoofin"  onclick="switchChannel('yahoofin',this)">Yahoo Finance</button>
         </div>
       </div>
       <div class="tv-body">
@@ -1139,9 +1139,9 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
               <div class="tv-ch-info"><div class="tv-ch-name">France 24</div><div class="tv-ch-desc">International News English</div></div>
               <div class="tv-live-badge">LIVE</div>
             </div>
-            <div class="tv-ch-item" data-ch="ap" onclick="switchChannel('ap',this)">
+            <div class="tv-ch-item" data-ch="yahoofin" onclick="switchChannel('yahoofin',this)">
               <div class="tv-ch-dot"></div>
-              <div class="tv-ch-info"><div class="tv-ch-name">AP News</div><div class="tv-ch-desc">Breaking News & Live Events</div></div>
+              <div class="tv-ch-info"><div class="tv-ch-name">Yahoo Finance</div><div class="tv-ch-desc">Markets, Stocks, Analysis 24/7</div></div>
               <div class="tv-live-badge">LIVE</div>
             </div>
           </div>
@@ -2691,7 +2691,7 @@ const LIVE_STREAM_IDS = {
   'france24':   {type:'channel', id:'UCQfwfsi5VrQ8yKZ-UWmAEFg'},  // France 24 English
   'wion':       {type:'channel', id:'UCJYifGXaZCXxBIY0YkNFBiw'},  // WION
   'euronews':   {type:'channel', id:'UCg2PveIFoQEg2DVwTiT1wYA'},  // Euronews English
-  'ap':         {type:'video',   id:'v8tpjzHPDJc'},                // Associated Press live
+  'yahoofin':   {type:'channel', id:'UCEAZeUIeJs0IjQiqTCdVSIg'},  // Yahoo Finance live — markets 24/7
 };
 
 function openLiveStream(key, chipEl) {
