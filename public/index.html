@@ -1517,7 +1517,7 @@ const UPGRADE_URL   = 'https://www.tradingnewsterminal.com/#pricing';
 // Plan is set from cached user data; authoritative check happens server-side
 const _cachedUser   = (() => { try { return JSON.parse(localStorage.getItem('tnt_user')||'{}'); } catch(e){ return {}; } })();
 const USER_PLAN     = (['pro','trial'].includes(_cachedUser.plan)) ? 'pro' : 'free'; // trial = pro access
-const IS_PRO        = USER_PLAN === 'pro';
+const IS_PRO        = USER_PLAN === 'pro' || USER_PLAN === 'trial';
 const PAGE_SIZE     = 50;
 
 // ─── State ──────────────────────────────────────────────────────
