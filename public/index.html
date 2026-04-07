@@ -286,23 +286,24 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .mnf-done:hover{background:var(--accent);}
 
 /* ── Tracker FX Sidebar Ad ── */
-@keyframes ad-glow-rotate { to { transform: rotate(360deg); } }
-.sidebar-tfx-ad{margin:0 10px 2px;flex-shrink:0;position:relative;overflow:hidden;border-radius:8px;padding:2px;}
-.sidebar-tfx-ad::before{content:'';position:absolute;width:200%;height:200%;top:-50%;left:-50%;background:conic-gradient(transparent 30%,rgba(107,92,231,.75) 42%,#9B8BFF 48%,#00d4ff 52%,#9B8BFF 58%,rgba(107,92,231,.75) 66%,transparent 76%);animation:ad-glow-rotate 4s linear infinite;z-index:0;pointer-events:none;}
-.sidebar-tfx-ad-inner{background:#22304A;border:1px solid rgba(107,92,231,0.3);border-radius:6px;overflow:hidden;position:relative;z-index:1;}
+@property --ad-angle { syntax:'<angle>'; initial-value:0deg; inherits:false; }
+@keyframes ad-border-rotate { to { --ad-angle: 360deg; } }
+.sidebar-tfx-ad{margin:0 10px 2px;flex-shrink:0;border-radius:8px;border:2px solid transparent;background:linear-gradient(#0f1217,#0f1217) padding-box, conic-gradient(from var(--ad-angle),transparent 50%,rgba(107,92,231,.85) 62%,#00d4ff 72%,rgba(107,92,231,.85) 82%,transparent 90%) border-box;animation:ad-border-rotate 4s linear infinite;}
+.sidebar-tfx-ad-inner{background:#22304A;border:none;border-radius:6px;overflow:hidden;position:relative;}
 .sidebar-tfx-ad-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#6B5CE7 40%,#9B8BFF 60%,transparent);}
 .tfx-ad-body-wrap{padding:12px 13px 11px;}
-.tfx-ad-eyebrow{font-size:7.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:7px;}
-.tfx-ad-logo-text{display:flex;align-items:baseline;gap:7px;line-height:1;margin-bottom:6px;}
-.tfx-word-tracker{font-size:11px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.65);}
-.tfx-word-fx{font-size:28px;font-weight:900;color:#9B8BFF;letter-spacing:-.02em;line-height:1;}
-.tfx-ad-tagline{font-size:10px;color:#fff;line-height:1.45;margin-bottom:10px;}
+.tfx-ad-eyebrow{font-size:8.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:8px;}
+.tfx-ad-logo-text{display:flex;align-items:baseline;gap:7px;line-height:1;margin-bottom:7px;}
+.tfx-word-tracker{font-size:13px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.7);}
+.tfx-word-fx{font-size:26px;font-weight:900;color:#9B8BFF;letter-spacing:-.02em;line-height:1;}
+.tfx-ad-tagline{font-size:12px;color:#e0e8f4;line-height:1.45;margin-bottom:10px;font-weight:500;}
 .tfx-ad-stats{display:flex;gap:5px;margin-bottom:10px;}
 .tfx-ad-stat{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:3px;padding:5px 3px;text-align:center;}
-.tfx-ad-stat-num{font-size:11px;font-weight:800;color:#fff;display:block;line-height:1;}
-.tfx-ad-stat-lbl{font-size:7.5px;color:#fff;display:block;margin-top:2px;text-transform:uppercase;letter-spacing:.05em;}
-.tfx-ad-btn{display:block;width:100%;padding:8px 10px;text-align:center;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;border-radius:3px;text-decoration:none;transition:all .2s;}
+.tfx-ad-stat-num{font-size:12px;font-weight:800;color:#fff;display:block;line-height:1;}
+.tfx-ad-stat-lbl{font-size:9px;color:#c0d0e0;display:block;margin-top:2px;text-transform:uppercase;letter-spacing:.05em;}
+.tfx-ad-btn{display:block;width:100%;padding:9px 10px;text-align:center;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;border-radius:3px;text-decoration:none;transition:all .2s;}
 .tfx-ad-btn:hover{background:linear-gradient(135deg,#4A3ACC,#6B5BEF);transform:translateY(-1px);box-shadow:0 4px 16px rgba(107,92,231,.45);}
+.tfx-ad-footer-note{font-size:9.5px;color:#9bb4cc;text-align:center;margin-top:6px;letter-spacing:.04em;}
 .tfx-ad-footer-note{font-size:8px;color:#fff;text-align:center;margin-top:6px;letter-spacing:.04em;}
 
 /* ── Modal PRO gating ── */
@@ -549,10 +550,9 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .delay-banner-btn{flex-shrink:0;padding:6px 16px;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:none;transition:all .15s;border-radius:3px;white-space:nowrap;}
 .delay-banner-btn:hover{background:linear-gradient(135deg,#4A3ACC,#6B5BEF);}
 /* ── Inline feed ad ── */
-.feed-ad-card{cursor:pointer;transition:opacity .15s;position:relative;overflow:hidden;padding:2px;}
-.feed-ad-card::before{content:'';position:absolute;width:200%;height:200%;top:-50%;left:-50%;background:conic-gradient(transparent 30%,rgba(107,92,231,.75) 42%,#9B8BFF 48%,#00d4ff 52%,#9B8BFF 58%,rgba(107,92,231,.75) 66%,transparent 76%);animation:ad-glow-rotate 4s linear infinite;z-index:0;pointer-events:none;}
+.feed-ad-card{cursor:pointer;transition:opacity .15s;position:relative;overflow:hidden;border:2px solid transparent;background:linear-gradient(#22304A,#22304A) padding-box, conic-gradient(from var(--ad-angle),transparent 50%,rgba(107,92,231,.85) 62%,#00d4ff 72%,rgba(107,92,231,.85) 82%,transparent 90%) border-box;animation:ad-border-rotate 4s linear infinite;}
 .feed-ad-card:hover{opacity:.92;}
-.feed-ad-banner{background:#22304A;border-top:2px solid #6B5CE7;border-bottom:1px solid rgba(107,92,231,.18);padding:11px 20px 11px 22px;display:flex;align-items:center;gap:14px;position:relative;z-index:1;}
+.feed-ad-banner{background:#22304A;padding:11px 20px 11px 22px;display:flex;align-items:center;gap:14px;position:relative;}
 .feed-ad-brand{display:flex;flex-direction:column;gap:1px;flex-shrink:0;min-width:74px;}
 .feed-ad-brand-name{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.01em;line-height:1;}
 .feed-ad-brand-name span{color:#9B8BFF;}
@@ -561,8 +561,8 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .feed-ad-copy{flex:1;min-width:0;}
 .feed-ad-headline{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .feed-ad-sub{font-size:10px;color:#fff;}
-.feed-ad-cta{flex-shrink:0;padding:7px 16px;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:all .15s;white-space:nowrap;}
-.feed-ad-card:hover .feed-ad-cta{background:linear-gradient(135deg,#4A3ACC,#6B5BEF);}
+.feed-ad-cta{flex-shrink:0;padding:7px 16px;background:#ffffff;color:#5B4BDD;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:all .15s;white-space:nowrap;}
+.feed-ad-card:hover .feed-ad-cta{background:#f0f0ff;color:#4A3ACC;}
 .feed-ad-sponsored{display:none;}
 
 /* ── Empty ── */
@@ -1004,25 +1004,25 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
     <div class="sidebar-tfx-ad" id="sidebarTfxAd">
       <div class="sidebar-tfx-ad-inner">
         <div class="tfx-ad-body-wrap">
-          <div class="tfx-ad-eyebrow">Sponsored</div>
+          <div class="tfx-ad-eyebrow" data-i18n="ad.sponsored">Sponsored</div>
           <div class="tfx-ad-logo-text"><span class="tfx-word-tracker">TRACKER</span><span class="tfx-word-fx">FX</span></div>
-          <div class="tfx-ad-tagline">The Master Key to<br>Profitable Trading</div>
+          <div class="tfx-ad-tagline" data-i18n-html="ad.tagline">The Master Key to<br>Profitable Trading</div>
           <div class="tfx-ad-stats">
             <div class="tfx-ad-stat">
               <span class="tfx-ad-stat-num">1200+</span>
-              <span class="tfx-ad-stat-lbl">Brokers</span>
+              <span class="tfx-ad-stat-lbl" data-i18n="ad.stat_brokers">Brokers</span>
             </div>
             <div class="tfx-ad-stat">
               <span class="tfx-ad-stat-num">MT4/5</span>
-              <span class="tfx-ad-stat-lbl">Auto Sync</span>
+              <span class="tfx-ad-stat-lbl" data-i18n="ad.stat_sync">Auto Sync</span>
             </div>
             <div class="tfx-ad-stat">
               <span class="tfx-ad-stat-num">Free</span>
-              <span class="tfx-ad-stat-lbl">Trial cTrader</span>
+              <span class="tfx-ad-stat-lbl" data-i18n="ad.stat_trial">Free Trial</span>
             </div>
           </div>
-          <a class="tfx-ad-btn" href="https://www.trackerfx.com" target="_blank" rel="noopener">Start Your Journey</a>
-          <div class="tfx-ad-footer-note">Automated Trading Journal</div>
+          <a class="tfx-ad-btn" href="https://www.trackerfx.com" target="_blank" rel="noopener" data-i18n="ad.cta">Start Your Journey</a>
+          <div class="tfx-ad-footer-note" data-i18n="ad.footer">Automated Trading Journal</div>
         </div>
       </div>
     </div>
@@ -1717,6 +1717,9 @@ const STRINGS = {
     'delay.btn':'⚡ Upgrade to Pro',
     'status.status':'Status','status.connection':'Connection','status.updated':'Updated','status.items':'Items',
     'status.connecting':'Connecting...',
+    'ad.sponsored':'Sponsored','ad.tagline':'The Master Key to<br>Profitable Trading','ad.brand_tag':'Trading Journal',
+    'ad.headline':'The Master Key to Profitable Trading','ad.sub':'Automated Journal · 1200+ Brokers · MT4/MT5 · Free Trial on cTrader',
+    'ad.cta':'Start Your Journey','ad.stat_brokers':'Brokers','ad.stat_sync':'Auto Sync','ad.stat_trial':'Free Trial','ad.footer':'Automated Trading Journal',
     'empty.connecting':'Connecting','empty.connecting_sub':'Establishing real-time connection...',
     'empty.no_news':'No news found','empty.no_news_sub':'Change filters or wait for next update',
     'share.btn':'⇪ Share','toast.link_copied':'Link copied',
@@ -1861,6 +1864,9 @@ const STRINGS = {
     'delay.btn':'⚡ Upgrade para Pro',
     'status.status':'Estado','status.connection':'Ligação','status.updated':'Atualizado','status.items':'Itens',
     'status.connecting':'A conectar...',
+    'ad.sponsored':'Patrocinado','ad.tagline':'A Chave Mestra para<br>Trading Lucrativo','ad.brand_tag':'Diário de Trading',
+    'ad.headline':'A Chave Mestra para Trading Lucrativo','ad.sub':'Diário Automático · +1200 Brokers · MT4/MT5 · Trial Grátis no cTrader',
+    'ad.cta':'Começa Agora','ad.stat_brokers':'Brokers','ad.stat_sync':'Sync Auto','ad.stat_trial':'Trial cTrader','ad.footer':'Diário de Trading Automático',
     'empty.connecting':'A conectar','empty.connecting_sub':'A estabelecer ligação em tempo real...',
     'empty.no_news':'Sem notícias','empty.no_news_sub':'Altera os filtros ou aguarda a próxima atualização',
     'share.btn':'⇪ Partilhar','toast.link_copied':'Ligação copiada',
@@ -2005,6 +2011,9 @@ const STRINGS = {
     'delay.btn':'⚡ Pásate a Pro',
     'status.status':'Estado','status.connection':'Conexión','status.updated':'Actualizado','status.items':'Ítems',
     'status.connecting':'Conectando...',
+    'ad.sponsored':'Patrocinado','ad.tagline':'La Clave Maestra del<br>Trading Rentable','ad.brand_tag':'Diario de Trading',
+    'ad.headline':'La Clave Maestra del Trading Rentable','ad.sub':'Diario Automático · +1200 Brokers · MT4/MT5 · Trial Gratis en cTrader',
+    'ad.cta':'Empieza Ahora','ad.stat_brokers':'Brokers','ad.stat_sync':'Sync Auto','ad.stat_trial':'Trial cTrader','ad.footer':'Diario de Trading Automático',
     'empty.connecting':'Conectando','empty.connecting_sub':'Estableciendo conexión en tiempo real...',
     'empty.no_news':'Sin noticias','empty.no_news_sub':'Cambia los filtros o espera la próxima actualización',
     'share.btn':'⇪ Compartir','toast.link_copied':'Enlace copiado',
@@ -2149,6 +2158,9 @@ const STRINGS = {
     'delay.btn':'⚡ Passer à Pro',
     'status.status':'Statut','status.connection':'Connexion','status.updated':'Mis à jour','status.items':'Éléments',
     'status.connecting':'Connexion...',
+    'ad.sponsored':'Sponsorisé','ad.tagline':'La Clé Maîtresse du<br>Trading Profitable','ad.brand_tag':'Journal de Trading',
+    'ad.headline':'La Clé Maîtresse du Trading Profitable','ad.sub':'Journal Automatisé · +1200 Brokers · MT4/MT5 · Essai Gratuit sur cTrader',
+    'ad.cta':'Commencer','ad.stat_brokers':'Brokers','ad.stat_sync':'Sync Auto','ad.stat_trial':'Essai cTrader','ad.footer':'Journal de Trading Automatisé',
     'empty.connecting':'Connexion','empty.connecting_sub':'Établissement de la connexion en temps réel...',
     'empty.no_news':'Aucune actualité','empty.no_news_sub':'Modifiez les filtres ou attendez la prochaine mise à jour',
     'share.btn':'⇪ Partager','toast.link_copied':'Lien copié',
@@ -2293,6 +2305,9 @@ const STRINGS = {
     'delay.btn':'⚡ Auf Pro upgraden',
     'status.status':'Status','status.connection':'Verbindung','status.updated':'Aktualisiert','status.items':'Einträge',
     'status.connecting':'Verbinden...',
+    'ad.sponsored':'Gesponsert','ad.tagline':'Der Schlüssel zum<br>profitablen Trading','ad.brand_tag':'Trading Journal',
+    'ad.headline':'Der Schlüssel zum profitablen Trading','ad.sub':'Automatisches Journal · +1200 Broker · MT4/MT5 · Kostenlose Testversion auf cTrader',
+    'ad.cta':'Jetzt starten','ad.stat_brokers':'Broker','ad.stat_sync':'Auto-Sync','ad.stat_trial':'Test cTrader','ad.footer':'Automatisches Trading Journal',
     'empty.connecting':'Verbinden','empty.connecting_sub':'Echtzeit-Verbindung wird hergestellt...',
     'empty.no_news':'Keine Nachrichten','empty.no_news_sub':'Filter ändern oder auf nächstes Update warten',
     'share.btn':'⇪ Teilen','toast.link_copied':'Link kopiert',
@@ -2437,6 +2452,9 @@ const STRINGS = {
     'delay.btn':'⚡ Passa a Pro',
     'status.status':'Stato','status.connection':'Connessione','status.updated':'Aggiornato','status.items':'Elementi',
     'status.connecting':'Connessione...',
+    'ad.sponsored':'Sponsorizzato','ad.tagline':'La Chiave Maestra del<br>Trading Redditizio','ad.brand_tag':'Diario di Trading',
+    'ad.headline':'La Chiave Maestra del Trading Redditizio','ad.sub':'Diario Automatico · +1200 Broker · MT4/MT5 · Prova Gratuita su cTrader',
+    'ad.cta':'Inizia ora','ad.stat_brokers':'Broker','ad.stat_sync':'Sync Auto','ad.stat_trial':'Trial cTrader','ad.footer':'Diario di Trading Automatico',
     'empty.connecting':'Connessione','empty.connecting_sub':'Connessione in tempo reale in corso...',
     'empty.no_news':'Nessuna notizia','empty.no_news_sub':'Cambia i filtri o attendi il prossimo aggiornamento',
     'share.btn':'⇪ Condividi','toast.link_copied':'Link copiato',
@@ -4134,15 +4152,15 @@ function renderNews() {
            <div class="feed-ad-banner">
              <div class="feed-ad-brand">
                <div class="feed-ad-brand-name">Tracker<span>FX</span></div>
-               <div class="feed-ad-brand-tag">Trading Journal</div>
+               <div class="feed-ad-brand-tag">${t('ad.brand_tag')}</div>
              </div>
              <div class="feed-ad-divider"></div>
              <div class="feed-ad-copy">
-               <div class="feed-ad-headline">The Master Key to Profitable Trading</div>
-               <div class="feed-ad-sub">Automated Journal · 1200+ Brokers · MT4/MT5 · Free Trial on cTrader</div>
+               <div class="feed-ad-headline">${t('ad.headline')}</div>
+               <div class="feed-ad-sub">${t('ad.sub')}</div>
              </div>
-             <button class="feed-ad-cta" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">Start Your Journey</button>
-             <span class="feed-ad-sponsored">Sponsored</span>
+             <button class="feed-ad-cta" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">${t('ad.cta')}</button>
+             <span class="feed-ad-sponsored">${t('ad.sponsored')}</span>
            </div>
          </div>`
       : '';
@@ -4235,6 +4253,11 @@ function renderCalendar() {
   }).join('');
 }
 function injectCalRelease(e) {
+  // Basic plan: delay CE releases by 2 minutes (same as news feed delay)
+  if (!IS_PRO) { setTimeout(() => _doInjectCalRelease(e), 2 * 60 * 1000); return; }
+  _doInjectCalRelease(e);
+}
+function _doInjectCalRelease(e) {
   const ac=actualClass(e.actual,e.forecast,e.previous,e.title);
   const acLabel=ac==='actual-positive'?'🟢':ac==='actual-negative'?'🔴':'🟡';
   const flag=FLAGS[e.country]||'';
