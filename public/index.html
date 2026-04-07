@@ -882,32 +882,32 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       <button class="squawk-btn" id="squawkBtn" onclick="toggleSquawk()">🔇 Squawk OFF</button>
       <button class="squawk-cfg-btn" id="squawkCfgBtn" onclick="toggleSquawkCfg(event)" title="Squawk settings">⚙</button>
       <div class="squawk-dd" id="squawkDd">
-        <div class="squawk-dd-title">⚙ Squawk Settings</div>
+        <div class="squawk-dd-title" data-i18n="squawk.title">⚙ Squawk Settings</div>
         <div class="squawk-dd-row">
-          <span class="squawk-dd-lbl">Voice</span>
+          <span class="squawk-dd-lbl" data-i18n="squawk.voice">Voice</span>
           <select class="squawk-voice-sel" id="squawkVoiceSel" onchange="setSquawkVoice(this.value)">
-            <option value="">Auto — best available</option>
+            <option value="" data-i18n="squawk.voice_auto">Auto — best available</option>
           </select>
         </div>
         <div class="squawk-dd-row">
-          <span class="squawk-dd-lbl">Speed</span>
+          <span class="squawk-dd-lbl" data-i18n="squawk.speed">Speed</span>
           <div class="squawk-speed-row">
             <input type="range" id="squawkRateInput" min="0.6" max="1.6" step="0.1" value="1.0" oninput="setSquawkRate(this.value)">
             <span class="squawk-speed-val" id="squawkRateVal">1.0×</span>
           </div>
         </div>
         <div class="squawk-dd-row">
-          <span class="squawk-dd-lbl">Read news</span>
+          <span class="squawk-dd-lbl" data-i18n="squawk.read_news">Read news</span>
           <div class="squawk-chips">
-            <button class="squawk-chip sel" data-sf="ALL"      onclick="setSquawkFilter('ALL',this)">All</button>
-            <button class="squawk-chip"     data-sf="HIGH"     onclick="setSquawkFilter('HIGH',this)">🔴 High Impact</button>
-            <button class="squawk-chip"     data-sf="MEDIUM"   onclick="setSquawkFilter('MEDIUM',this)">🟡 Medium Impact</button>
-            <button class="squawk-chip"     data-sf="MY_NEWS"  onclick="setSquawkFilter('MY_NEWS',this)">★ My News</button>
-            <button class="squawk-chip"     data-sf="CALENDAR" onclick="setSquawkFilter('CALENDAR',this)" title="Read Medium + High Economic Calendar releases">📅 Calendar</button>
+            <button class="squawk-chip sel" data-sf="ALL"      onclick="setSquawkFilter('ALL',this)" data-i18n="squawk.chip_all">All</button>
+            <button class="squawk-chip"     data-sf="HIGH"     onclick="setSquawkFilter('HIGH',this)" data-i18n="squawk.chip_high">🔴 High Impact</button>
+            <button class="squawk-chip"     data-sf="MEDIUM"   onclick="setSquawkFilter('MEDIUM',this)" data-i18n="squawk.chip_medium">🟡 Medium Impact</button>
+            <button class="squawk-chip"     data-sf="MY_NEWS"  onclick="setSquawkFilter('MY_NEWS',this)" data-i18n="squawk.chip_mynews">★ My News</button>
+            <button class="squawk-chip"     data-sf="CALENDAR" onclick="setSquawkFilter('CALENDAR',this)" title="Read Medium + High Economic Calendar releases" data-i18n="squawk.chip_calendar">📅 Calendar</button>
           </div>
         </div>
-        <button class="squawk-test-btn" onclick="testSquawkVoice()">▶ Test Voice</button>
-        <div class="squawk-dd-note">Voices always read in English for clarity.<br>Neural/Google voices sound best.</div>
+        <button class="squawk-test-btn" onclick="testSquawkVoice()" data-i18n="squawk.test">▶ Test Voice</button>
+        <div class="squawk-dd-note" data-i18n-html="squawk.note_html">Voices always read in English for clarity.<br>Neural/Google voices sound best.</div>
       </div>
     </div>
     <button class="sound-btn active" id="soundBtn" onclick="toggleSound()">🔔 Alerts ON</button>
@@ -929,7 +929,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
     <div class="user-avatar" id="userAvatarBtn" onclick="openSettings()" title="Account Settings" style="display:none"></div>
     <span id="userLabel" style="font-size:11px;color:var(--text-muted);font-family:var(--font-mono);cursor:pointer;" onclick="openSettings()"></span>
     <button class="settings-btn" id="settingsBtn" onclick="openSettings()" title="Account Settings" style="display:none">⚙</button>
-    <button class="auth-btn" id="logoutBtn" onclick="doLogout()" style="display:none">Sign Out</button>
+    <button class="auth-btn" id="logoutBtn" onclick="doLogout()" style="display:none" data-i18n="nav.signout">Sign Out</button>
   </div>
 </header>
 
@@ -939,18 +939,18 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 
     <!-- Vertical Navigation Menu -->
     <nav class="sidebar-nav">
-      <span class="sidebar-nav-label">Menu</span>
-      <button class="tab-btn active" id="tab-news-btn" onclick="switchTab('news')"><span class="nav-icon">≡</span>News Feed</button>
-      <button class="tab-btn" id="tab-calendar-btn" onclick="switchTab('calendar')"><span class="nav-icon">▦</span>Calendar</button>
-      <button class="tab-btn" id="tab-tv-btn" onclick="IS_PRO ? switchTab('tv') : showUpgrade('Live Financial TV')"><span class="nav-icon">▶</span>Live TV<span class="tab-pro-lock" id="tv-lock-badge">PRO</span></button>
-      <button class="tab-btn" id="tab-fx-btn" onclick="IS_PRO ? switchTab('fx') : showUpgrade('FX Rates')"><span class="nav-icon">⇄</span>FX Rates<span class="tab-pro-lock">PRO</span></button>
-      <button class="tab-btn" id="tab-crypto-btn" onclick="IS_PRO ? switchTab('crypto') : showUpgrade('Crypto Markets')"><span class="nav-icon">◈</span>Crypto<span class="tab-pro-lock">PRO</span></button>
-      <button class="tab-btn" id="tab-commodities-btn" onclick="IS_PRO ? switchTab('commodities') : showUpgrade('Commodities')"><span class="nav-icon">◆</span>Commodities<span class="tab-pro-lock">PRO</span></button>
-      <button class="tab-btn" id="tab-macro-btn" onclick="IS_PRO ? switchTab('macro') : showUpgrade('Macro Dashboard')"><span class="nav-icon">∿</span>Macro<span class="tab-pro-lock">PRO</span></button>
-      <button class="tab-btn" id="tab-sentiment-btn" onclick="IS_PRO ? switchTab('sentiment') : showUpgrade('Market Sentiment')"><span class="nav-icon">◎</span>Sentiment<span class="tab-pro-lock">PRO</span></button>
-      <button class="tab-btn" id="tab-earnings-btn" onclick="IS_PRO ? switchTab('earnings') : showUpgrade('Earnings Calendar')"><span class="nav-icon">$</span>Earnings<span class="tab-pro-lock">PRO</span></button>
-      <button class="tab-btn" id="tab-centralbanks-btn" onclick="IS_PRO ? switchTab('centralbanks') : showUpgrade('Central Bank News')"><span class="nav-icon">♦</span>Central Banks<span class="tab-pro-lock">PRO</span></button>
-      <button class="tab-btn" id="tab-screener-btn" onclick="IS_PRO ? switchTab('screener') : showUpgrade('Market Screener')"><span class="nav-icon">⊞</span>Screener<span class="tab-pro-lock">PRO</span></button>
+      <span class="sidebar-nav-label" data-i18n="nav.menu">Menu</span>
+      <button class="tab-btn active" id="tab-news-btn" onclick="switchTab('news')"><span class="nav-icon">≡</span><span data-i18n="nav.news_feed">News Feed</span></button>
+      <button class="tab-btn" id="tab-calendar-btn" onclick="switchTab('calendar')"><span class="nav-icon">▦</span><span data-i18n="nav.calendar">Calendar</span></button>
+      <button class="tab-btn" id="tab-tv-btn" onclick="IS_PRO ? switchTab('tv') : showUpgrade('Live Financial TV')"><span class="nav-icon">▶</span><span data-i18n="nav.tv">Live TV</span><span class="tab-pro-lock" id="tv-lock-badge">PRO</span></button>
+      <button class="tab-btn" id="tab-fx-btn" onclick="IS_PRO ? switchTab('fx') : showUpgrade('FX Rates')"><span class="nav-icon">⇄</span><span data-i18n="nav.fx">FX Rates</span><span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-crypto-btn" onclick="IS_PRO ? switchTab('crypto') : showUpgrade('Crypto Markets')"><span class="nav-icon">◈</span><span data-i18n="nav.crypto">Crypto</span><span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-commodities-btn" onclick="IS_PRO ? switchTab('commodities') : showUpgrade('Commodities')"><span class="nav-icon">◆</span><span data-i18n="nav.commodities">Commodities</span><span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-macro-btn" onclick="IS_PRO ? switchTab('macro') : showUpgrade('Macro Dashboard')"><span class="nav-icon">∿</span><span data-i18n="nav.macro">Macro</span><span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-sentiment-btn" onclick="IS_PRO ? switchTab('sentiment') : showUpgrade('Market Sentiment')"><span class="nav-icon">◎</span><span data-i18n="nav.sentiment">Sentiment</span><span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-earnings-btn" onclick="IS_PRO ? switchTab('earnings') : showUpgrade('Earnings Calendar')"><span class="nav-icon">$</span><span data-i18n="nav.earnings">Earnings</span><span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-centralbanks-btn" onclick="IS_PRO ? switchTab('centralbanks') : showUpgrade('Central Bank News')"><span class="nav-icon">♦</span><span data-i18n="nav.central_banks">Central Banks</span><span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-screener-btn" onclick="IS_PRO ? switchTab('screener') : showUpgrade('Market Screener')"><span class="nav-icon">⊞</span><span data-i18n="nav.screener">Screener</span><span class="tab-pro-lock">PRO</span></button>
     </nav>
 
     <!-- ── Tracker FX Ad (basic users only) ── -->
@@ -988,10 +988,10 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       <button class="filter-btn" data-impact="LOW" onclick="setImpact('LOW',this)"><div class="filter-dot dot-low"></div><span data-i18n="sidebar.low">Low</span><span class="filter-count" id="count-low">0</span></button>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-label">★ My News Feed</div>
-      <div class="mynews-summary" id="mynewsSummary">No filters active</div>
+      <div class="sidebar-label" data-i18n="mynews.title">★ My News Feed</div>
+      <div class="mynews-summary" id="mynewsSummary" data-i18n="mynews.no_filters">No filters active</div>
       <button class="mynews-config-btn" onclick="openMyNewsConfig()">
-        ⚙ Configure Feed
+        <span data-i18n="mynews.config">⚙ Configure Feed</span>
         <span class="mynews-badge" id="mynewsBadge">0</span>
       </button>
     </div>
@@ -1675,6 +1675,29 @@ const STRINGS = {
     'cal.source':'Economic Calendar','cal.today':'Today','cal.tomorrow':'Tomorrow',
     'cal.prev':'Prev','cal.fore':'Fore','cal.actual':'Actual',
     'cal.high_lbl':'HIGH','cal.med_lbl':'MED','cal.low_lbl':'LOW',
+    'nav.menu':'Menu',
+    'nav.news_feed':'News Feed','nav.calendar':'Calendar','nav.tv':'Live TV',
+    'nav.fx':'FX Rates','nav.crypto':'Crypto','nav.commodities':'Commodities',
+    'nav.macro':'Macro','nav.sentiment':'Sentiment','nav.earnings':'Earnings',
+    'nav.central_banks':'Central Banks','nav.screener':'Screener','nav.signout':'Sign Out',
+    'mynews.title':'★ My News Feed','mynews.no_filters':'No filters active',
+    'mynews.basic_hint':'Select major FX currencies below','mynews.config':'⚙ Configure Feed',
+    'squawk.title':'⚙ Squawk Settings','squawk.voice':'Voice','squawk.voice_auto':'Auto — best available',
+    'squawk.speed':'Speed','squawk.read_news':'Read news',
+    'squawk.chip_all':'All','squawk.chip_high':'🔴 High Impact','squawk.chip_medium':'🟡 Medium Impact',
+    'squawk.chip_mynews':'★ My News','squawk.chip_calendar':'📅 Calendar',
+    'squawk.test':'▶ Test Voice',
+    'squawk.note_html':'Voices always read in English for clarity.<br>Neural/Google voices sound best.',
+    'settings.title':'⚙ Account Settings','settings.profile':'Profile',
+    'settings.upload':'Upload Photo','settings.upload_note':'JPG, PNG · Max 500KB',
+    'settings.name':'Display Name','settings.name_ph':'Your name','settings.email':'Email',
+    'settings.save':'Save Changes',
+    'settings.password':'Change Password','settings.cur_pwd':'Current Password',
+    'settings.new_pwd':'New Password','settings.new_pwd_ph':'Min. 6 characters',
+    'settings.conf_pwd':'Confirm New Password','settings.conf_pwd_ph':'Repeat new password',
+    'settings.update_pwd':'Update Password',
+    'settings.subscription':'Subscription','settings.current_plan':'Current Plan',
+    'settings.upgrade':'Upgrade to Pro →','settings.manage':'Manage Subscription',
   },
   pt:{
     'logo.sub':'Inteligência de Mercado em Tempo Real',
@@ -1722,6 +1745,29 @@ const STRINGS = {
     'cal.source':'Calendário Económico','cal.today':'Hoje','cal.tomorrow':'Amanhã',
     'cal.prev':'Ant','cal.fore':'Prev','cal.actual':'Atual',
     'cal.high_lbl':'ALTO','cal.med_lbl':'MÉD','cal.low_lbl':'BAIXO',
+    'nav.menu':'Menu',
+    'nav.news_feed':'Notícias','nav.calendar':'Calendário','nav.tv':'TV ao Vivo',
+    'nav.fx':'Câmbios','nav.crypto':'Cripto','nav.commodities':'Matérias-Primas',
+    'nav.macro':'Macro','nav.sentiment':'Sentimento','nav.earnings':'Resultados',
+    'nav.central_banks':'Bancos Centrais','nav.screener':'Screener','nav.signout':'Sair',
+    'mynews.title':'★ As Minhas Notícias','mynews.no_filters':'Sem filtros ativos',
+    'mynews.basic_hint':'Seleciona moedas FX principais abaixo','mynews.config':'⚙ Configurar Feed',
+    'squawk.title':'⚙ Definições do Squawk','squawk.voice':'Voz','squawk.voice_auto':'Auto — melhor disponível',
+    'squawk.speed':'Velocidade','squawk.read_news':'Ler notícias',
+    'squawk.chip_all':'Todas','squawk.chip_high':'🔴 Alto Impacto','squawk.chip_medium':'🟡 Médio Impacto',
+    'squawk.chip_mynews':'★ As Minhas','squawk.chip_calendar':'📅 Calendário',
+    'squawk.test':'▶ Testar Voz',
+    'squawk.note_html':'As vozes lêem sempre em inglês para clareza.<br>As vozes Neural/Google soam melhor.',
+    'settings.title':'⚙ Definições da Conta','settings.profile':'Perfil',
+    'settings.upload':'Carregar Foto','settings.upload_note':'JPG, PNG · Máx 500KB',
+    'settings.name':'Nome','settings.name_ph':'O teu nome','settings.email':'Email',
+    'settings.save':'Guardar Alterações',
+    'settings.password':'Alterar Palavra-passe','settings.cur_pwd':'Palavra-passe Atual',
+    'settings.new_pwd':'Nova Palavra-passe','settings.new_pwd_ph':'Mín. 6 caracteres',
+    'settings.conf_pwd':'Confirmar Nova Palavra-passe','settings.conf_pwd_ph':'Repetir nova palavra-passe',
+    'settings.update_pwd':'Atualizar Palavra-passe',
+    'settings.subscription':'Subscrição','settings.current_plan':'Plano Atual',
+    'settings.upgrade':'Mudar para Pro →','settings.manage':'Gerir Subscrição',
   },
   es:{
     'logo.sub':'Inteligencia de Mercado en Tiempo Real',
@@ -1769,6 +1815,29 @@ const STRINGS = {
     'cal.source':'Calendario Económico','cal.today':'Hoy','cal.tomorrow':'Mañana',
     'cal.prev':'Ant','cal.fore':'Prev','cal.actual':'Actual',
     'cal.high_lbl':'ALTO','cal.med_lbl':'MED','cal.low_lbl':'BAJO',
+    'nav.menu':'Menú',
+    'nav.news_feed':'Noticias','nav.calendar':'Calendario','nav.tv':'TV en Vivo',
+    'nav.fx':'Tipos FX','nav.crypto':'Cripto','nav.commodities':'Materias Primas',
+    'nav.macro':'Macro','nav.sentiment':'Sentimiento','nav.earnings':'Resultados',
+    'nav.central_banks':'Bancos Centrales','nav.screener':'Screener','nav.signout':'Cerrar Sesión',
+    'mynews.title':'★ Mis Noticias','mynews.no_filters':'Sin filtros activos',
+    'mynews.basic_hint':'Selecciona divisas FX principales abajo','mynews.config':'⚙ Configurar Feed',
+    'squawk.title':'⚙ Ajustes de Squawk','squawk.voice':'Voz','squawk.voice_auto':'Auto — mejor disponible',
+    'squawk.speed':'Velocidad','squawk.read_news':'Leer noticias',
+    'squawk.chip_all':'Todas','squawk.chip_high':'🔴 Alto Impacto','squawk.chip_medium':'🟡 Medio Impacto',
+    'squawk.chip_mynews':'★ Mis Noticias','squawk.chip_calendar':'📅 Calendario',
+    'squawk.test':'▶ Probar Voz',
+    'squawk.note_html':'Las voces siempre leen en inglés para mayor claridad.<br>Las voces Neural/Google suenan mejor.',
+    'settings.title':'⚙ Ajustes de Cuenta','settings.profile':'Perfil',
+    'settings.upload':'Subir Foto','settings.upload_note':'JPG, PNG · Máx 500KB',
+    'settings.name':'Nombre','settings.name_ph':'Tu nombre','settings.email':'Email',
+    'settings.save':'Guardar Cambios',
+    'settings.password':'Cambiar Contraseña','settings.cur_pwd':'Contraseña Actual',
+    'settings.new_pwd':'Nueva Contraseña','settings.new_pwd_ph':'Mín. 6 caracteres',
+    'settings.conf_pwd':'Confirmar Nueva Contraseña','settings.conf_pwd_ph':'Repetir nueva contraseña',
+    'settings.update_pwd':'Actualizar Contraseña',
+    'settings.subscription':'Suscripción','settings.current_plan':'Plan Actual',
+    'settings.upgrade':'Pásate a Pro →','settings.manage':'Gestionar Suscripción',
   },
   fr:{
     'logo.sub':'Intelligence de Marché en Temps Réel',
@@ -1816,6 +1885,29 @@ const STRINGS = {
     'cal.source':'Calendrier Économique','cal.today':'Aujourd\u2019hui','cal.tomorrow':'Demain',
     'cal.prev':'Préc','cal.fore':'Prév','cal.actual':'Actuel',
     'cal.high_lbl':'ÉLEVÉ','cal.med_lbl':'MOY','cal.low_lbl':'FAIBLE',
+    'nav.menu':'Menu',
+    'nav.news_feed':'Actualités','nav.calendar':'Calendrier','nav.tv':'TV en Direct',
+    'nav.fx':'Taux FX','nav.crypto':'Crypto','nav.commodities':'Matières Premières',
+    'nav.macro':'Macro','nav.sentiment':'Sentiment','nav.earnings':'Résultats',
+    'nav.central_banks':'Banques Centrales','nav.screener':'Screener','nav.signout':'Déconnexion',
+    'mynews.title':'★ Mes Actualités','mynews.no_filters':'Aucun filtre actif',
+    'mynews.basic_hint':'Sélectionnez les devises FX majeures ci-dessous','mynews.config':'⚙ Configurer le Flux',
+    'squawk.title':'⚙ Paramètres Squawk','squawk.voice':'Voix','squawk.voice_auto':'Auto — meilleure disponible',
+    'squawk.speed':'Vitesse','squawk.read_news':'Lire les actus',
+    'squawk.chip_all':'Toutes','squawk.chip_high':'🔴 Impact Élevé','squawk.chip_medium':'🟡 Impact Moyen',
+    'squawk.chip_mynews':'★ Mes Actus','squawk.chip_calendar':'📅 Calendrier',
+    'squawk.test':'▶ Tester la Voix',
+    'squawk.note_html':'Les voix lisent toujours en anglais pour la clarté.<br>Les voix Neural/Google sonnent le mieux.',
+    'settings.title':'⚙ Paramètres du Compte','settings.profile':'Profil',
+    'settings.upload':'Téléverser une Photo','settings.upload_note':'JPG, PNG · Max 500Ko',
+    'settings.name':'Nom','settings.name_ph':'Votre nom','settings.email':'Email',
+    'settings.save':'Enregistrer',
+    'settings.password':'Changer le Mot de Passe','settings.cur_pwd':'Mot de Passe Actuel',
+    'settings.new_pwd':'Nouveau Mot de Passe','settings.new_pwd_ph':'Min. 6 caractères',
+    'settings.conf_pwd':'Confirmer le Nouveau Mot de Passe','settings.conf_pwd_ph':'Répéter le nouveau mot de passe',
+    'settings.update_pwd':'Mettre à Jour le Mot de Passe',
+    'settings.subscription':'Abonnement','settings.current_plan':'Plan Actuel',
+    'settings.upgrade':'Passer à Pro →','settings.manage':'Gérer l\u2019Abonnement',
   },
   de:{
     'logo.sub':'Markt-Intelligenz in Echtzeit',
@@ -1863,6 +1955,29 @@ const STRINGS = {
     'cal.source':'Wirtschaftskalender','cal.today':'Heute','cal.tomorrow':'Morgen',
     'cal.prev':'Vorh','cal.fore':'Prog','cal.actual':'Aktuell',
     'cal.high_lbl':'HOCH','cal.med_lbl':'MITT','cal.low_lbl':'NIED',
+    'nav.menu':'Menü',
+    'nav.news_feed':'Nachrichten','nav.calendar':'Kalender','nav.tv':'Live-TV',
+    'nav.fx':'FX-Kurse','nav.crypto':'Krypto','nav.commodities':'Rohstoffe',
+    'nav.macro':'Makro','nav.sentiment':'Sentiment','nav.earnings':'Ergebnisse',
+    'nav.central_banks':'Zentralbanken','nav.screener':'Screener','nav.signout':'Abmelden',
+    'mynews.title':'★ Meine Nachrichten','mynews.no_filters':'Keine Filter aktiv',
+    'mynews.basic_hint':'Wähle unten Haupt-FX-Währungen','mynews.config':'⚙ Feed konfigurieren',
+    'squawk.title':'⚙ Squawk-Einstellungen','squawk.voice':'Stimme','squawk.voice_auto':'Auto — beste verfügbar',
+    'squawk.speed':'Geschwindigkeit','squawk.read_news':'Nachrichten vorlesen',
+    'squawk.chip_all':'Alle','squawk.chip_high':'🔴 Hoher Impact','squawk.chip_medium':'🟡 Mittlerer Impact',
+    'squawk.chip_mynews':'★ Meine','squawk.chip_calendar':'📅 Kalender',
+    'squawk.test':'▶ Stimme testen',
+    'squawk.note_html':'Stimmen lesen immer auf Englisch zur Klarheit.<br>Neural/Google-Stimmen klingen am besten.',
+    'settings.title':'⚙ Konto-Einstellungen','settings.profile':'Profil',
+    'settings.upload':'Foto hochladen','settings.upload_note':'JPG, PNG · Max 500KB',
+    'settings.name':'Anzeigename','settings.name_ph':'Dein Name','settings.email':'E-Mail',
+    'settings.save':'Änderungen speichern',
+    'settings.password':'Passwort ändern','settings.cur_pwd':'Aktuelles Passwort',
+    'settings.new_pwd':'Neues Passwort','settings.new_pwd_ph':'Min. 6 Zeichen',
+    'settings.conf_pwd':'Neues Passwort bestätigen','settings.conf_pwd_ph':'Neues Passwort wiederholen',
+    'settings.update_pwd':'Passwort aktualisieren',
+    'settings.subscription':'Abonnement','settings.current_plan':'Aktueller Plan',
+    'settings.upgrade':'Auf Pro upgraden →','settings.manage':'Abonnement verwalten',
   },
   it:{
     'logo.sub':'Intelligence di Mercato in Tempo Reale',
@@ -1910,6 +2025,29 @@ const STRINGS = {
     'cal.source':'Calendario Economico','cal.today':'Oggi','cal.tomorrow':'Domani',
     'cal.prev':'Prec','cal.fore':'Prev','cal.actual':'Attuale',
     'cal.high_lbl':'ALTO','cal.med_lbl':'MED','cal.low_lbl':'BASSO',
+    'nav.menu':'Menu',
+    'nav.news_feed':'Notizie','nav.calendar':'Calendario','nav.tv':'TV Live',
+    'nav.fx':'Tassi FX','nav.crypto':'Cripto','nav.commodities':'Materie Prime',
+    'nav.macro':'Macro','nav.sentiment':'Sentiment','nav.earnings':'Risultati',
+    'nav.central_banks':'Banche Centrali','nav.screener':'Screener','nav.signout':'Esci',
+    'mynews.title':'★ Le Mie Notizie','mynews.no_filters':'Nessun filtro attivo',
+    'mynews.basic_hint':'Seleziona le valute FX principali sotto','mynews.config':'⚙ Configura Feed',
+    'squawk.title':'⚙ Impostazioni Squawk','squawk.voice':'Voce','squawk.voice_auto':'Auto — migliore disponibile',
+    'squawk.speed':'Velocità','squawk.read_news':'Leggi notizie',
+    'squawk.chip_all':'Tutte','squawk.chip_high':'🔴 Alto Impatto','squawk.chip_medium':'🟡 Medio Impatto',
+    'squawk.chip_mynews':'★ Le Mie','squawk.chip_calendar':'📅 Calendario',
+    'squawk.test':'▶ Prova Voce',
+    'squawk.note_html':'Le voci leggono sempre in inglese per chiarezza.<br>Le voci Neural/Google suonano meglio.',
+    'settings.title':'⚙ Impostazioni Account','settings.profile':'Profilo',
+    'settings.upload':'Carica Foto','settings.upload_note':'JPG, PNG · Max 500KB',
+    'settings.name':'Nome','settings.name_ph':'Il tuo nome','settings.email':'Email',
+    'settings.save':'Salva Modifiche',
+    'settings.password':'Cambia Password','settings.cur_pwd':'Password Attuale',
+    'settings.new_pwd':'Nuova Password','settings.new_pwd_ph':'Min. 6 caratteri',
+    'settings.conf_pwd':'Conferma Nuova Password','settings.conf_pwd_ph':'Ripeti nuova password',
+    'settings.update_pwd':'Aggiorna Password',
+    'settings.subscription':'Abbonamento','settings.current_plan':'Piano Attuale',
+    'settings.upgrade':'Passa a Pro →','settings.manage':'Gestisci Abbonamento',
   }
 };
 function t(key) { return (STRINGS[lang]||STRINGS.en)[key]||key; }
@@ -1921,6 +2059,9 @@ function applyTranslations() {
   if (sb) sb.textContent = t(soundEnabled ? 'nav.alerts_on' : 'nav.alerts_off');
   updateSquawkBtn();
   updateFeedTitle();
+  if (typeof _updateMyNewsCount === 'function') {
+    try { _updateMyNewsCount(); } catch {}
+  }
 }
 
 // ─── PT Translation ───────────────────────────────────────────────
@@ -2316,7 +2457,7 @@ function _updateMyNewsCount() {
   if (badge) { badge.textContent = total; badge.classList.toggle('show', total > 0); }
   if (summary) {
     if (total === 0) {
-      summary.textContent = IS_PRO ? 'No filters active' : 'Select major FX currencies below';
+      summary.textContent = IS_PRO ? t('mynews.no_filters') : t('mynews.basic_hint');
     } else {
       const parts = [];
       if (myWatchlist.length)    parts.push(myWatchlist.length    + ' asset'    + (myWatchlist.length    > 1 ? 's' : ''));
@@ -5449,65 +5590,65 @@ function _fmtScTs(ts) {
 <div class="settings-overlay" id="settingsOverlay" onclick="if(event.target===this)closeSettings()">
   <div class="settings-modal">
     <div class="settings-header">
-      <div class="settings-title">⚙ Account Settings</div>
+      <div class="settings-title" data-i18n="settings.title">⚙ Account Settings</div>
       <button class="settings-close" onclick="closeSettings()">✕</button>
     </div>
     <div class="settings-body">
 
       <!-- PROFILE -->
       <div class="settings-section">
-        <div class="settings-section-label">Profile</div>
+        <div class="settings-section-label" data-i18n="settings.profile">Profile</div>
         <div class="settings-avatar-row">
           <div class="settings-avatar-preview" id="settingsAvatarPreview"></div>
           <div class="settings-avatar-actions">
-            <button class="settings-avatar-btn" onclick="document.getElementById('avatarFileInput').click()">Upload Photo</button>
-            <span class="settings-avatar-note">JPG, PNG · Max 500KB</span>
+            <button class="settings-avatar-btn" onclick="document.getElementById('avatarFileInput').click()" data-i18n="settings.upload">Upload Photo</button>
+            <span class="settings-avatar-note" data-i18n="settings.upload_note">JPG, PNG · Max 500KB</span>
             <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handleAvatarFile(this)">
           </div>
         </div>
         <div class="settings-field">
-          <label class="settings-label" for="settingsName">Display Name</label>
-          <input class="settings-input" id="settingsName" type="text" placeholder="Your name" autocomplete="name">
+          <label class="settings-label" for="settingsName" data-i18n="settings.name">Display Name</label>
+          <input class="settings-input" id="settingsName" type="text" placeholder="Your name" data-i18n-placeholder="settings.name_ph" autocomplete="name">
         </div>
         <div class="settings-field">
-          <label class="settings-label" for="settingsEmail">Email</label>
+          <label class="settings-label" for="settingsEmail" data-i18n="settings.email">Email</label>
           <input class="settings-input" id="settingsEmail" type="email" readonly>
         </div>
-        <button class="settings-save-btn" id="saveProfileBtn" onclick="saveProfile()">Save Changes</button>
+        <button class="settings-save-btn" id="saveProfileBtn" onclick="saveProfile()" data-i18n="settings.save">Save Changes</button>
         <div class="settings-msg" id="profileMsg"></div>
       </div>
 
       <!-- PASSWORD -->
       <div class="settings-section">
-        <div class="settings-section-label">Change Password</div>
+        <div class="settings-section-label" data-i18n="settings.password">Change Password</div>
         <div class="settings-field">
-          <label class="settings-label" for="settingsCurPwd">Current Password</label>
+          <label class="settings-label" for="settingsCurPwd" data-i18n="settings.cur_pwd">Current Password</label>
           <input class="settings-input" id="settingsCurPwd" type="password" placeholder="••••••••" autocomplete="current-password">
         </div>
         <div class="settings-field">
-          <label class="settings-label" for="settingsNewPwd">New Password</label>
-          <input class="settings-input" id="settingsNewPwd" type="password" placeholder="Min. 6 characters" autocomplete="new-password">
+          <label class="settings-label" for="settingsNewPwd" data-i18n="settings.new_pwd">New Password</label>
+          <input class="settings-input" id="settingsNewPwd" type="password" placeholder="Min. 6 characters" data-i18n-placeholder="settings.new_pwd_ph" autocomplete="new-password">
         </div>
         <div class="settings-field">
-          <label class="settings-label" for="settingsConfPwd">Confirm New Password</label>
-          <input class="settings-input" id="settingsConfPwd" type="password" placeholder="Repeat new password" autocomplete="new-password">
+          <label class="settings-label" for="settingsConfPwd" data-i18n="settings.conf_pwd">Confirm New Password</label>
+          <input class="settings-input" id="settingsConfPwd" type="password" placeholder="Repeat new password" data-i18n-placeholder="settings.conf_pwd_ph" autocomplete="new-password">
         </div>
-        <button class="settings-save-btn" id="savePwdBtn" onclick="savePassword()">Update Password</button>
+        <button class="settings-save-btn" id="savePwdBtn" onclick="savePassword()" data-i18n="settings.update_pwd">Update Password</button>
         <div class="settings-msg" id="pwdMsg"></div>
       </div>
 
       <!-- SUBSCRIPTION -->
       <div class="settings-section">
-        <div class="settings-section-label">Subscription</div>
+        <div class="settings-section-label" data-i18n="settings.subscription">Subscription</div>
         <div class="plan-info-row">
-          <span class="plan-info-label">Current Plan</span>
+          <span class="plan-info-label" data-i18n="settings.current_plan">Current Plan</span>
           <span class="plan-badge-sm" id="settingsPlanBadge">FREE</span>
         </div>
         <div id="settingsUpgradeWrap">
-          <button class="settings-plan-btn upgrade" onclick="closeSettings();showUpgrade('Settings')">Upgrade to Pro →</button>
+          <button class="settings-plan-btn upgrade" onclick="closeSettings();showUpgrade('Settings')" data-i18n="settings.upgrade">Upgrade to Pro →</button>
         </div>
         <div id="settingsManageWrap" style="display:none">
-          <button class="settings-plan-btn manage" id="settingsManageBtn" onclick="openBillingPortal()">Manage Subscription</button>
+          <button class="settings-plan-btn manage" id="settingsManageBtn" onclick="openBillingPortal()" data-i18n="settings.manage">Manage Subscription</button>
           <div class="settings-msg" id="billingMsg"></div>
         </div>
       </div>
