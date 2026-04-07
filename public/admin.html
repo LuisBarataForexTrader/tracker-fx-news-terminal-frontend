@@ -765,7 +765,9 @@ function _enterApp() {
   init();
 }
 async function verifyToken() {
-  // Check expiry first
+  // Snapshot the token so we can detect if a fresh login happened while waiting
+  const tokenAtStart = _token;
+  // Check localStorage expiry first
   const exp = parseInt(localStorage.getItem('tnt_admin_token_exp') || '0');
   if (exp && Date.now() > exp) {
     showLoginErr('Session expired — please sign in again');
@@ -773,10 +775,16 @@ async function verifyToken() {
   }
   try {
     const r = await api('/admin/stats/overview');
+    // If token changed while awaiting (user logged in), abort — don't touch the new session
+    if (_token !== tokenAtStart) return;
     if (r.total_users !== undefined) {
       _enterApp();
     } else { showLoginErr(); }
-  } catch { showLoginErr(); }
+  } catch {
+    // Same guard: if user logged in while this request was in-flight, ignore the error
+    if (_token !== tokenAtStart) return;
+    showLoginErr();
+  }
 }
 function showLoginErr(msg) {
   const el = document.getElementById('login-err');
