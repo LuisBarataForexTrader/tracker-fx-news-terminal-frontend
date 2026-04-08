@@ -1211,7 +1211,8 @@ async function _pollOnline() {
     if (el('on-landing'))  el('on-landing').innerHTML    = `<strong>${c.landing ?? 0}</strong> site`;
     if (el('on-login'))    el('on-login').style.display  = 'none';
     const usersEl = el('on-users');
-    _onlineUidSet = new Set((r.users_online||[]).map(u => String(u.uid)));
+    _onlineUidSet   = new Set((r.users_online||[]).filter(u => u.uid).map(u => String(u.uid)));
+    _onlineEmailSet = new Set((r.users_online||[]).filter(u => u.email).map(u => u.email.toLowerCase()));
     if (usersEl) {
       usersEl.innerHTML = (r.users_online||[]).map(u =>
         `<span class="on-user-chip" title="${u.email}">${u.email || 'User #'+u.uid}</span>`
@@ -1615,7 +1616,8 @@ let _st = null;
 let _usersCache = [];
 let _sortCol = 'joined';
 let _sortDir = -1; // -1 = desc, 1 = asc
-let _onlineUidSet = new Set(); // kept in sync by _pollOnline
+let _onlineUidSet   = new Set(); // kept in sync by _pollOnline (uid→String)
+let _onlineEmailSet = new Set(); // fallback: email match for sessions without uid
 
 function searchUsers() {
   clearTimeout(_st);
@@ -1632,7 +1634,7 @@ async function _doSearch() {
     const apiPlan = plan === 'online' ? '' : plan;
     const users = await api(`/admin/users/search?q=${encodeURIComponent(q)}&plan=${encodeURIComponent(apiPlan)}`);
     _usersCache = plan === 'online'
-      ? users.filter(u => _onlineUidSet.has(String(u.id)))
+      ? users.filter(u => _onlineUidSet.has(String(u.id)) || _onlineEmailSet.has((u.email||'').toLowerCase()))
       : users;
     _renderUsers();
   } catch(err) { console.error('[Users load error]', err); tbody.innerHTML='<tr><td colspan="5" class="empty-state" style="color:var(--red)">Load error</td></tr>'; }
@@ -1672,7 +1674,8 @@ function _renderUsers() {
 
 function _applyOnlineDots() {
   document.querySelectorAll('tr[data-uid]').forEach(row => {
-    const online = _onlineUidSet.has(row.dataset.uid);
+    const email  = (row.dataset.email || '').toLowerCase();
+    const online = _onlineUidSet.has(row.dataset.uid) || _onlineEmailSet.has(email);
     const dot    = row.querySelector('.u-online-dot');
     const avatar = row.querySelector('.u-avatar');
     if (dot)    dot.style.display = online ? 'block' : 'none';
@@ -1811,7 +1814,7 @@ function userRow(u) {
     </div>
   </div>`;
 
-  return `<tr class="user-row" data-uid="${u.id}">
+  return `<tr class="user-row" data-uid="${u.id}" data-email="${u.email.toLowerCase().replace(/"/g,'&quot;')}">
     <td>
       <div class="u-cell">
         <div style="position:relative;flex-shrink:0">
