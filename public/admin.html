@@ -1196,7 +1196,7 @@ async function _pollOnline() {
     // Header widget (always visible)
     if (el('hdr-on-total'))  el('hdr-on-total').textContent  = total;
     if (el('hdr-on-detail')) el('hdr-on-detail').textContent =
-      `🖥${c.terminal??0} 🌐${c.landing??0} 🔑${c.login??0}`;
+      `App ${c.terminal??0}  Site ${c.landing??0}  Login ${c.login??0}`;
 
     // Overview banner (only when on overview section)
     if (el('on-total'))    el('on-total').textContent    = total;
