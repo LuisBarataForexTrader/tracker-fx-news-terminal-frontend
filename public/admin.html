@@ -178,7 +178,41 @@ select.ctrl-sel:focus{border-color:var(--accent)}
 .badge-basic{background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.2)}
 .badge-trial{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
 .badge-ceo{background:linear-gradient(135deg,rgba(251,191,36,.18),rgba(245,158,11,.12));color:#fbbf24;border:1px solid rgba(251,191,36,.35);font-size:8px;letter-spacing:.12em}
-.badge-staff{background:rgba(0,212,255,.08);color:var(--accent);border:1px solid rgba(0,212,255,.15);font-size:8px}
+.badge-client{background:rgba(160,180,196,.07);color:var(--text-muted);border:1px solid rgba(160,180,196,.15);font-size:8px}
+
+/* ─── User card rows ─────────────────────────────────────────── */
+.user-row td{vertical-align:top;padding:14px 16px 14px}
+.user-row:hover td{background:rgba(255,255,255,.018)}
+.u-cell{display:flex;gap:11px;align-items:flex-start}
+.u-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:var(--font-mono);letter-spacing:0}
+.u-meta{min-width:0}
+.u-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.u-email{font-size:11px;color:var(--text-muted);margin-top:3px;word-break:break-all;line-height:1.4}
+.u-id{font-size:9px;font-family:var(--font-mono);color:var(--border2);margin-top:4px}
+.u-journey{display:flex;align-items:center;gap:3px;flex-wrap:wrap;margin-top:2px}
+.u-step{font-size:9px;font-weight:700;letter-spacing:.07em;padding:3px 9px;border-radius:20px;font-family:var(--font-mono);white-space:nowrap}
+.u-step.s-basic{background:rgba(167,139,250,.1);color:#a78bfa;border:1px solid rgba(167,139,250,.25)}
+.u-step.s-trial{background:rgba(245,158,11,.1);color:#f59e0b;border:1px solid rgba(245,158,11,.25)}
+.u-step.s-pro{background:rgba(0,212,255,.1);color:#00d4ff;border:1px solid rgba(0,212,255,.25)}
+.u-step.s-done{opacity:.38;filter:grayscale(20%)}
+.u-arrow{color:var(--border2);font-size:9px;margin:0 1px}
+.u-trial-bar{margin-top:6px;min-width:120px}
+.u-dates{font-size:11px}
+.u-date-row{display:flex;gap:6px;align-items:baseline;margin-bottom:4px}
+.u-date-lbl{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);width:32px;flex-shrink:0}
+.u-date-val{color:var(--text-dim);font-family:var(--font-mono);font-size:10px}
+.u-country{display:flex;align-items:center;gap:5px;font-size:12px}
+.u-flag{font-size:18px;line-height:1}
+.u-cc{font-size:10px;font-family:var(--font-mono);color:var(--text-muted)}
+.u-actions{display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+.u-action-row{display:flex;gap:4px}
+.u-btn{font-family:var(--font);font-size:10px;font-weight:600;letter-spacing:.04em;background:transparent;border:1px solid var(--border2);color:var(--text-muted);padding:4px 10px;border-radius:3px;cursor:pointer;transition:all .12s;white-space:nowrap}
+.u-btn:hover{border-color:rgba(0,212,255,.4);color:var(--accent)}
+.u-btn.danger{border-color:rgba(255,59,92,.2);color:rgba(255,59,92,.6)}
+.u-btn.danger:hover{border-color:var(--red);color:var(--red)}
+.u-btn.gold{border-color:rgba(251,191,36,.25);color:rgba(251,191,36,.7)}
+.u-btn.gold:hover{border-color:#fbbf24;color:#fbbf24}
+.u-active-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);flex-shrink:0}
 .trial-bar-wrap{min-width:140px;}
 .trial-bar-track{height:4px;background:var(--border2);border-radius:3px;overflow:hidden;margin-bottom:3px;}
 .trial-bar-fill{height:100%;border-radius:3px;transition:width .3s;}
@@ -418,7 +452,6 @@ select.ctrl-sel:focus{border-color:var(--accent)}
             <input type="text" id="user-search" placeholder="Search by email or name…" oninput="searchUsers()"/>
             <select class="ctrl-sel" id="plan-filter" onchange="searchUsers()">
               <option value="">All Plans</option>
-              <option value="free">Free</option>
               <option value="basic">Basic</option>
               <option value="pro">Pro</option>
               <option value="trial">Trial</option>
@@ -430,12 +463,15 @@ select.ctrl-sel:focus{border-color:var(--accent)}
             <table class="data-table" id="users-table">
               <thead>
                 <tr>
-                  <th>ID</th><th>Email</th><th>Name</th><th>Country</th><th>Plan</th>
-                  <th>Active</th><th>Trial Ends</th><th>Created</th><th>Last Seen</th><th>Actions</th>
+                  <th style="width:35%">User</th>
+                  <th style="width:8%">Country</th>
+                  <th style="width:28%">Plan Journey</th>
+                  <th style="width:12%">Activity</th>
+                  <th style="width:17%;text-align:right">Actions</th>
                 </tr>
               </thead>
               <tbody id="users-tbody">
-                <tr><td colspan="10" class="empty-state"><span class="spinner"></span> Loading…</td></tr>
+                <tr><td colspan="5" class="empty-state"><span class="spinner"></span> Loading…</td></tr>
               </tbody>
             </table>
           </div>
@@ -1472,9 +1508,9 @@ async function _doSearch() {
     const users = await api(`/admin/users/search?q=${encodeURIComponent(q)}&plan=${encodeURIComponent(plan)}`);
     document.getElementById('users-count').textContent = users.length + ' users';
     tbody.innerHTML = users.length===0
-      ? '<tr><td colspan="10" class="empty-state">No users found</td></tr>'
+      ? '<tr><td colspan="5" class="empty-state">No users found</td></tr>'
       : users.map(userRow).join('');
-  } catch { tbody.innerHTML='<tr><td colspan="10" class="empty-state" style="color:var(--red)">Load error</td></tr>'; }
+  } catch { tbody.innerHTML='<tr><td colspan="5" class="empty-state" style="color:var(--red)">Load error</td></tr>'; }
 }
 
 function _fmtTrialDur(hours) {
@@ -1484,84 +1520,143 @@ function _fmtTrialDur(hours) {
   return hours+'h';
 }
 function userRow(u) {
-  const plan = u.plan||'free';
-  const planBadge = `<span class="badge badge-${plan}">${plan.toUpperCase()}</span>`;
+  const plan  = u.plan || 'basic';
+  const email = u.email.replace(/'/g, "&#39;");
+  const name  = (u.name || '').replace(/'/g, "&#39;").replace(/"/g, '&quot;');
+
+  // ── Avatar ──────────────────────────────────────────────────────────────
+  const initials = (() => {
+    if (u.name && u.name.trim()) {
+      const parts = u.name.trim().split(/\s+/);
+      return parts.length >= 2
+        ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase()
+        : parts[0].slice(0,2).toUpperCase();
+    }
+    return u.email.slice(0,2).toUpperCase();
+  })();
+  const avatarColor = plan === 'pro'   ? { bg:'rgba(0,212,255,.18)',  border:'rgba(0,212,255,.45)',  color:'#00d4ff' }
+                    : plan === 'trial' ? { bg:'rgba(245,158,11,.18)', border:'rgba(245,158,11,.45)', color:'#f59e0b' }
+                    :                   { bg:'rgba(167,139,250,.18)', border:'rgba(167,139,250,.45)',color:'#a78bfa' };
+
+  // ── Role badge ───────────────────────────────────────────────────────────
   const roleTag = u.role === 'ceo'
-    ? `<span class="badge badge-ceo" style="margin-left:4px">👑 CEO</span>`
-    : u.role === 'staff'
-    ? `<span class="badge badge-staff" style="margin-left:4px">STAFF</span>`
+    ? `<span class="badge badge-ceo">👑 CEO</span>`
     : '';
-  const isActive = u.email_verified==1 || u.last_seen || ['pro','basic','trial'].includes(plan);
-  const activeTd = isActive
-    ? '<span style="color:var(--green);font-family:var(--font-mono);font-size:12px">✓</span>'
-    : `<button class="act-btn" onclick="verifyUser(${u.id},'${u.email}')">Verify</button>`;
-  const durStr = _fmtTrialDur(u.trial_hours);
-  // Trial: show start → end with date + time (e.g. "07/04 10:12 → 14/04 10:12")
+
+  // ── Country column ───────────────────────────────────────────────────────
+  const COUNTRY_FLAGS = {PT:'🇵🇹',BR:'🇧🇷',US:'🇺🇸',GB:'🇬🇧',DE:'🇩🇪',FR:'🇫🇷',ES:'🇪🇸',IT:'🇮🇹',NL:'🇳🇱',BE:'🇧🇪',CH:'🇨🇭',AT:'🇦🇹',PL:'🇵🇱',SE:'🇸🇪',NO:'🇳🇴',DK:'🇩🇰',FI:'🇫🇮',IE:'🇮🇪',CA:'🇨🇦',AU:'🇦🇺',NZ:'🇳🇿',ZA:'🇿🇦',AE:'🇦🇪',SG:'🇸🇬',HK:'🇭🇰',JP:'🇯🇵',IN:'🇮🇳',MX:'🇲🇽',AR:'🇦🇷',CL:'🇨🇱',CO:'🇨🇴'};
+  const countryHtml = u.country
+    ? `<div class="u-country"><span class="u-flag">${COUNTRY_FLAGS[u.country]||'🌍'}</span><span class="u-cc">${u.country}</span></div>`
+    : `<span style="color:var(--border2);font-size:13px">—</span>`;
+
+  // ── Plan Journey ─────────────────────────────────────────────────────────
+  // Determine which steps are "done" (dimmed) vs active
+  const hadTrial = u.had_trial == 1 || plan === 'trial';
+  const isPro    = plan === 'pro';
+  const isTrial  = plan === 'trial';
+  const isBasic  = plan === 'basic';
+
+  const stepBasic = `<span class="u-step s-basic${isTrial||isPro?' s-done':''}">BASIC</span>`;
+  const arrowBT   = `<span class="u-arrow">›</span>`;
+  const stepTrial = hadTrial
+    ? `<span class="u-step s-trial${isPro?' s-done':''}">TRIAL</span>`
+    : '';
+  const arrowTP   = hadTrial && !isPro ? '' : (hadTrial ? `<span class="u-arrow">›</span>` : '');
+  const stepPro   = isPro || hadTrial
+    ? `<span class="u-step s-pro${!isPro?' s-done':''}">PRO</span>`
+    : '';
+
+  // Build arrow between trial and pro
+  const trialArrow = hadTrial ? `<span class="u-arrow">›</span>` : '';
+
+  // Active trial bar
+  let trialBar = '';
   const _fmtDT = (iso) => {
-    if (!iso) return null;
+    if (!iso) return '–';
     try {
       const d = new Date(iso.endsWith('Z')||iso.includes('+')?iso:iso+'Z');
-      const dd = String(d.getDate()).padStart(2,'0');
-      const mm = String(d.getMonth()+1).padStart(2,'0');
-      const hh = String(d.getHours()).padStart(2,'0');
-      const mi = String(d.getMinutes()).padStart(2,'0');
-      return `${dd}/${mm} ${hh}:${mi}`;
-    } catch { return null; }
+      return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    } catch { return '–'; }
   };
-  let trial = '–';
-  if (u.plan === 'trial' && u.trial_ends_at) {
-    // Active trial: progress bar + duration badge
-    const tStart = u.trial_started_at
-      ? new Date(u.trial_started_at.endsWith('Z')||u.trial_started_at.includes('+')?u.trial_started_at:u.trial_started_at+'Z').getTime()
-      : new Date(u.plan_changed_at.endsWith('Z')||u.plan_changed_at.includes('+')?u.plan_changed_at:u.plan_changed_at+'Z').getTime();
+  if (isTrial && u.trial_ends_at) {
+    const tStart = new Date((u.trial_started_at||u.plan_changed_at||u.trial_ends_at).endsWith('Z')||(u.trial_started_at||u.plan_changed_at||u.trial_ends_at).includes('+') ? (u.trial_started_at||u.plan_changed_at) : (u.trial_started_at||u.plan_changed_at)+'Z').getTime();
     const tEnd   = new Date(u.trial_ends_at.endsWith('Z')||u.trial_ends_at.includes('+')?u.trial_ends_at:u.trial_ends_at+'Z').getTime();
-    const tNow   = Date.now();
-    const pct    = Math.min(100, Math.max(0, Math.round((tNow - tStart) / (tEnd - tStart) * 100)));
-    const hue    = Math.round(120 - pct * 1.2); // 120=green → 0=red
-    const endFmt = _fmtDT(u.trial_ends_at) || '–';
-    const durBadge = durStr ? `<span class="trial-dur-badge" title="Total trial duration">${durStr}</span>` : '';
-    trial = `${durBadge}<div class="trial-bar-wrap" data-start="${u.trial_started_at||u.plan_changed_at}" data-end="${u.trial_ends_at}">
+    const pct    = Math.min(100, Math.max(0, Math.round((Date.now()-tStart)/(tEnd-tStart)*100)));
+    const hue    = Math.round(120 - pct * 1.2);
+    trialBar = `<div class="u-trial-bar">
       <div class="trial-bar-track"><div class="trial-bar-fill" style="width:${pct}%;background:hsl(${hue},85%,45%)"></div></div>
-      <div class="trial-bar-lbl">ends ${endFmt} <span style="color:hsl(${hue},85%,55%);font-weight:700">${pct}%</span></div>
+      <div class="trial-bar-lbl">ends ${_fmtDT(u.trial_ends_at)} · <span style="color:hsl(${hue},85%,55%);font-weight:700">${pct}%</span></div>
     </div>`;
-  } else if (u.had_trial && u.trial_started_at) {
-    // Had trial but no longer active — show duration + start date
-    const startDate = u.trial_started_at.slice(0, 10);
-    trial = durStr
-      ? `<span class="trial-dur-badge had" title="Had trial">${durStr}</span><span style="font-size:10px;color:var(--text-muted)">from ${startDate}</span>`
-      : `<span style="font-size:10px;color:var(--text-muted)">from ${startDate}</span>`;
   }
-  const created = u.created_at   ? u.created_at.slice(0,10)    : '–';
-  const seen    = u.last_seen    ? u.last_seen.slice(0,10)      : '–';
-  const email   = u.email.replace(/'/g,'');
-  const name    = (u.name||'').replace(/'/g,'').replace(/"/g,'');
-  const COUNTRY_FLAGS = {PT:'🇵🇹',BR:'🇧🇷',US:'🇺🇸',GB:'🇬🇧',DE:'🇩🇪',FR:'🇫🇷',ES:'🇪🇸',IT:'🇮🇹',NL:'🇳🇱',BE:'🇧🇪',CH:'🇨🇭',AT:'🇦🇹',PL:'🇵🇱',SE:'🇸🇪',NO:'🇳🇴',DK:'🇩🇰',FI:'🇫🇮',IE:'🇮🇪',CA:'🇨🇦',AU:'🇦🇺',NZ:'🇳🇿',ZA:'🇿🇦',AE:'🇦🇪',SG:'🇸🇬',HK:'🇭🇰',JP:'🇯🇵',IN:'🇮🇳',MX:'🇲🇽',AR:'🇦🇷',CL:'🇨🇱',CO:'🇨🇴'};
-  const flagStr = u.country ? (COUNTRY_FLAGS[u.country]||'🌍') + ' ' + u.country : '<span style="color:var(--border2)">—</span>';
-  // HAD TRIAL badge — shown for non-trial users who once had a trial
-  const hadTrialBadge = (u.had_trial == 1 && plan !== 'trial')
-    ? `<span style="font-size:9px;font-weight:700;letter-spacing:.08em;background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3);border-radius:3px;padding:1px 5px;margin-left:5px;vertical-align:middle">HAD TRIAL</span>`
-    : '';
-  // Show ✕ Trial button for active trial OR for users who ever had trial (to clear their history if needed)
+
+  let journeyHtml = `<div class="u-journey">${stepBasic}`;
+  if (hadTrial) journeyHtml += arrowBT + stepTrial;
+  if (isPro || hadTrial) journeyHtml += trialArrow + stepPro;
+  journeyHtml += `</div>`;
+  if (trialBar) journeyHtml += trialBar;
+
+  // ── Activity column ──────────────────────────────────────────────────────
+  const _relDate = (iso) => {
+    if (!iso) return '–';
+    try {
+      const d = new Date(iso.endsWith('Z')||iso.includes('+')?iso:iso+'Z');
+      const diffMs  = Date.now() - d.getTime();
+      const diffMin = Math.floor(diffMs / 60000);
+      const diffH   = Math.floor(diffMin / 60);
+      const diffD   = Math.floor(diffH / 24);
+      const diffW   = Math.floor(diffD / 7);
+      const diffMo  = Math.floor(diffD / 30);
+      if (diffMin < 2)   return 'Just now';
+      if (diffMin < 60)  return `${diffMin}m ago`;
+      if (diffH   < 24)  return `${diffH}h ago`;
+      if (diffD   === 1) return 'Yesterday';
+      if (diffD   < 7)   return `${diffD}d ago`;
+      if (diffW   < 5)   return `${diffW}w ago`;
+      if (diffMo  < 12)  return `${diffMo}mo ago`;
+      return `${Math.floor(diffMo/12)}y ago`;
+    } catch { return '–'; }
+  };
+  const isVerified = u.email_verified == 1;
+  const activeDot  = isVerified
+    ? `<span class="u-active-dot" title="Verified"></span>`
+    : `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;border:1px solid var(--border2);flex-shrink:0" title="Unverified"></span>`;
+
+  const activityHtml = `<div class="u-dates">
+    <div class="u-date-row">${activeDot}<span class="u-date-lbl">Joined</span><span class="u-date-val">${_relDate(u.created_at)}</span></div>
+    <div class="u-date-row" style="margin-bottom:0"><span style="width:7px;height:7px;flex-shrink:0;display:inline-block"></span><span class="u-date-lbl">Seen</span><span class="u-date-val">${_relDate(u.last_seen)}</span></div>
+  </div>`;
+
+  // ── Actions column ───────────────────────────────────────────────────────
   const cancelTrialBtn = (plan === 'trial' || u.had_trial == 1)
-    ? `<button class="act-btn" style="background:rgba(245,158,11,.15);color:var(--amber);border-color:rgba(245,158,11,.3)" onclick="cancelTrial(${u.id},'${email}')">✕ Trial</button>`
+    ? `<button class="u-btn" style="border-color:rgba(245,158,11,.3);color:rgba(245,158,11,.8)" onclick="cancelTrial(${u.id},'${email}')">✕ Trial</button>`
     : '';
-  return `<tr>
-    <td><span class="num">${u.id}</span></td>
-    <td>${u.email}</td>
-    <td style="color:var(--text-muted)">${u.name||'–'}</td>
-    <td style="font-size:12px">${flagStr}</td>
-    <td>${planBadge}${hadTrialBadge}${roleTag}</td>
-    <td style="text-align:center">${activeTd}</td>
-    <td><span class="num">${trial}</span></td>
-    <td><span class="num">${created}</span></td>
-    <td><span class="num">${seen}</span></td>
-    <td style="white-space:nowrap">
-      <button class="act-btn" onclick="openPlanModal(${u.id},'${email}','${plan}')">Plan</button>
-      <button class="act-btn" onclick="openTrialModal(${u.id},'${email}')">Trial</button>
+  const actionsHtml = `<div class="u-actions">
+    <div class="u-action-row">
+      <button class="u-btn" onclick="openPlanModal(${u.id},'${email}','${plan}')">Plan</button>
+      <button class="u-btn" onclick="openTrialModal(${u.id},'${email}')">Trial</button>
+    </div>
+    <div class="u-action-row">
+      <button class="u-btn gold" onclick="openRoleModal(${u.id},'${email}','${u.role||''}')">Role</button>
       ${cancelTrialBtn}
-      <button class="act-btn" style="background:rgba(251,191,36,.08);color:#fbbf24;border-color:rgba(251,191,36,.25)" onclick="openRoleModal(${u.id},'${email}','${u.role||''}')">Role</button>
-      <button class="act-btn danger" onclick="deleteUser(${u.id},'${email}')">✕</button>
+      <button class="u-btn danger" onclick="deleteUser(${u.id},'${email}')">✕</button>
+    </div>
+  </div>`;
+
+  return `<tr class="user-row">
+    <td>
+      <div class="u-cell">
+        <div class="u-avatar" style="background:${avatarColor.bg};border:1.5px solid ${avatarColor.border};color:${avatarColor.color}">${initials}</div>
+        <div class="u-meta">
+          <div class="u-name">${u.name||'<span style="color:var(--text-muted);font-style:italic;font-weight:400">No name</span>'}${roleTag}</div>
+          <div class="u-email">${u.email}</div>
+          <div class="u-id">#${u.id}</div>
+        </div>
+      </div>
     </td>
+    <td>${countryHtml}</td>
+    <td>${journeyHtml}</td>
+    <td>${activityHtml}</td>
+    <td>${actionsHtml}</td>
   </tr>`;
 }
 
@@ -1653,7 +1748,7 @@ function _renderTrafficWorldMap(data) {
       series: {
         regions: [{
           values: countMap,
-          scale: ['#2d4a6e', '#a78bfa'],
+          scale: ['#0a2a3f', '#00d4ff'],
           normalizeFunction: 'linear',
           attribute: 'fill',
         }]
@@ -2077,9 +2172,8 @@ function openRoleModal(id, email, currentRole) {
     <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">${email}</div>
     <label>Role</label>
     <select id="modal-role" style="width:100%">
-      <option value=""      ${!currentRole?'selected':''}>None</option>
-      <option value="ceo"   ${currentRole==='ceo'  ?'selected':''}>👑 CEO (Founder)</option>
-      <option value="staff" ${currentRole==='staff'?'selected':''}>Staff</option>
+      <option value="client" ${(!currentRole||currentRole==='client')?'selected':''}>🧑 Client (default)</option>
+      <option value="ceo"    ${currentRole==='ceo'  ?'selected':''}>👑 CEO (Founder)</option>
     </select>`;
   _modalAction = async () => {
     const role = document.getElementById('modal-role').value || null;
