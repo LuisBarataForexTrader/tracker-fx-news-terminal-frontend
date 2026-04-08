@@ -1851,21 +1851,23 @@ let soundEnabled     = localStorage.getItem('soundEnabled') !== 'false';
 // Migrate legacy filter values:
 // - 'CALENDAR' → CAL_HIGH + CAL_MEDIUM
 // - ['ALL'] (old noisy default) → ['HIGH','CAL_HIGH'] (sensible default)
-function _migrateFilters(arr) {
+// storageKey: the localStorage key this filter set belongs to (e.g. 'soundFilters').
+// This ensures the ALL→HIGH migration only fires when the correct key exists in
+// storage, and writes back to the correct key (not the hardcoded 'soundFilters').
+function _migrateFilters(arr, storageKey) {
   const s = new Set(arr);
   if (s.has('CALENDAR')) { s.delete('CALENDAR'); s.add('CAL_HIGH'); s.add('CAL_MEDIUM'); }
-  // If the only entry is 'ALL' and it came from localStorage (i.e. user never
-  // customised it), upgrade to the quieter default so alerts stop firing for
-  // every LOW/MEDIUM item and every calendar reload.
-  if (s.size === 1 && s.has('ALL') && localStorage.getItem('soundFilters') !== null) {
+  // Only upgrade sound filters: if the only entry is 'ALL' and the sound filter
+  // key exists in storage (user never customised it), switch to the quieter default.
+  if (storageKey === 'soundFilters' && s.size === 1 && s.has('ALL') && localStorage.getItem(storageKey) !== null) {
     s.delete('ALL'); s.add('HIGH'); s.add('CAL_HIGH');
-    localStorage.setItem('soundFilters', JSON.stringify(['HIGH','CAL_HIGH']));
+    localStorage.setItem(storageKey, JSON.stringify(['HIGH','CAL_HIGH']));
   }
   return s;
 }
 // Default: only HIGH impact news + HIGH calendar releases trigger sound.
 // 'ALL' (old default) caused alerts for every low-impact item on every reload.
-let soundFilters     = _migrateFilters(JSON.parse(localStorage.getItem('soundFilters') || '["HIGH","CAL_HIGH"]'));
+let soundFilters     = _migrateFilters(JSON.parse(localStorage.getItem('soundFilters') || '["HIGH","CAL_HIGH"]'), 'soundFilters');
 let soundVolume      = parseFloat(localStorage.getItem('soundVolume') || '0.5');
 let knownUrls        = new Set();
 // knownCalIds: persisted per calendar day so page reloads don't re-inject
@@ -1886,7 +1888,7 @@ let squawkEnabled    = localStorage.getItem('squawkEnabled') === 'true';
 let squawkQueue      = [];
 let squawkSpeaking   = false;
 let squawkRate       = parseFloat(localStorage.getItem('squawkRate') || '1.0');
-let squawkFilters    = _migrateFilters(JSON.parse(localStorage.getItem('squawkFilters') || '["ALL"]'));
+let squawkFilters    = _migrateFilters(JSON.parse(localStorage.getItem('squawkFilters') || '["ALL"]'), 'squawkFilters');
 let squawkVoiceName  = localStorage.getItem('squawkVoiceName') || '';
 let recentNewUrls    = new Set(); // URLs arrived in last 3 min → show NEW badge
 let newItemsCount    = 0;         // count for notification badge
@@ -3736,7 +3738,7 @@ function _openSquawkDd(anchorEl, alignRight) {
   populateSquawkVoices();
   const ri = document.getElementById('squawkRateInput');
   if (ri) { ri.value = squawkRate; document.getElementById('squawkRateVal').textContent = squawkRate.toFixed(1) + '×'; }
-  document.querySelectorAll('.squawk-chip').forEach(c => c.classList.toggle('sel', squawkFilters.has(c.dataset.sf)));
+  document.querySelectorAll('#squawkDd .squawk-chip').forEach(c => c.classList.toggle('sel', squawkFilters.has(c.dataset.sf)));
 }
 function _closeSquawkDd() {
   document.getElementById('squawkDd')?.classList.remove('open');
@@ -3859,8 +3861,8 @@ function setSoundFilter(f, btn) {
   } else {
     soundFilters.delete('ALL');
     if (soundFilters.has(f)) {
-      soundFilters.delete(f);
-      if (soundFilters.size === 0) soundFilters.add('ALL');
+      // Do not deselect the last remaining filter — prevents accidental reset to ALL
+      if (soundFilters.size > 1) soundFilters.delete(f);
     } else {
       soundFilters.add(f);
     }
@@ -3890,6 +3892,8 @@ function toggleSoundCfg(e) {
     dd.style.top  = (rect.bottom + 8) + 'px';
     dd.style.right = (window.innerWidth - rect.right) + 'px';
     dd.style.left  = 'auto';
+    // Sync chip visual state with actual soundFilters every time panel opens
+    document.querySelectorAll('#soundDd .squawk-chip').forEach(c => c.classList.toggle('sel', soundFilters.has(c.dataset.sf)));
   }
 }
 function playAlert() {
