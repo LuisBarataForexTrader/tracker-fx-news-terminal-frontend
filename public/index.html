@@ -1848,19 +1848,40 @@ let allNews          = [];
 let calReleases      = [];
 let displayLimit     = PAGE_SIZE;
 let soundEnabled     = localStorage.getItem('soundEnabled') !== 'false';
-// Migrate legacy 'CALENDAR' filter value → CAL_HIGH + CAL_MEDIUM
+// Migrate legacy filter values:
+// - 'CALENDAR' → CAL_HIGH + CAL_MEDIUM
+// - ['ALL'] (old noisy default) → ['HIGH','CAL_HIGH'] (sensible default)
 function _migrateFilters(arr) {
   const s = new Set(arr);
   if (s.has('CALENDAR')) { s.delete('CALENDAR'); s.add('CAL_HIGH'); s.add('CAL_MEDIUM'); }
+  // If the only entry is 'ALL' and it came from localStorage (i.e. user never
+  // customised it), upgrade to the quieter default so alerts stop firing for
+  // every LOW/MEDIUM item and every calendar reload.
+  if (s.size === 1 && s.has('ALL') && localStorage.getItem('soundFilters') !== null) {
+    s.delete('ALL'); s.add('HIGH'); s.add('CAL_HIGH');
+    localStorage.setItem('soundFilters', JSON.stringify(['HIGH','CAL_HIGH']));
+  }
   return s;
 }
-let soundFilters     = _migrateFilters(JSON.parse(localStorage.getItem('soundFilters') || '["ALL"]'));
+// Default: only HIGH impact news + HIGH calendar releases trigger sound.
+// 'ALL' (old default) caused alerts for every low-impact item on every reload.
+let soundFilters     = _migrateFilters(JSON.parse(localStorage.getItem('soundFilters') || '["HIGH","CAL_HIGH"]'));
 let soundVolume      = parseFloat(localStorage.getItem('soundVolume') || '0.5');
 let knownUrls        = new Set();
-// In-session only — prevents duplicates within a session but resets on page load
-// so recent events always show after refresh
-let knownCalIds = new Set();
-function saveCalIds() { /* no-op: in-session only */ }
+// knownCalIds: persisted per calendar day so page reloads don't re-inject
+// already-released events (and re-fire sound alerts).
+// Key includes today's date → auto-resets at midnight with no manual cleanup needed.
+const _CAL_IDS_KEY = 'knownCalIds_' + new Date().toISOString().slice(0, 10);
+let knownCalIds = new Set(JSON.parse(localStorage.getItem(_CAL_IDS_KEY) || '[]'));
+function saveCalIds() {
+  try {
+    localStorage.setItem(_CAL_IDS_KEY, JSON.stringify([...knownCalIds]));
+    // Purge keys from previous days to avoid localStorage bloat
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('knownCalIds_') && k !== _CAL_IDS_KEY)
+      .forEach(k => localStorage.removeItem(k));
+  } catch(e) {}
+}
 let squawkEnabled    = localStorage.getItem('squawkEnabled') === 'true';
 let squawkQueue      = [];
 let squawkSpeaking   = false;
@@ -3975,8 +3996,9 @@ function handleNewsData(data, isInit) {
   // recent headline starts speaking immediately — older items get queued/dropped
   squawkItems.forEach(n => squawkSpeak(n.headline_en, n.url, n));
 
-  // Sound: fire only if at least one new item matches the user's sound filters, throttled to max 1 per 60s
-  if (soundEnabled && soundNewItems.some(_soundMatchesFilters)) {
+  // Sound: only on live updates (never on initial page load), and only if a new
+  // item matches the user's sound filter. Throttled to max 1 beep per 60 s.
+  if (soundEnabled && !isInit && soundNewItems.some(_soundMatchesFilters)) {
     const now2 = Date.now();
     if (now2 - lastSoundTime > 60000) { lastSoundTime = now2; _playBeep(); }
   }
