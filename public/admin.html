@@ -2058,9 +2058,8 @@ function openPlanModal(id, email, currentPlan) {
     <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">${email}</div>
     <label>New Plan</label>
     <select id="modal-plan" style="width:100%;margin-bottom:8px">
-      <option value="free"  ${currentPlan==='free' ?'selected':''}>Free</option>
-      <option value="basic" ${currentPlan==='basic'?'selected':''}>Basic</option>
-      <option value="pro"   ${currentPlan==='pro'  ?'selected':''}>Pro</option>
+      <option value="basic" ${currentPlan==='basic'||currentPlan==='free'?'selected':''}>Basic (Free forever)</option>
+      <option value="pro"   ${currentPlan==='pro'  ?'selected':''}>Pro (Premium)</option>
     </select>
     <div style="font-size:11px;color:var(--text-muted);margin-top:6px">plan_changed_at will be updated automatically.</div>`;
   _modalAction = async () => {
