@@ -1751,9 +1751,16 @@ async function loadTraffic() {
 }
 
 function _renderTrafficWorldMap(data) {
+  // Build countMap with BOTH uppercase and lowercase keys so jsvectormap
+  // finds the value regardless of which case it uses internally per version
   const countMap = {};
-  const maxCount = data[0]?.count || 1;
-  data.forEach(d => { if (d.country) countMap[d.country.toUpperCase()] = d.count; });
+  data.forEach(d => {
+    if (!d.country) return;
+    const upper = d.country.toUpperCase();
+    const lower = d.country.toLowerCase();
+    countMap[upper] = d.count;
+    countMap[lower] = d.count;
+  });
 
   const mapEl = document.getElementById('chart-traffic-worldmap');
   if (mapEl) {
@@ -1773,14 +1780,14 @@ function _renderTrafficWorldMap(data) {
       series: {
         regions: [{
           values: countMap,
-          scale: ['#0d5080', '#00d4ff'],
-          normalizeFunction: 'polynomial',
+          scale: ['#1a7a9a', '#00d4ff'],  // min=visible teal, max=bright cyan (linear works best)
+          normalizeFunction: 'linear',
           attribute: 'fill',
         }]
       },
       onRegionTooltipShow(e, tooltip, code) {
         const name = COUNTRY_NAMES[code] || code;
-        const cnt  = countMap[code] || 0;
+        const cnt  = countMap[code] || countMap[code?.toLowerCase()] || countMap[code?.toUpperCase()] || 0;
         tooltip.text(`${FLAG_MAP[code]||''} ${name}: ${cnt} visit${cnt!==1?'s':''}`, true);
       }
     });
