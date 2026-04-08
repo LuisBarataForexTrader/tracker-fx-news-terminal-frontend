@@ -407,9 +407,9 @@ select.ctrl-sel:focus{border-color:var(--accent)}
             </div>
             <div style="width:1px;height:20px;background:var(--border2)"></div>
             <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap" id="on-breakdown">
-              <span class="on-pill" id="on-terminal">🖥 <strong>–</strong> app</span>
-              <span class="on-pill" id="on-landing">🌐 <strong>–</strong> landing</span>
-              <span class="on-pill" id="on-login">🔑 <strong>–</strong> login</span>
+              <span class="on-pill" id="on-terminal"><strong>–</strong> app</span>
+              <span class="on-pill" id="on-landing"><strong>–</strong> site</span>
+              <span class="on-pill" id="on-login" style="display:none"></span>
             </div>
           </div>
           <div id="on-users" style="display:flex;gap:6px;flex-wrap:wrap"></div>
@@ -1196,13 +1196,14 @@ async function _pollOnline() {
     // Header widget (always visible)
     if (el('hdr-on-total'))  el('hdr-on-total').textContent  = total;
     if (el('hdr-on-detail')) el('hdr-on-detail').textContent =
-      `App ${c.terminal??0}  Site ${c.landing??0}  Login ${c.login??0}`;
+      `App ${c.terminal??0}  Site ${(c.landing??0)+(c.login??0)}`;
 
     // Overview banner (only when on overview section)
+    const site = (c.landing??0)+(c.login??0);
     if (el('on-total'))    el('on-total').textContent    = total;
-    if (el('on-terminal')) el('on-terminal').innerHTML   = `🖥 <strong>${c.terminal ?? 0}</strong> app`;
-    if (el('on-landing'))  el('on-landing').innerHTML    = `🌐 <strong>${c.landing  ?? 0}</strong> landing`;
-    if (el('on-login'))    el('on-login').innerHTML      = `🔑 <strong>${c.login    ?? 0}</strong> login`;
+    if (el('on-terminal')) el('on-terminal').innerHTML   = `<strong>${c.terminal ?? 0}</strong> app`;
+    if (el('on-landing'))  el('on-landing').innerHTML    = `<strong>${site}</strong> site`;
+    if (el('on-login'))    el('on-login').style.display  = 'none';
     const usersEl = el('on-users');
     if (usersEl) {
       const users = r.users_online || [];
