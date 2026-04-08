@@ -8,6 +8,13 @@
 <meta name="keywords" content="trading news terminal, real-time financial news, live squawk, economic calendar, forex news, crypto news, market intelligence, breaking financial news, live financial TV">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://app.tradingnewsterminal.com/">
+<!-- Favicons -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#0a0c0f">
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://app.tradingnewsterminal.com/">
@@ -700,6 +707,25 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 @keyframes flashHigh{0%{background:rgba(255,59,92,0.3)}100%{background:var(--high-bg)}}
 .toast{position:fixed;bottom:50px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--accent);color:var(--accent);font-family:var(--font);font-size:11px;font-weight:500;padding:9px 22px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;border-radius:3px;}
 .toast.show{opacity:1;}
+/* ── Translate Notice Overlay ── */
+#translate-notice{position:fixed;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:9800;display:none;align-items:center;justify-content:center;}
+#translate-notice.show{display:flex;}
+@keyframes trSlideIn{from{opacity:0;transform:translateY(-20px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes trGlowPulse{0%,100%{box-shadow:0 0 0 1px rgba(0,212,255,0.22),0 0 28px rgba(0,212,255,0.1),0 0 70px rgba(0,212,255,0.05),0 32px 64px rgba(0,0,0,0.85)}50%{box-shadow:0 0 0 1px rgba(0,212,255,0.45),0 0 48px rgba(0,212,255,0.2),0 0 100px rgba(0,212,255,0.1),0 32px 64px rgba(0,0,0,0.85)}}
+@keyframes trLinePulse{0%,100%{opacity:0.45}50%{opacity:1}}
+@keyframes trIconPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,0.25)}60%{box-shadow:0 0 0 8px rgba(0,212,255,0)}}
+.tr-notice-box{position:relative;background:linear-gradient(158deg,#08101e 0%,#0c1628 100%);border:1px solid rgba(0,212,255,0.22);border-radius:14px;padding:36px 40px 30px;max-width:390px;width:90%;text-align:center;animation:trSlideIn .32s cubic-bezier(.34,1.56,.64,1),trGlowPulse 3s ease-in-out infinite .35s;}
+.tr-notice-box::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,transparent,#00d4ff 50%,transparent);animation:trLinePulse 2.5s ease-in-out infinite;}
+.tr-notice-close{position:absolute;top:10px;right:12px;font-size:13px;color:rgba(255,255,255,0.25);cursor:pointer;background:none;border:none;padding:4px 8px;border-radius:4px;transition:color .15s,background .15s;line-height:1;}
+.tr-notice-close:hover{color:rgba(255,255,255,0.75);background:rgba(255,255,255,0.07);}
+.tr-notice-icon-wrap{width:54px;height:54px;border-radius:50%;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.22);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:22px;animation:trIconPulse 2.8s ease-in-out infinite;}
+.tr-notice-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:10px;letter-spacing:0.07em;text-transform:uppercase;}
+.tr-notice-divider{width:36px;height:1px;background:rgba(0,212,255,0.3);margin:0 auto 14px;}
+.tr-notice-msg{font-size:12px;color:rgba(180,200,220,0.6);line-height:1.85;margin-bottom:10px;}
+.tr-notice-domain{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-family:var(--font-mono);color:rgba(0,212,255,0.75);background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);padding:5px 14px;border-radius:20px;margin-bottom:22px;letter-spacing:0.02em;}
+.tr-notice-domain::before{content:'⬡';font-size:9px;opacity:.7;}
+.tr-notice-btn{display:inline-block;padding:10px 28px;background:transparent;border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-family:var(--font);font-size:11px;font-weight:700;border-radius:6px;cursor:pointer;letter-spacing:0.08em;text-transform:uppercase;transition:all .2s;}
+.tr-notice-btn:hover{background:rgba(0,212,255,0.1);border-color:rgba(0,212,255,0.65);box-shadow:0 0 18px rgba(0,212,255,0.18);}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2)}::-webkit-scrollbar-thumb:hover{background:var(--text-muted)}
 
 /* ── Tab bar scrollable ── */
@@ -1485,6 +1511,7 @@ async function openSettings() {
   badge.className = 'plan-badge-sm ' + (plan === 'pro' ? 'pro' : 'free');
   document.getElementById('settingsUpgradeWrap').style.display = plan === 'pro' ? 'none' : '';
   document.getElementById('settingsManageWrap').style.display  = plan === 'pro' ? ''     : 'none';
+  _renderTranslateToggle(_loadPrefs().translateArticles);
   document.getElementById('settingsOverlay').classList.add('show');
   // Fetch fresh data from backend
   try {
@@ -1513,6 +1540,28 @@ async function openSettings() {
 }
 function closeSettings() {
   document.getElementById('settingsOverlay').classList.remove('show');
+}
+function _saveTranslatePref(val) {
+  _savePrefs({ translateArticles: val });
+  _renderTranslateToggle(val);
+}
+function _renderTranslateToggle(val) {
+  const wrap = document.getElementById('translateToggleWrap');
+  const upgradeBtn = document.getElementById('translateUpgradeBtn');
+  if (!wrap || !upgradeBtn) return;
+  if (!_isProNow()) {
+    wrap.style.display = 'none';
+    upgradeBtn.style.display = '';
+    return;
+  }
+  wrap.style.display = '';
+  upgradeBtn.style.display = 'none';
+  const chk = document.getElementById('translateArticlesToggle');
+  const slider = document.getElementById('translateArticlesSlider');
+  if (!chk || !slider) return;
+  chk.checked = !!val;
+  slider.style.background = val ? 'var(--accent)' : 'var(--border2)';
+  slider.innerHTML = `<span style="position:absolute;top:2px;left:${val?'18':'2'}px;width:16px;height:16px;background:#fff;border-radius:50%;transition:.2s;display:block;"></span>`;
 }
 function _togglePwd(id, btn) {
   const inp = document.getElementById(id);
@@ -1659,6 +1708,126 @@ const _cachedUser   = (() => { try { return JSON.parse(localStorage.getItem('tnt
 const USER_PLAN     = (['pro','trial'].includes(_cachedUser.plan)) ? 'pro' : 'free'; // trial = pro access
 const IS_PRO        = USER_PLAN === 'pro' || USER_PLAN === 'trial';
 const PAGE_SIZE     = 50;
+
+// Hide PRO lock badges for pro/trial users — basic plan only sees them
+if (IS_PRO) {
+  document.querySelectorAll('.tab-pro-lock').forEach(el => el.style.display = 'none');
+}
+
+// ─── Article Translation (Google Translate proxy) — PRO only ─────
+const _GT_LANG = { pt:'pt-PT', es:'es', fr:'fr', de:'de', it:'it' };
+// Sites that block Google Translate proxy (Cloudflare / bot protection)
+const _GT_BLOCKED = new Set([
+  'www.investing.com','investing.com',
+  'www.tradingeconomics.com','tradingeconomics.com',
+  'www.bloomberg.com','bloomberg.com',
+  'www.ft.com','ft.com',
+  'www.wsj.com','wsj.com',
+  'www.forexfactory.com','forexfactory.com',
+  'www.investing.com','investing.com','pt.investing.com','es.investing.com','fr.investing.com','de.investing.com','it.investing.com',
+  'www.axios.com','axios.com',
+]);
+
+// ─── Calendar headline label localisation ────────────────────────
+const _CAL_LABELS = {
+  pt: { Actual:'Real', Forecast:'Previsão', Previous:'Anterior' },
+  es: { Actual:'Real', Forecast:'Previsión', Previous:'Anterior' },
+  fr: { Actual:'Réel', Forecast:'Prévision', Previous:'Précédent' },
+  de: { Actual:'Aktuell', Forecast:'Prognose', Previous:'Vorherig' },
+  it: { Actual:'Effettivo', Forecast:'Previsione', Previous:'Precedente' },
+};
+function _localizeCalHeadline(h) {
+  if (lang === 'en' || !h) return h;
+  const m = _CAL_LABELS[lang]; if (!m) return h;
+  return h.replace(/\bActual\b/g, m.Actual).replace(/\bForecast\b/g, m.Forecast).replace(/\bPrevious\b/g, m.Previous);
+}
+function _isProNow() { return IS_PRO || window._tntPlan === 'pro' || window._tntPlan === 'trial'; }
+function _articleUrl(url) {
+  if (!url) return '#';
+  try {
+    const prefs = _loadPrefs();
+    if (!_isProNow() || !prefs.translateArticles || lang === 'en') return url;
+    const u = new URL(url);
+    if (_GT_BLOCKED.has(u.hostname)) return url;
+    const gtLang = _GT_LANG[lang] || lang;
+    const hostDashed = u.hostname.replace(/\./g, '-');
+    const qs = u.search ? u.search + '&' : '?';
+    return `https://${hostDashed}.translate.goog${u.pathname}${qs}_x_tr_sl=auto&_x_tr_tl=${gtLang}&_x_tr_hl=en`;
+  } catch { return url; }
+}
+// Per-session translation check cache: domain → {blocked: bool, at: timestamp}
+const _trDomainCache = {};
+
+// Opens article — checks translation support dynamically
+function _openArticle(url) {
+  if (!url) return;
+  try {
+    const prefs = _loadPrefs();
+    if (_isProNow() && prefs.translateArticles && lang !== 'en') {
+      const u = new URL(url);
+      const domain = u.hostname;
+      // Known blocked (hardcoded list) — instant
+      if (_GT_BLOCKED.has(domain)) {
+        _showTranslateNotice(domain, url);
+        return;
+      }
+      // Check session cache — instant
+      const cached = _trDomainCache[domain];
+      if (cached && Date.now() - cached.at < 3600000) {
+        if (cached.blocked) { _GT_BLOCKED.add(domain); _showTranslateNotice(domain, url); }
+        else window.open(_articleUrl(url), '_blank');
+        return;
+      }
+      // Not cached — check with backend
+      _openArticleWithCheck(url, domain);
+      return;
+    }
+    window.open(url, '_blank');
+  } catch { window.open(url, '_blank'); }
+}
+
+async function _openArticleWithCheck(url, domain) {
+  try {
+    const token = localStorage.getItem('tnt_token') || '';
+    const BE = 'https://trading-news-terminal-backend-production.up.railway.app';
+    const r = await fetch(`${BE}/proxy/check-translation?domain=${encodeURIComponent(domain)}&lang=${encodeURIComponent(lang)}`,
+      { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+    const data = r.ok ? await r.json() : { blocked: false };
+    _trDomainCache[domain] = { blocked: data.blocked, at: Date.now() };
+    if (data.blocked) {
+      _GT_BLOCKED.add(domain);
+      _showTranslateNotice(domain, url);
+    } else {
+      window.open(_articleUrl(url), '_blank');
+    }
+  } catch {
+    // On error just open translated URL optimistically
+    window.open(_articleUrl(url), '_blank');
+  }
+}
+function _showTranslateNotice(domain, finalUrl) {
+  const box   = document.getElementById('translate-notice');
+  if (!box) { window.open(finalUrl, '_blank'); return; }
+  const wrap  = box.querySelector('.tr-notice-icon-wrap');
+  const icon  = box.querySelector('.tr-notice-icon');
+  const title = box.querySelector('.tr-notice-title');
+  const div   = box.querySelector('.tr-notice-divider');
+  const msg   = box.querySelector('.tr-notice-msg');
+  const domEl = box.querySelector('.tr-notice-domain');
+  const btn   = box.querySelector('.tr-notice-btn');
+  if (wrap)  wrap.className  = 'tr-notice-icon-wrap';
+  if (icon)  icon.textContent = '⚠';
+  if (title) { title.textContent = STRINGS[lang]?.['tn.blocked.title'] || 'Translation Not Available'; title.className = 'tr-notice-title'; }
+  if (div)   div.className   = 'tr-notice-divider';
+  if (msg)   msg.textContent = STRINGS[lang]?.['tn.blocked.msg'] || 'This site blocks automated translation. Opening the original article instead.';
+  if (domEl) { domEl.className = 'tr-notice-domain'; domEl.textContent = domain; }
+  if (btn)   { btn.className = 'tr-notice-btn'; btn.textContent = STRINGS[lang]?.['tn.blocked.btn'] || 'Open Original Article →'; btn.onclick = () => { _dismissTranslateNotice(); window.open(finalUrl, '_blank'); }; }
+  box.classList.add('show');
+}
+function _dismissTranslateNotice() {
+  const box = document.getElementById('translate-notice');
+  if (box) box.classList.remove('show');
+}
 
 // ─── State ──────────────────────────────────────────────────────
 let lang             = 'en';
@@ -1822,6 +1991,9 @@ const STRINGS = {
     'settings.upload':'Upload Photo','settings.upload_note':'JPG, PNG · Max 500KB',
     'settings.name':'Display Name','settings.name_ph':'Your name','settings.email':'Email',
     'settings.save':'Save Changes',
+    'settings.prefs':'Preferences',
+    'settings.translate_title':'Translate articles',
+    'settings.translate_desc':'Open news articles translated to your selected language',
     'settings.password':'Change Password','settings.cur_pwd':'Current Password',
     'settings.new_pwd':'New Password','settings.new_pwd_ph':'Min. 6 characters',
     'settings.conf_pwd':'Confirm New Password','settings.conf_pwd_ph':'Repeat new password',
@@ -1860,6 +2032,12 @@ const STRINGS = {
     'earn.results_for':'results for','earn.no_upcoming':'No upcoming earnings data','earn.today':'📅 TODAY —',
     'earn.col.ticker':'Ticker','earn.col.company':'Company','earn.col.report_date':'Report Date',
     'earn.col.eps_est':'EPS Est.','earn.col.fy_end':'FY End',
+    'translate.blocked':'This site does not allow translation — opening original',
+    'tn.blocked.title':'Translation Not Available',
+    'tn.blocked.msg':'This site blocks automated translation. Opening the original article instead.',
+    'tn.trans.title':'Opening Translated Article',
+    'tn.trans.msg':'Article will open translated to {lang}',
+    'tn.blocked.btn':'Open Original Article →',
     'cb.title':'Central Bank News','cb.live':'LIVE','cb.no_news':'No central bank news found',
     'cb.items_meta':'items · Fed · ECB · BOE · BOJ · IMF',
     'sc.tab.stocks':'📈 Stocks','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Crypto',
@@ -1988,6 +2166,9 @@ const STRINGS = {
     'settings.upload':'Carregar Foto','settings.upload_note':'JPG, PNG · Máx 500KB',
     'settings.name':'Nome','settings.name_ph':'O teu nome','settings.email':'Email',
     'settings.save':'Guardar Alterações',
+    'settings.prefs':'Preferências',
+    'settings.translate_title':'Traduzir artigos',
+    'settings.translate_desc':'Abre os artigos traduzidos para o idioma selecionado',
     'settings.password':'Alterar Palavra-passe','settings.cur_pwd':'Palavra-passe Atual',
     'settings.new_pwd':'Nova Palavra-passe','settings.new_pwd_ph':'Mín. 6 caracteres',
     'settings.conf_pwd':'Confirmar Nova Palavra-passe','settings.conf_pwd_ph':'Repetir nova palavra-passe',
@@ -2026,6 +2207,12 @@ const STRINGS = {
     'earn.results_for':'resultados para','earn.no_upcoming':'Sem próximos resultados','earn.today':'📅 HOJE —',
     'earn.col.ticker':'Ticker','earn.col.company':'Empresa','earn.col.report_date':'Data Relatório',
     'earn.col.eps_est':'EPS Est.','earn.col.fy_end':'Fim Ano',
+    'translate.blocked':'Este site não permite tradução — a abrir original',
+    'tn.blocked.title':'Tradução Não Disponível',
+    'tn.blocked.msg':'Este site bloqueia a tradução automática. O artigo original será aberto.',
+    'tn.trans.title':'A Abrir Artigo Traduzido',
+    'tn.trans.msg':'O artigo será aberto traduzido em {lang}',
+    'tn.blocked.btn':'Abrir Artigo Original →',
     'cb.title':'Notícias dos Bancos Centrais','cb.live':'AO VIVO','cb.no_news':'Sem notícias dos bancos centrais',
     'cb.items_meta':'itens · Fed · BCE · BOE · BOJ · FMI',
     'sc.tab.stocks':'📈 Ações','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Cripto',
@@ -2154,6 +2341,9 @@ const STRINGS = {
     'settings.upload':'Subir Foto','settings.upload_note':'JPG, PNG · Máx 500KB',
     'settings.name':'Nombre','settings.name_ph':'Tu nombre','settings.email':'Email',
     'settings.save':'Guardar Cambios',
+    'settings.prefs':'Preferencias',
+    'settings.translate_title':'Traducir artículos',
+    'settings.translate_desc':'Abre los artículos traducidos al idioma seleccionado',
     'settings.password':'Cambiar Contraseña','settings.cur_pwd':'Contraseña Actual',
     'settings.new_pwd':'Nueva Contraseña','settings.new_pwd_ph':'Mín. 6 caracteres',
     'settings.conf_pwd':'Confirmar Nueva Contraseña','settings.conf_pwd_ph':'Repetir nueva contraseña',
@@ -2192,6 +2382,12 @@ const STRINGS = {
     'earn.results_for':'resultados para','earn.no_upcoming':'Sin próximos resultados','earn.today':'📅 HOY —',
     'earn.col.ticker':'Ticker','earn.col.company':'Empresa','earn.col.report_date':'Fecha Informe',
     'earn.col.eps_est':'EPS Est.','earn.col.fy_end':'Fin AF',
+    'translate.blocked':'Este sitio no permite traducción — abriendo original',
+    'tn.blocked.title':'Traducción No Disponible',
+    'tn.blocked.msg':'Este sitio bloquea la traducción automática. Abriendo el artículo original.',
+    'tn.trans.title':'Abriendo Artículo Traducido',
+    'tn.trans.msg':'El artículo se abrirá traducido al {lang}',
+    'tn.blocked.btn':'Abrir Artículo Original →',
     'cb.title':'Noticias de Bancos Centrales','cb.live':'EN VIVO','cb.no_news':'Sin noticias de bancos centrales',
     'cb.items_meta':'ítems · Fed · BCE · BOE · BOJ · FMI',
     'sc.tab.stocks':'📈 Acciones','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Cripto',
@@ -2320,6 +2516,9 @@ const STRINGS = {
     'settings.upload':'Téléverser une Photo','settings.upload_note':'JPG, PNG · Max 500Ko',
     'settings.name':'Nom','settings.name_ph':'Votre nom','settings.email':'Email',
     'settings.save':'Enregistrer',
+    'settings.prefs':'Préférences',
+    'settings.translate_title':'Traduire les articles',
+    'settings.translate_desc':'Ouvre les articles traduits dans la langue sélectionnée',
     'settings.password':'Changer le Mot de Passe','settings.cur_pwd':'Mot de Passe Actuel',
     'settings.new_pwd':'Nouveau Mot de Passe','settings.new_pwd_ph':'Min. 6 caractères',
     'settings.conf_pwd':'Confirmer le Nouveau Mot de Passe','settings.conf_pwd_ph':'Répéter le nouveau mot de passe',
@@ -2358,6 +2557,12 @@ const STRINGS = {
     'earn.results_for':'résultats pour','earn.no_upcoming':'Aucun résultat à venir','earn.today':'📅 AUJOURD\u2019HUI —',
     'earn.col.ticker':'Ticker','earn.col.company':'Société','earn.col.report_date':'Date Publication',
     'earn.col.eps_est':'BPA Est.','earn.col.fy_end':'Fin Ex.',
+    'translate.blocked':'Ce site ne permet pas la traduction — ouverture de l\'original',
+    'tn.blocked.title':'Traduction Non Disponible',
+    'tn.blocked.msg':'Ce site bloque la traduction automatique. Ouverture de l\'article original.',
+    'tn.trans.title':'Ouverture de l\'Article Traduit',
+    'tn.trans.msg':'L\'article s\'ouvrira traduit en {lang}',
+    'tn.blocked.btn':'Ouvrir l\'Article Original →',
     'cb.title':'Actualités Banques Centrales','cb.live':'DIRECT','cb.no_news':'Aucune actualité de banque centrale',
     'cb.items_meta':'éléments · Fed · BCE · BOE · BOJ · FMI',
     'sc.tab.stocks':'📈 Actions','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Crypto',
@@ -2486,6 +2691,9 @@ const STRINGS = {
     'settings.upload':'Foto hochladen','settings.upload_note':'JPG, PNG · Max 500KB',
     'settings.name':'Anzeigename','settings.name_ph':'Dein Name','settings.email':'E-Mail',
     'settings.save':'Änderungen speichern',
+    'settings.prefs':'Einstellungen',
+    'settings.translate_title':'Artikel übersetzen',
+    'settings.translate_desc':'Öffnet Artikel übersetzt in die gewählte Sprache',
     'settings.password':'Passwort ändern','settings.cur_pwd':'Aktuelles Passwort',
     'settings.new_pwd':'Neues Passwort','settings.new_pwd_ph':'Min. 6 Zeichen',
     'settings.conf_pwd':'Neues Passwort bestätigen','settings.conf_pwd_ph':'Neues Passwort wiederholen',
@@ -2524,6 +2732,12 @@ const STRINGS = {
     'earn.results_for':'Ergebnisse für','earn.no_upcoming':'Keine bevorstehenden Ergebnisse','earn.today':'📅 HEUTE —',
     'earn.col.ticker':'Ticker','earn.col.company':'Unternehmen','earn.col.report_date':'Berichtsdatum',
     'earn.col.eps_est':'EPS Schätz.','earn.col.fy_end':'GJ-Ende',
+    'translate.blocked':'Diese Website erlaubt keine Übersetzung — Original wird geöffnet',
+    'tn.blocked.title':'Übersetzung Nicht Verfügbar',
+    'tn.blocked.msg':'Diese Website blockiert automatische Übersetzung. Das Originalseite wird geöffnet.',
+    'tn.trans.title':'Übersetzter Artikel wird geöffnet',
+    'tn.trans.msg':'Artikel wird auf {lang} übersetzt geöffnet',
+    'tn.blocked.btn':'Originalartikel öffnen →',
     'cb.title':'Zentralbank-Nachrichten','cb.live':'LIVE','cb.no_news':'Keine Zentralbank-Nachrichten gefunden',
     'cb.items_meta':'Einträge · Fed · EZB · BOE · BOJ · IWF',
     'sc.tab.stocks':'📈 Aktien','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Krypto',
@@ -2652,6 +2866,9 @@ const STRINGS = {
     'settings.upload':'Carica Foto','settings.upload_note':'JPG, PNG · Max 500KB',
     'settings.name':'Nome','settings.name_ph':'Il tuo nome','settings.email':'Email',
     'settings.save':'Salva Modifiche',
+    'settings.prefs':'Preferenze',
+    'settings.translate_title':'Traduci articoli',
+    'settings.translate_desc':'Apre gli articoli tradotti nella lingua selezionata',
     'settings.password':'Cambia Password','settings.cur_pwd':'Password Attuale',
     'settings.new_pwd':'Nuova Password','settings.new_pwd_ph':'Min. 6 caratteri',
     'settings.conf_pwd':'Conferma Nuova Password','settings.conf_pwd_ph':'Ripeti nuova password',
@@ -2690,6 +2907,12 @@ const STRINGS = {
     'earn.results_for':'risultati per','earn.no_upcoming':'Nessun risultato in arrivo','earn.today':'📅 OGGI —',
     'earn.col.ticker':'Ticker','earn.col.company':'Azienda','earn.col.report_date':'Data Report',
     'earn.col.eps_est':'EPS Stim.','earn.col.fy_end':'Fine AF',
+    'translate.blocked':'Questo sito non consente la traduzione — apertura originale',
+    'tn.blocked.title':'Traduzione Non Disponibile',
+    'tn.blocked.msg':'Questo sito blocca la traduzione automatica. Apertura dell\'articolo originale.',
+    'tn.trans.title':'Apertura Articolo Tradotto',
+    'tn.trans.msg':'L\'articolo si aprirà tradotto in {lang}',
+    'tn.blocked.btn':'Apri Articolo Originale →',
     'cb.title':'Notizie Banche Centrali','cb.live':'LIVE','cb.no_news':'Nessuna notizia banche centrali',
     'cb.items_meta':'elementi · Fed · BCE · BOE · BOJ · FMI',
     'sc.tab.stocks':'📈 Azioni','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Cripto',
@@ -4320,7 +4543,7 @@ function renderNews() {
 
   const html = pageItems.map((n, idx) => {
     const isCalRelease = !!n._calRelease;
-    const headline  = (lang !== 'en' && n['headline_' + lang]) ? n['headline_' + lang] : n.headline_en;
+    const headline  = _localizeCalHeadline((lang !== 'en' && n['headline_' + lang]) ? n['headline_' + lang] : n.headline_en);
     const impactCls = (n.impact||'LOW').toLowerCase();
     const tags      = getAssetTags(n.assets);
     const moves     = isCalRelease ? [] : getMarketMoves(n.headline_en);
@@ -4351,16 +4574,10 @@ function renderNews() {
          </div>`
       : '';
 
-    // Calendar releases open ForexFactory on the specific event date
+    // Calendar releases: compute investing.com URL dynamically using current lang
     const clickAction = isCalRelease
-      ? (()=>{
-          const d = parseUTC(n.timestamp);
-          const mon = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'][d.getUTCMonth()];
-          const day = d.getUTCDate();
-          const yr  = d.getUTCFullYear();
-          return `window.open('https://www.forexfactory.com/calendar?day=${mon}${day}.${yr}','_blank')`;
-        })()
-      : (n.url && !ytId ? `window.open('${n.url}','_blank')` : 'void(0)');
+      ? `_openArticle(_investCalUrl())`
+      : (n.url && !ytId ? `_openArticle('${n.url}')` : 'void(0)');
 
     const safeUrl = (n.url||'').replace(/"/g,'&quot;');
     const calIdAttr = n._calId ? ` data-calid="${n._calId}"` : '';
@@ -4441,17 +4658,23 @@ function calSetImpact(imp, btn) {
   btn.classList.toggle('active', calImpactFilter.has(imp));
   renderCalendar();
 }
-function fmtVal(v,u) { if(v===null||v===undefined)return'—'; return parseFloat(v).toFixed(Math.abs(v)<10?2:1)+(u||''); }
+function fmtVal(v,u) {
+  if(v===null||v===undefined||v===''||v==='—')return'—';
+  if(typeof v==='string')return v; // already formatted by Investing.com (e.g. "0.4%")
+  return parseFloat(v).toFixed(Math.abs(v)<10?2:1)+(u||'');
+}
 // Indicators where higher = negative (unemployment, deficit, debt, claims, etc.)
 const NEGATIVE_HIGHER = ['unemployment','jobless','claims','deficit','debt','inflation','cpi','ppi','trade balance','current account','budget'];
+function _toNum(v){if(v===null||v===undefined||v==='')return null;if(typeof v==='number')return v;const n=parseFloat(String(v).replace(/[%,\s]/g,''));return isNaN(n)?null:n;}
 function actualClass(actual,forecast,prev,title) {
-  if(actual===null||actual===undefined)return'';
-  const ref=forecast??prev;
-  if(ref===null||ref===undefined)return'actual-neutral';
+  if(actual===null||actual===undefined||actual==='')return'';
+  const a=_toNum(actual);
+  const ref=_toNum(forecast)??_toNum(prev);
+  if(a===null||ref===null)return'actual-neutral';
   const t=(title||'').toLowerCase();
   const invertedMetric = NEGATIVE_HIGHER.some(k=>t.includes(k));
-  const higher = actual>ref;
-  const lower  = actual<ref;
+  const higher = a>ref;
+  const lower  = a<ref;
   if(higher) return invertedMetric?'actual-negative':'actual-positive';
   if(lower)  return invertedMetric?'actual-positive':'actual-negative';
   return'actual-neutral';
@@ -4477,15 +4700,16 @@ function renderCalendar() {
       const ic=e.importance===1?'imp-high':e.importance===0?'imp-med':'imp-low';
       const bc=e.importance===1?'badge-high':e.importance===0?'badge-medium':'badge-low';
       const il=e.importance===1?t('cal.high_lbl'):e.importance===0?t('cal.med_lbl'):t('cal.low_lbl');
-      const released=e.actual!==null&&e.actual!==undefined;
+      const released=e.actual!==null&&e.actual!==undefined&&e.actual!=='';
       const cd=!released?countdown(e.date):null;
-      const ac=actualClass(e.actual,e.forecast,e.previous,e.title);
+      const calTitle=(lang!=='en'&&e['title_'+lang])?e['title_'+lang]:e.title;
+      const ac=actualClass(e.actual,e.forecast,e.previous,calTitle);
       const timeLocal=new Date(e.date).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
       return`<div class="cal-event ${ic}${released?' released':''}" data-date="${e.date}">
         <div class="cal-time"><div>${timeLocal}</div>${cd?`<div class="cal-countdown">${cd}</div>`:''}</div>
         <div class="cal-country">${FLAGS[e.country]||''} ${e.country}</div>
         <div><span class="impact-badge ${bc}">${il}</span></div>
-        <div><div class="cal-title">${e.title}</div>${e.period?`<div class="cal-period">${e.period}</div>`:''}</div>
+        <div><div class="cal-title">${calTitle}</div>${e.period?`<div class="cal-period">${e.period}</div>`:''}</div>
         <div class="cal-values">
           <div class="cal-val"><div class="cal-val-label">${t('cal.prev')}</div><div class="cal-val-data">${fmtVal(e.previous,e.unit)}</div></div>
           <div class="cal-val"><div class="cal-val-label">${t('cal.fore')}</div><div class="cal-val-data">${fmtVal(e.forecast,e.unit)}</div></div>
@@ -4500,36 +4724,58 @@ function injectCalRelease(e) {
   if (!IS_PRO) { setTimeout(() => _doInjectCalRelease(e), 2 * 60 * 1000); return; }
   _doInjectCalRelease(e);
 }
+// Value labels for CE headlines in each language
+const _CAL_VAL_LABELS = {
+  en:['Actual','Forecast','Previous'],
+  pt:['Real','Previsão','Anterior'],
+  es:['Real','Previsión','Anterior'],
+  fr:['Réel','Prévision','Précédent'],
+  de:['Aktuell','Prognose','Vorherig'],
+  it:['Effettivo','Previsione','Precedente'],
+};
+function _buildCalHeadline(acLabel,flag,titleStr,actual,forecast,previous,unit,hlang){
+  const[lA,lF,lP]=_CAL_VAL_LABELS[hlang]||_CAL_VAL_LABELS['en'];
+  return`${acLabel} ${flag} ${titleStr} — ${lA}: ${fmtVal(actual,unit)} | ${lF}: ${fmtVal(forecast,unit)} | ${lP}: ${fmtVal(previous,unit)}`;
+}
+// Investing.com subdomain per language — used at both injection and click time
+const _INVEST_SUB={pt:'pt',es:'es',fr:'fr',de:'de',it:'it'};
+function _investCalUrl(){return`https://${_INVEST_SUB[lang]||'www'}.investing.com/economic-calendar/`;}
 function _doInjectCalRelease(e) {
+  const unit=e.unit||'';
   const ac=actualClass(e.actual,e.forecast,e.previous,e.title);
   const acLabel=ac==='actual-positive'?'🟢':ac==='actual-negative'?'🔴':'🟡';
   const flag=FLAGS[e.country]||'';
-  const unit=e.unit||'';
-  const headline=`${acLabel} ${flag} ${e.title} — Actual: ${fmtVal(e.actual,unit)} | Forecast: ${fmtVal(e.forecast,unit)} | Previous: ${fmtVal(e.previous,unit)}`;
   const impact=e.importance===1?'HIGH':e.importance===0?'MEDIUM':'LOW';
   const calAsset=COUNTRY_ASSET[e.country]||'USD';
-  const _d=new Date(e.date);
-  const _mon=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'][_d.getUTCMonth()];
-  const calUrl=`https://www.forexfactory.com/calendar?day=${_mon}${_d.getUTCDate()}.${_d.getUTCFullYear()}`;
-  // Use arrival time (now) not the scheduled e.date — ensures correct sort order in the feed
-  const _arrivalTs = new Date().toISOString();
-  calReleases.push({
-    timestamp: _arrivalTs,
-    headline_en:headline, impact,
+  const _investSub=_INVEST_SUB[lang]||'www';
+  const calUrl=`https://${_investSub}.investing.com/economic-calendar/`;
+  // Use the event's scheduled time (e.date) as timestamp
+  const _ts=e.date;
+  // Build English headline
+  const headline_en=_buildCalHeadline(acLabel,flag,e.title,e.actual,e.forecast,e.previous,unit,'en');
+  const item={
+    timestamp:_ts,
+    headline_en, impact,
     assets:calAsset,
     url:calUrl,
     source:'Economic Calendar', _calRelease:true, _ac:ac, _calCountry:e.country,
-    _calId: e.id,
-  });
+    _calId:e.id,
+  };
+  // Add language-specific headlines where we have a translated title
+  for(const l of ['pt','es','fr','de','it']){
+    const lt=e['title_'+l];
+    if(lt) item['headline_'+l]=_buildCalHeadline(acLabel,flag,lt,e.actual,e.forecast,e.previous,unit,l);
+  }
+  calReleases.push(item);
   if(soundEnabled){const _csn={_calRelease:true,impact,_calCountry:e.country};if(_soundMatchesFilters(_csn)){const now=Date.now();if(now-lastSoundTime>60000){lastSoundTime=now;_playBeep();}}}
   // Queue Medium + High calendar releases for squawk (filter CALENDAR controls whether it actually speaks)
   if (e.importance === 1 || e.importance === 0) {
     const calNewsItem = {
       impact, _calRelease: true, _calCountry: e.country,
-      headline_en: headline, url: calUrl, timestamp: _arrivalTs,
+      headline_en, url: calUrl, timestamp: _ts,
       _calId: e.id,
     };
-    squawkSpeak(headline, calUrl, calNewsItem);
+    squawkSpeak(headline_en, calUrl, calNewsItem);
   }
   renderNews();
 }
@@ -4537,10 +4783,11 @@ async function loadCalendar() {
   try {
     const res=await fetch(BACKEND_URL+'/calendar?days=14');
     const data=await res.json();
-    const prevReleased=new Set(calEvents.filter(e=>e.actual!==null&&e.actual!==undefined).map(e=>e.id));
+    const _hasActual=e=>e.actual!==null&&e.actual!==undefined&&e.actual!=='';
+    const prevReleased=new Set(calEvents.filter(_hasActual).map(e=>e.id));
     calEvents=data.events||[];
     calEvents.forEach(e=>{
-      if(e.actual!==null&&e.actual!==undefined&&!prevReleased.has(e.id)&&!knownCalIds.has(e.id)){
+      if(_hasActual(e)&&!prevReleased.has(e.id)&&!knownCalIds.has(e.id)){
         knownCalIds.add(e.id);
         saveCalIds();
         injectCalRelease(e);
@@ -5137,9 +5384,11 @@ async function loadCentralBanks(force=false){
       const src=(item.source||'').toUpperCase();
       let ts='—';
       try{const d=parseUTC(item.timestamp);ts=d.toLocaleDateString('en-GB')+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});}catch(_){}
-      return `<div class="news-item ${impact}" onclick="window.open('${item.url||'#'}','_blank')">
+      const cbSafeUrl = (item.url||'').replace(/"/g,'&quot;');
+      const cbHeadline = (lang !== 'en' && item['headline_' + lang]) ? item['headline_' + lang] : (item.headline_en||'');
+      return `<div class="news-item ${impact}" data-url="${cbSafeUrl}" onclick="_openArticle(this.dataset.url)">
         <div style="font-size:9px;color:var(--text-muted);font-family:var(--font-mono);margin-bottom:4px;">${src} · ${ts}</div>
-        <div class="news-headline">${item.headline_en||''}</div>
+        <div class="news-headline">${cbHeadline}</div>
       </div>`;
     }).join('');
     body.innerHTML=`
@@ -6588,6 +6837,22 @@ function _fmtScTs(ts) {
         <div class="settings-msg" id="pwdMsg"></div>
       </div>
 
+      <!-- PREFERENCES -->
+      <div class="settings-section">
+        <div class="settings-section-label" data-i18n="settings.prefs">Preferences</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;"><span data-i18n="settings.translate_title">Translate articles</span> <span style="font-size:9px;font-weight:700;letter-spacing:0.1em;color:var(--pro);background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.3);padding:1px 5px;border-radius:2px;vertical-align:middle;">PRO</span></div>
+            <div style="font-size:11px;color:var(--text-muted);" data-i18n="settings.translate_desc">Open news articles translated to your selected language</div>
+          </div>
+          <label id="translateToggleWrap" style="position:relative;display:inline-block;width:36px;height:20px;flex-shrink:0;cursor:pointer;">
+            <input type="checkbox" id="translateArticlesToggle" onchange="_saveTranslatePref(this.checked)" style="opacity:0;width:0;height:0;position:absolute;">
+            <span id="translateArticlesSlider" style="position:absolute;inset:0;background:var(--border2);border-radius:20px;transition:.2s;"></span>
+          </label>
+          <button id="translateUpgradeBtn" onclick="closeSettings();showUpgrade('Translate Articles')" style="display:none;font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;border:none;border-radius:3px;cursor:pointer;flex-shrink:0;">Upgrade</button>
+        </div>
+      </div>
+
       <!-- SUBSCRIPTION -->
       <div class="settings-section">
         <div class="settings-section-label" data-i18n="settings.subscription">Subscription</div>
@@ -6909,5 +7174,18 @@ document.addEventListener('DOMContentLoaded', function() {
 // Also call immediately (script is at end of body, so DOM is ready):
 try { applyTranslations(); } catch(e) {}
 </script>
+
+<!-- Translate Notice Overlay -->
+<div id="translate-notice" onclick="if(event.target===this)_dismissTranslateNotice()">
+  <div class="tr-notice-box">
+    <button class="tr-notice-close" onclick="_dismissTranslateNotice()">✕</button>
+    <div class="tr-notice-icon-wrap"><span class="tr-notice-icon">⚠</span></div>
+    <div class="tr-notice-title"></div>
+    <div class="tr-notice-divider"></div>
+    <div class="tr-notice-msg"></div>
+    <div class="tr-notice-domain"></div>
+    <button class="tr-notice-btn">Open Original Article →</button>
+  </div>
+</div>
 </body>
 </html>
