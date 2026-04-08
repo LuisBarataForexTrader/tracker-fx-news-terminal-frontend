@@ -185,7 +185,9 @@ select.ctrl-sel:focus{border-color:var(--accent)}
 .user-row td{vertical-align:top;padding:14px 16px 14px}
 .user-row:hover td{background:rgba(255,255,255,.018)}
 .u-cell{display:flex;gap:11px;align-items:flex-start}
-.u-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:var(--font-mono);letter-spacing:0}
+.u-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;font-family:var(--font-mono);letter-spacing:0;transition:box-shadow .3s}
+.u-avatar.is-online{animation:avatar-pulse 2s infinite}
+@keyframes avatar-pulse{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,.6)}50%{box-shadow:0 0 0 5px rgba(16,185,129,0)}}
 .u-meta{min-width:0}
 .u-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.3;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .u-email{font-size:11px;color:var(--text-muted);margin-top:3px;word-break:break-all;line-height:1.4}
@@ -215,6 +217,8 @@ select.ctrl-sel:focus{border-color:var(--accent)}
 .u-btn.gold:hover{border-color:#fbbf24;color:#fbbf24}
 .u-active-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);flex-shrink:0}
 .u-online-dot{animation:pulse 2s infinite}
+.sort-arrow{font-size:9px;color:var(--text-muted);margin-left:3px;font-style:normal}
+th:hover .sort-arrow{color:var(--accent)}
 .on-pill{font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
 .on-pill strong{color:var(--text);font-family:var(--font-mono);font-size:13px}
 .on-user-chip{font-size:10px;font-family:var(--font-mono);background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);color:var(--accent);padding:2px 8px;border-radius:3px;white-space:nowrap}
@@ -499,10 +503,10 @@ select.ctrl-sel:focus{border-color:var(--accent)}
             <table class="data-table" id="users-table">
               <thead>
                 <tr>
-                  <th style="width:35%">User</th>
-                  <th style="width:8%">Country</th>
-                  <th style="width:28%">Plan Journey</th>
-                  <th style="width:12%">Activity</th>
+                  <th style="width:35%;cursor:pointer;user-select:none" onclick="sortUsers('name')" id="th-name">User <span class="sort-arrow" id="sa-name"></span></th>
+                  <th style="width:8%;cursor:pointer;user-select:none" onclick="sortUsers('country')" id="th-country">Country <span class="sort-arrow" id="sa-country"></span></th>
+                  <th style="width:28%;cursor:pointer;user-select:none" onclick="sortUsers('plan')" id="th-plan">Plan Journey <span class="sort-arrow" id="sa-plan"></span></th>
+                  <th style="width:12%;cursor:pointer;user-select:none" onclick="sortUsers('joined')" id="th-joined">Activity <span class="sort-arrow" id="sa-joined"></span></th>
                   <th style="width:17%;text-align:right">Actions</th>
                 </tr>
               </thead>
@@ -1212,10 +1216,13 @@ async function _pollOnline() {
         `<span class="on-user-chip" title="${u.email}">${u.email || 'User #'+u.uid}</span>`
       ).join('');
     }
-    // Update pulsing dot on each user row
+    // Update pulsing dot + avatar glow on each user row
     document.querySelectorAll('tr[data-uid]').forEach(row => {
-      const dot = row.querySelector('.u-online-dot');
-      if (dot) dot.style.display = onlineUids.has(row.dataset.uid) ? 'block' : 'none';
+      const online = onlineUids.has(row.dataset.uid);
+      const dot    = row.querySelector('.u-online-dot');
+      const avatar = row.querySelector('.u-avatar');
+      if (dot)    dot.style.display = online ? 'block' : 'none';
+      if (avatar) avatar.classList.toggle('is-online', online);
     });
   } catch(_) {}
 }
@@ -1611,22 +1618,55 @@ async function loadRevenue() {
 
 // ── Users ──────────────────────────────────────────────────────
 let _st = null;
+let _usersCache = [];
+let _sortCol = 'joined';
+let _sortDir = -1; // -1 = desc, 1 = asc
+
 function searchUsers() {
   clearTimeout(_st);
-  _st = setTimeout(_doSearch,300);
+  _st = setTimeout(_doSearch, 300);
 }
+
 async function _doSearch() {
-  const q = document.getElementById('user-search').value.trim();
+  const q    = document.getElementById('user-search').value.trim();
   const plan = document.getElementById('plan-filter').value;
   const tbody = document.getElementById('users-tbody');
-  tbody.innerHTML = '<tr><td colspan="9" class="empty-state"><span class="spinner"></span></td></tr>';
+  tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><span class="spinner"></span></td></tr>';
   try {
     const users = await api(`/admin/users/search?q=${encodeURIComponent(q)}&plan=${encodeURIComponent(plan)}`);
-    document.getElementById('users-count').textContent = users.length + ' users';
-    tbody.innerHTML = users.length===0
-      ? '<tr><td colspan="5" class="empty-state">No users found</td></tr>'
-      : users.map(userRow).join('');
+    _usersCache = users;
+    _renderUsers();
   } catch(err) { console.error('[Users load error]', err); tbody.innerHTML='<tr><td colspan="5" class="empty-state" style="color:var(--red)">Load error</td></tr>'; }
+}
+
+function sortUsers(col) {
+  if (_sortCol === col) { _sortDir *= -1; } else { _sortCol = col; _sortDir = 1; }
+  // Update arrows
+  ['name','country','plan','joined'].forEach(c => {
+    const el = document.getElementById('sa-'+c);
+    if (!el) return;
+    el.textContent = _sortCol === c ? (_sortDir === 1 ? ' ↑' : ' ↓') : ' ↕';
+  });
+  _renderUsers();
+}
+
+function _renderUsers() {
+  const planOrder = { pro: 0, trial: 1, basic: 2, free: 3 };
+  const sorted = [..._usersCache].sort((a, b) => {
+    let va, vb;
+    if (_sortCol === 'name')    { va = (a.name||a.email).toLowerCase(); vb = (b.name||b.email).toLowerCase(); }
+    if (_sortCol === 'country') { va = a.country||''; vb = b.country||''; }
+    if (_sortCol === 'plan')    { va = planOrder[a.plan]??9; vb = planOrder[b.plan]??9; }
+    if (_sortCol === 'joined')  { va = a.created_at||''; vb = b.created_at||''; }
+    if (va < vb) return -1 * _sortDir;
+    if (va > vb) return  1 * _sortDir;
+    return 0;
+  });
+  const tbody = document.getElementById('users-tbody');
+  document.getElementById('users-count').textContent = sorted.length + ' users';
+  tbody.innerHTML = sorted.length === 0
+    ? '<tr><td colspan="5" class="empty-state">No users found</td></tr>'
+    : sorted.map(userRow).join('');
 }
 
 function _fmtTrialDur(hours) {
