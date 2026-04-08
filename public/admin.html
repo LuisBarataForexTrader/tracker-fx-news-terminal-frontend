@@ -533,7 +533,11 @@ select.ctrl-sel:focus{border-color:var(--accent)}
               <input type="number" id="adj-n" value="1" min="1" style="width:80px;background:var(--bg3);border:1px solid var(--border2);color:var(--text-dim);padding:6px 10px;border-radius:3px;font-size:11px"/>
             </div>
             <button class="refresh-btn" onclick="adjustVisits()" style="background:rgba(255,59,92,.08);border-color:rgba(255,59,92,.3);color:#f87171">Remove</button>
+            <div style="width:1px;height:32px;background:var(--border2);margin:0 4px"></div>
+            <button class="refresh-btn" onclick="blockMyIP()" style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3);color:#f59e0b" title="Detect and exclude your current IP from all future visit tracking">🚫 Block My IP</button>
+            <button class="refresh-btn" onclick="resetAllVisits()" style="background:rgba(255,59,92,.12);border-color:rgba(255,59,92,.4);color:#ff3b5c;font-weight:700" title="Zero all visit history and start fresh from today">⚠ Reset All Visits</button>
           </div>
+          <div id="adj-blocked-ips" style="padding:0 20px 14px;font-size:10px;color:var(--text-muted);font-family:var(--font-mono)"></div>
         </div>
       </div>
 
@@ -1745,53 +1749,69 @@ async function loadTraffic() {
     // Pre-fill adjust date with today
     const adjDate = document.getElementById('adj-date');
     if (adjDate && !adjDate.value) adjDate.value = new Date().toISOString().slice(0,10);
+    _loadBlockedIPs();
 
     _markRefreshed('traffic');
   } catch(e) { showToast('Traffic error','error'); console.error(e); }
 }
 
+function _interpolateColor(t) {
+  // t in [0,1]: #1a7a9a → #00d4ff
+  const r = Math.round(0x1a + t * (0x00 - 0x1a));
+  const g = Math.round(0x7a + t * (0xd4 - 0x7a));
+  const b = Math.round(0x9a + t * (0xff - 0x9a));
+  return `rgb(${r},${g},${b})`;
+}
+
 function _renderTrafficWorldMap(data) {
-  // Build countMap with BOTH uppercase and lowercase keys so jsvectormap
-  // finds the value regardless of which case it uses internally per version
+  if (!data.length) {
+    const mapEl = document.getElementById('chart-traffic-worldmap');
+    if (mapEl) mapEl.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:40px;text-align:center">No geo data yet</div>';
+    return;
+  }
+
+  // Build countMap with uppercase keys (jsvectormap world.js uses uppercase ISO-3166 alpha-2)
   const countMap = {};
-  data.forEach(d => {
-    if (!d.country) return;
-    const upper = d.country.toUpperCase();
-    const lower = d.country.toLowerCase();
-    countMap[upper] = d.count;
-    countMap[lower] = d.count;
-  });
+  data.forEach(d => { if (d.country) countMap[d.country.toUpperCase()] = d.count; });
+  const maxCount = Math.max(...Object.values(countMap), 1);
 
   const mapEl = document.getElementById('chart-traffic-worldmap');
-  if (mapEl) {
-    if (_charts['chart-traffic-worldmap']) {
-      try { _charts['chart-traffic-worldmap'].destroy(); } catch(_) {}
-      mapEl.innerHTML = '';
-    }
-    _charts['chart-traffic-worldmap'] = new jsVectorMap({
-      selector: '#chart-traffic-worldmap',
-      map: 'world',
-      backgroundColor: '#0a0c0f',
-      zoomOnScroll: false,
-      regionStyle: {
-        initial:  { fill: '#141c28', stroke: '#0a0c0f', strokeWidth: 0.4 },
-        hover:    { fill: '#ffffff', fillOpacity: 0.9 },
-      },
-      series: {
-        regions: [{
-          values: countMap,
-          scale: ['#1a7a9a', '#00d4ff'],  // min=visible teal, max=bright cyan (linear works best)
-          normalizeFunction: 'linear',
-          attribute: 'fill',
-        }]
-      },
-      onRegionTooltipShow(e, tooltip, code) {
-        const name = COUNTRY_NAMES[code] || code;
-        const cnt  = countMap[code] || countMap[code?.toLowerCase()] || countMap[code?.toUpperCase()] || 0;
-        tooltip.text(`${FLAG_MAP[code]||''} ${name}: ${cnt} visit${cnt!==1?'s':''}`, true);
-      }
-    });
+  if (!mapEl) return;
+
+  if (_charts['chart-traffic-worldmap']) {
+    try { _charts['chart-traffic-worldmap'].destroy(); } catch(_) {}
+    mapEl.innerHTML = '';
   }
+
+  const mapInst = new jsVectorMap({
+    selector: '#chart-traffic-worldmap',
+    map: 'world',
+    backgroundColor: '#0a0c0f',
+    zoomOnScroll: false,
+    regionStyle: {
+      initial:  { fill: '#141c28', stroke: '#0a0c0f', strokeWidth: 0.4 },
+      hover:    { fill: '#ffffff', fillOpacity: 0.85 },
+    },
+    onLoaded(map) {
+      // Directly color each region that has visit data using the map's internal regions object
+      Object.entries(countMap).forEach(([code, count]) => {
+        const t = count / maxCount;
+        const color = _interpolateColor(t);
+        // Try uppercase first, then lowercase (jsvectormap stores internally as uppercase)
+        const region = map.regions[code] || map.regions[code.toLowerCase()];
+        if (region && region.element) {
+          region.element.setStyle('fill', color);
+        }
+      });
+    },
+    onRegionTooltipShow(e, tooltip, code) {
+      const name = COUNTRY_NAMES[code] || code;
+      const cnt  = countMap[code] || countMap[code?.toLowerCase()] || 0;
+      tooltip.text(`${FLAG_MAP[code]||''} ${name}: ${cnt} visit${cnt!==1?'s':''}`, true);
+    }
+  });
+  _charts['chart-traffic-worldmap'] = mapInst;
+
   // Country list (top 20)
   const listEl = document.getElementById('traffic-country-list');
   if (!listEl) return;
@@ -1821,6 +1841,38 @@ async function adjustVisits() {
     showToast(`Removed ${n} visit${n>1?'s':''} from ${source||'all sources'}`, 'ok');
     loadTraffic();
   } catch(e) { showToast('Adjust error: '+e.message, 'error'); }
+}
+
+async function resetAllVisits() {
+  if (!confirm('⚠ Isto vai apagar TODOS os dados de visitas (page_views, page_visits, page_views_countries).\n\nAs contagens começam do zero a partir de hoje.\n\nTens a certeza?')) return;
+  try {
+    await api('/admin/stats/visits/reset', {method:'DELETE'});
+    showToast('Todas as visitas foram zeradas', 'ok');
+    loadTraffic();
+  } catch(e) { showToast('Reset error: '+e.message, 'error'); }
+}
+
+async function blockMyIP() {
+  try {
+    const r = await api('/admin/my-ip');
+    const ip = r.ip;
+    if (!ip || ip === 'unknown') { showToast('Não foi possível detectar o teu IP', 'error'); return; }
+    if (!confirm(`Bloquear o IP "${ip}" de todas as contagens de visitas?\n\nO teu IP nunca mais vai ser contado — landing, terminal ou login.`)) return;
+    await api('/admin/stats/visits/exclude-ip', {method:'POST', body: JSON.stringify({ip})});
+    showToast(`IP ${ip} bloqueado com sucesso`, 'ok');
+    // Show blocked IPs
+    _loadBlockedIPs();
+  } catch(e) { showToast('Erro ao bloquear IP: '+e.message, 'error'); }
+}
+
+async function _loadBlockedIPs() {
+  try {
+    const r = await api('/admin/stats/visits/excluded-ips');
+    const el = document.getElementById('adj-blocked-ips');
+    if (!el) return;
+    if (!r.data || !r.data.length) { el.textContent = ''; return; }
+    el.innerHTML = '🚫 IPs bloqueados: ' + r.data.map(d=>`<span style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);border-radius:2px;padding:1px 6px;margin-left:4px;color:#f59e0b">${d.ip}</span>`).join('');
+  } catch(_) {}
 }
 
 // ── Funnel ─────────────────────────────────────────────────────
