@@ -177,6 +177,8 @@ select.ctrl-sel:focus{border-color:var(--accent)}
 .badge-free{background:rgba(160,180,196,.08);color:var(--text-muted);border:1px solid rgba(160,180,196,.15)}
 .badge-basic{background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.2)}
 .badge-trial{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.2)}
+.badge-ceo{background:linear-gradient(135deg,rgba(251,191,36,.18),rgba(245,158,11,.12));color:#fbbf24;border:1px solid rgba(251,191,36,.35);font-size:8px;letter-spacing:.12em}
+.badge-staff{background:rgba(0,212,255,.08);color:var(--accent);border:1px solid rgba(0,212,255,.15);font-size:8px}
 .trial-bar-wrap{min-width:140px;}
 .trial-bar-track{height:4px;background:var(--border2);border-radius:3px;overflow:hidden;margin-bottom:3px;}
 .trial-bar-fill{height:100%;border-radius:3px;transition:width .3s;}
@@ -365,7 +367,7 @@ select.ctrl-sel:focus{border-color:var(--accent)}
             <div class="chart-canvas-wrap"><canvas id="chart-signups-overview"></canvas></div>
           </div>
           <div class="chart-box">
-            <div class="chart-box-hdr"><span class="chart-box-title">Traffic — Last 30 Days</span></div>
+            <div class="chart-box-hdr"><span class="chart-box-title">Landing Page Visits — SEO Trend (30d)</span></div>
             <div class="chart-canvas-wrap"><canvas id="chart-traffic-overview"></canvas></div>
           </div>
         </div>
@@ -463,6 +465,38 @@ select.ctrl-sel:focus{border-color:var(--accent)}
           <div class="chart-box">
             <div class="chart-box-hdr"><span class="chart-box-title">Visits by Source</span></div>
             <div class="chart-canvas-wrap tall"><canvas id="chart-traffic-sources"></canvas></div>
+          </div>
+        </div>
+        <!-- Visits by Country world map -->
+        <div class="chart-row cols-1">
+          <div class="chart-box">
+            <div class="chart-box-hdr"><span class="chart-box-title">Visits by Country</span></div>
+            <div class="map-canvas-wrap"><div id="chart-traffic-worldmap" style="width:100%;height:400px"></div></div>
+            <div id="traffic-country-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;padding:16px 20px 20px"></div>
+          </div>
+        </div>
+        <!-- Adjust Visits panel (for removing admin test traffic) -->
+        <div class="chart-box" style="margin-top:4px">
+          <div class="chart-box-hdr"><span class="chart-box-title">⚙ Adjust Visits</span><span style="font-size:11px;color:var(--text-muted);margin-left:10px">Remove admin/test traffic from stats</span></div>
+          <div style="padding:16px 20px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+            <div>
+              <label style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:5px">Date</label>
+              <input type="date" id="adj-date" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text-dim);padding:6px 10px;border-radius:3px;font-family:var(--font-mono);font-size:11px"/>
+            </div>
+            <div>
+              <label style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:5px">Source</label>
+              <select id="adj-source" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text-dim);padding:6px 10px;border-radius:3px;font-size:11px">
+                <option value="">All sources</option>
+                <option value="landing">Landing</option>
+                <option value="terminal">Terminal</option>
+                <option value="login">Login</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);display:block;margin-bottom:5px">Subtract</label>
+              <input type="number" id="adj-n" value="1" min="1" style="width:80px;background:var(--bg3);border:1px solid var(--border2);color:var(--text-dim);padding:6px 10px;border-radius:3px;font-size:11px"/>
+            </div>
+            <button class="refresh-btn" onclick="adjustVisits()" style="background:rgba(255,59,92,.08);border-color:rgba(255,59,92,.3);color:#f87171">Remove</button>
           </div>
         </div>
       </div>
@@ -1357,8 +1391,12 @@ async function loadOverview() {
     const sig6 = sig.signups.slice(-6), sigLbl = sig.labels.slice(-6);
     mkChart('chart-signups-overview','line',
       { labels:sigLbl, datasets:[lineDataset('New Users',sig6,'#a78bfa')] });
-    mkChart('chart-traffic-overview','line',
-      { labels:visits.data.map(d=>d.label), datasets:[lineDataset('Visits',visits.data.map(d=>d.visits),'#10b981')] });
+    // Landing page visits only — SEO indicator
+    const landingData = visits.data.map(d => (d.by_source||{}).landing || 0);
+    mkChart('chart-traffic-overview','bar',
+      { labels: visits.data.map(d=>d.label),
+        datasets:[barDataset('Landing Visits (SEO)', landingData, '#a78bfa')] },
+      { scales:{ x:{grid:GRID,ticks:XTICK}, y:{grid:GRID,ticks:YTICK,beginAtZero:true} } });
     _markRefreshed('overview');
   } catch(e){ showToast('Error loading overview','error'); console.error(e); }
 }
@@ -1436,7 +1474,7 @@ async function _doSearch() {
     tbody.innerHTML = users.length===0
       ? '<tr><td colspan="10" class="empty-state">No users found</td></tr>'
       : users.map(userRow).join('');
-  } catch { tbody.innerHTML='<tr><td colspan="9" class="empty-state" style="color:var(--red)">Load error</td></tr>'; }
+  } catch { tbody.innerHTML='<tr><td colspan="10" class="empty-state" style="color:var(--red)">Load error</td></tr>'; }
 }
 
 function _fmtTrialDur(hours) {
@@ -1448,6 +1486,11 @@ function _fmtTrialDur(hours) {
 function userRow(u) {
   const plan = u.plan||'free';
   const planBadge = `<span class="badge badge-${plan}">${plan.toUpperCase()}</span>`;
+  const roleTag = u.role === 'ceo'
+    ? `<span class="badge badge-ceo" style="margin-left:4px">👑 CEO</span>`
+    : u.role === 'staff'
+    ? `<span class="badge badge-staff" style="margin-left:4px">STAFF</span>`
+    : '';
   const isActive = u.email_verified==1 || u.last_seen || ['pro','basic','trial'].includes(plan);
   const activeTd = isActive
     ? '<span style="color:var(--green);font-family:var(--font-mono);font-size:12px">✓</span>'
@@ -1507,14 +1550,16 @@ function userRow(u) {
     <td>${u.email}</td>
     <td style="color:var(--text-muted)">${u.name||'–'}</td>
     <td style="font-size:12px">${flagStr}</td>
-    <td>${planBadge}${hadTrialBadge}</td>
+    <td>${planBadge}${hadTrialBadge}${roleTag}</td>
     <td style="text-align:center">${activeTd}</td>
     <td><span class="num">${trial}</span></td>
     <td><span class="num">${created}</span></td>
     <td><span class="num">${seen}</span></td>
     <td style="white-space:nowrap">
+      <button class="act-btn" onclick="openPlanModal(${u.id},'${email}','${plan}')">Plan</button>
       <button class="act-btn" onclick="openTrialModal(${u.id},'${email}')">Trial</button>
       ${cancelTrialBtn}
+      <button class="act-btn" style="background:rgba(251,191,36,.08);color:#fbbf24;border-color:rgba(251,191,36,.25)" onclick="openRoleModal(${u.id},'${email}','${u.role||''}')">Role</button>
       <button class="act-btn danger" onclick="deleteUser(${u.id},'${email}')">✕</button>
     </td>
   </tr>`;
@@ -1571,8 +1616,84 @@ async function loadTraffic() {
       { scales:{ x:{grid:GRID,ticks:XTICK,stacked:true},
                  y:{grid:GRID,ticks:YTICK,beginAtZero:true,stacked:true} } });
 
+    // World map of visits by country
+    try {
+      const geo = await api('/admin/stats/visits/countries');
+      _renderTrafficWorldMap(geo.data||[]);
+    } catch(e) { console.warn('[Traffic map]', e); }
+
+    // Pre-fill adjust date with today
+    const adjDate = document.getElementById('adj-date');
+    if (adjDate && !adjDate.value) adjDate.value = new Date().toISOString().slice(0,10);
+
     _markRefreshed('traffic');
   } catch(e) { showToast('Traffic error','error'); console.error(e); }
+}
+
+function _renderTrafficWorldMap(data) {
+  const countMap = {};
+  const maxCount = data[0]?.count || 1;
+  data.forEach(d => { if (d.country) countMap[d.country.toUpperCase()] = d.count; });
+
+  const mapEl = document.getElementById('chart-traffic-worldmap');
+  if (mapEl) {
+    if (_charts['chart-traffic-worldmap']) {
+      try { _charts['chart-traffic-worldmap'].destroy(); } catch(_) {}
+      mapEl.innerHTML = '';
+    }
+    _charts['chart-traffic-worldmap'] = new jsVectorMap({
+      selector: '#chart-traffic-worldmap',
+      map: 'world',
+      backgroundColor: '#0a0c0f',
+      zoomOnScroll: false,
+      regionStyle: {
+        initial:  { fill: '#141c28', stroke: '#0a0c0f', strokeWidth: 0.4 },
+        hover:    { fill: '#ffffff', fillOpacity: 0.9 },
+      },
+      series: {
+        regions: [{
+          values: countMap,
+          scale: ['#2d4a6e', '#a78bfa'],
+          normalizeFunction: 'linear',
+          attribute: 'fill',
+        }]
+      },
+      onRegionTooltipShow(e, tooltip, code) {
+        const name = COUNTRY_NAMES[code] || code;
+        const cnt  = countMap[code] || 0;
+        tooltip.text(`${FLAG_MAP[code]||''} ${name}: ${cnt} visit${cnt!==1?'s':''}`, true);
+      }
+    });
+  }
+  // Country list (top 20)
+  const listEl = document.getElementById('traffic-country-list');
+  if (!listEl) return;
+  const top = data.slice(0,20);
+  if (!top.length) { listEl.innerHTML = '<div style="color:var(--text-muted);font-size:11px;padding:4px">No geo data yet — visit data is geolocated in the background.</div>'; return; }
+  listEl.innerHTML = top.map((d,i) => {
+    const flag = FLAG_MAP[d.country] || '🌍';
+    const name = COUNTRY_NAMES[d.country] || d.country;
+    const barW = Math.round(d.count / maxCount * 100);
+    return `<div class="country-row">
+      <div class="country-rank">${i+1}</div>
+      <div class="country-flag">${flag}</div>
+      <div class="country-name">${name}</div>
+      <div class="country-bar-wrap"><div class="country-bar" style="width:${barW}%;background:#a78bfa"></div></div>
+      <div class="country-count">${d.count}</div>
+    </div>`;
+  }).join('');
+}
+
+async function adjustVisits() {
+  const date    = document.getElementById('adj-date').value || new Date().toISOString().slice(0,10);
+  const source  = document.getElementById('adj-source').value;
+  const n       = parseInt(document.getElementById('adj-n').value) || 1;
+  if (!confirm(`Remove ${n} visit${n>1?'s':''} from ${source||'all sources'} on ${date}?`)) return;
+  try {
+    await api(`/admin/stats/visits/adjust?date=${date}&source=${encodeURIComponent(source)}&subtract=${n}`, {method:'PATCH'});
+    showToast(`Removed ${n} visit${n>1?'s':''} from ${source||'all sources'}`, 'ok');
+    loadTraffic();
+  } catch(e) { showToast('Adjust error: '+e.message, 'error'); }
 }
 
 // ── Funnel ─────────────────────────────────────────────────────
@@ -1927,6 +2048,45 @@ function openCreateUserModal() {
     resultEl.innerHTML = `✓ User created<br>Email: ${res.email}<br>Plan: ${res.plan}${res.password !== '***' ? '<br>Password: <strong>'+res.password+'</strong>' : ''}`;
     showToast('User created','ok');
     searchUsers();
+  };
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function openPlanModal(id, email, currentPlan) {
+  document.getElementById('modal-title').textContent = 'Change Plan';
+  document.getElementById('modal-body').innerHTML = `
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">${email}</div>
+    <label>New Plan</label>
+    <select id="modal-plan" style="width:100%;margin-bottom:8px">
+      <option value="free"  ${currentPlan==='free' ?'selected':''}>Free</option>
+      <option value="basic" ${currentPlan==='basic'?'selected':''}>Basic</option>
+      <option value="pro"   ${currentPlan==='pro'  ?'selected':''}>Pro</option>
+    </select>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:6px">plan_changed_at will be updated automatically.</div>`;
+  _modalAction = async () => {
+    const plan = document.getElementById('modal-plan').value;
+    await api(`/admin/users/${id}/plan`, {method:'PATCH', body: JSON.stringify({plan})});
+    showToast(`Plan → ${plan.toUpperCase()}`, 'ok');
+    closeModal(); searchUsers();
+  };
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function openRoleModal(id, email, currentRole) {
+  document.getElementById('modal-title').textContent = 'Set User Role';
+  document.getElementById('modal-body').innerHTML = `
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:14px">${email}</div>
+    <label>Role</label>
+    <select id="modal-role" style="width:100%">
+      <option value=""      ${!currentRole?'selected':''}>None</option>
+      <option value="ceo"   ${currentRole==='ceo'  ?'selected':''}>👑 CEO (Founder)</option>
+      <option value="staff" ${currentRole==='staff'?'selected':''}>Staff</option>
+    </select>`;
+  _modalAction = async () => {
+    const role = document.getElementById('modal-role').value || null;
+    await api(`/admin/users/${id}/role`, {method:'PATCH', body: JSON.stringify({role})});
+    showToast('Role updated', 'ok');
+    closeModal(); searchUsers();
   };
   document.getElementById('modal-overlay').classList.add('open');
 }
