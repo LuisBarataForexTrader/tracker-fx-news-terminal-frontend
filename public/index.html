@@ -606,21 +606,19 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 /* ── Inline feed ad ── */
 .feed-ad-card{cursor:pointer;transition:opacity .15s;position:relative;overflow:hidden;border:2px solid transparent;background:linear-gradient(#22304A,#22304A) padding-box, conic-gradient(from var(--ad-angle),transparent 50%,rgba(107,92,231,.85) 62%,#00d4ff 72%,rgba(107,92,231,.85) 82%,transparent 90%) border-box;animation:ad-border-rotate 4s linear infinite;}
 .feed-ad-card:hover{opacity:.92;}
-.feed-ad-banner{background:#22304A;padding:11px 20px 11px 22px;display:flex;align-items:center;gap:14px;position:relative;}
-.feed-ad-brand{display:flex;flex-direction:column;gap:1px;flex-shrink:0;min-width:74px;}
-.feed-ad-brand-name{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.01em;line-height:1;}
-.feed-ad-brand-name span{color:#9B8BFF;}
-.feed-ad-brand-tag{font-size:8px;color:#fff;letter-spacing:.07em;text-transform:uppercase;margin-top:2px;}
-.feed-ad-divider{width:1px;height:28px;background:rgba(255,255,255,.1);flex-shrink:0;}
+.feed-ad-banner{background:#22304A;padding:0 20px 0 22px;display:flex;align-items:center;gap:14px;position:relative;height:60px;}
+.feed-ad-brand{display:flex;align-items:center;flex-shrink:0;}
+.feed-ad-dark-logo{height:28px;width:auto;max-width:150px;display:block;}
+.feed-ad-divider{width:1px;height:32px;background:rgba(255,255,255,.1);flex-shrink:0;}
 .feed-ad-copy{flex:1;min-width:0;}
-.feed-ad-headline{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.feed-ad-sub{font-size:10px;color:#fff;}
+.feed-ad-headline{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.feed-ad-sub{font-size:11px;color:rgba(255,255,255,.75);}
 .feed-ad-cta{flex-shrink:0;padding:7px 16px;background:#ffffff;color:#5B4BDD;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:all .15s;white-space:nowrap;}
 .feed-ad-card:hover .feed-ad-cta{background:#f0f0ff;color:#4A3ACC;}
 .feed-ad-sponsored{display:none;}
 /* ── White cTrader ad ── */
-.feed-ad-white-card{cursor:pointer;background:#fff;border-left:4px solid #CC1A2A;overflow:hidden;transition:box-shadow .2s;position:relative;}
-.feed-ad-white-card:hover{box-shadow:0 2px 16px rgba(204,26,42,.12);}
+.feed-ad-white-card{cursor:pointer;overflow:hidden;position:relative;border:2px solid transparent;background:linear-gradient(#fff,#fff) padding-box, conic-gradient(from var(--ad-angle),transparent 50%,rgba(0,212,255,.9) 62%,#5B8FE8 72%,rgba(0,212,255,.9) 82%,transparent 90%) border-box;animation:ad-border-rotate 4s linear infinite;}
+.feed-ad-white-card:hover{opacity:.95;}
 .feed-ad-white-inner{display:flex;align-items:center;height:60px;}
 .feed-ad-tfx-block{display:flex;align-items:center;padding:0 16px;border-right:1px solid #eee;height:100%;flex-shrink:0;}
 .feed-ad-tfx-logo{height:28px;width:auto;max-width:140px;display:block;}
@@ -4720,12 +4718,11 @@ function renderNews() {
           <div class="feed-ad-white-sponsored">${t('ad2.sponsored')}</div>
         </div>`;
       } else {
-        // ── Ad B: dark — Tracker FX brand (existing, unchanged) ──
+        // ── Ad B: dark — Tracker FX brand ──
         adHtml = `<div class="feed-ad-card" onclick="window.open('https://www.trackerfx.com','_blank')">
            <div class="feed-ad-banner">
              <div class="feed-ad-brand">
-               <div class="feed-ad-brand-name">Tracker<span>FX</span></div>
-               <div class="feed-ad-brand-tag">${t('ad.brand_tag')}</div>
+               <img src="/assets/trackerfx-negative.svg" class="feed-ad-dark-logo" alt="Tracker FX">
              </div>
              <div class="feed-ad-divider"></div>
              <div class="feed-ad-copy">
