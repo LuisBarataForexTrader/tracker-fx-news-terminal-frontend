@@ -773,6 +773,7 @@ th:hover .sort-arrow{color:var(--accent)}
           <h2>Billing / TOConline</h2><div class="sec-hdr-line"></div>
           <div class="controls">
             <button class="refresh-btn" onclick="tocDiagnose()">⚡ Diagnose</button>
+            <button class="refresh-btn" onclick="tocReauth()" style="color:#f59e0b;border-color:rgba(245,158,11,.4)">🔑 Re-autenticar TOConline</button>
           </div>
         </div>
 
@@ -2696,6 +2697,32 @@ async function saveModal() {
 }
 
 // ── Billing / TOConline ────────────────────────────────────────
+function tocReauth() {
+  // Open TOConline OAuth in new window using the JWT session token
+  const url = `${BACKEND}/toconline/auth?token=${encodeURIComponent(_token)}`;
+  const win = window.open(url, '_blank', 'width=800,height=600');
+  if (!win) alert('Popup bloqueado — permite popups para este site e tenta novamente.');
+  // After auth completes, re-diagnose automatically
+  const checker = setInterval(async () => {
+    try {
+      const card = document.getElementById('toc-status-card');
+      const r = await fetch(`${BACKEND}/admin/toconline/diagnose`, {
+        headers: { 'x-admin-token': _token }
+      });
+      if (r.ok) {
+        const data = await r.json();
+        if (data.access_token && String(data.access_token).startsWith('✅')) {
+          clearInterval(checker);
+          card.innerHTML = '<span style="color:var(--green)">✅ TOConline re-autenticado com sucesso!</span>';
+          tocDiagnose();
+        }
+      }
+    } catch(e) {}
+  }, 3000);
+  // Stop checking after 3 minutes
+  setTimeout(() => clearInterval(checker), 180000);
+}
+
 async function tocDiagnose() {
   const card = document.getElementById('toc-status-card');
   card.innerHTML = '<span class="spinner"></span> A diagnosticar…';
