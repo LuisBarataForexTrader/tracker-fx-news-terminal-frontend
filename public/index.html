@@ -611,8 +611,8 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .feed-ad-dark-logo{height:28px;width:auto;max-width:150px;display:block;}
 .feed-ad-divider{width:1px;height:32px;background:rgba(255,255,255,.1);flex-shrink:0;}
 .feed-ad-copy{flex:1;min-width:0;}
-.feed-ad-headline{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.feed-ad-sub{font-size:11px;color:rgba(255,255,255,.75);}
+.feed-ad-sub{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.feed-ad-headline{font-size:10px;font-weight:400;color:rgba(255,255,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .feed-ad-cta{flex-shrink:0;padding:7px 16px;background:#ffffff;color:#5B4BDD;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:3px;border:none;cursor:pointer;text-transform:uppercase;transition:all .15s;white-space:nowrap;}
 .feed-ad-card:hover .feed-ad-cta{background:#f0f0ff;color:#4A3ACC;}
 .feed-ad-sponsored{display:none;}
@@ -4726,8 +4726,8 @@ function renderNews() {
              </div>
              <div class="feed-ad-divider"></div>
              <div class="feed-ad-copy">
-               <div class="feed-ad-headline">${t('ad.headline')}</div>
                <div class="feed-ad-sub">${t('ad.sub')}</div>
+               <div class="feed-ad-headline">${t('ad.headline')}</div>
              </div>
              <button class="feed-ad-cta" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">${t('ad.cta')}</button>
              <span class="feed-ad-sponsored">${t('ad.sponsored')}</span>
