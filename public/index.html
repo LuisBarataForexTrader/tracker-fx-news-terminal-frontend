@@ -1705,8 +1705,23 @@ const BACKEND_URL   = 'https://trading-news-terminal-backend-production.up.railw
 const UPGRADE_URL   = 'https://www.tradingnewsterminal.com/#pricing';
 // Plan is set from cached user data; authoritative check happens server-side
 const _cachedUser   = (() => { try { return JSON.parse(localStorage.getItem('tnt_user')||'{}'); } catch(e){ return {}; } })();
-const USER_PLAN     = (['pro','trial'].includes(_cachedUser.plan)) ? 'pro' : 'free'; // trial = pro access
-const IS_PRO        = USER_PLAN === 'pro' || USER_PLAN === 'trial';
+
+// ── SANDBOX MODE: ?_plan=basic or ?_plan=pro overrides plan for testing ──────
+const _urlPlanOverride = new URLSearchParams(window.location.search).get('_plan');
+const _isSandbox = !!_urlPlanOverride;
+if (_isSandbox) {
+  console.warn(`[SANDBOX] Plan override active: "${_urlPlanOverride}" — not a real user session`);
+  // Show a small indicator so it's obvious we're in sandbox
+  const _sb = document.createElement('div');
+  _sb.style.cssText = 'position:fixed;bottom:8px;right:8px;z-index:99999;background:#f59e0b;color:#000;font-size:10px;font-weight:800;letter-spacing:.1em;padding:4px 10px;border-radius:3px;text-transform:uppercase;pointer-events:none;';
+  _sb.textContent = '⚙ SANDBOX — ' + _urlPlanOverride.toUpperCase();
+  document.body.appendChild(_sb);
+}
+
+const USER_PLAN = _isSandbox
+  ? (['pro','trial'].includes(_urlPlanOverride) ? 'pro' : 'free')
+  : (['pro','trial'].includes(_cachedUser.plan)) ? 'pro' : 'free'; // trial = pro access
+const IS_PRO        = USER_PLAN === 'pro';
 const PAGE_SIZE     = 50;
 
 // Hide PRO lock badges for pro/trial users — basic plan only sees them
@@ -1749,7 +1764,7 @@ function _localizeCalHeadline(h) {
   const m = _CAL_LABELS[lang]; if (!m) return h;
   return h.replace(/\bActual\b/g, m.Actual).replace(/\bForecast\b/g, m.Forecast).replace(/\bPrevious\b/g, m.Previous);
 }
-function _isProNow() { return IS_PRO || window._tntPlan === 'pro' || window._tntPlan === 'trial'; }
+function _isProNow() { return IS_PRO || (_isSandbox ? false : (window._tntPlan === 'pro' || window._tntPlan === 'trial')); }
 function _articleUrl(url) {
   if (!url) return '#';
   try {
