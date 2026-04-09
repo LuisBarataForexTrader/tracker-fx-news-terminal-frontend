@@ -750,6 +750,10 @@ th:hover .sort-arrow{color:var(--accent)}
           <div class="chart-box">
             <div class="chart-box-hdr"><span class="chart-box-title">Global Customer Distribution</span></div>
             <div class="map-canvas-wrap"><div id="chart-worldmap" style="width:100%;height:420px"></div></div>
+            <div id="customers-map-legend" style="display:none;gap:16px;padding:8px 16px 4px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;">
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#00d4ff;display:inline-block"></span>Pro</span>
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#a78bfa;display:inline-block"></span>Basic</span>
+            </div>
           </div>
         </div>
         <div class="sec-hdr" style="margin-top:4px">
@@ -1879,10 +1883,10 @@ async function loadTraffic() {
         datasets: [lineDataset('Total Visits', d.data.map(r=>r.visits), '#10b981')] },
       { scales:{ x:{grid:GRID,ticks:XTICK}, y:{grid:GRID,ticks:YTICK,beginAtZero:true} } });
 
-    // Source breakdown chart (stacked bars)
-    const srcColors = { terminal:'#00d4ff', landing:'#a78bfa', login:'#f59e0b' };
-    const srcDatasets = ['terminal','landing','login'].map(src => ({
-      label: src.charAt(0).toUpperCase()+src.slice(1),
+    // Source breakdown chart — Site (landing) + App (terminal) only
+    const srcColors = { terminal:'#00d4ff', landing:'#a78bfa' };
+    const srcDatasets = ['terminal','landing'].map(src => ({
+      label: src === 'terminal' ? 'App' : 'Site',
       data:  d.data.map(r => (r.by_source||{})[src] || 0),
       backgroundColor: srcColors[src]+'99',
       borderColor:     srcColors[src],
@@ -2325,8 +2329,8 @@ function _renderTrialDonut({ basicOnly, stillTrial, converted, didNot, total, ra
 }
 
 // ── Customers Map ──────────────────────────────────────────────
-const FLAG_MAP = {PT:'🇵🇹',BR:'🇧🇷',US:'🇺🇸',GB:'🇬🇧',DE:'🇩🇪',FR:'🇫🇷',ES:'🇪🇸',IT:'🇮🇹',NL:'🇳🇱',BE:'🇧🇪',CH:'🇨🇭',AT:'🇦🇹',PL:'🇵🇱',SE:'🇸🇪',NO:'🇳🇴',DK:'🇩🇰',FI:'🇫🇮',IE:'🇮🇪',CA:'🇨🇦',AU:'🇦🇺',NZ:'🇳🇿',ZA:'🇿🇦',AE:'🇦🇪',SG:'🇸🇬',HK:'🇭🇰',JP:'🇯🇵',IN:'🇮🇳',MX:'🇲🇽',AR:'🇦🇷',CL:'🇨🇱',CO:'🇨🇴',CN:'🇨🇳',RU:'🇷🇺',TR:'🇹🇷',KR:'🇰🇷',ID:'🇮🇩',MY:'🇲🇾',TH:'🇹🇭',PH:'🇵🇭',VN:'🇻🇳',PK:'🇵🇰',NG:'🇳🇬',EG:'🇪🇬',GR:'🇬🇷',CZ:'🇨🇿',HU:'🇭🇺',RO:'🇷🇴',SK:'🇸🇰',HR:'🇭🇷',RS:'🇷🇸',UA:'🇺🇦',IL:'🇮🇱',SA:'🇸🇦',QA:'🇶🇦',KW:'🇰🇼',XX:'🌍',OTHER:'🌍'};
-const COUNTRY_NAMES = {PT:'Portugal',BR:'Brazil',US:'United States',GB:'United Kingdom',DE:'Germany',FR:'France',ES:'Spain',IT:'Italy',NL:'Netherlands',BE:'Belgium',CH:'Switzerland',AT:'Austria',PL:'Poland',SE:'Sweden',NO:'Norway',DK:'Denmark',FI:'Finland',IE:'Ireland',CA:'Canada',AU:'Australia',NZ:'New Zealand',ZA:'South Africa',AE:'UAE',SG:'Singapore',HK:'Hong Kong',JP:'Japan',IN:'India',MX:'Mexico',AR:'Argentina',CL:'Chile',CO:'Colombia',CN:'China',RU:'Russia',TR:'Turkey',KR:'South Korea',ID:'Indonesia',MY:'Malaysia',TH:'Thailand',PH:'Philippines',VN:'Vietnam',PK:'Pakistan',NG:'Nigeria',EG:'Egypt',GR:'Greece',CZ:'Czech Rep.',HU:'Hungary',RO:'Romania',SK:'Slovakia',HR:'Croatia',RS:'Serbia',UA:'Ukraine',IL:'Israel',SA:'Saudi Arabia',QA:'Qatar',KW:'Kuwait',XX:'Unknown',OTHER:'Other'};
+const FLAG_MAP = {PT:'🇵🇹',BR:'🇧🇷',US:'🇺🇸',GB:'🇬🇧',DE:'🇩🇪',FR:'🇫🇷',ES:'🇪🇸',IT:'🇮🇹',NL:'🇳🇱',BE:'🇧🇪',CH:'🇨🇭',AT:'🇦🇹',PL:'🇵🇱',SE:'🇸🇪',NO:'🇳🇴',DK:'🇩🇰',FI:'🇫🇮',IE:'🇮🇪',CA:'🇨🇦',AU:'🇦🇺',NZ:'🇳🇿',ZA:'🇿🇦',AE:'🇦🇪',SG:'🇸🇬',HK:'🇭🇰',JP:'🇯🇵',IN:'🇮🇳',MX:'🇲🇽',AR:'🇦🇷',CL:'🇨🇱',CO:'🇨🇴',CN:'🇨🇳',RU:'🇷🇺',TR:'🇹🇷',KR:'🇰🇷',ID:'🇮🇩',MY:'🇲🇾',TH:'🇹🇭',PH:'🇵🇭',VN:'🇻🇳',PK:'🇵🇰',NG:'🇳🇬',EG:'🇪🇬',GR:'🇬🇷',CZ:'🇨🇿',HU:'🇭🇺',RO:'🇷🇴',SK:'🇸🇰',HR:'🇭🇷',RS:'🇷🇸',UA:'🇺🇦',IL:'🇮🇱',SA:'🇸🇦',QA:'🇶🇦',KW:'🇰🇼',LI:'🇱🇮',IM:'🇮🇲',GI:'🇬🇮',JE:'🇯🇪',GG:'🇬🇬',MC:'🇲🇨',LU:'🇱🇺',MT:'🇲🇹',CY:'🇨🇾',XX:'🌍',OTHER:'🌍'};
+const COUNTRY_NAMES = {PT:'Portugal',BR:'Brazil',US:'United States',GB:'United Kingdom',DE:'Germany',FR:'France',ES:'Spain',IT:'Italy',NL:'Netherlands',BE:'Belgium',CH:'Switzerland',AT:'Austria',PL:'Poland',SE:'Sweden',NO:'Norway',DK:'Denmark',FI:'Finland',IE:'Ireland',CA:'Canada',AU:'Australia',NZ:'New Zealand',ZA:'South Africa',AE:'UAE',SG:'Singapore',HK:'Hong Kong',JP:'Japan',IN:'India',MX:'Mexico',AR:'Argentina',CL:'Chile',CO:'Colombia',CN:'China',RU:'Russia',TR:'Turkey',KR:'South Korea',ID:'Indonesia',MY:'Malaysia',TH:'Thailand',PH:'Philippines',VN:'Vietnam',PK:'Pakistan',NG:'Nigeria',EG:'Egypt',GR:'Greece',CZ:'Czech Rep.',HU:'Hungary',RO:'Romania',SK:'Slovakia',HR:'Croatia',RS:'Serbia',UA:'Ukraine',IL:'Israel',SA:'Saudi Arabia',QA:'Qatar',KW:'Kuwait',LI:'Liechtenstein',IM:'Isle of Man',GI:'Gibraltar',JE:'Jersey',GG:'Guernsey',MC:'Monaco',LU:'Luxembourg',MT:'Malta',CY:'Cyprus',XX:'Unknown',OTHER:'Other'};
 
 // ISO 3166-1 numeric → alpha2 (subset covering main countries)
 const ISO_NUM = {4:'AF',8:'AL',12:'DZ',24:'AO',32:'AR',36:'AU',40:'AT',50:'BD',56:'BE',76:'BR',100:'BG',124:'CA',144:'LK',152:'CL',156:'CN',170:'CO',191:'HR',196:'CY',203:'CZ',208:'DK',818:'EG',233:'EE',246:'FI',250:'FR',276:'DE',300:'GR',344:'HK',348:'HU',356:'IN',360:'ID',372:'IE',376:'IL',380:'IT',392:'JP',400:'JO',398:'KZ',404:'KE',408:'KP',410:'KR',414:'KW',422:'LB',428:'LV',440:'LT',442:'LU',458:'MY',484:'MX',504:'MA',528:'NL',554:'NZ',566:'NG',578:'NO',586:'PK',604:'PE',608:'PH',616:'PL',620:'PT',634:'QA',642:'RO',643:'RU',682:'SA',703:'SK',724:'ES',752:'SE',756:'CH',158:'TW',764:'TH',792:'TR',804:'UA',784:'AE',826:'GB',840:'US',704:'VN',710:'ZA',716:'ZW'};
@@ -2337,16 +2341,26 @@ async function loadCustomers() {
     const stats = data.data || [];
     const maxCount = stats[0]?.count || 1;
 
-    // Build alpha2(uppercase) → count map for jsvectormap
-    const countMap = {};
+    // Build maps: total count, pro count, basic count per country
+    const countMap = {}, proMap = {}, basicMap = {};
     stats.forEach(d => {
-      if (d.country && d.country !== 'XX') countMap[d.country.toUpperCase()] = d.count;
+      if (d.country && d.country !== 'XX') {
+        const k = d.country.toUpperCase();
+        countMap[k]  = d.count;
+        proMap[k]    = d.pro_count || 0;
+        basicMap[k]  = d.basic_count || 0;
+      }
     });
 
-    // Render world map with jsvectormap
+    // Color map: cyan for countries with Pro users, purple for Basic-only
+    const fillMap = {};
+    Object.keys(countMap).forEach(k => {
+      fillMap[k] = proMap[k] > 0 ? '#00d4ff' : '#a78bfa';
+    });
+
+    // Render world map
     const mapEl = document.getElementById('chart-worldmap');
     if (mapEl) {
-      // Destroy previous instance if any
       if (_charts['chart-worldmap']) {
         try { _charts['chart-worldmap'].destroy(); } catch(_) {}
         mapEl.innerHTML = '';
@@ -2359,25 +2373,31 @@ async function loadCustomers() {
         regionStyle: {
           initial:  { fill: '#141c28', stroke: '#0a0c0f', strokeWidth: 0.4 },
           hover:    { fill: '#ffffff', fillOpacity: 0.9 },
-          selected: { fill: '#00d4ff' },
         },
         series: {
           regions: [{
-            values: countMap,
-            scale: ['#1a7a9a', '#00d4ff'],  // min=visible teal, max=bright cyan
-            normalizeFunction: 'linear',
+            values: fillMap,
             attribute: 'fill',
           }]
         },
         onRegionTooltipShow(e, tooltip, code) {
           const name = COUNTRY_NAMES[code] || code;
-          const cnt  = countMap[code] || 0;
-          tooltip.text(`${FLAG_MAP[code]||''} ${name}: ${cnt} user${cnt!==1?'s':''}`, true);
+          const total = countMap[code] || 0;
+          if (!total) return;
+          const pro   = proMap[code]   || 0;
+          const basic = basicMap[code] || 0;
+          tooltip.text(`${FLAG_MAP[code]||''} ${name}: ${total} user${total!==1?'s':''}` +
+            (pro   > 0 ? ` · <span style="color:#00d4ff">${pro} Pro</span>`   : '') +
+            (basic > 0 ? ` · <span style="color:#a78bfa">${basic} Basic</span>` : ''), true);
         }
       });
     }
 
-    // Country list
+    // Legend
+    const legendEl = document.getElementById('customers-map-legend');
+    if (legendEl) legendEl.style.display = 'flex';
+
+    // Country list with Basic/Pro breakdown
     const listEl = document.getElementById('country-list');
     const visible = stats.filter(d => d.country && d.country !== 'XX');
     if (!visible.length) {
@@ -2385,15 +2405,21 @@ async function loadCustomers() {
       return;
     }
     listEl.innerHTML = visible.map((d,i) => {
-      const flag = FLAG_MAP[d.country] || '🌍';
-      const name = COUNTRY_NAMES[d.country] || d.country;
-      const barW = Math.round(d.count / maxCount * 100);
+      const flag  = FLAG_MAP[d.country]  || '🌍';
+      const name  = COUNTRY_NAMES[d.country] || d.country;
+      const barW  = Math.round(d.count / maxCount * 100);
+      const pro   = d.pro_count   || 0;
+      const basic = d.basic_count || 0;
+      const planBadges = [
+        pro   > 0 ? `<span style="font-size:9px;font-weight:700;color:#00d4ff;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);border-radius:2px;padding:1px 5px">PRO ${pro}</span>`   : '',
+        basic > 0 ? `<span style="font-size:9px;font-weight:700;color:#a78bfa;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);border-radius:2px;padding:1px 5px">BASIC ${basic}</span>` : '',
+      ].filter(Boolean).join(' ');
       return `<div class="country-row">
         <div class="country-rank">${i+1}</div>
         <div class="country-flag">${flag}</div>
         <div class="country-name">${name}</div>
-        <div class="country-bar-wrap"><div class="country-bar" style="width:${barW}%"></div></div>
-        <div class="country-count">${d.count}</div>
+        <div class="country-bar-wrap"><div class="country-bar" style="width:${barW}%;background:${pro>0?'#00d4ff':'#a78bfa'}"></div></div>
+        <div class="country-count" style="display:flex;align-items:center;gap:5px">${d.count} ${planBadges}</div>
       </div>`;
     }).join('');
     _markRefreshed('customers');
