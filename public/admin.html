@@ -3063,6 +3063,9 @@ function switchFeedsTab(tab) {
   if (!isAll) loadPlanSources();
 }
 
+let _planTotalFeeds = 0;
+let _planBasicWhitelist = 0;
+
 async function loadPlanSources() {
   document.getElementById('plans-basic-list').innerHTML =
     '<div style="padding:20px;text-align:center"><span class="spinner"></span></div>';
@@ -3070,7 +3073,9 @@ async function loadPlanSources() {
     '<div style="padding:20px;text-align:center"><span class="spinner"></span></div>';
   try {
     const data = await api('/admin/sources/plans');
-    _planSources = { basic: data.basic_sources || [], pro_only: data.pro_only_sources || [] };
+    _planSources      = { basic: data.basic_sources || [], pro_only: data.pro_only_sources || [] };
+    _planTotalFeeds   = data.total_feeds   || 0;
+    _planBasicWhitelist = data.basic_whitelist_count || data.basic_sources.length;
     _planDirty = false;
     renderPlanSources();
   } catch(e) {
@@ -3088,31 +3093,36 @@ function renderPlanSources() {
   const basicFiltered = _planSources.basic.filter(s => !qBasic || s.toLowerCase().includes(qBasic));
   const proFiltered   = allPro.filter(s => !qPro || s.toLowerCase().includes(qPro));
 
-  document.getElementById('plans-basic-count').textContent = _planSources.basic.length;
-  document.getElementById('plans-pro-count').textContent   = allPro.length;
+  // KPIs: show whitelist count for Basic, total feeds for Pro
+  document.getElementById('plans-basic-count').textContent = _planBasicWhitelist || _planSources.basic.length;
+  document.getElementById('plans-pro-count').textContent   = _planTotalFeeds || allPro.length;
 
-  const rowStyle  = 'display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px';
-  const nameStyle = 'font-weight:600;color:var(--text-dim);text-transform:capitalize';
-  const btnStyle  = (col) => `padding:3px 10px;font-size:10px;font-weight:700;letter-spacing:.06em;background:transparent;border:1px solid ${col};color:${col};border-radius:3px;cursor:pointer`;
+  const rowStyle  = 'display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px';
+  const nameStyle = 'font-weight:600;color:var(--text-dim);text-transform:capitalize;flex:1';
+  const btnStyle  = (col) => `padding:3px 10px;font-size:10px;font-weight:700;letter-spacing:.06em;background:transparent;border:1px solid ${col};color:${col};border-radius:3px;cursor:pointer;flex-shrink:0`;
+  const badge     = (label, col) => `<span style="font-size:9px;padding:2px 6px;border-radius:2px;background:${col}18;border:1px solid ${col}44;color:${col};flex-shrink:0">${label}</span>`;
 
+  // Basic column: each source has Basic + Pro badges (Pro also sees these) + button to demote
   document.getElementById('plans-basic-list').innerHTML = basicFiltered.length
     ? basicFiltered.sort().map(s => `
         <div style="${rowStyle}">
+          ${badge('Basic','#a78bfa')}${badge('Pro','#00d4ff')}
           <span style="${nameStyle}">${_esc(s)}</span>
-          <button onclick="movePlanSource('${_esc(s)}', false)" style="${btnStyle('#00d4ff')}" title="Move to Pro-only">→ Pro only</button>
+          <button onclick="movePlanSource('${_esc(s)}', false)" style="${btnStyle('#607080')}" title="Move to Pro-only">→ Pro only</button>
         </div>`).join('')
     : '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:11px">No sources</div>';
 
+  // Pro column: all sources — Basic+Pro badges if in both, just Pro badge if Pro-only
   document.getElementById('plans-pro-list').innerHTML = proFiltered.length
     ? proFiltered.sort().map(s => {
         const isBasic = _planSources.basic.map(x=>x.toLowerCase()).includes(s.toLowerCase());
-        const badge = isBasic
-          ? `<span style="font-size:9px;padding:2px 6px;border-radius:2px;background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);color:#a78bfa;margin-right:6px">Basic</span>`
-          : `<span style="font-size:9px;padding:2px 6px;border-radius:2px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);color:var(--accent);margin-right:6px">Pro only</span>`;
+        const badges  = isBasic
+          ? badge('Basic','#a78bfa') + badge('Pro','#00d4ff')
+          : badge('Pro only','#00d4ff');
         const moveBtn = isBasic
           ? `<button onclick="movePlanSource('${_esc(s)}', false)" style="${btnStyle('#607080')}" title="Remove from Basic">→ Pro only</button>`
           : `<button onclick="movePlanSource('${_esc(s)}', true)"  style="${btnStyle('#a78bfa')}" title="Add to Basic">← Add to Basic</button>`;
-        return `<div style="${rowStyle}">${badge}<span style="${nameStyle};flex:1">${_esc(s)}</span>${moveBtn}</div>`;
+        return `<div style="${rowStyle}">${badges}<span style="${nameStyle}">${_esc(s)}</span>${moveBtn}</div>`;
       }).join('')
     : '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:11px">No sources</div>';
 
