@@ -698,57 +698,111 @@ th:hover .sort-arrow{color:var(--accent)}
           </div>
         </div>
 
-        <!-- Health progress bar (hidden until check starts) -->
-        <div id="health-progress-wrap" style="display:none;margin-bottom:20px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px 20px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-            <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)">Running Health Check…</span>
-            <span id="health-progress-label" style="font-size:11px;font-family:var(--font-mono);color:var(--text-muted)">Checking feeds…</span>
-          </div>
-          <div style="background:var(--bg3);border-radius:3px;height:6px;overflow:hidden">
-            <div id="health-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#7dd3fc);transition:width .4s ease;border-radius:3px"></div>
-          </div>
-          <div id="health-progress-sub" style="font-size:10px;color:var(--text-muted);margin-top:8px">This takes 15–30 seconds. Feeds are checked in parallel.</div>
+        <!-- Sub-tabs -->
+        <div style="display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0">
+          <button id="feeds-tab-all" onclick="switchFeedsTab('all')" style="padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid var(--accent);color:var(--accent);cursor:pointer;margin-bottom:-1px">All Feeds</button>
+          <button id="feeds-tab-plans" onclick="switchFeedsTab('plans')" style="padding:8px 16px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-muted);cursor:pointer;margin-bottom:-1px">Plan Sources</button>
         </div>
 
-        <div id="feeds-kpis" class="kpi-grid" style="grid-template-columns:repeat(5,1fr);margin-bottom:20px"></div>
-
-        <div class="table-wrap">
-          <div class="table-toolbar">
-            <input type="text" id="feeds-search" placeholder="Filter by source, URL or status…" oninput="filterFeeds()" />
-            <select id="feeds-status-filter" onchange="filterFeeds()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:6px 10px;border-radius:3px;font-family:var(--font);font-size:12px;cursor:pointer">
-              <option value="">All statuses</option>
-              <option value="ok">✓ OK</option>
-              <option value="empty">⚠ Empty</option>
-              <option value="error">✕ Error</option>
-              <option value="timeout">⏱ Timeout</option>
-              <option value="unknown">— Not checked</option>
-            </select>
-            <select id="feeds-tier-filter" onchange="filterFeeds()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:6px 10px;border-radius:3px;font-family:var(--font);font-size:12px;cursor:pointer">
-              <option value="">All tiers</option>
-              <option value="fast">🔴 Fast (10s)</option>
-              <option value="medium">🟡 Medium (60s)</option>
-              <option value="slow">🟢 Slow (5min)</option>
-            </select>
-            <span id="feeds-count" class="table-count"></span>
+        <!-- ── Tab: All Feeds ── -->
+        <div id="feeds-panel-all">
+          <!-- Health progress bar -->
+          <div id="health-progress-wrap" style="display:none;margin-bottom:20px;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px 20px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)">Running Health Check…</span>
+              <span id="health-progress-label" style="font-size:11px;font-family:var(--font-mono);color:var(--text-muted)">Checking feeds…</span>
+            </div>
+            <div style="background:var(--bg3);border-radius:3px;height:6px;overflow:hidden">
+              <div id="health-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#7dd3fc);transition:width .4s ease;border-radius:3px"></div>
+            </div>
+            <div id="health-progress-sub" style="font-size:10px;color:var(--text-muted);margin-top:8px">This takes 15–30 seconds. Feeds are checked in parallel.</div>
           </div>
-          <table class="data-table">
-            <thead><tr>
-              <th>#</th>
-              <th>Status</th>
-              <th>Source</th>
-              <th>URL</th>
-              <th>Tier</th>
-              <th>Category</th>
-              <th style="text-align:right">Latency</th>
-              <th style="text-align:right">Entries</th>
-              <th style="text-align:right">In DB</th>
-            </tr></thead>
-            <tbody id="feeds-tbody">
-              <tr><td colspan="9" style="text-align:center;padding:30px;color:var(--text-muted);font-size:12px">Click <strong style="color:var(--accent)">↻ List</strong> to load sources, or <strong style="color:var(--accent)">⚡ Run Health Check</strong> to test all feeds.</td></tr>
-            </tbody>
-          </table>
+
+          <div id="feeds-kpis" class="kpi-grid" style="grid-template-columns:repeat(5,1fr);margin-bottom:20px"></div>
+
+          <div class="table-wrap">
+            <div class="table-toolbar">
+              <input type="text" id="feeds-search" placeholder="Filter by source, URL or status…" oninput="filterFeeds()" />
+              <select id="feeds-status-filter" onchange="filterFeeds()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:6px 10px;border-radius:3px;font-family:var(--font);font-size:12px;cursor:pointer">
+                <option value="">All statuses</option>
+                <option value="ok">✓ OK</option>
+                <option value="empty">⚠ Empty</option>
+                <option value="error">✕ Error</option>
+                <option value="timeout">⏱ Timeout</option>
+                <option value="unknown">— Not checked</option>
+              </select>
+              <select id="feeds-tier-filter" onchange="filterFeeds()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:6px 10px;border-radius:3px;font-family:var(--font);font-size:12px;cursor:pointer">
+                <option value="">All tiers</option>
+                <option value="fast">🔴 Fast (30s)</option>
+                <option value="medium">🟡 Medium (60s)</option>
+                <option value="slow">🟢 Slow (5min)</option>
+              </select>
+              <span id="feeds-count" class="table-count"></span>
+            </div>
+            <table class="data-table">
+              <thead><tr>
+                <th>#</th>
+                <th>Status</th>
+                <th>Source</th>
+                <th>URL</th>
+                <th>Tier</th>
+                <th>Plan</th>
+                <th>Category</th>
+                <th style="text-align:right">Latency</th>
+                <th style="text-align:right">Entries</th>
+                <th style="text-align:right">In DB</th>
+              </tr></thead>
+              <tbody id="feeds-tbody">
+                <tr><td colspan="10" style="text-align:center;padding:30px;color:var(--text-muted);font-size:12px">Click <strong style="color:var(--accent)">↻ List</strong> to load sources, or <strong style="color:var(--accent)">⚡ Run Health Check</strong> to test all feeds.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="health-last-run" style="font-size:10px;color:var(--text-muted);margin-top:10px;text-align:right"></div>
         </div>
-        <div id="health-last-run" style="font-size:10px;color:var(--text-muted);margin-top:10px;text-align:right"></div>
+
+        <!-- ── Tab: Plan Sources ── -->
+        <div id="feeds-panel-plans" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <div style="font-size:11px;color:var(--text-muted)">Drag sources between plans or click the arrow buttons. Changes are saved immediately to the server.</div>
+            <button id="plans-save-btn" onclick="savePlanSources()" style="padding:7px 18px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--accent);color:#000;border:none;border-radius:3px;cursor:pointer;opacity:.5;pointer-events:none">Save Changes</button>
+          </div>
+
+          <!-- KPI summary -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+            <div style="background:var(--bg2);border:1px solid rgba(167,139,250,.3);border-radius:6px;padding:14px 18px">
+              <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#a78bfa;margin-bottom:4px">Basic Plan</div>
+              <div id="plans-basic-count" style="font-size:28px;font-weight:700;color:#fff;font-family:var(--font-mono)">—</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:2px">sources · delayed 2 min</div>
+            </div>
+            <div style="background:var(--bg2);border:1px solid rgba(0,212,255,.3);border-radius:6px;padding:14px 18px">
+              <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:4px">Pro Plan</div>
+              <div id="plans-pro-count" style="font-size:28px;font-weight:700;color:#fff;font-family:var(--font-mono)">—</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:2px">total sources · real-time</div>
+            </div>
+          </div>
+
+          <!-- Two-column layout -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <!-- Basic column -->
+            <div>
+              <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#a78bfa;margin-bottom:10px;display:flex;align-items:center;gap:8px">
+                <span style="width:8px;height:8px;border-radius:50%;background:#a78bfa;display:inline-block"></span>
+                Basic Sources
+                <input id="plans-search-basic" type="text" placeholder="Filter…" oninput="filterPlanSources()" style="margin-left:auto;padding:4px 8px;font-size:10px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:3px;width:100px;outline:none">
+              </div>
+              <div id="plans-basic-list" style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;max-height:480px;overflow-y:auto"></div>
+            </div>
+            <!-- Pro-only column -->
+            <div>
+              <div style="font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:8px">
+                <span style="width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block"></span>
+                Pro Only Sources
+                <input id="plans-search-pro" type="text" placeholder="Filter…" oninput="filterPlanSources()" style="margin-left:auto;padding:4px 8px;font-size:10px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);border-radius:3px;width:100px;outline:none">
+              </div>
+              <div id="plans-pro-list" style="background:var(--bg2);border:1px solid var(--border);border-radius:4px;max-height:480px;overflow-y:auto"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- ── Customers Map ── -->
@@ -2990,6 +3044,121 @@ async function createManualInvoice() {
     result.textContent = `❌ ${e.message}`;
     result.style.color = 'var(--red)';
   }
+}
+
+// ── Plan Sources ──────────────────────────────────────────────
+let _planSources = { basic: [], pro_only: [] }; // loaded from server
+let _planDirty   = false;
+
+function switchFeedsTab(tab) {
+  const isAll   = tab === 'all';
+  // Tab buttons
+  document.getElementById('feeds-tab-all').style.borderBottomColor   = isAll ? 'var(--accent)' : 'transparent';
+  document.getElementById('feeds-tab-all').style.color               = isAll ? 'var(--accent)' : 'var(--text-muted)';
+  document.getElementById('feeds-tab-plans').style.borderBottomColor = isAll ? 'transparent' : 'var(--accent)';
+  document.getElementById('feeds-tab-plans').style.color             = isAll ? 'var(--text-muted)' : 'var(--accent)';
+  // Panels
+  document.getElementById('feeds-panel-all').style.display   = isAll ? '' : 'none';
+  document.getElementById('feeds-panel-plans').style.display = isAll ? 'none' : '';
+  if (!isAll) loadPlanSources();
+}
+
+async function loadPlanSources() {
+  document.getElementById('plans-basic-list').innerHTML =
+    '<div style="padding:20px;text-align:center"><span class="spinner"></span></div>';
+  document.getElementById('plans-pro-list').innerHTML =
+    '<div style="padding:20px;text-align:center"><span class="spinner"></span></div>';
+  try {
+    const data = await api('/admin/sources/plans');
+    _planSources = { basic: data.basic_sources || [], pro_only: data.pro_only_sources || [] };
+    _planDirty = false;
+    renderPlanSources();
+  } catch(e) {
+    document.getElementById('plans-basic-list').innerHTML =
+      '<div style="padding:20px;text-align:center;color:#f87171">Error loading plan sources</div>';
+  }
+}
+
+function renderPlanSources() {
+  const qBasic = (document.getElementById('plans-search-basic').value || '').toLowerCase();
+  const qPro   = (document.getElementById('plans-search-pro').value   || '').toLowerCase();
+
+  const basicFiltered = _planSources.basic.filter(s => !qBasic || s.toLowerCase().includes(qBasic));
+  const proFiltered   = _planSources.pro_only.filter(s => !qPro || s.toLowerCase().includes(qPro));
+
+  document.getElementById('plans-basic-count').textContent = _planSources.basic.length;
+  document.getElementById('plans-pro-count').textContent   =
+    _planSources.basic.length + _planSources.pro_only.length;
+
+  const rowStyle = 'display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px';
+  const nameStyle = 'font-weight:600;color:var(--text-dim);text-transform:capitalize';
+  const btnStyle  = (col) => `padding:3px 10px;font-size:10px;font-weight:700;letter-spacing:.06em;background:transparent;border:1px solid ${col};color:${col};border-radius:3px;cursor:pointer`;
+
+  document.getElementById('plans-basic-list').innerHTML = basicFiltered.length
+    ? basicFiltered.sort().map(s => `
+        <div style="${rowStyle}">
+          <span style="${nameStyle}">${_esc(s)}</span>
+          <button onclick="movePlanSource('${_esc(s)}', false)" style="${btnStyle('#00d4ff')}" title="Move to Pro-only">→ Pro</button>
+        </div>`).join('')
+    : '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:11px">No sources</div>';
+
+  document.getElementById('plans-pro-list').innerHTML = proFiltered.length
+    ? proFiltered.sort().map(s => `
+        <div style="${rowStyle}">
+          <button onclick="movePlanSource('${_esc(s)}', true)" style="${btnStyle('#a78bfa')}" title="Move to Basic">← Basic</button>
+          <span style="${nameStyle}">${_esc(s)}</span>
+        </div>`).join('')
+    : '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:11px">No pro-only sources</div>';
+
+  // Enable/disable save button
+  const btn = document.getElementById('plans-save-btn');
+  if (_planDirty) {
+    btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
+  } else {
+    btn.style.opacity = '.5'; btn.style.pointerEvents = 'none';
+  }
+}
+
+function filterPlanSources() {
+  renderPlanSources();
+}
+
+function movePlanSource(source, toBasic) {
+  if (toBasic) {
+    _planSources.pro_only = _planSources.pro_only.filter(s => s.toLowerCase() !== source.toLowerCase());
+    if (!_planSources.basic.map(s=>s.toLowerCase()).includes(source.toLowerCase()))
+      _planSources.basic.push(source);
+  } else {
+    _planSources.basic = _planSources.basic.filter(s => s.toLowerCase() !== source.toLowerCase());
+    if (!_planSources.pro_only.map(s=>s.toLowerCase()).includes(source.toLowerCase()))
+      _planSources.pro_only.push(source);
+  }
+  _planDirty = true;
+  renderPlanSources();
+}
+
+async function savePlanSources() {
+  const btn = document.getElementById('plans-save-btn');
+  btn.textContent = 'Saving…'; btn.style.opacity = '.7'; btn.style.pointerEvents = 'none';
+  try {
+    await fetch(BACKEND + '/admin/sources/plans', {
+      method: 'PUT',
+      headers: { 'x-admin-token': _token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ basic_sources: _planSources.basic })
+    }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
+    _planDirty = false;
+    btn.textContent = 'Save Changes';
+    renderPlanSources();
+    showToast('Plan sources saved', 'ok');
+  } catch(e) {
+    btn.textContent = 'Save Changes';
+    btn.style.opacity = '1'; btn.style.pointerEvents = 'auto';
+    showToast('Save failed: ' + e.message, 'err');
+  }
+}
+
+function _esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 // ── Toast ──────────────────────────────────────────────────────
