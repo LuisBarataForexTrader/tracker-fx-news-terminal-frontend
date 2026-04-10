@@ -7577,44 +7577,82 @@ try { applyTranslations(); } catch(e) {}
 
 <script>
 // ── Axis-lock scroll for commodities & earnings (no diagonal) ──
+// Uses passive:false + preventDefault to hard-block the unwanted axis.
+// Implements manual scroll + momentum so the feel stays native.
 (function(){
   function axisLock(el){
     if(!el) return;
-    var sx=0, sy=0, dir=null;
+    var sx, sy, sl, st, dir=null;
+    var velX=0, velY=0, lastX, lastY, lastT, rafId;
+
     el.addEventListener('touchstart', function(e){
-      sx = e.touches[0].clientX;
-      sy = e.touches[0].clientY;
-      dir = null;
-      el.style.overflowX = 'scroll';
-      el.style.overflowY = 'scroll';
+      if(rafId){ cancelAnimationFrame(rafId); rafId=null; }
+      var t = e.touches[0];
+      sx = lastX = t.clientX;
+      sy = lastY = t.clientY;
+      sl = el.scrollLeft;
+      st = el.scrollTop;
+      dir = null; velX = 0; velY = 0;
+      lastT = Date.now();
     }, {passive:true});
+
     el.addEventListener('touchmove', function(e){
+      var t = e.touches[0];
+      var dx = sx - t.clientX;
+      var dy = sy - t.clientY;
+
+      // Determine axis on first significant movement
       if(!dir){
-        var dx = Math.abs(e.touches[0].clientX - sx);
-        var dy = Math.abs(e.touches[0].clientY - sy);
-        if(dx > 4 || dy > 4){
-          dir = dx > dy ? 'x' : 'y';
-          el.style.overflowX = dir==='x' ? 'scroll' : 'hidden';
-          el.style.overflowY = dir==='y' ? 'scroll' : 'hidden';
-        }
+        if(Math.abs(dx) > 5 || Math.abs(dy) > 5){
+          dir = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+        } else { return; }
       }
-    }, {passive:true});
+
+      // Block native scroll so we can control it manually
+      e.preventDefault();
+
+      // Track velocity (px/ms)
+      var now = Date.now();
+      var dt = Math.max(now - lastT, 1);
+      velX = (lastX - t.clientX) / dt;
+      velY = (lastY - t.clientY) / dt;
+      lastX = t.clientX; lastY = t.clientY; lastT = now;
+
+      // Scroll only the locked axis
+      if(dir === 'x') el.scrollLeft = sl + dx;
+      else            el.scrollTop  = st + dy;
+
+    }, {passive:false}); // passive:false required for preventDefault
+
     el.addEventListener('touchend', function(){
+      if(!dir) return;
+      var lockedDir = dir;
       dir = null;
-      el.style.overflowX = 'scroll';
-      el.style.overflowY = 'scroll';
+      // Momentum: decelerate at 92% per frame
+      var vx = velX * 16, vy = velY * 16;
+      function glide(){
+        if(lockedDir === 'x'){
+          if(Math.abs(vx) < 0.5) return;
+          el.scrollLeft += vx;
+          vx *= 0.92;
+        } else {
+          if(Math.abs(vy) < 0.5) return;
+          el.scrollTop += vy;
+          vy *= 0.92;
+        }
+        rafId = requestAnimationFrame(glide);
+      }
+      rafId = requestAnimationFrame(glide);
     }, {passive:true});
   }
-  // Apply after DOM ready
+
   function init(){
     axisLock(document.getElementById('commodities-body'));
     axisLock(document.getElementById('earnings-body'));
   }
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  } else { init(); }
 })();
 </script>
 </body>
