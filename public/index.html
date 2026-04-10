@@ -597,14 +597,27 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .scroll-sentinel{height:1px;}
 
 /* ── Delay banner ── */
-.delay-banner-wrap{margin:10px 16px 8px;}
-.delay-banner{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#ffffff;border:1px solid #e2e8f0;border-left:3px solid #6B5CE7;padding:9px 20px;flex-shrink:0;border-radius:3px;}
+.delay-banner-wrap{margin:0;padding:10px 14px 6px;}
+.delay-banner{
+  position:sticky;top:0;z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border:2px solid transparent;
+  background:linear-gradient(var(--bg2),var(--bg2)) padding-box,
+             conic-gradient(from var(--ad-angle),transparent 50%,rgba(107,92,231,.85) 62%,#00d4ff 72%,rgba(107,92,231,.85) 82%,transparent 90%) border-box;
+  animation:ad-border-rotate 4s linear infinite;
+  padding:10px 16px;flex-shrink:0;border-radius:4px;
+}
 .delay-banner-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
-.delay-banner-icon{font-size:14px;flex-shrink:0;}
-.delay-banner-text{font-size:13px;color:#374151;line-height:1.5;overflow:hidden;}
-.delay-banner-text strong{color:#6B5CE7;font-weight:700;}
-.delay-banner-btn{flex-shrink:0;padding:6px 16px;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:none;transition:all .15s;border-radius:3px;white-space:nowrap;}
+.delay-banner-icon{font-size:15px;flex-shrink:0;}
+.delay-banner-text{font-size:12px;color:var(--text-dim);line-height:1.5;overflow:hidden;}
+.delay-banner-text strong{color:var(--accent);font-weight:700;}
+.delay-banner-btn{flex-shrink:0;padding:6px 14px;background:linear-gradient(135deg,#5B4BDD,#7C6BFF);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;border:none;transition:all .15s;border-radius:3px;white-space:nowrap;}
 .delay-banner-btn:hover{background:linear-gradient(135deg,#4A3ACC,#6B5BEF);}
+@media(max-width:768px){
+  .delay-banner{padding:8px 12px;gap:8px;}
+  .delay-banner-text{font-size:11px;}
+  .delay-banner-btn{padding:5px 10px;font-size:9px;}
+}
 /* ── Inline feed ad ── */
 .feed-ad-card{cursor:pointer;transition:opacity .15s;position:relative;overflow:hidden;border:2px solid transparent;background:linear-gradient(#22304A,#22304A) padding-box, conic-gradient(from var(--ad-angle),transparent 50%,rgba(107,92,231,.85) 62%,#00d4ff 72%,rgba(107,92,231,.85) 82%,transparent 90%) border-box;animation:ad-border-rotate 4s linear infinite;}
 .feed-ad-card:hover{opacity:.92;}
@@ -1463,8 +1476,8 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
     <div class="tab-content hidden" id="tab-screener">
       <div class="mob-screener-notice" style="display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px 24px;text-align:center;gap:16px;">
         <div style="font-size:48px;">🖥️</div>
-        <div style="font-size:17px;font-weight:700;color:#fff;">Desktop Required</div>
-        <div style="font-size:13px;color:#7a9ab0;line-height:1.65;max-width:280px;">The Market Screener is optimised for larger screens.<br>Open on a desktop or laptop for the full experience.</div>
+        <div style="font-size:17px;font-weight:700;color:#fff;" data-i18n="sc.mob.title">Desktop Required</div>
+        <div style="font-size:13px;color:#7a9ab0;line-height:1.65;max-width:280px;" data-i18n="sc.mob.sub">The Market Screener is optimised for larger screens. Open on a desktop or laptop for the full experience.</div>
       </div>
       <div id="screener-body">
         <div class="sc-subtabs">
@@ -2289,6 +2302,8 @@ const STRINGS = {
     'sc.fl.analyst':'Analyst','sc.fl.signal':'Signal','sc.fl.group':'Group',
     'sc.fl.period':'Period','sc.fl.type':'Type',
     'sc.strength_title':'Currency Strength (24h)',
+    'sc.mob.title':'Desktop Required',
+    'sc.mob.sub':'The Market Screener is optimised for larger screens. Open on a desktop or laptop for the full experience.',
     'mnf.title':'⚙ Configure My News Feed',
     'mnf.subtitle':'Personalize the news, categories and calendar countries you want to track.',
     'mnf.tab.assets':'Assets','mnf.tab.categories':'Categories','mnf.tab.calendar':'Calendar',
@@ -2465,6 +2480,8 @@ const STRINGS = {
     'sc.fl.analyst':'Analista','sc.fl.signal':'Sinal','sc.fl.group':'Grupo',
     'sc.fl.period':'Período','sc.fl.type':'Tipo',
     'sc.strength_title':'Força das Moedas (24h)',
+    'sc.mob.title':'Requer Desktop',
+    'sc.mob.sub':'O Market Screener está optimizado para ecrãs maiores. Abre num computador para a experiência completa.',
     'mnf.title':'⚙ Configurar o Meu Feed',
     'mnf.subtitle':'Personalize as notícias, categorias e países do calendário que quer acompanhar.',
     'mnf.tab.assets':'Ativos','mnf.tab.categories':'Categorias','mnf.tab.calendar':'Calendário',
@@ -2641,6 +2658,8 @@ const STRINGS = {
     'sc.fl.analyst':'Analista','sc.fl.signal':'Señal','sc.fl.group':'Grupo',
     'sc.fl.period':'Período','sc.fl.type':'Tipo',
     'sc.strength_title':'Fuerza de Divisas (24h)',
+    'sc.mob.title':'Requiere Escritorio',
+    'sc.mob.sub':'El Market Screener está optimizado para pantallas grandes. Ábrelo en un ordenador para la experiencia completa.',
     'mnf.title':'⚙ Configurar Mi Feed',
     'mnf.subtitle':'Personaliza las noticias, categorías y países del calendario que quieres seguir.',
     'mnf.tab.assets':'Activos','mnf.tab.categories':'Categorías','mnf.tab.calendar':'Calendario',
@@ -2817,6 +2836,8 @@ const STRINGS = {
     'sc.fl.analyst':'Analyste','sc.fl.signal':'Signal','sc.fl.group':'Groupe',
     'sc.fl.period':'Période','sc.fl.type':'Type',
     'sc.strength_title':'Force des Devises (24h)',
+    'sc.mob.title':'Écran Bureau Requis',
+    'sc.mob.sub':'Le Market Screener est optimisé pour les grands écrans. Ouvrez-le sur un ordinateur pour l\'expérience complète.',
     'mnf.title':'⚙ Configurer Mon Fil',
     'mnf.subtitle':'Personnalisez les actualités, catégories et pays du calendrier que vous souhaitez suivre.',
     'mnf.tab.assets':'Actifs','mnf.tab.categories':'Catégories','mnf.tab.calendar':'Calendrier',
@@ -2993,6 +3014,8 @@ const STRINGS = {
     'sc.fl.analyst':'Analyst','sc.fl.signal':'Signal','sc.fl.group':'Gruppe',
     'sc.fl.period':'Zeitraum','sc.fl.type':'Typ',
     'sc.strength_title':'Währungsstärke (24h)',
+    'sc.mob.title':'Desktop Erforderlich',
+    'sc.mob.sub':'Der Market Screener ist für größere Bildschirme optimiert. Öffne ihn auf einem Desktop oder Laptop für die vollständige Erfahrung.',
     'mnf.title':'⚙ Meinen Feed konfigurieren',
     'mnf.subtitle':'Passen Sie die Nachrichten, Kategorien und Kalenderländer an, die Sie verfolgen möchten.',
     'mnf.tab.assets':'Assets','mnf.tab.categories':'Kategorien','mnf.tab.calendar':'Kalender',
@@ -3169,6 +3192,8 @@ const STRINGS = {
     'sc.fl.analyst':'Analista','sc.fl.signal':'Segnale','sc.fl.group':'Gruppo',
     'sc.fl.period':'Periodo','sc.fl.type':'Tipo',
     'sc.strength_title':'Forza delle Valute (24h)',
+    'sc.mob.title':'Desktop Richiesto',
+    'sc.mob.sub':'Il Market Screener è ottimizzato per schermi più grandi. Aprilo su un desktop o laptop per l\'esperienza completa.',
     'mnf.title':'⚙ Configura il Mio Feed',
     'mnf.subtitle':'Personalizza notizie, categorie e paesi del calendario che vuoi seguire.',
     'mnf.tab.assets':'Asset','mnf.tab.categories':'Categorie','mnf.tab.calendar':'Calendario',
