@@ -4847,9 +4847,9 @@ function renderNews() {
           <span class="delay-banner-text"><strong>${t('delay.title')}</strong> — ${t('delay.sub')}</span>
         </span>
         <span class="delay-banner-mob delay-banner-plan">${t('delay.plan')}</span>
-        <span class="delay-banner-mob delay-banner-sep">—</span>
+        <span class="delay-banner-mob delay-banner-sep" style="color:#000">—</span>
         <span class="delay-banner-mob delay-banner-icon">⏱</span>
-        <span class="delay-banner-mob delay-banner-text">${t('delay.title')}</span>
+        <span class="delay-banner-mob delay-banner-text" style="color:#000">${t('delay.title')}</span>
       </div>
       <button class="delay-banner-btn" onclick="showUpgrade('Real-Time News Feed')">${t('delay.btn')}</button>
     </div>` : '';
@@ -4944,8 +4944,8 @@ function renderNews() {
               <img src="/assets/trackerfx-positive.svg" class="feed-ad-tfx-logo" alt="Tracker FX">
             </div>
             <div class="feed-ad-white-copy">
-              <div class="feed-ad-white-hl">${t('ad2.hl')}</div>
-              <div class="feed-ad-white-sub">${t('ad2.sub')}</div>
+              <div class="feed-ad-white-hl" style="color:#000">${t('ad2.hl')}</div>
+              <div class="feed-ad-white-sub" style="color:#000">${t('ad2.sub')}</div>
             </div>
             <div class="feed-ad-ctrader-block">
               <svg class="feed-ad-ctrader-svg" viewBox="0 0 360 64" xmlns="http://www.w3.org/2000/svg">
@@ -4957,7 +4957,7 @@ function renderNews() {
               <button class="feed-ad-white-cta" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">${t('ad2.cta')}</button>
             </div>
           </div>
-          <div class="feed-ad-white-sponsored">${t('ad2.sponsored')}</div>
+          <div class="feed-ad-white-sponsored" style="color:#000">${t('ad2.sponsored')}</div>
         </div>`;
       } else {
         // ── Ad B: dark — Tracker FX brand ──
@@ -4971,7 +4971,7 @@ function renderNews() {
                <div class="feed-ad-sub">${t('ad.sub')}</div>
                <div class="feed-ad-headline">${t('ad.headline')}</div>
              </div>
-             <button class="feed-ad-cta" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">${t('ad.cta')}</button>
+             <button class="feed-ad-cta" style="background:#fff;color:#5B4BDD" onclick="event.stopPropagation();window.open('https://www.trackerfx.com','_blank')">${t('ad.cta')}</button>
              <span class="feed-ad-sponsored">${t('ad.sponsored')}</span>
            </div>
          </div>`;
