@@ -6246,7 +6246,7 @@ function _scOpenChart(type, sym, name) {
   if (type === 'indices') {
     const iEntry = _INDICES_TV[sym];
     if (iEntry && iEntry.symbol) { _openChartSymbol(iEntry.symbol, iEntry.label); return; }
-    if (iEntry && !iEntry.symbol) { showToast((iEntry.label || name) + ' — chart not available in free widget'); return; }
+    if (iEntry && !iEntry.symbol) { showToast((iEntry.label || name) + ' — chart not available'); return; }
     showToast(name + ' — chart not available'); return;
   }
   // 'commodities' tab OR 'commodity' from multi-asset — both handled here
