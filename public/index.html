@@ -7574,5 +7574,48 @@ try { applyTranslations(); } catch(e) {}
   setTimeout(_checkVersion,  30 * 1000);        // first check 30s after load
 })();
 </script>
+
+<script>
+// ── Axis-lock scroll for commodities & earnings (no diagonal) ──
+(function(){
+  function axisLock(el){
+    if(!el) return;
+    var sx=0, sy=0, dir=null;
+    el.addEventListener('touchstart', function(e){
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+      dir = null;
+      el.style.overflowX = 'scroll';
+      el.style.overflowY = 'scroll';
+    }, {passive:true});
+    el.addEventListener('touchmove', function(e){
+      if(!dir){
+        var dx = Math.abs(e.touches[0].clientX - sx);
+        var dy = Math.abs(e.touches[0].clientY - sy);
+        if(dx > 4 || dy > 4){
+          dir = dx > dy ? 'x' : 'y';
+          el.style.overflowX = dir==='x' ? 'scroll' : 'hidden';
+          el.style.overflowY = dir==='y' ? 'scroll' : 'hidden';
+        }
+      }
+    }, {passive:true});
+    el.addEventListener('touchend', function(){
+      dir = null;
+      el.style.overflowX = 'scroll';
+      el.style.overflowY = 'scroll';
+    }, {passive:true});
+  }
+  // Apply after DOM ready
+  function init(){
+    axisLock(document.getElementById('commodities-body'));
+    axisLock(document.getElementById('earnings-body'));
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
 </body>
 </html>
