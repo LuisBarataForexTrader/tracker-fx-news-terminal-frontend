@@ -3065,6 +3065,7 @@ function switchFeedsTab(tab) {
 
 let _planTotalFeeds = 0;
 let _planBasicWhitelist = 0;
+let _planAllFeeds = []; // [{url, source, plan}] — one entry per RSS feed
 
 async function loadPlanSources() {
   document.getElementById('plans-basic-list').innerHTML =
@@ -3073,9 +3074,10 @@ async function loadPlanSources() {
     '<div style="padding:20px;text-align:center"><span class="spinner"></span></div>';
   try {
     const data = await api('/admin/sources/plans');
-    _planSources      = { basic: data.basic_sources || [], pro_only: data.pro_only_sources || [] };
-    _planTotalFeeds   = data.total_feeds   || 0;
+    _planSources        = { basic: data.basic_sources || [], pro_only: data.pro_only_sources || [] };
+    _planTotalFeeds     = data.total_feeds   || 0;
     _planBasicWhitelist = data.basic_whitelist_count || data.basic_sources.length;
+    _planAllFeeds       = data.all_feeds || [];
     _planDirty = false;
     renderPlanSources();
   } catch(e) {
@@ -3088,21 +3090,25 @@ function renderPlanSources() {
   const qBasic = (document.getElementById('plans-search-basic').value || '').toLowerCase();
   const qPro   = (document.getElementById('plans-search-pro').value   || '').toLowerCase();
 
-  const allPro = [..._planSources.basic, ..._planSources.pro_only];
+  const basicSet = new Set(_planSources.basic.map(s => s.toLowerCase()));
 
   const basicFiltered = _planSources.basic.filter(s => !qBasic || s.toLowerCase().includes(qBasic));
-  const proFiltered   = allPro.filter(s => !qPro || s.toLowerCase().includes(qPro));
+  // Pro column: one row per RSS feed (209 entries), filtered by search
+  const proFiltered = _planAllFeeds.filter(f =>
+    !qPro || f.source.toLowerCase().includes(qPro) || f.url.toLowerCase().includes(qPro)
+  );
 
-  // KPIs: show whitelist count for Basic, total feeds for Pro
+  // KPIs
   document.getElementById('plans-basic-count').textContent = _planBasicWhitelist || _planSources.basic.length;
-  document.getElementById('plans-pro-count').textContent   = _planTotalFeeds || allPro.length;
+  document.getElementById('plans-pro-count').textContent   = _planTotalFeeds || _planAllFeeds.length;
 
-  const rowStyle  = 'display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px';
-  const nameStyle = 'font-weight:600;color:var(--text-dim);text-transform:capitalize;flex:1';
+  const rowStyle  = 'display:flex;align-items:center;gap:6px;padding:7px 12px;border-bottom:1px solid var(--border);font-size:12px';
+  const nameStyle = 'font-weight:600;color:var(--text-dim);text-transform:capitalize;flex:1;min-width:0';
+  const urlStyle  = 'font-size:10px;color:var(--text-muted);font-family:var(--font-mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1.5;min-width:0';
   const btnStyle  = (col) => `padding:3px 10px;font-size:10px;font-weight:700;letter-spacing:.06em;background:transparent;border:1px solid ${col};color:${col};border-radius:3px;cursor:pointer;flex-shrink:0`;
   const badge     = (label, col) => `<span style="font-size:9px;padding:2px 6px;border-radius:2px;background:${col}18;border:1px solid ${col}44;color:${col};flex-shrink:0">${label}</span>`;
 
-  // Basic column: each source has Basic + Pro badges (Pro also sees these) + button to demote
+  // Basic column: 100 source names with Basic + Pro badges
   document.getElementById('plans-basic-list').innerHTML = basicFiltered.length
     ? basicFiltered.sort().map(s => `
         <div style="${rowStyle}">
@@ -3112,19 +3118,18 @@ function renderPlanSources() {
         </div>`).join('')
     : '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:11px">No sources</div>';
 
-  // Pro column: all sources — Basic+Pro badges if in both, just Pro badge if Pro-only
+  // Pro column: ALL 209 feeds — one row per feed URL with source name + plan badge
   document.getElementById('plans-pro-list').innerHTML = proFiltered.length
-    ? proFiltered.sort().map(s => {
-        const isBasic = _planSources.basic.map(x=>x.toLowerCase()).includes(s.toLowerCase());
-        const badges  = isBasic
-          ? badge('Basic','#a78bfa') + badge('Pro','#00d4ff')
-          : badge('Pro only','#00d4ff');
+    ? proFiltered.map(f => {
+        const isBasic = basicSet.has(f.source.toLowerCase());
+        const b = isBasic ? badge('Basic','#a78bfa') + badge('Pro','#00d4ff') : badge('Pro only','#00d4ff');
+        const host = f.url.replace(/^https?:\/\/(www\.|feeds\.)?/,'').split('/')[0];
         const moveBtn = isBasic
-          ? `<button onclick="movePlanSource('${_esc(s)}', false)" style="${btnStyle('#607080')}" title="Remove from Basic">→ Pro only</button>`
-          : `<button onclick="movePlanSource('${_esc(s)}', true)"  style="${btnStyle('#a78bfa')}" title="Add to Basic">← Add to Basic</button>`;
-        return `<div style="${rowStyle}">${badges}<span style="${nameStyle}">${_esc(s)}</span>${moveBtn}</div>`;
+          ? `<button onclick="movePlanSource('${_esc(f.source)}', false)" style="${btnStyle('#607080')}" title="Move to Pro-only">→ Pro only</button>`
+          : `<button onclick="movePlanSource('${_esc(f.source)}', true)"  style="${btnStyle('#a78bfa')}" title="Add to Basic">← Basic</button>`;
+        return `<div style="${rowStyle}">${b}<span style="${nameStyle}">${_esc(f.source)}</span><span style="${urlStyle}" title="${_esc(f.url)}">${_esc(host)}</span>${moveBtn}</div>`;
       }).join('')
-    : '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:11px">No sources</div>';
+    : '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:11px">No feeds</div>';
 
   // Enable/disable save button
   const btn = document.getElementById('plans-save-btn');
