@@ -6197,31 +6197,32 @@ const _COMM_TV = {
 };
 
 // ─── Indices: yfinance ticker → TradingView proName ────────────
+// All symbols verified against TradingView free widget compatibility
 const _INDICES_TV = {
   // Americas
   '^GSPC':      {symbol:'SP:SPX',              label:'S&P 500'},
   '^NDX':       {symbol:'NASDAQ:NDX',          label:'Nasdaq 100'},
   '^IXIC':      {symbol:'NASDAQ:IXIC',         label:'Nasdaq Composite'},
   '^DJI':       {symbol:'DJ:DJI',              label:'Dow Jones'},
-  '^RUT':       {symbol:'TVC:RUT',             label:'Russell 2000'},
-  '^BVSP':      {symbol:'BMFBOVESPA:IBOV',     label:'Bovespa'},
+  '^RUT':       {symbol:'INDEX:RUT',           label:'Russell 2000'},
+  '^BVSP':      {symbol:'INDEX:BOVESPA',       label:'Bovespa'},
   // Europe
-  '^GDAXI':     {symbol:'XETR:DAX',            label:'DAX 40'},
-  '^FTSE':      {symbol:'SPREADEX:UK100',       label:'FTSE 100'},
-  '^FCHI':      {symbol:'EURONEXT:PX1',        label:'CAC 40'},
-  '^STOXX50E':  {symbol:'TVC:SX5E',            label:'Euro Stoxx 50'},
-  '^IBEX':      {symbol:'BME:IBC',             label:'IBEX 35'},
-  '^AEX':       {symbol:'EURONEXT:AEX',        label:'AEX'},
+  '^GDAXI':     {symbol:'INDEX:DAX',           label:'DAX 40'},
+  '^FTSE':      {symbol:'INDEX:UKX',           label:'FTSE 100'},
+  '^FCHI':      {symbol:'INDEX:CAC40',         label:'CAC 40'},
+  '^STOXX50E':  {symbol:'INDEX:SX5E',          label:'Euro Stoxx 50'},
+  '^IBEX':      {symbol:'INDEX:IBEX35',        label:'IBEX 35'},
+  '^AEX':       {symbol:'INDEX:AEX',           label:'AEX'},
   '^SSMI':      {symbol:'INDEX:SMI',           label:'SMI'},
-  'FTSEMIB.MI': {symbol:'MIL:FTSEMIB',         label:'FTSE MIB'},
+  'FTSEMIB.MI': {symbol:'INDEX:FTSEMIB',       label:'FTSE MIB'},
   // Asia-Pacific
-  '^N225':      {symbol:'TVC:NI225',           label:'Nikkei 225'},
-  '^HSI':       {symbol:'TVC:HSI',             label:'Hang Seng'},
-  '^AXJO':      {symbol:'ASX:XJO',             label:'ASX 200'},
-  '^KS11':      {symbol:'KRX:KOSPI',           label:'KOSPI'},
-  '^TWII':      {symbol:'TWSE:TSE',            label:'TAIEX'},
-  '^NSEI':      {symbol:'NSE:NIFTY50',         label:'Nifty 50'},
-  '000001.SS':  {symbol:'SSE:000001',          label:'Shanghai Composite'},
+  '^N225':      {symbol:'INDEX:NKY',           label:'Nikkei 225'},
+  '^HSI':       {symbol:'INDEX:HSI',           label:'Hang Seng'},
+  '^AXJO':      {symbol:'INDEX:AS51',          label:'ASX 200'},
+  '^KS11':      {symbol:'INDEX:KOSPI',         label:'KOSPI'},
+  '^TWII':      {symbol:'INDEX:TWII',          label:'TAIEX'},
+  '^NSEI':      {symbol:'INDEX:NIFTY50',       label:'Nifty 50'},
+  '000001.SS':  {symbol:'INDEX:SHCOMP',        label:'Shanghai Composite'},
   // Volatility
   '^VIX':       {symbol:'TVC:VIX',             label:'VIX · Volatility Index'},
 };
