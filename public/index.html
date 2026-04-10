@@ -6197,35 +6197,35 @@ const _COMM_TV = {
 };
 
 // ─── Indices: yfinance ticker → TradingView proName ────────────
-// CAPITALCOM: = free CFD data feed — works in embedded widget without subscription.
-// Native exchange symbols (NASDAQ:, SP:, DJ:) require TradingView subscription.
+// CAPITALCOM: symbols verified against tradingview.com/symbols/CAPITALCOM-XXXX/
+// No-chart indices (KS11, TWII) show a message instead of an invalid widget.
 const _INDICES_TV = {
   // Americas
-  '^GSPC':      {symbol:'CAPITALCOM:US500',      label:'S&P 500'},
-  '^NDX':       {symbol:'CAPITALCOM:US100',      label:'Nasdaq 100'},
-  '^IXIC':      {symbol:'CAPITALCOM:US100',      label:'Nasdaq Composite'},
-  '^DJI':       {symbol:'CAPITALCOM:US30',       label:'Dow Jones'},
-  '^RUT':       {symbol:'CAPITALCOM:US2000',     label:'Russell 2000'},
-  '^BVSP':      {symbol:'CAPITALCOM:BRAZ60',     label:'Bovespa'},
+  '^GSPC':      {symbol:'CAPITALCOM:US500',   label:'S&P 500'},
+  '^NDX':       {symbol:'CAPITALCOM:US100',   label:'Nasdaq 100'},
+  '^IXIC':      {symbol:'CAPITALCOM:US100',   label:'Nasdaq Composite'},
+  '^DJI':       {symbol:'CAPITALCOM:US30',    label:'Dow Jones'},
+  '^RUT':       {symbol:'CAPITALCOM:RTY',     label:'Russell 2000'},
+  '^BVSP':      {symbol:'BMFBOVESPA:IBOV',    label:'Bovespa'},
   // Europe
-  '^GDAXI':     {symbol:'CAPITALCOM:GER40',      label:'DAX 40'},
-  '^FTSE':      {symbol:'CAPITALCOM:UK100',      label:'FTSE 100'},
-  '^FCHI':      {symbol:'CAPITALCOM:FRA40',      label:'CAC 40'},
-  '^STOXX50E':  {symbol:'CAPITALCOM:EU50',       label:'Euro Stoxx 50'},
-  '^IBEX':      {symbol:'CAPITALCOM:SPAIN35',    label:'IBEX 35'},
-  '^AEX':       {symbol:'CAPITALCOM:NLD25',      label:'AEX'},
-  '^SSMI':      {symbol:'CAPITALCOM:SWI20',      label:'SMI'},
-  'FTSEMIB.MI': {symbol:'CAPITALCOM:ITA40',      label:'FTSE MIB'},
+  '^GDAXI':     {symbol:'CAPITALCOM:DE40',    label:'DAX 40'},
+  '^FTSE':      {symbol:'CAPITALCOM:UK100',   label:'FTSE 100'},
+  '^FCHI':      {symbol:'CAPITALCOM:FR40',    label:'CAC 40'},
+  '^STOXX50E':  {symbol:'CAPITALCOM:EU50',    label:'Euro Stoxx 50'},
+  '^IBEX':      {symbol:'CAPITALCOM:SP35',    label:'IBEX 35'},
+  '^AEX':       {symbol:'CAPITALCOM:NL25',    label:'AEX'},
+  '^SSMI':      {symbol:'CAPITALCOM:SW20',    label:'SMI'},
+  'FTSEMIB.MI': {symbol:'CAPITALCOM:IT40',    label:'FTSE MIB'},
   // Asia-Pacific
-  '^N225':      {symbol:'CAPITALCOM:JP225',      label:'Nikkei 225'},
-  '^HSI':       {symbol:'CAPITALCOM:HK50',       label:'Hang Seng'},
-  '^AXJO':      {symbol:'CAPITALCOM:AUS200',     label:'ASX 200'},
-  '^KS11':      {symbol:'CAPITALCOM:KOR200',     label:'KOSPI'},
-  '^TWII':      {symbol:'CAPITALCOM:TAIW',       label:'TAIEX'},
-  '^NSEI':      {symbol:'CAPITALCOM:INDIA50',    label:'Nifty 50'},
-  '000001.SS':  {symbol:'CAPITALCOM:CHINA50',    label:'China A50'},
+  '^N225':      {symbol:'CAPITALCOM:J225',    label:'Nikkei 225'},
+  '^HSI':       {symbol:'CAPITALCOM:HK50',    label:'Hang Seng'},
+  '^AXJO':      {symbol:'CAPITALCOM:AU200AU', label:'ASX 200'},
+  '^KS11':      {symbol:null,                 label:'KOSPI'},
+  '^TWII':      {symbol:null,                 label:'TAIEX'},
+  '^NSEI':      {symbol:'CAPITALCOM:NIFTY50', label:'Nifty 50'},
+  '000001.SS':  {symbol:'CAPITALCOM:CN50',    label:'China A50'},
   // Volatility
-  '^VIX':       {symbol:'TVC:VIX',               label:'VIX · Volatility Index'},
+  '^VIX':       {symbol:'TVC:VIX',            label:'VIX · Volatility Index'},
 };
 
 // ─── Screener → Chart ──────────────────────────────────────────
@@ -6245,10 +6245,9 @@ function _scOpenChart(type, sym, name) {
   // indices tab
   if (type === 'indices') {
     const iEntry = _INDICES_TV[sym];
-    if (iEntry) { _openChartSymbol(iEntry.symbol, iEntry.label); return; }
-    // fallback — try sym as-is (strip leading ^)
-    _openChartSymbol(sym.replace('^',''), name);
-    return;
+    if (iEntry && iEntry.symbol) { _openChartSymbol(iEntry.symbol, iEntry.label); return; }
+    if (iEntry && !iEntry.symbol) { showToast((iEntry.label || name) + ' — chart not available in free widget'); return; }
+    showToast(name + ' — chart not available'); return;
   }
   // 'commodities' tab OR 'commodity' from multi-asset — both handled here
   if (type === 'commodities' || type === 'commodity') {
