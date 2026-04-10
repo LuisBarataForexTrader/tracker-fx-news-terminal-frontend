@@ -1033,9 +1033,16 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
   .tv-player-container{position:relative !important;width:100% !important;height:0 !important;padding-bottom:56.25% !important;min-height:0 !important;}
   .tv-player-container iframe{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;}
   .tv-disclaimer{display:none !important;}
-  /* Commodities + Earnings — contained scroll, no page drift */
-  #tab-commodities,#tab-earnings{overflow:hidden !important;}
-  #commodities-body,#earnings-body{overflow:auto !important;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+  /* Commodities + Earnings — horizontal scroll only, no vertical page drift */
+  #tab-commodities,#tab-earnings{overflow:hidden !important;display:block !important;}
+  #commodities-body,#earnings-body{
+    overflow-x:auto !important;
+    overflow-y:auto !important;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+    touch-action:pan-x pan-y;
+    height:calc(100vh - 72px - 46px - 34px) !important;
+  }
   /* Sentiment — stack vertically and allow scroll */
   .sentiment-layout{display:flex !important;flex-direction:column !important;height:auto !important;overflow:visible !important;min-height:0 !important;}
   #sentiment-body{overflow:visible !important;flex:none !important;height:auto !important;}
@@ -1044,9 +1051,9 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
   /* Status bar — hide less critical items, prevent cutoff */
   .status-bar{gap:10px !important;padding:5px 10px !important;overflow:hidden !important;}
   .status-item:nth-child(3),.status-item:nth-child(4){display:none !important;}
-  /* Ticker bar — more height so TradingView quotes aren't clipped */
-  .ticker-bar{height:56px !important;}
-  .ticker-bar .tradingview-widget-container{height:56px !important;}
+  /* Ticker bar — revert to original height */
+  .ticker-bar{height:46px !important;}
+  .ticker-bar .tradingview-widget-container{height:46px !important;}
   /* Header — hide verbose right-side items, keep lang flag accessible */
   #userLabel{display:none !important;}
   #logoutBtn{display:none !important;}
