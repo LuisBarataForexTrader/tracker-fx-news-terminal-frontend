@@ -1,5 +1,13 @@
 {
   "alias": ["app.tradingnewsterminal.com"],
+  "redirects": [
+    { "source": "/admin.html",      "destination": "/admin",      "permanent": true },
+    { "source": "/ad-preview.html", "destination": "/ad-preview", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/admin",      "destination": "/admin.html" },
+    { "source": "/ad-preview", "destination": "/ad-preview.html" }
+  ],
   "headers": [
     {
       "source": "/(.*).html",
