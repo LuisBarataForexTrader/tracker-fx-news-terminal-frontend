@@ -1026,6 +1026,10 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 @media(max-width:768px){
   /* Hide 2nd ticker bar */
   .ticker-bar-2{display:none !important;}
+  /* Ticker bar — 68px shows symbol + price + % change (3 rows) */
+  .ticker-bar{height:68px !important;overflow:hidden !important;}
+  .ticker-bar .tradingview-widget-container{height:68px !important;}
+  .ticker-bar .tradingview-widget-container__widget{height:68px !important;}
   /* TV — force-hide sidebar so player takes full width */
   .tv-sidebar{display:none !important;}
   .tv-body{display:flex !important;flex-direction:column !important;overflow:visible !important;}
@@ -1033,8 +1037,8 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
   .tv-player-container{position:relative !important;width:100% !important;height:0 !important;padding-bottom:56.25% !important;min-height:0 !important;}
   .tv-player-container iframe{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;}
   .tv-disclaimer{display:none !important;}
-  /* Commodities + Earnings — keep flex column so height fills screen, scroll within */
-  #tab-commodities,#tab-earnings{overflow:hidden !important;display:flex !important;flex-direction:column !important;}
+  /* Commodities + Earnings — flex column when VISIBLE; #ID.hidden beats #ID so hidden wins */
+  #tab-commodities:not(.hidden),#tab-earnings:not(.hidden){overflow:hidden !important;display:flex !important;flex-direction:column !important;}
   #commodities-body,#earnings-body{flex:1 !important;overflow:scroll !important;-webkit-overflow-scrolling:touch !important;overscroll-behavior:contain !important;}
   /* Sentiment — stack vertically and allow scroll */
   .sentiment-layout{display:flex !important;flex-direction:column !important;height:auto !important;overflow:visible !important;min-height:0 !important;}
