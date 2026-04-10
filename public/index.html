@@ -76,6 +76,8 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+.mob-sidebar-toggle{display:none;}
+.mob-sidebar-overlay{display:none;}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.025) 2px,rgba(0,0,0,0.025) 4px);pointer-events:none;z-index:1000;}
 
 /* ── Header ── */
@@ -87,6 +89,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .logo-text{font-size:13px;font-weight:700;letter-spacing:0.12em;color:var(--text);text-transform:uppercase;line-height:1.3;}
 .logo-text span{color:var(--accent);}
 .logo-sub{font-size:9px;font-weight:400;color:#fff;letter-spacing:0.12em;text-transform:uppercase;margin-top:2px;}
+.mob-logo{display:none;}
 .logo-pro-badge{display:inline-block;font-size:9px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-left:10px;vertical-align:middle;position:relative;top:-1px;}
 .logo-pro-badge.pro{color:#00d4ff;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.35);box-shadow:0 0 10px rgba(0,212,255,0.15);}
 .logo-pro-badge.trial{color:#f59e0b;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.35);box-shadow:0 0 10px rgba(245,158,11,0.15);}
@@ -682,6 +685,63 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .cal-val-data.actual-neutral{color:var(--medium);font-weight:600;}
 .cal-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:300px;gap:12px;color:var(--text-muted);}
 @media(max-width:900px){.cal-event{grid-template-columns:80px 40px 50px 1fr;}.cal-values{display:none;}}
+@media(max-width:768px){
+  :root{--sidebar-w:0px;}
+  /* Hamburger button */
+  .mob-sidebar-toggle{display:flex;align-items:center;justify-content:center;width:36px;height:36px;font-size:18px;background:transparent;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;border-radius:3px;flex-shrink:0;transition:all .15s;}
+  .mob-sidebar-toggle:hover{color:var(--accent);border-color:var(--accent);}
+  /* Header — hide search, keep clock compact */
+  .header{padding:0 10px;gap:6px;overflow:visible;}
+  /* Logo — show TNT abbreviation on mobile */
+  .desk-logo{display:none;}
+  .mob-logo{display:inline;color:var(--accent);}
+  .search-wrap{display:none;}
+  .header-center{gap:4px;flex:0 0 auto;}
+  .live-indicator{display:none;}
+  .tz-label{display:none;}
+  .clock{font-size:12px;}
+  .logo-sub{display:none;}
+  .logo-pro-badge{display:none;}
+  .squawk-wrap{display:none;}
+  .sound-wrap{display:none;}
+  .lang-cur .lang-code,.lang-cur .lang-caret{display:none;}
+  .lang-cur{padding:6px 8px;}
+  /* Main layout — single column, clip overflow */
+  .main{grid-template-columns:1fr;overflow:hidden;}
+  /* Sidebar — slide-in overlay */
+  .sidebar{position:fixed;top:var(--header-h);left:0;width:210px;height:calc(100vh - var(--header-h));transform:translateX(-210px);transition:transform .25s ease;z-index:200;background:var(--bg2);border-right:1px solid var(--border2);}
+  .sidebar-open .sidebar{transform:translateX(0);}
+  /* Hide red upgrade CTA from sidebar */
+  .pack-info{display:none;}
+  /* Sidebar overlay */
+  .mob-sidebar-overlay{display:block;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:199;opacity:0;pointer-events:none;transition:opacity .25s;}
+  .sidebar-open .mob-sidebar-overlay{opacity:1;pointer-events:all;}
+  /* Status bar */
+  .status-bar{left:0;padding:5px 10px;}
+  /* Feed / news */
+  .feed{overflow-x:hidden;max-width:100%;}
+  .ticker-bar,.ticker-bar-2{overflow:hidden;max-width:100%;}
+  .feed-header{padding:10px 12px;overflow-x:hidden;}
+  .news-item{padding:10px 12px;}
+  /* Calendar */
+  .cal-header{padding:10px 12px;}
+  /* Live TV — hide right sidebar, ensure video shows */
+  .tv-sidebar{display:none;}
+  .tv-player-container{min-height:280px;}
+  /* Data panels — allow horizontal scroll for tables */
+  .data-panel{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  /* Sentiment — stack Fear&Greed + COT vertically, allow full scroll */
+  .tab-content#tab-sentiment{overflow-y:auto;}
+  #sentiment-body{overflow:visible;flex:none;height:auto;}
+  .sentiment-layout{grid-template-columns:1fr;height:auto;overflow:visible;min-height:0;}
+  .fg-panel{border-right:none;border-bottom:1px solid var(--border);}
+  .cot-panel{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  /* Screener — show desktop notice, hide content */
+  .mob-screener-notice{display:flex !important;}
+  #screener-body{display:none !important;}
+  /* Tab content — allow vertical scroll, clip horizontal at main level */
+  .tab-content{overflow-y:auto;overflow-x:hidden;}
+}
 
 /* ── Live TV ── */
 .tv-header{padding:16px 28px;border-bottom:1px solid var(--border);background:var(--bg2);flex-shrink:0;}
@@ -968,10 +1028,11 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 
 <!-- ── HEADER ── -->
 <header class="header">
+  <button class="mob-sidebar-toggle" onclick="toggleMobSidebar()" aria-label="Menu">☰</button>
   <div class="logo">
     <div class="logo-icon"></div>
     <div>
-      <div class="logo-text">Trading <span>News Terminal</span><span id="logo-pro-badge"></span></div>
+      <div class="logo-text"><span class="desk-logo">Trading <span>News Terminal</span></span><span class="mob-logo">TNT</span><span id="logo-pro-badge"></span></div>
       <div class="logo-sub" data-i18n="logo.sub">Real-time Market Intelligence</div>
     </div>
   </div>
@@ -1078,6 +1139,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
   </div>
 </header>
 
+<div class="mob-sidebar-overlay" onclick="toggleMobSidebar()"></div>
 <div class="main">
   <!-- SIDEBAR -->
   <aside class="sidebar">
@@ -1358,6 +1420,11 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 
     <!-- SCREENER TAB (PRO) -->
     <div class="tab-content hidden" id="tab-screener">
+      <div class="mob-screener-notice" style="display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px 24px;text-align:center;gap:16px;">
+        <div style="font-size:48px;">🖥️</div>
+        <div style="font-size:17px;font-weight:700;color:#fff;">Desktop Required</div>
+        <div style="font-size:13px;color:#7a9ab0;line-height:1.65;max-width:280px;">The Market Screener is optimised for larger screens.<br>Open on a desktop or laptop for the full experience.</div>
+      </div>
       <div id="screener-body">
         <div class="sc-subtabs">
           <button class="sc-stab active" id="sc-tab-stocks"      onclick="switchScreener('stocks')"><span data-i18n="sc.tab.stocks">📈 Stocks</span></button>
@@ -3790,6 +3857,8 @@ function drainSquawkQueue() {
   }, 150);
 }
 
+function toggleMobSidebar(){document.body.classList.toggle('sidebar-open');}
+
 function toggleSquawk() {
   if (!IS_PRO) { showUpgrade('Live Squawk'); return; }
   squawkEnabled = !squawkEnabled;
@@ -4334,6 +4403,7 @@ function switchChannel(ch, btn) {
 let currentTab = 'news';
 function switchTab(tab) {
   currentTab = tab;
+  document.body.classList.remove('sidebar-open'); // close mobile sidebar on tab switch
   document.querySelectorAll('.tab-content').forEach(el=>el.classList.add('hidden'));
   document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.remove('hidden');
