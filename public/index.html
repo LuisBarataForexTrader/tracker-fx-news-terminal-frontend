@@ -1363,6 +1363,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
           <button class="sc-stab active" id="sc-tab-stocks"      onclick="switchScreener('stocks')"><span data-i18n="sc.tab.stocks">📈 Stocks</span></button>
           <button class="sc-stab"        id="sc-tab-forex"       onclick="switchScreener('forex')"><span data-i18n="sc.tab.forex">💱 Forex</span></button>
           <button class="sc-stab"        id="sc-tab-crypto"      onclick="switchScreener('crypto')"><span data-i18n="sc.tab.crypto">₿ Crypto</span></button>
+          <button class="sc-stab"        id="sc-tab-indices"     onclick="switchScreener('indices')"><span data-i18n="sc.tab.indices">📊 Indices</span></button>
           <button class="sc-stab"        id="sc-tab-commodities" onclick="switchScreener('commodities')"><span data-i18n="sc.tab.commodities">🛢 Commodities</span></button>
           <button class="sc-stab"        id="sc-tab-multi"       onclick="switchScreener('multi')"><span data-i18n="sc.tab.multi">🌐 Multi-Asset</span></button>
         </div>
@@ -2165,7 +2166,7 @@ const STRINGS = {
     'cb.title':'Central Bank News','cb.live':'LIVE','cb.no_news':'No central bank news found',
     'cb.items_meta':'items · Fed · ECB · BOE · BOJ · IMF',
     'sc.tab.stocks':'📈 Stocks','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Crypto',
-    'sc.tab.commodities':'🛢 Commodities','sc.tab.multi':'🌐 Multi-Asset',
+    'sc.tab.indices':'📊 Indices','sc.tab.commodities':'🛢 Commodities','sc.tab.multi':'🌐 Multi-Asset',
     'sc.loading_select':'Select a screener above','sc.loading_data':'Loading data…',
     'sc.preparing':'Preparing data…','sc.first_load_hint':'This takes ~30s on first load. Retrying automatically…',
     'sc.no_match':'No results match your filters.','sc.failed':'⚠ Failed to load screener.',
@@ -2341,7 +2342,7 @@ const STRINGS = {
     'cb.title':'Notícias dos Bancos Centrais','cb.live':'AO VIVO','cb.no_news':'Sem notícias dos bancos centrais',
     'cb.items_meta':'itens · Fed · BCE · BOE · BOJ · FMI',
     'sc.tab.stocks':'📈 Ações','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Cripto',
-    'sc.tab.commodities':'🛢 Matérias-Primas','sc.tab.multi':'🌐 Multi-Ativo',
+    'sc.tab.indices':'📊 Índices','sc.tab.commodities':'🛢 Matérias-Primas','sc.tab.multi':'🌐 Multi-Ativo',
     'sc.loading_select':'Seleciona um screener acima','sc.loading_data':'A carregar dados…',
     'sc.preparing':'A preparar dados…','sc.first_load_hint':'Demora ~30s no primeiro carregamento. A tentar novamente…',
     'sc.no_match':'Nenhum resultado corresponde aos filtros.','sc.failed':'⚠ Falha ao carregar screener.',
@@ -2517,7 +2518,7 @@ const STRINGS = {
     'cb.title':'Noticias de Bancos Centrales','cb.live':'EN VIVO','cb.no_news':'Sin noticias de bancos centrales',
     'cb.items_meta':'ítems · Fed · BCE · BOE · BOJ · FMI',
     'sc.tab.stocks':'📈 Acciones','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Cripto',
-    'sc.tab.commodities':'🛢 Materias Primas','sc.tab.multi':'🌐 Multi-Activo',
+    'sc.tab.indices':'📊 Índices','sc.tab.commodities':'🛢 Materias Primas','sc.tab.multi':'🌐 Multi-Activo',
     'sc.loading_select':'Selecciona un screener arriba','sc.loading_data':'Cargando datos…',
     'sc.preparing':'Preparando datos…','sc.first_load_hint':'Tarda ~30s en la primera carga. Reintentando…',
     'sc.no_match':'Ningún resultado coincide con los filtros.','sc.failed':'⚠ Error al cargar el screener.',
@@ -2693,7 +2694,7 @@ const STRINGS = {
     'cb.title':'Actualités Banques Centrales','cb.live':'DIRECT','cb.no_news':'Aucune actualité de banque centrale',
     'cb.items_meta':'éléments · Fed · BCE · BOE · BOJ · FMI',
     'sc.tab.stocks':'📈 Actions','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Crypto',
-    'sc.tab.commodities':'🛢 Matières Premières','sc.tab.multi':'🌐 Multi-Actifs',
+    'sc.tab.indices':'📊 Indices','sc.tab.commodities':'🛢 Matières Premières','sc.tab.multi':'🌐 Multi-Actifs',
     'sc.loading_select':'Sélectionnez un screener ci-dessus','sc.loading_data':'Chargement des données…',
     'sc.preparing':'Préparation des données…','sc.first_load_hint':'~30s lors du premier chargement. Nouvelle tentative…',
     'sc.no_match':'Aucun résultat ne correspond aux filtres.','sc.failed':'⚠ Échec du chargement du screener.',
@@ -2869,7 +2870,7 @@ const STRINGS = {
     'cb.title':'Zentralbank-Nachrichten','cb.live':'LIVE','cb.no_news':'Keine Zentralbank-Nachrichten gefunden',
     'cb.items_meta':'Einträge · Fed · EZB · BOE · BOJ · IWF',
     'sc.tab.stocks':'📈 Aktien','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Krypto',
-    'sc.tab.commodities':'🛢 Rohstoffe','sc.tab.multi':'🌐 Multi-Asset',
+    'sc.tab.indices':'📊 Indizes','sc.tab.commodities':'🛢 Rohstoffe','sc.tab.multi':'🌐 Multi-Asset',
     'sc.loading_select':'Wähle einen Screener oben','sc.loading_data':'Daten werden geladen…',
     'sc.preparing':'Daten werden vorbereitet…','sc.first_load_hint':'Erste Ladung dauert ~30s. Erneuter Versuch…',
     'sc.no_match':'Keine Ergebnisse entsprechen den Filtern.','sc.failed':'⚠ Screener-Ladung fehlgeschlagen.',
@@ -3045,7 +3046,7 @@ const STRINGS = {
     'cb.title':'Notizie Banche Centrali','cb.live':'LIVE','cb.no_news':'Nessuna notizia banche centrali',
     'cb.items_meta':'elementi · Fed · BCE · BOE · BOJ · FMI',
     'sc.tab.stocks':'📈 Azioni','sc.tab.forex':'💱 Forex','sc.tab.crypto':'₿ Cripto',
-    'sc.tab.commodities':'🛢 Materie Prime','sc.tab.multi':'🌐 Multi-Asset',
+    'sc.tab.indices':'📊 Indici','sc.tab.commodities':'🛢 Materie Prime','sc.tab.multi':'🌐 Multi-Asset',
     'sc.loading_select':'Seleziona uno screener sopra','sc.loading_data':'Caricamento dati…',
     'sc.preparing':'Preparazione dati…','sc.first_load_hint':'~30s al primo caricamento. Nuovo tentativo…',
     'sc.no_match':'Nessun risultato corrisponde ai filtri.','sc.failed':'⚠ Caricamento screener fallito.',
@@ -6451,7 +6452,7 @@ async function loadScreener(type, force) {
     if (mt && json.updated) mt.textContent = t('sc.updated') + ' ' + _fmtScTs(json.updated);
     // Auto-refresh
     if (_scTimer) clearInterval(_scTimer);
-    const ttl = {stocks:900, forex:120, crypto:300, commodities:300, multi:300}[type] || 300;
+    const ttl = {stocks:900, forex:120, crypto:300, commodities:300, indices:300, multi:300}[type] || 300;
     _scTimer = setInterval(() => {
       if (currentTab === 'screener' && _scType === type) loadScreener(type, true);
     }, ttl * 1000);
@@ -6498,6 +6499,8 @@ function _buildScParams(type) {
     add('group','grp'); add('signal','signal');
   } else if (type === 'crypto') {
     add('min_change','minchg'); add('max_change','maxchg'); add('period','period');
+  } else if (type === 'indices') {
+    add('region','region'); add('signal','signal');
   } else if (type === 'commodities') {
     add('group','grp'); add('signal','signal');
   } else if (type === 'multi') {
@@ -6576,6 +6579,14 @@ function _renderScFilters(type) {
       <div class="sc-fg"><span class="sc-fl">${t('sc.fl.chg')}</span>
       <input class="sc-inp" id="sc-f-minchg" placeholder="${_MIN}" type="number" step="0.1">
       <input class="sc-inp" id="sc-f-maxchg" placeholder="${_MAX}" type="number" step="0.1"></div>`;
+  } else if (type === 'indices') {
+    h += `<div class="sc-fg"><span class="sc-fl">${t('sc.fl.region') || 'Region'}</span>
+      <select class="sc-sel" id="sc-f-region"><option value="">${_ALL}</option>
+      <option>Americas</option><option>Europe</option><option>Asia-Pacific</option><option>Volatility</option></select></div>
+      <div class="sc-fg"><span class="sc-fl">${t('sc.fl.signal')}</span>
+      <select class="sc-sel" id="sc-f-signal"><option value="">${_ALL}</option>
+      <option>Oversold</option><option>Bullish</option><option>Neutral</option>
+      <option>Bearish</option><option>Overbought</option></select></div>`;
   } else if (type === 'commodities') {
     h += `<div class="sc-fg"><span class="sc-fl">${t('sc.fl.group')}</span>
       <select class="sc-sel" id="sc-f-grp"><option value="">${_ALL}</option>
@@ -6690,6 +6701,10 @@ function _renderScTable(type, data) {
          _scTh('price','Price') + _scTh('change_1h','1H%') + _scTh('change_24h','24H%') +
          _scTh('change_7d','7D%') + _scTh('change_30d','30D%') +
          _scTh('market_cap','Mkt Cap') + _scTh('volume_24h','Vol 24H') + _scTh('ath_change','vs ATH');
+  } else if (type === 'indices') {
+    h += _scTh('name','Index') + _scTh('region','Region') + _scTh('price','Price') +
+         _scTh('change_1d','1D%') + _scTh('change_1w','1W%') + _scTh('change_1m','1M%') +
+         _scTh('week52_pct','52W') + _scTh('rsi','RSI') + _scTh('signal','Signal');
   } else if (type === 'commodities') {
     h += _scTh('name','Commodity') + _scTh('group','Group') + _scTh('price','Price') +
          _scTh('change_1d','1D%') + _scTh('change_1w','1W%') + _scTh('change_1m','1M%') +
@@ -6706,6 +6721,7 @@ function _renderScTable(type, data) {
     if (type === 'stocks')      rowClick = `openCompanyDetail('${d.symbol}','${(d.name||d.symbol).replace(/'/g,'').replace(/"/g,'')}')`;
     else if (type === 'forex')  rowClick = `_scOpenChart('forex','${(d.pair||'').replace(/'/g,'')}','${(d.pair||'')}')`;
     else if (type === 'crypto') rowClick = `_scOpenChart('crypto','${d.symbol}','${(d.name||d.symbol).replace(/'/g,'')}')`;
+    else if (type === 'indices')    rowClick = `_scOpenChart('indices','${(d.ticker||'').replace(/'/g,'')}','${(d.name||'').replace(/'/g,'')}')`;
     else if (type === 'commodities') rowClick = `_scOpenChart('commodities','${(d.ticker||d.name||'').replace(/'/g,'').replace(/\s/g,'')}','${(d.name||'').replace(/'/g,'')}')`;
     else if (type === 'multi')  rowClick = `_scOpenChart('${(d.asset_type||'stocks').toLowerCase()}','${(d.symbol||'').replace(/'/g,'')}','${(d.name||'').replace(/'/g,'')}')`;
     const rowTitle = type === 'stocks' ? t('sc.tt_company_card') : t('sc.tt_open_chart');
@@ -6777,6 +6793,14 @@ function _renderScTable(type, data) {
             <td>${_scMcap(d.market_cap,null)}</td>
             <td class="sc-flat">${_fmtCompact(d.volume_24h)}</td>
             <td>${d.ath_change!=null?_scChg(d.ath_change):'—'}</td>`;
+    } else if (type === 'indices') {
+      const idxPrice = d.price > 1000 ? _fmtN(d.price) : d.price.toFixed(2);
+      h += `<td><span class="sc-sym">${d.name}</span></td>
+            <td><span class="sc-tag">${d.region||'—'}</span></td>
+            <td class="sc-price">${idxPrice}</td>
+            <td>${_scChg(d.change_1d)}</td><td>${_scChg(d.change_1w)}</td><td>${_scChg(d.change_1m)}</td>
+            <td>${_scRange(d.week52_pct)}</td>
+            <td>${_scRsi(d.rsi)}</td><td>${_scSig(d.signal)}</td>`;
     } else if (type === 'commodities') {
       h += `<td><span class="sc-sym">${d.name}</span></td>
             <td><span class="sc-tag">${d.group||'—'}</span></td>
