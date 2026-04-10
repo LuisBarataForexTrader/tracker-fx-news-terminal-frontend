@@ -247,6 +247,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .plan-badge-sm{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:2px;}
 .plan-badge-sm.free{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);color:var(--accent);}
 .plan-badge-sm.pro{background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.25);color:var(--pro);}
+.plan-badge-sm.trial{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.35);color:#f59e0b;}
 .settings-plan-btn{width:100%;padding:10px;font-family:var(--font);font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border:none;cursor:pointer;border-radius:3px;transition:all .2s;}
 .settings-plan-btn.upgrade{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;box-shadow:0 4px 16px rgba(167,139,250,0.25);}
 .settings-plan-btn.upgrade:hover{box-shadow:0 6px 24px rgba(167,139,250,0.4);transform:translateY(-1px);}
@@ -1508,6 +1509,51 @@ document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') _checkPlanChanged();
 });
 
+// ─── Settings Plan Helper ────────────────────────────────────────
+function _renderSettingsPlan(plan, trialEndsAt) {
+  const badge = document.getElementById('settingsPlanBadge');
+  const trialInfo = document.getElementById('settingsTrialInfo');
+  const trialEndsEl = document.getElementById('settingsTrialEnds');
+  const trialDaysEl = document.getElementById('settingsTrialDaysLeft');
+  if (plan === 'trial') {
+    badge.textContent = 'TRIAL';
+    badge.className = 'plan-badge-sm trial';
+    // show trial block
+    if (trialEndsAt) {
+      const ends = new Date(trialEndsAt);
+      const now = new Date();
+      const msLeft = ends - now;
+      const daysLeft = Math.ceil(msLeft / (1000*60*60*24));
+      const dateStr = ends.toLocaleDateString(undefined, {day:'numeric', month:'long', year:'numeric'});
+      trialEndsEl.textContent = dateStr;
+      if (daysLeft > 1) {
+        trialDaysEl.textContent = daysLeft + ' days remaining';
+      } else if (daysLeft === 1) {
+        trialDaysEl.textContent = 'Expires today';
+      } else {
+        trialDaysEl.textContent = 'Trial expired';
+      }
+      trialInfo.style.display = '';
+    } else {
+      trialInfo.style.display = 'none';
+    }
+    document.getElementById('settingsUpgradeWrap').style.display = '';
+    document.getElementById('settingsManageWrap').style.display  = 'none';
+  } else if (plan === 'pro') {
+    badge.textContent = 'PRO';
+    badge.className = 'plan-badge-sm pro';
+    trialInfo.style.display = 'none';
+    document.getElementById('settingsUpgradeWrap').style.display = 'none';
+    document.getElementById('settingsManageWrap').style.display  = '';
+  } else {
+    badge.textContent = 'FREE';
+    badge.className = 'plan-badge-sm free';
+    trialInfo.style.display = 'none';
+    document.getElementById('settingsUpgradeWrap').style.display = '';
+    document.getElementById('settingsManageWrap').style.display  = 'none';
+  }
+}
+
 // ─── Settings Modal ─────────────────────────────────────────────
 async function openSettings() {
   // First open with cached data, then refresh from backend
@@ -1521,10 +1567,7 @@ async function openSettings() {
   _renderSettingsAvatar(user.avatar || null, user.name || user.email || '');
   const plan = user.plan || 'free';
   const badge = document.getElementById('settingsPlanBadge');
-  badge.textContent = plan === 'pro' ? 'PRO' : 'FREE';
-  badge.className = 'plan-badge-sm ' + (plan === 'pro' ? 'pro' : 'free');
-  document.getElementById('settingsUpgradeWrap').style.display = plan === 'pro' ? 'none' : '';
-  document.getElementById('settingsManageWrap').style.display  = plan === 'pro' ? ''     : 'none';
+  _renderSettingsPlan(plan, user.trial_ends_at || null);
   _renderTranslateToggle(_loadPrefs().translateArticles);
   document.getElementById('settingsOverlay').classList.add('show');
   // Fetch fresh data from backend
@@ -1542,13 +1585,10 @@ async function openSettings() {
     }
     // update plan display
     const fp = fresh.plan || 'free';
-    badge.textContent = fp === 'pro' ? 'PRO' : 'FREE';
-    badge.className = 'plan-badge-sm ' + (fp === 'pro' ? 'pro' : 'free');
-    document.getElementById('settingsUpgradeWrap').style.display = fp === 'pro' ? 'none' : '';
-    document.getElementById('settingsManageWrap').style.display  = fp === 'pro' ? ''     : 'none';
+    _renderSettingsPlan(fp, fresh.trial_ends_at || null);
     // update cache
     const u = (() => { try { return JSON.parse(localStorage.getItem('tnt_user')||'{}'); } catch(e){ return {}; } })();
-    Object.assign(u, {name:fresh.name, email:fresh.email, plan:fresh.plan, avatar:fresh.avatar});
+    Object.assign(u, {name:fresh.name, email:fresh.email, plan:fresh.plan, avatar:fresh.avatar, trial_ends_at: fresh.trial_ends_at||null});
     localStorage.setItem('tnt_user', JSON.stringify(u));
   } catch(e) { /* non-critical */ }
 }
@@ -1604,18 +1644,41 @@ function _renderHeaderAvatar(src, fallbackName) {
 async function handleAvatarFile(input) {
   const file = input.files[0];
   if (!file) return;
+  const msgEl = document.getElementById('profileMsg');
   if (file.size > 500*1024) {
-    const el = document.getElementById('profileMsg');
-    el.textContent = 'Image too large. Max 500KB.';
-    el.className = 'settings-msg err';
+    msgEl.textContent = 'Image too large. Max 500KB.';
+    msgEl.className = 'settings-msg err';
     return;
   }
   const reader = new FileReader();
-  reader.onload = e => {
+  reader.onload = async e => {
     const dataUrl = e.target.result;
-    _renderSettingsAvatar(dataUrl, document.getElementById('settingsName').value);
-    // store temporarily on the button so saveProfile() can pick it up
-    document.getElementById('settingsAvatarPreview').dataset.pending = dataUrl;
+    const name = document.getElementById('settingsName').value;
+    // show preview immediately
+    _renderSettingsAvatar(dataUrl, name);
+    // auto-save avatar right away (no need to click Save Changes)
+    const token = localStorage.getItem('tnt_token');
+    msgEl.textContent = 'Saving photo…';
+    msgEl.className = 'settings-msg';
+    try {
+      const r = await fetch(BACKEND_URL+'/auth/me/avatar', {
+        method:'PUT',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+        body: JSON.stringify({avatar: dataUrl})
+      });
+      if (!r.ok) { const d=await r.json(); throw new Error(d.detail||'Failed to save avatar'); }
+      // persist in localStorage and update header
+      const u = (() => { try { return JSON.parse(localStorage.getItem('tnt_user')||'{}'); } catch(e){ return {}; } })();
+      u.avatar = dataUrl;
+      localStorage.setItem('tnt_user', JSON.stringify(u));
+      _renderHeaderAvatar(dataUrl, name);
+      msgEl.textContent = 'Photo saved!';
+      msgEl.className = 'settings-msg ok';
+      setTimeout(() => { if (msgEl.textContent === 'Photo saved!') { msgEl.textContent=''; msgEl.className='settings-msg'; } }, 2500);
+    } catch(err) {
+      msgEl.textContent = err.message || 'Error saving photo.';
+      msgEl.className = 'settings-msg err';
+    }
   };
   reader.readAsDataURL(file);
 }
@@ -6959,6 +7022,12 @@ function _fmtScTs(ts) {
         <div class="plan-info-row">
           <span class="plan-info-label" data-i18n="settings.current_plan">Current Plan</span>
           <span class="plan-badge-sm" id="settingsPlanBadge">FREE</span>
+        </div>
+        <div id="settingsTrialInfo" style="display:none;margin:8px 0 4px;padding:10px 12px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);border-radius:4px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a78bfa;margin-bottom:4px;">Trial Period</div>
+          <div style="font-size:12px;color:var(--text-dim);">Access to all PRO features until</div>
+          <div id="settingsTrialEnds" style="font-size:13px;font-weight:700;color:#c4b5fd;margin-top:3px;"></div>
+          <div id="settingsTrialDaysLeft" style="font-size:11px;color:var(--text-muted);margin-top:2px;"></div>
         </div>
         <div id="settingsUpgradeWrap">
           <button class="settings-plan-btn upgrade" onclick="closeSettings();showUpgrade('Settings')" data-i18n="settings.upgrade">Upgrade to Pro →</button>
