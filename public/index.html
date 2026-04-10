@@ -3833,7 +3833,7 @@ _updateMyNewsCount();
 // ─── Squawk (Edge TTS via backend API — guaranteed neural voices) ─
 let _ttsVoices = [];       // [{id, name, gender, accent}] from backend
 let _ttsAudio  = null;     // current Audio element
-let _ttsDefaultVoice = 'en-US-BrianNeural';
+let _ttsDefaultVoice = 'en-US-EricNeural';
 
 async function _loadTTSVoices() {
   try {
@@ -4099,7 +4099,7 @@ function openSquawkFromSidebar(btn) {
 function populateSquawkVoices() {
   const sel = document.getElementById('squawkVoiceSel');
   if (!sel) return;
-  sel.innerHTML = '<option value="">Auto — Brian (US)</option>';
+  sel.innerHTML = '<option value="">Auto — Eric (Default)</option>';
   _ttsVoices.forEach(v => {
     const opt = document.createElement('option');
     opt.value = v.id;
