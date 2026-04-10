@@ -6197,34 +6197,35 @@ const _COMM_TV = {
 };
 
 // ─── Indices: yfinance ticker → TradingView proName ────────────
-// All symbols verified against TradingView free widget compatibility
+// Uses CAPITALCOM: (free CFD feed) for all indices — works in free embedded widget.
+// SP:SPX, NASDAQ:NDX and DJ:DJI are verified free on their native exchanges.
 const _INDICES_TV = {
   // Americas
-  '^GSPC':      {symbol:'SP:SPX',              label:'S&P 500'},
-  '^NDX':       {symbol:'NASDAQ:NDX',          label:'Nasdaq 100'},
-  '^IXIC':      {symbol:'NASDAQ:IXIC',         label:'Nasdaq Composite'},
-  '^DJI':       {symbol:'DJ:DJI',              label:'Dow Jones'},
-  '^RUT':       {symbol:'INDEX:RUT',           label:'Russell 2000'},
-  '^BVSP':      {symbol:'INDEX:BOVESPA',       label:'Bovespa'},
+  '^GSPC':      {symbol:'SP:SPX',                label:'S&P 500'},
+  '^NDX':       {symbol:'NASDAQ:NDX',            label:'Nasdaq 100'},
+  '^IXIC':      {symbol:'CAPITALCOM:US100',      label:'Nasdaq Composite'},
+  '^DJI':       {symbol:'DJ:DJI',                label:'Dow Jones'},
+  '^RUT':       {symbol:'CAPITALCOM:US2000',     label:'Russell 2000'},
+  '^BVSP':      {symbol:'CAPITALCOM:BRAZ60',     label:'Bovespa'},
   // Europe
-  '^GDAXI':     {symbol:'INDEX:DAX',           label:'DAX 40'},
-  '^FTSE':      {symbol:'INDEX:UKX',           label:'FTSE 100'},
-  '^FCHI':      {symbol:'INDEX:CAC40',         label:'CAC 40'},
-  '^STOXX50E':  {symbol:'INDEX:SX5E',          label:'Euro Stoxx 50'},
-  '^IBEX':      {symbol:'INDEX:IBEX35',        label:'IBEX 35'},
-  '^AEX':       {symbol:'INDEX:AEX',           label:'AEX'},
-  '^SSMI':      {symbol:'INDEX:SMI',           label:'SMI'},
-  'FTSEMIB.MI': {symbol:'INDEX:FTSEMIB',       label:'FTSE MIB'},
+  '^GDAXI':     {symbol:'CAPITALCOM:GER40',      label:'DAX 40'},
+  '^FTSE':      {symbol:'CAPITALCOM:UK100',      label:'FTSE 100'},
+  '^FCHI':      {symbol:'CAPITALCOM:FRA40',      label:'CAC 40'},
+  '^STOXX50E':  {symbol:'CAPITALCOM:EU50',       label:'Euro Stoxx 50'},
+  '^IBEX':      {symbol:'CAPITALCOM:SPAIN35',    label:'IBEX 35'},
+  '^AEX':       {symbol:'CAPITALCOM:NLD25',      label:'AEX'},
+  '^SSMI':      {symbol:'CAPITALCOM:SWI20',      label:'SMI'},
+  'FTSEMIB.MI': {symbol:'CAPITALCOM:ITA40',      label:'FTSE MIB'},
   // Asia-Pacific
-  '^N225':      {symbol:'INDEX:NKY',           label:'Nikkei 225'},
-  '^HSI':       {symbol:'INDEX:HSI',           label:'Hang Seng'},
-  '^AXJO':      {symbol:'INDEX:AS51',          label:'ASX 200'},
-  '^KS11':      {symbol:'INDEX:KOSPI',         label:'KOSPI'},
-  '^TWII':      {symbol:'INDEX:TWII',          label:'TAIEX'},
-  '^NSEI':      {symbol:'INDEX:NIFTY50',       label:'Nifty 50'},
-  '000001.SS':  {symbol:'INDEX:SHCOMP',        label:'Shanghai Composite'},
+  '^N225':      {symbol:'CAPITALCOM:JP225',      label:'Nikkei 225'},
+  '^HSI':       {symbol:'CAPITALCOM:HK50',       label:'Hang Seng'},
+  '^AXJO':      {symbol:'CAPITALCOM:AUS200',     label:'ASX 200'},
+  '^KS11':      {symbol:'CAPITALCOM:KOR200',     label:'KOSPI'},
+  '^TWII':      {symbol:'CAPITALCOM:TAIW',       label:'TAIEX'},
+  '^NSEI':      {symbol:'CAPITALCOM:INDIA50',    label:'Nifty 50'},
+  '000001.SS':  {symbol:'CAPITALCOM:CHINA50',    label:'China A50'},
   // Volatility
-  '^VIX':       {symbol:'TVC:VIX',             label:'VIX · Volatility Index'},
+  '^VIX':       {symbol:'TVC:VIX',               label:'VIX · Volatility Index'},
 };
 
 // ─── Screener → Chart ──────────────────────────────────────────
