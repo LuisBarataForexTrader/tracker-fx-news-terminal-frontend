@@ -858,14 +858,19 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .kw-input{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--font);font-size:12px;padding:7px 10px;outline:none;}
 .kw-input:focus{border-color:var(--accent);}
 .kw-add-btn{padding:7px 12px;background:var(--accent);border:none;border-radius:4px;color:#000;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
-/* ── Push bell header button ── */
-.push-bell-btn{background:none;border:1px solid transparent;border-radius:6px;padding:4px 7px;font-size:15px;cursor:pointer;transition:all .2s;color:var(--text-muted);line-height:1;position:relative;}
-.push-bell-btn:hover{background:rgba(255,255,255,0.08);border-color:var(--border);}
-.push-bell-btn.active{border-color:rgba(39,174,96,0.7);background:rgba(39,174,96,0.15);animation:push-ring .6s ease;box-shadow:0 0 8px rgba(39,174,96,0.35);}
-.push-bell-btn.active::after{content:'';position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:#27ae60;box-shadow:0 0 5px #27ae60;}
-/* Push explain popup — fixed to viewport, never blocks header */
-.push-explain{position:fixed;top:56px;right:12px;width:min(320px,92vw);background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 16px 14px;z-index:9000;box-shadow:0 8px 32px rgba(0,0,0,0.5);animation:fadeIn .2s ease;pointer-events:auto;}
-@media(max-width:600px){.push-explain{top:auto;bottom:12px;right:4px;left:4px;width:auto;}}
+/* ── Sidebar Push Alerts section ── */
+.sidebar-push-section{padding:10px 10px 12px;}
+.sidebar-push-row{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,0.03);cursor:pointer;transition:all .18s;user-select:none;}
+.sidebar-push-row:hover{background:rgba(255,255,255,0.06);border-color:var(--border2);}
+.sidebar-push-row.push-active{border-color:rgba(39,174,96,0.5);background:rgba(39,174,96,0.08);}
+.sidebar-push-icon{font-size:16px;flex-shrink:0;}
+.sidebar-push-text{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0;}
+.sidebar-push-title{font-size:11px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-push-status{font-size:10px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-push-row.push-active .sidebar-push-status{color:#27ae60;}
+/* Push explain popup — fixed near sidebar */
+.push-explain{position:fixed;left:calc(var(--sidebar-w) + 10px);bottom:80px;width:min(310px,92vw);background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 16px 14px;z-index:9000;box-shadow:0 8px 32px rgba(0,0,0,0.5);animation:fadeIn .2s ease;pointer-events:auto;}
+@media(max-width:768px){.push-explain{left:4px;right:4px;bottom:12px;width:auto;}}
 .push-explain-close{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;line-height:1;padding:2px 6px;}
 .push-explain-icon{font-size:28px;text-align:center;margin-bottom:8px;}
 .push-explain-title{font-size:14px;font-weight:700;color:var(--text);text-align:center;margin:0 0 6px;}
@@ -1294,21 +1299,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
     <div class="squawk-wrap" id="squawkWrap">
       <button class="squawk-btn" id="squawkBtn" onclick="toggleSquawk()">🔇 Squawk OFF</button>
       <button class="squawk-cfg-btn" id="squawkCfgBtn" onclick="toggleSquawkCfg(event)" title="Squawk settings">⚙</button>
-      <button class="push-bell-btn" id="pushBellBtn" onclick="IS_PRO ? _handlePushBellClick() : showUpgrade('Push Notifications')" title="Browser push alerts — get notified even when the tab is closed">🔔</button>
       <div class="squawk-dd" id="squawkDd">
-        <div class="push-card" id="pushCard" onclick="IS_PRO ? togglePushNotifications() : showUpgrade('Push Notifications')">
-          <div class="push-card-left">
-            <span class="push-card-icon" id="pushCardIcon">🔔</span>
-            <div class="push-card-text">
-              <span class="push-card-title" data-i18n="push.section">Browser Push Alerts</span>
-              <span class="push-card-sub" data-i18n="push.desc">Alerts even when tab is closed</span>
-            </div>
-          </div>
-          <div class="push-toggle" id="pushToggle">
-            <div class="push-toggle-knob"></div>
-          </div>
-        </div>
-        <div id="pushToggleBtn" style="display:none"></div>
         <div class="squawk-dd-title" data-i18n="squawk.title">⚙ Squawk Settings</div>
         <div class="squawk-dd-row">
           <span class="squawk-dd-lbl" data-i18n="squawk.voice">Voice</span>
@@ -1432,6 +1423,21 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       </button>
       <button class="tab-btn" id="tab-screener-btn" onclick="IS_PRO ? switchTab('screener') : showUpgrade('Market Screener')"><span class="nav-icon">⊞</span><span data-i18n="nav.screener">Screener</span><span class="tab-pro-lock">PRO</span></button>
     </nav>
+
+    <!-- ── Push Alerts (sidebar section) ── -->
+    <div class="sidebar-push-section" id="sidebarPushSection">
+      <div class="sidebar-label" data-i18n="push.section_label">Push Alerts</div>
+      <div class="sidebar-push-row" id="sidebarPushRow" onclick="IS_PRO ? _handlePushBellClick() : showUpgrade('Push Notifications')" title="Browser push alerts — get notified even when the tab is closed">
+        <span class="sidebar-push-icon" id="sidebarPushIcon">🔕</span>
+        <div class="sidebar-push-text">
+          <span class="sidebar-push-title" data-i18n="push.section">Browser Notifications</span>
+          <span class="sidebar-push-status" id="sidebarPushSub" data-i18n="push.desc">Alerts even when tab is closed</span>
+        </div>
+        <div class="push-toggle" id="pushToggle">
+          <div class="push-toggle-knob"></div>
+        </div>
+      </div>
+    </div>
 
     <!-- ── Tracker FX Ad (basic users only) ── -->
     <div class="sidebar-tfx-ad" id="sidebarTfxAd">
@@ -4747,17 +4753,22 @@ function handleNewsData(data, isInit) {
     if (!knownUrls.has(n.url)) {
       knownUrls.add(n.url);
       const itemTime = parseUTC(n.timestamp).getTime();
-      if (itemTime > fiveMinAgo) {
+      // ingested_at = when WE received/stored it (more reliable for freshness than publication timestamp).
+      // RSS feeds can be polled 30-120s after the article is published, so itemTime may be stale.
+      const ingestedTime = n.ingested_at ? parseUTC(n.ingested_at).getTime() : itemTime;
+      // Consider item "recent" if it was published OR ingested within the last 5 minutes
+      if (itemTime > fiveMinAgo || ingestedTime > fiveMinAgo) {
         recentNewUrls.add(n.url);
         genuineNewCount++;
         hasRecentNew = true;
         soundNewItems.push(n);  // collect for sound filter check
         // Only queue for squawk if this is a live update AND the news is truly fresh.
-        // HIGH impact: allow up to 2 min old (RSS feeds can lag slightly on breaking news).
+        // Use ingestedTime so articles published >2 min ago but just ingested still get read.
+        // HIGH impact: allow up to 2 min since ingestion.
         // Other items: strict 90s window to avoid stale squawks.
         if (!isInit) {
           const squawkCutoff = (n.impact === 'HIGH') ? squawkHighAge : squawkMaxAge;
-          if (itemTime >= squawkCutoff) squawkItems.push(n);
+          if (ingestedTime >= squawkCutoff) squawkItems.push(n);
         }
         setTimeout(() => recentNewUrls.delete(n.url), 10*60*1000);
       }
@@ -8002,10 +8013,10 @@ async function togglePushNotifications() {
     _showPushToast('❌ Push notifications not supported in this browser.', '#c0392b');
     return;
   }
-  // Instant visual feedback — disable button during async work
-  const bellBtn = document.getElementById('pushBellBtn');
-  if (bellBtn) { bellBtn.style.opacity = '0.5'; bellBtn.style.pointerEvents = 'none'; }
-  const restoreBell = () => { if (bellBtn) { bellBtn.style.opacity = ''; bellBtn.style.pointerEvents = ''; } };
+  // Instant visual feedback — dim toggle during async work
+  const pushRow = document.getElementById('sidebarPushRow');
+  if (pushRow) { pushRow.style.opacity = '0.5'; pushRow.style.pointerEvents = 'none'; }
+  const restore = () => { if (pushRow) { pushRow.style.opacity = ''; pushRow.style.pointerEvents = ''; } };
   if (_pushEnabled) {
     // Unsubscribe
     try {
@@ -8017,14 +8028,14 @@ async function togglePushNotifications() {
     } catch {}
     _pushEnabled = false;
     _updatePushBtn();
-    restoreBell();
+    restore();
     return;
   }
   // Subscribe — with auto-reset on FCM error
   const permission = await Notification.requestPermission();
   if (permission !== 'granted') {
     _showPushToast('⚠️ Notification permission denied. Enable it in browser settings.', '#e67e22');
-    restoreBell();
+    restore();
     return;
   }
   const tok = localStorage.getItem('tnt_token');
@@ -8034,7 +8045,7 @@ async function togglePushNotifications() {
     ({ publicKey } = await kr.json());
   } catch(e) {
     _showPushToast('❌ Could not reach server. Check your connection.', '#c0392b');
-    restoreBell(); return;
+    restore(); return;
   }
   // Register SW fresh
   try {
@@ -8043,7 +8054,7 @@ async function togglePushNotifications() {
   } catch(e) {
     console.error('[Push] SW register failed:', e);
     _showPushToast('❌ Service worker failed to register: ' + (e.message || e), '#c0392b', 8000);
-    restoreBell(); return;
+    restore(); return;
   }
 
   let sub = await _tryPushSubscribe(publicKey);
@@ -8053,7 +8064,7 @@ async function togglePushNotifications() {
   }
   if (!sub) {
     _showPushToast('❌ Push registration failed. Open the console (F12) and share the [Push] error lines.', '#c0392b', 10000);
-    restoreBell(); return;
+    restore(); return;
   }
   // Save subscription to backend
   try {
@@ -8065,11 +8076,11 @@ async function togglePushNotifications() {
     });
     _pushEnabled = true;
     _updatePushBtn();
-    restoreBell();
+    restore();
     _showPushToast('✅ Push alerts enabled! You\'ll be notified even with the tab closed.', '#27ae60', 4000);
   } catch(e) {
     _showPushToast('❌ Could not save subscription. Try again.', '#c0392b');
-    restoreBell();
+    restore();
   }
 }
 
@@ -8094,19 +8105,12 @@ function _showPushToast(msg, bg, duration = 5000) {
   setTimeout(() => toast.remove(), duration);
 }
 function _updatePushBtn() {
-  // Bell button in header — emoji + active class
-  const bell = document.getElementById('pushBellBtn');
-  if (bell) {
-    bell.classList.toggle('active', _pushEnabled);
-    bell.textContent = _pushEnabled ? '🔔' : '🔔';
-    bell.title = _pushEnabled ? 'Push alerts ON — click to disable' : 'Enable browser push alerts';
-  }
-  // Toggle card in squawk dropdown
-  const card   = document.getElementById('pushCard');
+  // Sidebar push section
+  const row    = document.getElementById('sidebarPushRow');
   const toggle = document.getElementById('pushToggle');
-  const icon   = document.getElementById('pushCardIcon');
-  const sub    = document.querySelector('.push-card-sub');
-  if (card)   card.classList.toggle('enabled', _pushEnabled);
+  const icon   = document.getElementById('sidebarPushIcon');
+  const sub    = document.getElementById('sidebarPushSub');
+  if (row)    row.classList.toggle('push-active', _pushEnabled);
   if (toggle) toggle.classList.toggle('on', _pushEnabled);
   if (icon)   icon.textContent = _pushEnabled ? '🔔' : '🔕';
   if (sub)    sub.textContent  = _pushEnabled ? 'Active — HIGH impact alerts on' : 'Alerts even when tab is closed';
@@ -8826,7 +8830,7 @@ try { applyTranslations(); } catch(e) {}
     </div>
   </div>
   <button class="push-explain-enable" onclick="document.getElementById('pushExplain').style.display='none'; togglePushNotifications()">Enable Push Alerts</button>
-  <p class="push-explain-note">You can disable anytime by clicking the 🔔 button again.</p>
+  <p class="push-explain-note">You can disable anytime from the Push Alerts section in the sidebar.</p>
 </div>
 </body>
 </html>
