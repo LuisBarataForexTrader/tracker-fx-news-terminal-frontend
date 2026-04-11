@@ -861,8 +861,8 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 /* ── Push bell header button ── */
 .push-bell-btn{background:none;border:1px solid transparent;border-radius:6px;padding:4px 7px;font-size:15px;cursor:pointer;transition:all .2s;color:var(--text-muted);line-height:1;position:relative;}
 .push-bell-btn:hover{background:rgba(255,255,255,0.08);border-color:var(--border);}
-.push-bell-btn.active{border-color:rgba(255,215,0,0.6);background:rgba(255,215,0,0.15);animation:push-ring .6s ease;box-shadow:0 0 8px rgba(255,215,0,0.3);}
-.push-bell-btn.active::after{content:'';position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:#ffd700;box-shadow:0 0 4px #ffd700;}
+.push-bell-btn.active{border-color:rgba(39,174,96,0.7);background:rgba(39,174,96,0.15);animation:push-ring .6s ease;box-shadow:0 0 8px rgba(39,174,96,0.35);}
+.push-bell-btn.active::after{content:'';position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:#27ae60;box-shadow:0 0 5px #27ae60;}
 /* Push explain popup */
 .push-explain{position:absolute;top:calc(100% + 10px);right:0;width:min(320px,92vw);background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 16px 14px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.5);animation:fadeIn .2s ease;}
 .push-explain-close{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;line-height:1;padding:2px 6px;}
@@ -882,14 +882,14 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 /* ── Push card in squawk dropdown ── */
 .push-card{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,215,0,0.15);background:rgba(255,215,0,0.04);margin-bottom:10px;cursor:pointer;transition:all .2s;gap:10px;}
 .push-card:hover{background:rgba(255,215,0,0.09);border-color:rgba(255,215,0,0.3);}
-.push-card.enabled{background:rgba(255,215,0,0.12);border-color:rgba(255,215,0,0.4);}
+.push-card.enabled{background:rgba(39,174,96,0.1);border-color:rgba(39,174,96,0.4);}
 .push-card-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
 .push-card-icon{font-size:18px;flex-shrink:0;}
 .push-card-text{display:flex;flex-direction:column;gap:2px;}
 .push-card-title{font-size:12px;font-weight:700;color:var(--text);}
 .push-card-sub{font-size:10px;color:var(--text-muted);}
 .push-toggle{width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,0.1);border:1px solid var(--border);position:relative;flex-shrink:0;transition:all .2s;}
-.push-toggle.on{background:rgba(255,215,0,0.6);border-color:rgba(255,215,0,0.8);}
+.push-toggle.on{background:rgba(39,174,96,0.8);border-color:rgba(39,174,96,1);}
 .push-toggle-knob{width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.4);}
 .push-toggle.on .push-toggle-knob{transform:translateX(16px);}
 .kw-tags{display:flex;flex-wrap:wrap;gap:6px;}
@@ -8023,6 +8023,10 @@ async function togglePushNotifications() {
     _showPushToast('❌ Push notifications not supported in this browser.', '#c0392b');
     return;
   }
+  // Instant visual feedback — disable button during async work
+  const bellBtn = document.getElementById('pushBellBtn');
+  if (bellBtn) { bellBtn.style.opacity = '0.5'; bellBtn.style.pointerEvents = 'none'; }
+  const restoreBell = () => { if (bellBtn) { bellBtn.style.opacity = ''; bellBtn.style.pointerEvents = ''; } };
   if (_pushEnabled) {
     // Unsubscribe
     try {
@@ -8034,12 +8038,14 @@ async function togglePushNotifications() {
     } catch {}
     _pushEnabled = false;
     _updatePushBtn();
+    restoreBell();
     return;
   }
   // Subscribe — with auto-reset on FCM error
   const permission = await Notification.requestPermission();
   if (permission !== 'granted') {
     _showPushToast('⚠️ Notification permission denied. Enable it in browser settings.', '#e67e22');
+    restoreBell();
     return;
   }
   const tok = localStorage.getItem('tnt_token');
@@ -8049,28 +8055,26 @@ async function togglePushNotifications() {
     ({ publicKey } = await kr.json());
   } catch(e) {
     _showPushToast('❌ Could not reach server. Check your connection.', '#c0392b');
-    return;
+    restoreBell(); return;
   }
   // Register SW fresh
-  let reg;
   try {
-    reg = await navigator.serviceWorker.register('/sw.js');
+    await navigator.serviceWorker.register('/sw.js');
     await navigator.serviceWorker.ready;
   } catch(e) {
     console.error('[Push] SW register failed:', e);
     _showPushToast('❌ Service worker failed to register: ' + (e.message || e), '#c0392b', 8000);
-    return;
+    restoreBell(); return;
   }
 
   let sub = await _tryPushSubscribe(publicKey);
   if (!sub) {
-    // One retry after full reset
     try { await _resetServiceWorker(); } catch(e) {}
     sub = await _tryPushSubscribe(publicKey);
   }
   if (!sub) {
     _showPushToast('❌ Push registration failed. Open the console (F12) and share the [Push] error lines.', '#c0392b', 10000);
-    return;
+    restoreBell(); return;
   }
   // Save subscription to backend
   try {
@@ -8082,9 +8086,11 @@ async function togglePushNotifications() {
     });
     _pushEnabled = true;
     _updatePushBtn();
+    restoreBell();
     _showPushToast('✅ Push alerts enabled! You\'ll be notified even with the tab closed.', '#27ae60', 4000);
   } catch(e) {
     _showPushToast('❌ Could not save subscription. Try again.', '#c0392b');
+    restoreBell();
   }
 }
 
