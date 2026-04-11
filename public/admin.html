@@ -1439,11 +1439,14 @@ const CAT_COLORS = {
 };
 
 const STATUS_META = {
-  ok:      { icon:'✓', color:'#4ade80', label:'OK' },
-  empty:   { icon:'⚠', color:'#f59e0b', label:'Empty' },
-  error:   { icon:'✕', color:'#f87171', label:'Error' },
-  timeout: { icon:'⏱', color:'#fb923c', label:'Timeout' },
-  unknown: { icon:'—', color:'#607080', label:'—' },
+  ok:       { icon:'✓', color:'#4ade80', label:'OK' },
+  empty:    { icon:'⚠', color:'#f59e0b', label:'Empty' },
+  error:    { icon:'✕', color:'#f87171', label:'Error' },
+  timeout:  { icon:'⏱', color:'#fb923c', label:'Timeout' },
+  running:  { icon:'⚡', color:'#38bdf8', label:'Live' },
+  pending:  { icon:'⏳', color:'#a78bfa', label:'Pending' },
+  disabled: { icon:'○', color:'#607080', label:'Disabled' },
+  unknown:  { icon:'—', color:'#607080', label:'—' },
 };
 
 function _statusBadge(status) {
@@ -1452,10 +1455,11 @@ function _statusBadge(status) {
 }
 
 function _updateFeedsKPIs(feeds, realTotal) {
-  const total   = feeds.length;
-  const ok      = feeds.filter(f=>f.status==='ok').length;
-  const empty   = feeds.filter(f=>f.status==='empty').length;
-  const errors  = feeds.filter(f=>f.status==='error'||f.status==='timeout').length;
+  const rss     = feeds.filter(f=>f.type!=='crawler');
+  const total   = rss.length;
+  const ok      = rss.filter(f=>f.status==='ok').length;
+  const empty   = rss.filter(f=>f.status==='empty').length;
+  const errors  = rss.filter(f=>f.status==='error'||f.status==='timeout').length;
   // Use real_total_articles from backend (avoids double-counting shared source names)
   const dbLabel = realTotal != null ? realTotal.toLocaleString() : '—';
   document.getElementById('feeds-kpis').innerHTML =
@@ -1541,9 +1545,12 @@ async function runHealthCheck() {
 }
 
 const TIER_META = {
-  fast:   { label:'🔴 Fast',   sub:'10s',   color:'#f87171' },
-  medium: { label:'🟡 Medium', sub:'60s',   color:'#fbbf24' },
-  slow:   { label:'🟢 Slow',   sub:'5min',  color:'#4ade80' },
+  fast:     { label:'Fast',     sub:'10s',      color:'#f87171' },
+  medium:   { label:'Medium',   sub:'60s',      color:'#fbbf24' },
+  slow:     { label:'Slow',     sub:'5min',     color:'#4ade80' },
+  realtime: { label:'Realtime', sub:'live',     color:'#38bdf8' },
+  '15min':  { label:'Crawler',  sub:'15min',    color:'#a78bfa' },
+  '30min':  { label:'Crawler',  sub:'30min',    color:'#a78bfa' },
 };
 function _tierBadge(tier) {
   const m = TIER_META[tier] || { label:'—', sub:'', color:'#607080' };
@@ -1553,16 +1560,37 @@ function _tierBadge(tier) {
 function renderFeeds(feeds) {
   document.getElementById('feeds-count').textContent = feeds.length + ' feeds';
   document.getElementById('feeds-tbody').innerHTML = feeds.map((f,i)=>{
+    const status   = f.status || 'unknown';
+    const errTip   = f.error ? ` title="${f.error.replace(/"/g,'&quot;')}"` : '';
+
+    // ── Crawler rows (Telegram, GDELT, NewsAPI) ──────────────────
+    if (f.type === 'crawler') {
+      const lastRun  = f.last_run ? new Date(f.last_run+'Z').toLocaleTimeString() : '—';
+      const added    = f.total_added != null ? f.total_added.toLocaleString() : '—';
+      const extra    = f.channels ? ` · ${f.channels} channels` : '';
+      const planClr  = '#a78bfa';
+      return `<tr style="background:rgba(167,139,250,0.04)"${errTip}>
+        <td style="color:#607080;font-size:10px">${i+1}</td>
+        <td>${_statusBadge(status)}</td>
+        <td style="font-weight:600;color:#a78bfa;white-space:nowrap">${f.source}</td>
+        <td style="font-size:11px;color:var(--text-dim)">${f.url.replace('crawler://','⚙ ')}${extra}</td>
+        <td>${_tierBadge(f.tier)}</td>
+        <td><span style="font-size:9px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:3px;background:${planClr}18;color:${planClr};border:1px solid ${planClr}33">Crawler</span></td>
+        <td style="text-align:right;font-family:var(--font-mono);font-size:11px;color:#607080">${lastRun}</td>
+        <td style="text-align:right;font-family:var(--font-mono);font-size:11px;color:var(--text-muted)">—</td>
+        <td style="text-align:right;font-family:var(--font-mono);font-size:11px;color:${f.total_added>0?'var(--accent)':'#607080'}">${added}</td>
+      </tr>`;
+    }
+
+    // ── RSS feed rows ─────────────────────────────────────────────
     const cat      = _feedCategory(f.url);
     const catColor = CAT_COLORS[cat] || '#64748b';
-    const status   = f.status || 'unknown';
     const host     = f.url.replace(/^https?:\/\/(www\.)?/,'').split('/')[0];
     const path     = f.url.replace(/^https?:\/\/(www\.)?[^/]+/,'');
     const latency  = f.latency_ms != null ? `${f.latency_ms}ms` : '—';
     const latColor = f.latency_ms == null ? '#607080' : f.latency_ms < 1000 ? '#4ade80' : f.latency_ms < 3000 ? '#f59e0b' : '#f87171';
     const entries  = f.entries != null ? f.entries : '—';
     const dbCount  = f.db_count != null ? f.db_count.toLocaleString() : '—';
-    const errTip   = f.error ? ` title="${f.error.replace(/"/g,'&quot;')}"` : '';
     return `<tr${errTip}>
       <td style="color:#607080;font-size:10px">${i+1}</td>
       <td>${_statusBadge(status)}</td>
