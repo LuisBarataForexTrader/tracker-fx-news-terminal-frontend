@@ -151,53 +151,59 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .squawk-speed-row{display:flex;align-items:center;gap:8px;}
 .squawk-speed-row input[type=range]{flex:1;accent-color:var(--accent);cursor:pointer;}
 .squawk-speed-val{font-size:11px;font-weight:700;color:#fff;min-width:30px;text-align:right;}
-.squawk-chips{display:flex;gap:5px;flex-wrap:wrap;}
+.squawk-chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px;}
 .squawk-chip{padding:4px 10px;background:var(--bg3);border:1px solid var(--border);color:#fff;font-family:var(--font);font-size:10px;cursor:pointer;border-radius:3px;transition:all .12s;}
 .squawk-chip.sel{background:rgba(0,212,255,0.1);border-color:var(--accent);color:var(--accent);font-weight:700;}
-.squawk-chips-sublabel{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.38);margin:8px 0 4px;padding:0 1px;}
+.squawk-chips-sublabel{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-top:14px;margin-bottom:7px;padding-top:10px;padding-left:1px;padding-right:1px;border-top:1px solid var(--border);}
+.squawk-section-label{font-size:10px;color:var(--text-muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
 .squawk-test-btn{width:100%;margin-top:4px;padding:7px;background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);color:var(--accent);font-family:var(--font);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border-radius:3px;transition:all .15s;}
 .squawk-test-btn:hover{background:rgba(0,212,255,0.14);}
 .squawk-dd-note{font-size:9px;color:#fff;margin-top:10px;line-height:1.5;}
 
 /* ── Upgrade Modal ── */
-.upgrade-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:4000;align-items:center;justify-content:center;padding:20px;}
+.upgrade-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:4000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
 .upgrade-overlay.show{display:flex;}
-.upgrade-modal{background:#0f1217;border:1px solid rgba(167,139,250,0.4);border-radius:6px;padding:40px;max-width:440px;width:100%;text-align:center;position:relative;box-shadow:0 40px 80px rgba(0,0,0,0.6),0 0 60px rgba(167,139,250,0.08);}
-.upgrade-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#a78bfa,transparent);}
-.upgrade-close{position:absolute;top:14px;right:16px;background:none;border:none;color:#7a9ab0;cursor:pointer;font-size:18px;line-height:1;}
-.upgrade-icon{font-size:36px;margin-bottom:16px;}
-.upgrade-title{font-size:22px;font-weight:800;margin-bottom:8px;}
-.upgrade-feature{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a78bfa;border:1px solid rgba(167,139,250,0.3);background:rgba(167,139,250,0.08);padding:4px 12px;border-radius:2px;margin-bottom:12px;}
-.upgrade-desc{font-size:13px;color:#dde8f4;line-height:1.55;margin-bottom:20px;}
-.upgrade-benefits{display:flex;flex-direction:column;gap:8px;text-align:left;margin-bottom:28px;}
-.upgrade-benefit{display:flex;align-items:center;gap:10px;font-size:13px;color:#ffffff;}
-.upgrade-benefit::before{content:'✓';color:#a78bfa;font-weight:700;flex-shrink:0;}
-.upgrade-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-family:var(--font);font-size:13px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;border:none;cursor:pointer;border-radius:3px;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(167,139,250,0.3);}
+.upgrade-modal{background:#0b0e15;border:1px solid rgba(167,139,250,0.28);border-radius:8px;padding:0;max-width:460px;width:100%;text-align:center;position:relative;box-shadow:0 40px 80px rgba(0,0,0,0.75),0 0 80px rgba(167,139,250,0.08);overflow:hidden;}
+.upgrade-modal-top{background:linear-gradient(160deg,rgba(124,58,237,0.15),rgba(167,139,250,0.04));border-bottom:1px solid rgba(167,139,250,0.12);padding:32px 36px 24px;position:relative;}
+.upgrade-modal-top::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,#7c3aed,#a78bfa,#7c3aed,transparent);}
+.upgrade-close{position:absolute;top:14px;right:16px;background:none;border:none;color:#556070;cursor:pointer;font-size:18px;line-height:1;z-index:2;transition:color .15s;}
+.upgrade-close:hover{color:#a0b8cc;}
+.upgrade-lock-ring{width:56px;height:56px;background:linear-gradient(135deg,rgba(124,58,237,0.85),rgba(167,139,250,0.9));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px;box-shadow:0 8px 28px rgba(124,58,237,0.4),0 0 0 1px rgba(167,139,250,0.2);}
+.upgrade-icon{display:none;}
+.upgrade-feature{display:inline-block;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#a78bfa;border:1px solid rgba(167,139,250,0.28);background:rgba(167,139,250,0.1);padding:3px 10px;border-radius:2px;margin-bottom:10px;}
+.upgrade-title{font-size:21px;font-weight:800;margin:0;letter-spacing:-0.02em;}
+.upgrade-body{padding:22px 36px 28px;}
+.upgrade-desc{font-size:13px;color:#c0d0de;line-height:1.6;margin-bottom:20px;}
+.upgrade-benefits{display:flex;flex-direction:column;gap:6px;text-align:left;margin-bottom:24px;}
+.upgrade-benefit{display:flex;align-items:center;gap:10px;font-size:12.5px;color:#d8e8f4;padding:8px 12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:3px;}
+.upgrade-benefit::before{display:none;}
+.upgrade-benefit-icon{width:18px;height:18px;background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.2);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#a78bfa;font-size:10px;font-weight:900;flex-shrink:0;line-height:1;}
+.upgrade-btn{display:block;width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-family:var(--font);font-size:13px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;border:none;cursor:pointer;border-radius:4px;text-decoration:none;transition:all .2s;box-shadow:0 4px 20px rgba(167,139,250,0.28);}
 .upgrade-btn:hover{box-shadow:0 6px 28px rgba(167,139,250,0.5);transform:translateY(-1px);}
-.upgrade-btn-later{display:block;margin-top:12px;font-size:12px;color:#8aa4bc;cursor:pointer;background:none;border:none;width:100%;text-align:center;}
-.upgrade-btn-later:hover{color:#dde8f4;}
-.upgrade-vat{font-size:11px;color:#c8a84a;background:rgba(200,168,74,0.1);border:1px solid rgba(200,168,74,0.25);border-radius:3px;text-align:center;padding:7px 12px;margin-bottom:12px;letter-spacing:0.01em;}
+.upgrade-btn-later{display:block;margin-top:12px;font-size:12px;color:#5a7488;cursor:pointer;background:none;border:none;width:100%;text-align:center;letter-spacing:0.02em;}
+.upgrade-btn-later:hover{color:#c0d0de;}
+.upgrade-vat{font-size:11px;color:#c8a84a;background:rgba(200,168,74,0.07);border:1px solid rgba(200,168,74,0.2);border-radius:3px;text-align:center;padding:7px 12px;margin-bottom:12px;letter-spacing:0.01em;}
 /* ── Plan chooser cards ── */
 .plan-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;align-items:stretch;}
-.plan-card{background:#141820;border:1px solid #2a3444;border-radius:5px;padding:18px 14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;display:flex;flex-direction:column;}
-.plan-card:hover{border-color:#7c3aed;background:#1a1530;}
-.plan-card.annual{border:2px solid #a78bfa;background:linear-gradient(160deg,rgba(124,58,237,0.18),rgba(167,139,250,0.08));box-shadow:0 0 28px rgba(167,139,250,0.18),inset 0 1px 0 rgba(167,139,250,0.15);}
-.plan-card.annual:hover{background:linear-gradient(160deg,rgba(124,58,237,0.28),rgba(167,139,250,0.14));box-shadow:0 0 40px rgba(167,139,250,0.3),inset 0 1px 0 rgba(167,139,250,0.2);}
+.plan-card{background:#101520;border:1px solid #1e2a38;border-radius:5px;padding:18px 14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.plan-card:hover{border-color:#7c3aed;background:#160f2a;}
+.plan-card.annual{border:2px solid #a78bfa;background:linear-gradient(160deg,rgba(124,58,237,0.18),rgba(167,139,250,0.07));box-shadow:0 0 30px rgba(167,139,250,0.14),inset 0 1px 0 rgba(167,139,250,0.12);}
+.plan-card.annual:hover{background:linear-gradient(160deg,rgba(124,58,237,0.28),rgba(167,139,250,0.12));box-shadow:0 0 44px rgba(167,139,250,0.28),inset 0 1px 0 rgba(167,139,250,0.18);}
 .plan-card.annual::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#a78bfa,#c4b5fd,#a78bfa,transparent);}
-.plan-card-badge{display:inline-block;font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#10b981;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.4);padding:3px 10px;border-radius:2px;margin-bottom:10px;}
-.plan-card-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#a0b8cc;margin-bottom:8px;}
+.plan-card-badge{display:inline-block;font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:#10b981;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.32);padding:3px 10px;border-radius:2px;margin-bottom:10px;}
+.plan-card-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#8aa4bc;margin-bottom:8px;}
 .annual .plan-card-label{color:#c4b5fd;font-size:11px;}
 .plan-card-price{font-size:28px;font-weight:800;color:#fff;line-height:1;}
-.annual .plan-card-price{font-size:38px;color:#e9d5ff;text-shadow:0 0 20px rgba(167,139,250,0.5);}
-.plan-card-price span{font-size:14px;font-weight:500;color:#7a9ab0;}
+.annual .plan-card-price{font-size:38px;color:#e9d5ff;text-shadow:0 0 20px rgba(167,139,250,0.4);}
+.plan-card-price span{font-size:14px;font-weight:500;color:#6a8499;}
 .annual .plan-card-price span{font-size:15px;color:#a78bfa;}
-.plan-card-sub{font-size:10px;color:#a0b8cc;margin-top:4px;margin-bottom:14px;min-height:28px;flex:1;}
+.plan-card-sub{font-size:10px;color:#8aa4bc;margin-top:4px;margin-bottom:14px;min-height:28px;flex:1;}
 .annual .plan-card-sub{font-size:11px;color:#c4b5fd;}
-.plan-card-sub s{color:#4a6070;}
-.plan-card-btn{width:100%;padding:9px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;border:none;cursor:pointer;border-radius:3px;transition:all .2s;box-shadow:0 2px 12px rgba(167,139,250,0.25);margin-top:auto;}
-.annual .plan-card-btn{padding:11px;font-size:11px;background:linear-gradient(135deg,#6d28d9,#a78bfa,#c4b5fd);box-shadow:0 4px 20px rgba(167,139,250,0.45);}
-.plan-card-btn:hover{box-shadow:0 4px 20px rgba(167,139,250,0.45);transform:translateY(-1px);}
-.annual .plan-card-btn:hover{box-shadow:0 6px 28px rgba(167,139,250,0.65);transform:translateY(-2px);}
+.plan-card-sub s{color:#3a4a5a;}
+.plan-card-btn{width:100%;padding:9px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-family:var(--font);font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;border:none;cursor:pointer;border-radius:3px;transition:all .2s;box-shadow:0 2px 12px rgba(167,139,250,0.2);margin-top:auto;}
+.annual .plan-card-btn{padding:11px;font-size:11px;background:linear-gradient(135deg,#6d28d9,#a78bfa,#c4b5fd);box-shadow:0 4px 20px rgba(167,139,250,0.38);}
+.plan-card-btn:hover{box-shadow:0 4px 20px rgba(167,139,250,0.4);transform:translateY(-1px);}
+.annual .plan-card-btn:hover{box-shadow:0 6px 28px rgba(167,139,250,0.6);transform:translateY(-2px);}
 .plan-card-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
 
 /* ── Pro locked badge on tab ── */
@@ -294,13 +300,26 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .wl-cat-btn:hover{color:#9bb;border-color:#2a5;}
 .wl-cat-btn.selected{color:#a78bfa;border-color:rgba(167,139,250,0.5);background:rgba(167,139,250,0.08);}
 
-/* ── My News compact sidebar trigger ── */
-.mynews-trigger{}
-.mynews-summary{font-size:10px;color:#7a9ab0;margin:2px 0 10px;line-height:1.5;min-height:14px;}
-.mynews-config-btn{width:100%;padding:8px 12px;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.2);color:var(--accent);font-family:var(--font);font-size:11px;font-weight:600;cursor:pointer;border-radius:3px;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;}
-.mynews-config-btn:hover{background:rgba(0,212,255,0.12);border-color:var(--accent);}
-.mynews-badge{background:var(--accent);color:#000;font-size:9px;font-weight:800;padding:1px 5px;border-radius:9px;min-width:14px;text-align:center;display:none;}
+/* ── My News sidebar (redesigned) ── */
+.mynews-section{padding:0 !important;}
+.mynews-sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:11px 14px 5px;}
+.mynews-sec-label{font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:#8aa4bc;}
+.mynews-summary{padding:0 14px 9px;font-size:11px;color:#b0c4d4;font-weight:500;min-height:16px;line-height:1.4;}
+.mynews-config-btn{width:100%;padding:10px 14px;background:rgba(0,212,255,0.03);border:none;border-top:1px solid rgba(0,212,255,0.1);color:var(--accent);font-family:var(--font);font-size:11px;font-weight:600;cursor:pointer;border-radius:0;transition:all .15s;display:flex;align-items:center;gap:8px;}
+.mynews-config-btn:hover{background:rgba(0,212,255,0.09);border-top-color:rgba(0,212,255,0.25);}
+.mynews-cfg-icon{font-size:12px;opacity:0.7;flex-shrink:0;}
+.mynews-cfg-arr{margin-left:auto;opacity:0.45;font-size:13px;}
+.mynews-badge{background:rgba(0,212,255,0.12);color:var(--accent);border:1px solid rgba(0,212,255,0.25);font-size:9px;font-weight:800;padding:2px 7px;border-radius:9px;min-width:18px;text-align:center;display:none;}
 .mynews-badge.show{display:inline-block;}
+/* ── My News Impact Filter (modal tab) ── */
+.mnt-impact-header{padding:4px 0 20px;}
+.mnt-impact-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.mnt-impact-sub{font-size:11px;color:var(--text-muted);line-height:1.55;}
+.mnt-impact-options{display:flex;flex-direction:column;gap:8px;}
+.mnt-impact-btn{display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:4px;color:var(--text-muted);font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;text-align:left;width:100%;}
+.mnt-impact-btn:hover{background:rgba(255,255,255,0.04);border-color:var(--border2);color:var(--text);}
+.mnt-impact-btn.active{background:rgba(0,212,255,0.06);border-color:rgba(0,212,255,0.3);color:var(--accent);}
+.mnt-impact-btn .filter-dot{flex-shrink:0;}
 
 /* ── My News Config Modal ── */
 .mynews-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:3000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(3px);}
@@ -833,6 +852,45 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 @keyframes flashHigh{0%{background:rgba(255,59,92,0.3)}100%{background:var(--high-bg)}}
 .toast{position:fixed;bottom:50px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--accent);color:var(--accent);font-family:var(--font);font-size:11px;font-weight:500;padding:9px 22px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;border-radius:3px;}
 .toast.show{opacity:1;}
+/* ── Keyword Alerts ── */
+.kw-section{padding:12px 0 8px;}
+.kw-input-row{display:flex;gap:8px;margin-bottom:10px;}
+.kw-input{flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--font);font-size:12px;padding:7px 10px;outline:none;}
+.kw-input:focus{border-color:var(--accent);}
+.kw-add-btn{padding:7px 12px;background:var(--accent);border:none;border-radius:4px;color:#000;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
+/* ── Push bell header button ── */
+.push-bell-btn{background:none;border:1px solid transparent;border-radius:6px;padding:4px 7px;font-size:15px;cursor:pointer;transition:all .2s;color:var(--text-muted);line-height:1;}
+.push-bell-btn:hover{background:rgba(255,255,255,0.08);border-color:var(--border);}
+.push-bell-btn.active{color:#ffd700;border-color:rgba(255,215,0,0.3);background:rgba(255,215,0,0.08);animation:push-ring .6s ease;}
+@keyframes push-ring{0%,100%{transform:rotate(0deg)}20%{transform:rotate(-15deg)}40%{transform:rotate(15deg)}60%{transform:rotate(-10deg)}80%{transform:rotate(10deg)}}
+/* ── Push card in squawk dropdown ── */
+.push-card{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,215,0,0.15);background:rgba(255,215,0,0.04);margin-bottom:10px;cursor:pointer;transition:all .2s;gap:10px;}
+.push-card:hover{background:rgba(255,215,0,0.09);border-color:rgba(255,215,0,0.3);}
+.push-card.enabled{background:rgba(255,215,0,0.12);border-color:rgba(255,215,0,0.4);}
+.push-card-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+.push-card-icon{font-size:18px;flex-shrink:0;}
+.push-card-text{display:flex;flex-direction:column;gap:2px;}
+.push-card-title{font-size:12px;font-weight:700;color:var(--text);}
+.push-card-sub{font-size:10px;color:var(--text-muted);}
+.push-toggle{width:36px;height:20px;border-radius:10px;background:rgba(255,255,255,0.1);border:1px solid var(--border);position:relative;flex-shrink:0;transition:all .2s;}
+.push-toggle.on{background:rgba(255,215,0,0.6);border-color:rgba(255,215,0,0.8);}
+.push-toggle-knob{width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.4);}
+.push-toggle.on .push-toggle-knob{transform:translateX(16px);}
+.kw-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.kw-suggestions-label{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:18px;margin-bottom:8px;}
+.kw-suggestions{display:flex;flex-wrap:wrap;gap:6px;}
+.kw-suggest{padding:4px 10px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-muted);font-size:11px;cursor:pointer;transition:all .15s;user-select:none;}
+.kw-suggest:hover{background:rgba(0,212,255,0.12);border-color:rgba(0,212,255,0.35);color:var(--text);}
+.kw-suggest.active{background:rgba(0,212,255,0.18);border-color:rgba(0,212,255,0.5);color:var(--accent);}
+.kw-tag{display:inline-flex;align-items:center;gap:5px;padding:4px 8px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.25);border-radius:12px;font-size:11px;color:var(--accent);}
+.kw-tag-remove{cursor:pointer;opacity:.6;font-size:13px;line-height:1;}
+.kw-tag-remove:hover{opacity:1;}
+.kw-empty{font-size:11px;color:var(--text-muted);padding:4px 0;}
+.kw-alert-toast{position:fixed;top:70px;right:20px;z-index:9999;background:rgba(255,200,0,0.95);color:#000;border-radius:6px;padding:10px 14px;font-size:12px;font-weight:700;max-width:320px;box-shadow:0 4px 20px rgba(0,0,0,0.4);animation:kw-slide-in .25s ease;pointer-events:none;}
+@keyframes kw-slide-in{from{transform:translateX(40px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+/* ── Export Button ── */
+.feed-export-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:4px;color:var(--text-muted);font-family:var(--font);font-size:11px;cursor:pointer;transition:all .15s;margin-left:auto;}
+.feed-export-btn:hover{background:rgba(255,255,255,0.09);color:var(--text);border-color:var(--border2);}
 /* ── Translate Notice Overlay ── */
 #translate-notice{position:fixed;inset:0;background:rgba(0,0,0,0.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:9800;display:none;align-items:center;justify-content:center;}
 #translate-notice.show{display:flex;}
@@ -1149,6 +1207,45 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .trial-promo-note{font-size:10px;color:#556677;text-align:center;margin-top:6px;}
 @keyframes promoSlideIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:600px){.trial-promo{bottom:16px;right:16px;left:16px;width:auto;}}
+
+/* ── Upgrade modal — mobile responsive ── */
+@media(max-width:520px){
+  .upgrade-overlay{padding:0;align-items:flex-end;}
+  .upgrade-modal{max-width:100%;border-radius:16px 16px 0 0;max-height:92vh;overflow-y:auto;}
+  .upgrade-modal-top{padding:24px 20px 18px;}
+  .upgrade-body{padding:16px 20px 24px;}
+  .plan-cards{grid-template-columns:1fr;}
+  .plan-card.annual{order:-1;}
+  .upgrade-lock-ring{width:46px;height:46px;font-size:20px;}
+  .upgrade-title{font-size:18px;}
+}
+/* ── My News modal — 4 tabs on mobile ── */
+@media(max-width:520px){
+  .mynews-panel{max-height:94vh;}
+  .mynews-tabs{gap:1px;padding:12px 12px 0;flex-wrap:nowrap;overflow-x:auto;}
+  .mynews-tab{padding:7px 10px;font-size:11px;white-space:nowrap;flex-shrink:0;}
+  .mynews-hdr{padding:16px 16px 0;}
+  .mynews-body{padding:16px 16px;}
+}
+
+/* ── Central Banks Tab ── */
+.cb-item{padding:12px 0;border-bottom:1px solid var(--border);transition:background .1s;}
+.cb-item:hover{background:rgba(255,255,255,0.02);}
+.cb-item-header{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.cb-impact{font-size:11px;}
+.cb-source{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600;}
+.cb-time{font-size:10px;color:var(--text-muted);margin-left:auto;}
+.cb-headline{font-size:13px;color:var(--text);line-height:1.45;font-weight:500;}
+.cb-assets{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.cb-asset-tag{font-size:10px;padding:2px 6px;background:rgba(255,255,255,0.06);border-radius:3px;color:var(--text-muted);}
+
+/* ── Correlations ── */
+.corr-table{border-collapse:collapse;font-size:11px;width:100%;min-width:600px;}
+.corr-table td,.corr-table th{white-space:nowrap;}
+.corr-table th{padding:6px 8px;color:var(--text-muted);font-weight:600;font-size:10px;text-align:center;border:1px solid var(--border);white-space:nowrap;}
+.corr-table td{padding:6px 8px;text-align:center;border:1px solid var(--border);font-size:11px;font-weight:500;transition:opacity .1s;}
+.corr-table tr:hover td{opacity:.85;}
+
 </style>
 </head>
 <body>
@@ -1180,7 +1277,21 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
     <div class="squawk-wrap" id="squawkWrap">
       <button class="squawk-btn" id="squawkBtn" onclick="toggleSquawk()">🔇 Squawk OFF</button>
       <button class="squawk-cfg-btn" id="squawkCfgBtn" onclick="toggleSquawkCfg(event)" title="Squawk settings">⚙</button>
+      <button class="push-bell-btn" id="pushBellBtn" onclick="IS_PRO ? togglePushNotifications() : showUpgrade('Push Notifications')" title="Browser push alerts — get notified even when the tab is closed">🔔</button>
       <div class="squawk-dd" id="squawkDd">
+        <div class="push-card" id="pushCard" onclick="IS_PRO ? togglePushNotifications() : showUpgrade('Push Notifications')">
+          <div class="push-card-left">
+            <span class="push-card-icon" id="pushCardIcon">🔔</span>
+            <div class="push-card-text">
+              <span class="push-card-title" data-i18n="push.section">Browser Push Alerts</span>
+              <span class="push-card-sub" data-i18n="push.desc">Alerts even when tab is closed</span>
+            </div>
+          </div>
+          <div class="push-toggle" id="pushToggle">
+            <div class="push-toggle-knob"></div>
+          </div>
+        </div>
+        <div id="pushToggleBtn" style="display:none"></div>
         <div class="squawk-dd-title" data-i18n="squawk.title">⚙ Squawk Settings</div>
         <div class="squawk-dd-row">
           <span class="squawk-dd-lbl" data-i18n="squawk.voice">Voice</span>
@@ -1208,6 +1319,20 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
             <button class="squawk-chip" data-sf="CAL_HIGH"   onclick="setSquawkFilter('CAL_HIGH',this)"   data-i18n="squawk.chip_cal_high">🔴 High</button>
             <button class="squawk-chip" data-sf="CAL_MEDIUM" onclick="setSquawkFilter('CAL_MEDIUM',this)" data-i18n="squawk.chip_cal_medium">🟡 Medium</button>
             <button class="squawk-chip" data-sf="CAL_LOW"    onclick="setSquawkFilter('CAL_LOW',this)"    data-i18n="squawk.chip_cal_low">🟢 Low</button>
+          </div>
+          <div class="squawk-chips-sublabel" data-i18n="squawk.assets_label">📌 Assets / Pairs</div>
+          <div class="squawk-chips">
+            <button class="squawk-chip squawk-asset-chip sel" data-sa="ALL" onclick="setSquawkAsset('ALL',this)" data-i18n="squawk.chip_all">All</button>
+            <button class="squawk-chip squawk-asset-chip" data-sa="USD" onclick="setSquawkAsset('USD',this)">USD</button>
+            <button class="squawk-chip squawk-asset-chip" data-sa="EUR" onclick="setSquawkAsset('EUR',this)">EUR</button>
+            <button class="squawk-chip squawk-asset-chip" data-sa="GBP" onclick="setSquawkAsset('GBP',this)">GBP</button>
+            <button class="squawk-chip squawk-asset-chip" data-sa="JPY" onclick="setSquawkAsset('JPY',this)">JPY</button>
+            <button class="squawk-chip squawk-asset-chip" data-sa="CHF" onclick="setSquawkAsset('CHF',this)">CHF</button>
+            <button class="squawk-chip squawk-asset-chip" data-sa="AUD" onclick="setSquawkAsset('AUD',this)">AUD</button>
+            <button class="squawk-chip squawk-asset-chip" data-sa="CAD" onclick="setSquawkAsset('CAD',this)">CAD</button>
+            <button class="squawk-chip squawk-asset-chip" data-sa="GOLD" onclick="setSquawkAsset('GOLD',this)">GOLD</button>
+            <button class="squawk-chip squawk-asset-chip" data-sa="OIL" onclick="setSquawkAsset('OIL',this)">OIL</button>
+            <button class="squawk-chip squawk-asset-chip" data-sa="BTC" onclick="setSquawkAsset('BTC',this)">BTC</button>
           </div>
         </div>
         <button class="squawk-test-btn" onclick="testSquawkVoice()" data-i18n="squawk.test">▶ Test Voice</button>
@@ -1285,6 +1410,9 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       <button class="tab-btn" id="tab-sentiment-btn" onclick="IS_PRO ? switchTab('sentiment') : showUpgrade('Market Sentiment')"><span class="nav-icon">◎</span><span data-i18n="nav.sentiment">Sentiment</span><span class="tab-pro-lock">PRO</span></button>
       <button class="tab-btn" id="tab-earnings-btn" onclick="IS_PRO ? switchTab('earnings') : showUpgrade('Earnings Calendar')"><span class="nav-icon">$</span><span data-i18n="nav.earnings">Earnings</span><span class="tab-pro-lock">PRO</span></button>
       <button class="tab-btn" id="tab-centralbanks-btn" onclick="IS_PRO ? switchTab('centralbanks') : showUpgrade('Central Bank News')"><span class="nav-icon">♦</span><span data-i18n="nav.central_banks">Central Banks</span><span class="tab-pro-lock">PRO</span></button>
+      <button class="tab-btn" id="tab-correlations-btn" onclick="IS_PRO ? switchTab('correlations') : showUpgrade('Market Correlations')">
+        <span class="nav-icon">⇄</span><span data-i18n="nav.correlations">Correlations</span><span class="tab-pro-lock">PRO</span>
+      </button>
       <button class="tab-btn" id="tab-screener-btn" onclick="IS_PRO ? switchTab('screener') : showUpgrade('Market Screener')"><span class="nav-icon">⊞</span><span data-i18n="nav.screener">Screener</span><span class="tab-pro-lock">PRO</span></button>
     </nav>
 
@@ -1316,18 +1444,22 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
     </div>
 
     <div class="sidebar-section">
-      <div class="sidebar-label" data-i18n="sidebar.impact">Impact</div>
+      <div class="sidebar-label" data-i18n="sidebar.impact">All News · Impact</div>
       <button class="filter-btn active" data-impact="ALL" onclick="setImpact('ALL',this)"><div class="filter-dot dot-all"></div><span data-i18n="sidebar.all_news">All News</span><span class="filter-count" id="count-all">0</span></button>
       <button class="filter-btn" data-impact="HIGH" onclick="setImpact('HIGH',this)"><div class="filter-dot dot-high"></div><span data-i18n="sidebar.high_impact">High Impact</span><span class="filter-count" id="count-high">0</span></button>
       <button class="filter-btn" data-impact="MEDIUM" onclick="setImpact('MEDIUM',this)"><div class="filter-dot dot-medium"></div><span data-i18n="sidebar.medium">Medium</span><span class="filter-count" id="count-medium">0</span></button>
       <button class="filter-btn" data-impact="LOW" onclick="setImpact('LOW',this)"><div class="filter-dot dot-low"></div><span data-i18n="sidebar.low">Low</span><span class="filter-count" id="count-low">0</span></button>
     </div>
-    <div class="sidebar-section">
-      <div class="sidebar-label" data-i18n="mynews.title">★ My News Feed</div>
+    <div class="sidebar-section mynews-section">
+      <div class="mynews-sec-hdr">
+        <span class="mynews-sec-label" data-i18n="mynews.title">My News Feed</span>
+        <span class="mynews-badge" id="mynewsBadge"></span>
+      </div>
       <div class="mynews-summary" id="mynewsSummary" data-i18n="mynews.no_filters">No filters active</div>
       <button class="mynews-config-btn" onclick="openMyNewsConfig()">
-        <span data-i18n="mynews.config">⚙ Configure Feed</span>
-        <span class="mynews-badge" id="mynewsBadge">0</span>
+        <span class="mynews-cfg-icon">⚙</span>
+        <span data-i18n="mynews.config">Configure Feed</span>
+        <span class="mynews-cfg-arr">→</span>
       </button>
     </div>
     <div class="pack-info">
@@ -1397,6 +1529,13 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       <div class="feed-header">
         <div class="feed-title" id="feedTitle">All News <span class="feed-title-badge" data-i18n="feed.live">LIVE</span></div>
         <div class="feed-count" id="feedCount">Connecting...</div>
+        <button class="feed-export-btn" id="feedExportBtn" onclick="IS_PRO ? exportNewsFeed() : showUpgrade('Export News Feed')" title="Export to CSV" data-i18n-title="export.tooltip">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span data-i18n="export.btn">Export</span>
+        </button>
+        <button class="feed-export-btn" onclick="IS_PRO ? openSummary() : showUpgrade('Daily Summary')" title="Today's Highlights" style="margin-left:8px;" data-i18n-title="summary.tooltip">
+          📋
+        </button>
       </div>
       <div class="delay-banner-wrap" id="delayBannerWrap"></div>
       <div class="feed-inner" id="newsFeed">
@@ -1543,7 +1682,26 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 
     <!-- CENTRAL BANKS TAB (PRO) -->
     <div class="tab-content hidden" id="tab-centralbanks">
-      <div id="centralbanks-body" style="flex:1;display:flex;flex-direction:column;overflow:hidden;"><div class="data-loading">⟳ Loading central bank news...</div></div>
+      <div class="tab-header-bar" style="display:flex;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;font-weight:700;color:var(--text);" data-i18n="nav.central_banks">Central Banks</span>
+        <button onclick="loadCentralBanks(true)" style="margin-left:auto;padding:4px 10px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:4px;color:var(--text-muted);font-size:11px;cursor:pointer;font-family:var(--font);">↻ Refresh</button>
+      </div>
+      <div id="centralbanks-body" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
+        <div class="data-loading">⟳ Loading central bank news...</div>
+      </div>
+    </div>
+
+    <!-- CORRELATIONS TAB (PRO) -->
+    <div class="tab-content hidden" id="tab-correlations">
+      <div class="tab-header-bar" style="display:flex;align-items:center;padding:10px 12px;border-bottom:1px solid var(--border);">
+        <span style="font-size:13px;font-weight:700;color:var(--text);" data-i18n="nav.correlations">Correlations</span>
+        <span style="font-size:10px;color:var(--text-muted);margin-left:8px;">30-day Pearson · Daily closes</span>
+        <span id="corr-countdown" style="margin-left:auto;font-size:10px;color:var(--text-muted);margin-right:8px;"></span>
+        <button id="corr-refresh-btn" onclick="_loadCorrelations(true)" style="padding:4px 10px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:4px;color:var(--text-muted);font-size:11px;cursor:pointer;font-family:var(--font);">↻ Refresh</button>
+      </div>
+      <div id="correlations-body" style="flex:1;overflow:auto;padding:16px;">
+        <div class="data-loading">⟳ Loading correlations...</div>
+      </div>
     </div>
 
     <!-- SCREENER TAB (PRO) -->
@@ -1589,8 +1747,16 @@ const LOGIN_URL = 'https://www.tradingnewsterminal.com/login.html';
   const hashParams = new URLSearchParams(location.hash.slice(1));
   const hashToken = hashParams.get('token');
   if (hashToken) {
-    localStorage.setItem('tnt_token', decodeURIComponent(hashToken));
     const hashUser = hashParams.get('user');
+    // Detect user change — if a different user is logging in, clear all previous
+    // user's preferences so watchlists, filters etc. don't bleed across accounts.
+    try {
+      const newUser  = hashUser ? JSON.parse(decodeURIComponent(hashUser)) : null;
+      const prevUser = JSON.parse(localStorage.getItem('tnt_user') || '{}');
+      const userChanged = newUser && prevUser.id && String(newUser.id) !== String(prevUser.id);
+      if (userChanged) _clearUserPrefs();
+    } catch(e) {}
+    localStorage.setItem('tnt_token', decodeURIComponent(hashToken));
     if (hashUser) localStorage.setItem('tnt_user', decodeURIComponent(hashUser));
     history.replaceState(null, '', location.pathname);
   }
@@ -1618,9 +1784,11 @@ const LOGIN_URL = 'https://www.tradingnewsterminal.com/login.html';
         const cached = JSON.parse(localStorage.getItem('tnt_user') || '{}');
         cached.plan = plan || cached.plan;
         localStorage.setItem('tnt_user', JSON.stringify(cached));
+        _clearPlanPrefs();
         showToast(plan === 'pro' ? '🎉 Bem-vindo ao Pro! A activar...' : '🎉 Pagamento confirmado! A recarregar...');
         setTimeout(() => location.reload(), 1800);
       } catch(e) {
+        _clearPlanPrefs();
         showToast('🎉 Pagamento confirmado! A recarregar...');
         setTimeout(() => location.reload(), 2000);
       }
@@ -1647,9 +1815,11 @@ const LOGIN_URL = 'https://www.tradingnewsterminal.com/login.html';
         const cached = JSON.parse(localStorage.getItem('tnt_user') || '{}');
         cached.plan = plan || cached.plan;
         localStorage.setItem('tnt_user', JSON.stringify(cached));
+        _clearPlanPrefs();
         showToast(t('toast.trial_started'));
         setTimeout(() => location.reload(), 1800);
       } catch(e) {
+        _clearPlanPrefs();
         showToast(t('toast.trial_started'));
         setTimeout(() => location.reload(), 2000);
       }
@@ -1703,7 +1873,7 @@ const LOGIN_URL = 'https://www.tradingnewsterminal.com/login.html';
         if (_d.had_trial !== undefined) user.had_trial = _d.had_trial;
         if (_d.trial_source !== undefined) user.trial_source = _d.trial_source;
         if (_d.id || _planChanged || _d.had_trial !== undefined) localStorage.setItem('tnt_user', JSON.stringify(user));
-        if (_planChanged) window.location.reload();
+        if (_planChanged) { _clearPlanPrefs(); window.location.reload(); }
         // Show promo popup for eligible Basic users (after plan check to avoid flash before reload)
         if (!_planChanged) _maybeShowTrialPromo(_d.had_trial || 0);
       } catch(e) {}
@@ -1711,6 +1881,22 @@ const LOGIN_URL = 'https://www.tradingnewsterminal.com/login.html';
   } catch(e) {}
 })();
 
+// _clearUserPrefs / _clearPlanPrefs: function declarations (hoisted) so they
+// can be called early in the auth-gate hash-token handling above.
+function _clearUserPrefs() {
+  ['tnt_token','tnt_user','tnt_login_at',
+   'myWatchlist','myCatWatch','myCalCountries',
+   'squawkEnabled','squawkRate','squawkFilters','squawkVoiceName',
+   'soundEnabled','soundFilters','soundVolume',
+   'tnt_v1_prefs','tnt_trial_promo_date'
+  ].forEach(k => localStorage.removeItem(k));
+}
+// Clears plan-sensitive preferences when the user upgrades or downgrades.
+// Called before every plan-change reload so the new session starts clean.
+function _clearPlanPrefs() {
+  ['myWatchlist','myCatWatch','myCalCountries','tnt_v1_prefs','tnt_trial_promo_date'
+  ].forEach(k => localStorage.removeItem(k));
+}
 function doLogout() {
   const tok = localStorage.getItem('tnt_token');
   if (tok) {
@@ -1719,9 +1905,7 @@ function doLogout() {
       headers: { 'Authorization': 'Bearer ' + tok }
     }).catch(() => {});
   }
-  localStorage.removeItem('tnt_token');
-  localStorage.removeItem('tnt_user');
-  localStorage.removeItem('tnt_login_at');
+  _clearUserPrefs();
   window.location.replace(LOGIN_URL + '?logout=1');
 }
 
@@ -1777,6 +1961,7 @@ async function _checkPlanChanged() {
     if (data.plan !== (cached.plan || 'free')) {
       cached.plan = data.plan;
       localStorage.setItem('tnt_user', JSON.stringify(cached));
+      _clearPlanPrefs();
       window.location.reload();
     }
   } catch(e) { /* non-critical */ }
@@ -2210,6 +2395,8 @@ function _dismissTranslateNotice() {
 // ─── State ──────────────────────────────────────────────────────
 let lang             = 'en';
 let impactFilters    = new Set(['ALL']); // multi-select: 'ALL'|'HIGH'|'MEDIUM'|'LOW'
+let myNewsImpact     = new Set(['ALL']); // impact filter for My News tab only
+let keywordAlerts = JSON.parse(localStorage.getItem('keywordAlerts') || '[]'); // array of lowercase strings
 let selectedCategories = new Set(); // empty = ALL
 let calAssetFilter   = new Set();   // empty = ALL assets
 let calImpactFilter  = new Set([1, 0]);
@@ -2259,6 +2446,7 @@ let squawkQueue      = [];
 let squawkSpeaking   = false;
 let squawkRate       = parseFloat(localStorage.getItem('squawkRate') || '1.0');
 let squawkFilters    = _migrateFilters(JSON.parse(localStorage.getItem('squawkFilters') || '["ALL"]'), 'squawkFilters');
+let squawkAssets     = new Set(['ALL']); // 'ALL' or specific asset codes like 'USD','EUR','GOLD'
 let squawkVoiceName  = localStorage.getItem('squawkVoiceName') || '';
 let recentNewUrls    = new Set(); // URLs arrived in last 3 min → show NEW badge
 let newItemsCount    = 0;         // count for notification badge
@@ -2277,8 +2465,11 @@ function _savePreferences() {
   if (!tok) return;
   const prefs = {
     myWatchlist, myCatWatch, myCalCountries,
+    myNewsImpact: [...myNewsImpact],
+    keywordAlerts,
     squawkEnabled, squawkRate,
     squawkFilters: [...squawkFilters],
+    squawkAssets: [...squawkAssets],
     squawkVoiceName,
     soundEnabled,
     soundFilters: [...soundFilters],
@@ -2308,9 +2499,12 @@ async function _loadPreferences() {
     if (Array.isArray(p.myWatchlist))    { myWatchlist = p.myWatchlist;    localStorage.setItem('myWatchlist', JSON.stringify(myWatchlist)); }
     if (Array.isArray(p.myCatWatch))     { myCatWatch  = p.myCatWatch;     localStorage.setItem('myCatWatch',  JSON.stringify(myCatWatch)); }
     if (Array.isArray(p.myCalCountries)) { myCalCountries = p.myCalCountries; localStorage.setItem('myCalCountries', JSON.stringify(myCalCountries)); }
+    if (Array.isArray(p.myNewsImpact) && p.myNewsImpact.length) { myNewsImpact = new Set(p.myNewsImpact); localStorage.setItem('myNewsImpact', JSON.stringify([...myNewsImpact])); }
+    if (Array.isArray(p.keywordAlerts)) { keywordAlerts = p.keywordAlerts; localStorage.setItem('keywordAlerts', JSON.stringify(keywordAlerts)); }
     if (typeof p.squawkEnabled === 'boolean') { squawkEnabled = p.squawkEnabled; localStorage.setItem('squawkEnabled', squawkEnabled); }
     if (typeof p.squawkRate    === 'number')  { squawkRate    = p.squawkRate;    localStorage.setItem('squawkRate', squawkRate.toString()); }
     if (Array.isArray(p.squawkFilters))  { squawkFilters = new Set(p.squawkFilters); localStorage.setItem('squawkFilters', JSON.stringify([...squawkFilters])); }
+    if (Array.isArray(p.squawkAssets) && p.squawkAssets.length) { squawkAssets = new Set(p.squawkAssets); localStorage.setItem('squawkAssets', JSON.stringify([...squawkAssets])); document.querySelectorAll('#squawkDd .squawk-asset-chip').forEach(c => c.classList.toggle('sel', squawkAssets.has(c.dataset.sa))); }
     if (typeof p.squawkVoiceName=== 'string') { squawkVoiceName = p.squawkVoiceName; localStorage.setItem('squawkVoiceName', squawkVoiceName); }
     if (typeof p.soundEnabled  === 'boolean') { soundEnabled = p.soundEnabled;   localStorage.setItem('soundEnabled', soundEnabled); }
     if (Array.isArray(p.soundFilters))   { soundFilters = new Set(p.soundFilters);   localStorage.setItem('soundFilters', JSON.stringify([...soundFilters])); }
@@ -2382,7 +2576,7 @@ const STRINGS = {
     'nav.login':'Login','nav.signup':'Sign Up',
     'squawk.off':'🔇 Squawk OFF','squawk.on':'🔊 Squawk ON','squawk.speaking':'🔊 Speaking...',
     'search.placeholder':'Search news, assets, keywords...',
-    'sidebar.impact':'Impact','sidebar.all_news':'All News','sidebar.high_impact':'High Impact',
+    'sidebar.impact':'All News · Impact','sidebar.all_news':'All News','sidebar.high_impact':'High Impact',
     'sidebar.medium':'Medium','sidebar.low':'Low',
     'sidebar.watchlist_label':'My News — Watchlist',
     'sidebar.watchlist_hint':'Select assets to pin to MY NEWS',
@@ -2432,13 +2626,17 @@ const STRINGS = {
     'nav.fx':'FX Rates','nav.crypto':'Crypto','nav.commodities':'Commodities',
     'nav.macro':'Macro','nav.sentiment':'Sentiment','nav.earnings':'Earnings',
     'nav.central_banks':'Central Banks','nav.screener':'Screener','nav.signout':'Sign Out',
-    'mynews.title':'★ My News Feed','mynews.no_filters':'No filters active',
-    'mynews.basic_hint':'Select major FX currencies below','mynews.config':'⚙ Configure Feed',
+    'nav.correlations':'Correlations',
+    'summary.title':'Today\'s Highlights','summary.tooltip':'View today\'s top stories',
+    'push.section':'Browser Push Alerts','push.desc':'Alerts even when tab is closed','push.enable':'Enable','push.disable':'Disable',
+    'mynews.title':'My News Feed','mynews.no_filters':'No filters active',
+    'mynews.basic_hint':'Select major FX currencies below','mynews.config':'Configure Feed',
     'squawk.title':'⚙ Squawk Settings','squawk.voice':'Voice','squawk.voice_auto':'Auto — best available',
     'squawk.speed':'Speed','squawk.read_news':'Read news',
     'squawk.chip_all':'All','squawk.chip_high':'🔴 High Impact','squawk.chip_medium':'🟡 Medium Impact',
     'squawk.chip_mynews':'★ My News','squawk.chip_calendar':'📅 Calendar','squawk.chip_low':'🟢 Low Impact',
     'squawk.ce_events':'📅 CE Events','squawk.chip_cal_high':'🔴 High','squawk.chip_cal_medium':'🟡 Medium','squawk.chip_cal_low':'🟢 Low',
+    'squawk.assets_label':'Assets / Pairs',
     'squawk.test':'▶ Test Voice',
     'squawk.note_html':'Voices always read in English for clarity.<br>Neural/Google voices sound best.',
     'sound.title':'🔔 Alert Settings','sound.alert_for':'Alert for','sound.volume':'Volume','sound.test':'▶ Test Sound',
@@ -2515,7 +2713,10 @@ const STRINGS = {
     'sc.mob.sub':'The Market Screener is optimised for larger screens. Open on a desktop or laptop for the full experience.',
     'mnf.title':'⚙ Configure My News Feed',
     'mnf.subtitle':'Personalize the news, categories and calendar countries you want to track.',
-    'mnf.tab.assets':'Assets','mnf.tab.categories':'Categories','mnf.tab.calendar':'Calendar',
+    'mnf.tab.assets':'Assets','mnf.tab.categories':'Categories','mnf.tab.calendar':'Calendar','mnf.tab.impact':'Impact',
+    'mnf.impact.title':'Filter My News by Impact Level',
+    'mnf.impact.sub':'Show only news with a specific market impact level in your personalised feed. Applied on top of your asset and category subscriptions.',
+    'mnf.impact.all':'All Impact Levels','mnf.impact.high':'High Impact Only','mnf.impact.medium':'Medium Impact','mnf.impact.low':'Low Impact',
     'mnf.basic_notice_html':'You are on the <strong>Basic Plan</strong>. Only major FX currencies are available. <strong>Upgrade to Pro</strong> to unlock all assets, categories and countries.',
     'mnf.grp.fx_major':'💱 FX — Major Currencies','mnf.grp.fx_minor':'💱 FX — Minor & Exotic',
     'mnf.grp.crypto_large':'₿ Crypto — Large Caps','mnf.grp.crypto_mid':'₿ Crypto — Mid Caps',
@@ -2535,7 +2736,10 @@ const STRINGS = {
     'mnf.n_asset':'asset','mnf.n_assets':'assets',
     'mnf.n_category':'category','mnf.n_categories':'categories',
     'mnf.n_country':'country','mnf.n_countries':'countries',
+    'mnf.n_impact':'impact level','mnf.n_impacts':'impact levels',
     'mnf.n_filter_active':'filter active','mnf.n_filters_active':'filters active',
+    'kw.tab':'Keywords','kw.title':'Keyword Alerts','kw.sub':'Get an instant alert when any headline contains your keywords. Works across all news sources in real time.','kw.placeholder':'e.g. Fed, OPEC, China PMI','kw.add':'Add','kw.empty':'No keywords yet. Add one above.',
+    'export.btn':'Export','export.tooltip':'Export current feed to CSV',
     'upgrade.title':'Upgrade to Pro',
     'upgrade.desc.tv':'Watch Bloomberg, CNBC, Al Jazeera and more live channels directly inside the terminal.',
     'upgrade.desc.squawk':'Hands-free voice alerts for every breaking headline the instant it arrives — zero delay.',
@@ -2561,7 +2765,7 @@ const STRINGS = {
     'nav.login':'Entrar','nav.signup':'Registar',
     'squawk.off':'🔇 Squawk OFF','squawk.on':'🔊 Squawk ON','squawk.speaking':'🔊 A falar...',
     'search.placeholder':'Pesquisar notícias, ativos, palavras-chave...',
-    'sidebar.impact':'Impacto','sidebar.all_news':'Todas as Notícias','sidebar.high_impact':'Alto Impacto',
+    'sidebar.impact':'Todas as Notícias · Impacto','sidebar.all_news':'Todas as Notícias','sidebar.high_impact':'Alto Impacto',
     'sidebar.medium':'Médio','sidebar.low':'Baixo',
     'sidebar.watchlist_label':'As Minhas Notícias',
     'sidebar.watchlist_hint':'Seleciona ativos para As Minhas Notícias',
@@ -2611,13 +2815,17 @@ const STRINGS = {
     'nav.fx':'Câmbios','nav.crypto':'Cripto','nav.commodities':'Matérias-Primas',
     'nav.macro':'Macro','nav.sentiment':'Sentimento','nav.earnings':'Resultados',
     'nav.central_banks':'Bancos Centrais','nav.screener':'Screener','nav.signout':'Sair',
-    'mynews.title':'★ As Minhas Notícias','mynews.no_filters':'Sem filtros ativos',
-    'mynews.basic_hint':'Seleciona moedas FX principais abaixo','mynews.config':'⚙ Configurar Feed',
+    'nav.correlations':'Correlações',
+    'summary.title':'Destaques de Hoje','summary.tooltip':'Ver os destaques de hoje',
+    'push.section':'Alertas Push no Browser','push.desc':'Alertas mesmo com o tab fechado','push.enable':'Ativar','push.disable':'Desativar',
+    'mynews.title':'As Minhas Notícias','mynews.no_filters':'Sem filtros ativos',
+    'mynews.basic_hint':'Seleciona moedas FX principais abaixo','mynews.config':'Configurar Feed',
     'squawk.title':'⚙ Definições do Squawk','squawk.voice':'Voz','squawk.voice_auto':'Auto — melhor disponível',
     'squawk.speed':'Velocidade','squawk.read_news':'Ler notícias',
     'squawk.chip_all':'Todas','squawk.chip_high':'🔴 Alto Impacto','squawk.chip_medium':'🟡 Médio Impacto',
     'squawk.chip_mynews':'★ As Minhas','squawk.chip_calendar':'📅 Calendário','squawk.chip_low':'🟢 Baixo Impacto',
     'squawk.ce_events':'📅 Eventos CE','squawk.chip_cal_high':'🔴 Alto','squawk.chip_cal_medium':'🟡 Médio','squawk.chip_cal_low':'🟢 Baixo',
+    'squawk.assets_label':'Ativos / Pares',
     'squawk.test':'▶ Testar Voz',
     'squawk.note_html':'As vozes lêem sempre em inglês para clareza.<br>As vozes Neural/Google soam melhor.',
     'sound.title':'🔔 Definições de Alertas','sound.alert_for':'Alertar para','sound.volume':'Volume','sound.test':'▶ Testar Som',
@@ -2694,7 +2902,10 @@ const STRINGS = {
     'sc.mob.sub':'O Market Screener está optimizado para ecrãs maiores. Abre num computador para a experiência completa.',
     'mnf.title':'⚙ Configurar o Meu Feed',
     'mnf.subtitle':'Personalize as notícias, categorias e países do calendário que quer acompanhar.',
-    'mnf.tab.assets':'Ativos','mnf.tab.categories':'Categorias','mnf.tab.calendar':'Calendário',
+    'mnf.tab.assets':'Ativos','mnf.tab.categories':'Categorias','mnf.tab.calendar':'Calendário','mnf.tab.impact':'Impacto',
+    'mnf.impact.title':'Filtrar As Minhas Notícias por Nível de Impacto',
+    'mnf.impact.sub':'Mostrar apenas notícias com um nível de impacto específico no seu feed personalizado. Aplicado sobre as subscrições de ativos e categorias.',
+    'mnf.impact.all':'Todos os Níveis de Impacto','mnf.impact.high':'Apenas Alto Impacto','mnf.impact.medium':'Impacto Médio','mnf.impact.low':'Baixo Impacto',
     'mnf.basic_notice_html':'Está no <strong>Plano Básico</strong>. Apenas as principais moedas FX estão disponíveis. <strong>Atualize para Pro</strong> para desbloquear todos os ativos, categorias e países.',
     'mnf.grp.fx_major':'💱 FX — Moedas Principais','mnf.grp.fx_minor':'💱 FX — Menores e Exóticas',
     'mnf.grp.crypto_large':'₿ Cripto — Grandes','mnf.grp.crypto_mid':'₿ Cripto — Médias',
@@ -2714,7 +2925,10 @@ const STRINGS = {
     'mnf.n_asset':'ativo','mnf.n_assets':'ativos',
     'mnf.n_category':'categoria','mnf.n_categories':'categorias',
     'mnf.n_country':'país','mnf.n_countries':'países',
+    'mnf.n_impact':'nível de impacto','mnf.n_impacts':'níveis de impacto',
     'mnf.n_filter_active':'filtro ativo','mnf.n_filters_active':'filtros ativos',
+    'kw.tab':'Keywords','kw.title':'Alertas por Palavra-Chave','kw.sub':'Recebe um alerta imediato quando uma notícia contém as tuas palavras-chave. Funciona em tempo real em todas as fontes.','kw.placeholder':'ex: Fed, OPEC, China PMI','kw.add':'Adicionar','kw.empty':'Sem palavras-chave. Adiciona uma acima.',
+    'export.btn':'Exportar','export.tooltip':'Exportar feed atual para CSV',
     'upgrade.title':'Mudar para Pro',
     'upgrade.desc.tv':'Vê Bloomberg, CNBC, Al Jazeera e mais canais ao vivo diretamente no terminal.',
     'upgrade.desc.squawk':'Alertas de voz automáticos para cada notícia breaking no instante em que chega — sem atraso.',
@@ -2740,7 +2954,7 @@ const STRINGS = {
     'nav.login':'Entrar','nav.signup':'Registrarse',
     'squawk.off':'🔇 Squawk OFF','squawk.on':'🔊 Squawk ON','squawk.speaking':'🔊 Hablando...',
     'search.placeholder':'Buscar noticias, activos, palabras clave...',
-    'sidebar.impact':'Impacto','sidebar.all_news':'Todas las Noticias','sidebar.high_impact':'Alto Impacto',
+    'sidebar.impact':'Todas las Noticias · Impacto','sidebar.all_news':'Todas las Noticias','sidebar.high_impact':'Alto Impacto',
     'sidebar.medium':'Medio','sidebar.low':'Bajo',
     'sidebar.watchlist_label':'Mis Noticias — Lista',
     'sidebar.watchlist_hint':'Selecciona activos para fijar a MIS NOTICIAS',
@@ -2790,13 +3004,17 @@ const STRINGS = {
     'nav.fx':'Tipos FX','nav.crypto':'Cripto','nav.commodities':'Materias Primas',
     'nav.macro':'Macro','nav.sentiment':'Sentimiento','nav.earnings':'Resultados',
     'nav.central_banks':'Bancos Centrales','nav.screener':'Screener','nav.signout':'Cerrar Sesión',
-    'mynews.title':'★ Mis Noticias','mynews.no_filters':'Sin filtros activos',
-    'mynews.basic_hint':'Selecciona divisas FX principales abajo','mynews.config':'⚙ Configurar Feed',
+    'nav.correlations':'Correlaciones',
+    'summary.title':'Destacados de Hoy','summary.tooltip':'Ver las noticias más importantes de hoy',
+    'push.section':'Alertas Push del Navegador','push.desc':'Alertas incluso con la pestaña cerrada','push.enable':'Activar','push.disable':'Desactivar',
+    'mynews.title':'Mis Noticias','mynews.no_filters':'Sin filtros activos',
+    'mynews.basic_hint':'Selecciona divisas FX principales abajo','mynews.config':'Configurar Feed',
     'squawk.title':'⚙ Ajustes de Squawk','squawk.voice':'Voz','squawk.voice_auto':'Auto — mejor disponible',
     'squawk.speed':'Velocidad','squawk.read_news':'Leer noticias',
     'squawk.chip_all':'Todas','squawk.chip_high':'🔴 Alto Impacto','squawk.chip_medium':'🟡 Medio Impacto',
     'squawk.chip_mynews':'★ Mis Noticias','squawk.chip_calendar':'📅 Calendario','squawk.chip_low':'🟢 Bajo Impacto',
     'squawk.ce_events':'📅 Eventos CE','squawk.chip_cal_high':'🔴 Alto','squawk.chip_cal_medium':'🟡 Medio','squawk.chip_cal_low':'🟢 Bajo',
+    'squawk.assets_label':'Activos / Pares',
     'squawk.test':'▶ Probar Voz',
     'squawk.note_html':'Las voces siempre leen en inglés para mayor claridad.<br>Las voces Neural/Google suenan mejor.',
     'sound.title':'🔔 Ajustes de Alertas','sound.alert_for':'Alertar por','sound.volume':'Volumen','sound.test':'▶ Probar Sonido',
@@ -2873,7 +3091,10 @@ const STRINGS = {
     'sc.mob.sub':'El Market Screener está optimizado para pantallas grandes. Ábrelo en un ordenador para la experiencia completa.',
     'mnf.title':'⚙ Configurar Mi Feed',
     'mnf.subtitle':'Personaliza las noticias, categorías y países del calendario que quieres seguir.',
-    'mnf.tab.assets':'Activos','mnf.tab.categories':'Categorías','mnf.tab.calendar':'Calendario',
+    'mnf.tab.assets':'Activos','mnf.tab.categories':'Categorías','mnf.tab.calendar':'Calendario','mnf.tab.impact':'Impacto',
+    'mnf.impact.title':'Filtrar Mis Noticias por Nivel de Impacto',
+    'mnf.impact.sub':'Mostrar solo noticias con un nivel de impacto específico en tu feed personalizado. Aplicado sobre tus suscripciones de activos y categorías.',
+    'mnf.impact.all':'Todos los Niveles de Impacto','mnf.impact.high':'Solo Alto Impacto','mnf.impact.medium':'Impacto Medio','mnf.impact.low':'Bajo Impacto',
     'mnf.basic_notice_html':'Estás en el <strong>Plan Básico</strong>. Solo las principales divisas FX están disponibles. <strong>Actualiza a Pro</strong> para desbloquear todos los activos, categorías y países.',
     'mnf.grp.fx_major':'💱 FX — Divisas Principales','mnf.grp.fx_minor':'💱 FX — Menores y Exóticas',
     'mnf.grp.crypto_large':'₿ Cripto — Grandes','mnf.grp.crypto_mid':'₿ Cripto — Medianas',
@@ -2893,7 +3114,10 @@ const STRINGS = {
     'mnf.n_asset':'activo','mnf.n_assets':'activos',
     'mnf.n_category':'categoría','mnf.n_categories':'categorías',
     'mnf.n_country':'país','mnf.n_countries':'países',
+    'mnf.n_impact':'nivel de impacto','mnf.n_impacts':'niveles de impacto',
     'mnf.n_filter_active':'filtro activo','mnf.n_filters_active':'filtros activos',
+    'kw.tab':'Palabras Clave','kw.title':'Alertas por Palabra Clave','kw.sub':'Recibe una alerta instantánea cuando un titular contiene tus palabras clave.','kw.placeholder':'ej: Fed, OPEC, China PMI','kw.add':'Añadir','kw.empty':'Sin palabras clave. Añade una arriba.',
+    'export.btn':'Exportar','export.tooltip':'Exportar feed actual a CSV',
     'upgrade.title':'Actualizar a Pro',
     'upgrade.desc.tv':'Ve Bloomberg, CNBC, Al Jazeera y más canales en vivo directamente en el terminal.',
     'upgrade.desc.squawk':'Alertas de voz automáticas para cada titular al instante en que llega — sin retraso.',
@@ -2919,7 +3143,7 @@ const STRINGS = {
     'nav.login':'Connexion','nav.signup':'S\u2019inscrire',
     'squawk.off':'🔇 Squawk OFF','squawk.on':'🔊 Squawk ON','squawk.speaking':'🔊 En cours...',
     'search.placeholder':'Rechercher actualités, actifs, mots-clés...',
-    'sidebar.impact':'Impact','sidebar.all_news':'Toutes les Actualités','sidebar.high_impact':'Impact Élevé',
+    'sidebar.impact':'Toutes les Actualités · Impact','sidebar.all_news':'Toutes les Actualités','sidebar.high_impact':'Impact Élevé',
     'sidebar.medium':'Moyen','sidebar.low':'Faible',
     'sidebar.watchlist_label':'Mes Actualités — Watchlist',
     'sidebar.watchlist_hint':'Sélectionnez des actifs à épingler à MES ACTUALITÉS',
@@ -2969,13 +3193,17 @@ const STRINGS = {
     'nav.fx':'Taux FX','nav.crypto':'Crypto','nav.commodities':'Matières Premières',
     'nav.macro':'Macro','nav.sentiment':'Sentiment','nav.earnings':'Résultats',
     'nav.central_banks':'Banques Centrales','nav.screener':'Screener','nav.signout':'Déconnexion',
-    'mynews.title':'★ Mes Actualités','mynews.no_filters':'Aucun filtre actif',
-    'mynews.basic_hint':'Sélectionnez les devises FX majeures ci-dessous','mynews.config':'⚙ Configurer le Flux',
+    'nav.correlations':'Corrélations',
+    'summary.title':'Points Forts du Jour','summary.tooltip':'Voir les actualités majeures du jour',
+    'push.section':'Alertes Push Navigateur','push.desc':'Alertes même onglet fermé','push.enable':'Activer','push.disable':'Désactiver',
+    'mynews.title':'Mes Actualités','mynews.no_filters':'Aucun filtre actif',
+    'mynews.basic_hint':'Sélectionnez les devises FX majeures ci-dessous','mynews.config':'Configurer le Flux',
     'squawk.title':'⚙ Paramètres Squawk','squawk.voice':'Voix','squawk.voice_auto':'Auto — meilleure disponible',
     'squawk.speed':'Vitesse','squawk.read_news':'Lire les actus',
     'squawk.chip_all':'Toutes','squawk.chip_high':'🔴 Impact Élevé','squawk.chip_medium':'🟡 Impact Moyen',
     'squawk.chip_mynews':'★ Mes Actus','squawk.chip_calendar':'📅 Calendrier','squawk.chip_low':'🟢 Faible Impact',
     'squawk.ce_events':'📅 Événements CE','squawk.chip_cal_high':'🔴 Élevé','squawk.chip_cal_medium':'🟡 Moyen','squawk.chip_cal_low':'🟢 Faible',
+    'squawk.assets_label':'Actifs / Paires',
     'squawk.test':'▶ Tester la Voix',
     'squawk.note_html':'Les voix lisent toujours en anglais pour la clarté.<br>Les voix Neural/Google sonnent le mieux.',
     'sound.title':'🔔 Paramètres des Alertes','sound.alert_for':'Alerter pour','sound.volume':'Volume','sound.test':'▶ Tester le Son',
@@ -3052,7 +3280,10 @@ const STRINGS = {
     'sc.mob.sub':'Le Market Screener est optimisé pour les grands écrans. Ouvrez-le sur un ordinateur pour l\'expérience complète.',
     'mnf.title':'⚙ Configurer Mon Fil',
     'mnf.subtitle':'Personnalisez les actualités, catégories et pays du calendrier que vous souhaitez suivre.',
-    'mnf.tab.assets':'Actifs','mnf.tab.categories':'Catégories','mnf.tab.calendar':'Calendrier',
+    'mnf.tab.assets':'Actifs','mnf.tab.categories':'Catégories','mnf.tab.calendar':'Calendrier','mnf.tab.impact':'Impact',
+    'mnf.impact.title':'Filtrer Mes Actualités par Niveau d\'Impact',
+    'mnf.impact.sub':'Afficher uniquement les actualités avec un niveau d\'impact spécifique dans votre fil personnalisé. Appliqué en plus de vos abonnements actifs et catégories.',
+    'mnf.impact.all':'Tous les Niveaux d\'Impact','mnf.impact.high':'Impact Élevé Uniquement','mnf.impact.medium':'Impact Moyen','mnf.impact.low':'Faible Impact',
     'mnf.basic_notice_html':"Vous êtes sur le <strong>Plan Basique</strong>. Seules les principales devises FX sont disponibles. <strong>Passez à Pro</strong> pour débloquer tous les actifs, catégories et pays.",
     'mnf.grp.fx_major':'💱 FX — Devises Majeures','mnf.grp.fx_minor':'💱 FX — Mineures et Exotiques',
     'mnf.grp.crypto_large':'₿ Crypto — Grandes','mnf.grp.crypto_mid':'₿ Crypto — Moyennes',
@@ -3072,7 +3303,10 @@ const STRINGS = {
     'mnf.n_asset':'actif','mnf.n_assets':'actifs',
     'mnf.n_category':'catégorie','mnf.n_categories':'catégories',
     'mnf.n_country':'pays','mnf.n_countries':'pays',
+    'mnf.n_impact':'niveau d\'impact','mnf.n_impacts':'niveaux d\'impact',
     'mnf.n_filter_active':'filtre actif','mnf.n_filters_active':'filtres actifs',
+    'kw.tab':'Mots-clés','kw.title':'Alertes par Mot-clé','kw.sub':'Recevez une alerte instantanée quand un titre contient vos mots-clés.','kw.placeholder':'ex: Fed, OPEC, China PMI','kw.add':'Ajouter','kw.empty':'Aucun mot-clé. Ajoutez-en un ci-dessus.',
+    'export.btn':'Exporter','export.tooltip':'Exporter le flux actuel en CSV',
     'upgrade.title':'Passer à Pro',
     'upgrade.desc.tv':'Regardez Bloomberg, CNBC, Al Jazeera et plus en direct dans le terminal.',
     'upgrade.desc.squawk':'Alertes vocales automatiques pour chaque breaking news dès son arrivée — sans délai.',
@@ -3098,7 +3332,7 @@ const STRINGS = {
     'nav.login':'Anmelden','nav.signup':'Registrieren',
     'squawk.off':'🔇 Squawk AUS','squawk.on':'🔊 Squawk AN','squawk.speaking':'🔊 Spricht...',
     'search.placeholder':'Nachrichten, Werte, Schlagwörter suchen...',
-    'sidebar.impact':'Impact','sidebar.all_news':'Alle Nachrichten','sidebar.high_impact':'Hoher Impact',
+    'sidebar.impact':'Alle Nachrichten · Impact','sidebar.all_news':'Alle Nachrichten','sidebar.high_impact':'Hoher Impact',
     'sidebar.medium':'Mittel','sidebar.low':'Niedrig',
     'sidebar.watchlist_label':'Meine Nachrichten — Watchlist',
     'sidebar.watchlist_hint':'Werte auswählen um sie in MEINE NACHRICHTEN anzuheften',
@@ -3148,13 +3382,17 @@ const STRINGS = {
     'nav.fx':'FX-Kurse','nav.crypto':'Krypto','nav.commodities':'Rohstoffe',
     'nav.macro':'Makro','nav.sentiment':'Sentiment','nav.earnings':'Ergebnisse',
     'nav.central_banks':'Zentralbanken','nav.screener':'Screener','nav.signout':'Abmelden',
-    'mynews.title':'★ Meine Nachrichten','mynews.no_filters':'Keine Filter aktiv',
-    'mynews.basic_hint':'Wähle unten Haupt-FX-Währungen','mynews.config':'⚙ Feed konfigurieren',
+    'nav.correlations':'Korrelationen',
+    'summary.title':'Heutige Highlights','summary.tooltip':'Heutige Top-Meldungen anzeigen',
+    'push.section':'Browser-Push-Benachrichtigungen','push.desc':'Alarme auch bei geschlossenem Tab','push.enable':'Aktivieren','push.disable':'Deaktivieren',
+    'mynews.title':'Meine Nachrichten','mynews.no_filters':'Keine Filter aktiv',
+    'mynews.basic_hint':'Wähle unten Haupt-FX-Währungen','mynews.config':'Feed konfigurieren',
     'squawk.title':'⚙ Squawk-Einstellungen','squawk.voice':'Stimme','squawk.voice_auto':'Auto — beste verfügbar',
     'squawk.speed':'Geschwindigkeit','squawk.read_news':'Nachrichten vorlesen',
     'squawk.chip_all':'Alle','squawk.chip_high':'🔴 Hoher Impact','squawk.chip_medium':'🟡 Mittlerer Impact',
     'squawk.chip_mynews':'★ Meine','squawk.chip_calendar':'📅 Kalender','squawk.chip_low':'🟢 Geringer Impact',
     'squawk.ce_events':'📅 CE Ereignisse','squawk.chip_cal_high':'🔴 Hoch','squawk.chip_cal_medium':'🟡 Mittel','squawk.chip_cal_low':'🟢 Niedrig',
+    'squawk.assets_label':'Assets / Paare',
     'squawk.test':'▶ Stimme testen',
     'squawk.note_html':'Stimmen lesen immer auf Englisch zur Klarheit.<br>Neural/Google-Stimmen klingen am besten.',
     'sound.title':'🔔 Alarm-Einstellungen','sound.alert_for':'Alarm für','sound.volume':'Lautstärke','sound.test':'▶ Sound testen',
@@ -3231,7 +3469,10 @@ const STRINGS = {
     'sc.mob.sub':'Der Market Screener ist für größere Bildschirme optimiert. Öffne ihn auf einem Desktop oder Laptop für die vollständige Erfahrung.',
     'mnf.title':'⚙ Meinen Feed konfigurieren',
     'mnf.subtitle':'Passen Sie die Nachrichten, Kategorien und Kalenderländer an, die Sie verfolgen möchten.',
-    'mnf.tab.assets':'Assets','mnf.tab.categories':'Kategorien','mnf.tab.calendar':'Kalender',
+    'mnf.tab.assets':'Assets','mnf.tab.categories':'Kategorien','mnf.tab.calendar':'Kalender','mnf.tab.impact':'Impact',
+    'mnf.impact.title':'Meine Nachrichten nach Auswirkungsgrad filtern',
+    'mnf.impact.sub':'Nur Nachrichten mit einem bestimmten Marktauswirkungsgrad in Ihrem personalisierten Feed anzeigen. Wird zusätzlich zu Ihren Asset- und Kategorieabonnements angewendet.',
+    'mnf.impact.all':'Alle Auswirkungsgrade','mnf.impact.high':'Nur Hoher Impact','mnf.impact.medium':'Mittlerer Impact','mnf.impact.low':'Niedriger Impact',
     'mnf.basic_notice_html':'Sie nutzen den <strong>Basic-Plan</strong>. Nur die wichtigsten FX-Währungen sind verfügbar. <strong>Upgrade auf Pro</strong>, um alle Assets, Kategorien und Länder freizuschalten.',
     'mnf.grp.fx_major':'💱 FX — Hauptwährungen','mnf.grp.fx_minor':'💱 FX — Nebenwerte & Exoten',
     'mnf.grp.crypto_large':'₿ Krypto — Large Caps','mnf.grp.crypto_mid':'₿ Krypto — Mid Caps',
@@ -3251,7 +3492,10 @@ const STRINGS = {
     'mnf.n_asset':'Asset','mnf.n_assets':'Assets',
     'mnf.n_category':'Kategorie','mnf.n_categories':'Kategorien',
     'mnf.n_country':'Land','mnf.n_countries':'Länder',
+    'mnf.n_impact':'Impact-Level','mnf.n_impacts':'Impact-Levels',
     'mnf.n_filter_active':'aktiver Filter','mnf.n_filters_active':'aktive Filter',
+    'kw.tab':'Keywords','kw.title':'Keyword-Alarme','kw.sub':'Erhalte sofortige Alarme, wenn eine Schlagzeile deine Schlüsselwörter enthält.','kw.placeholder':'z.B. Fed, OPEC, China PMI','kw.add':'Hinzufügen','kw.empty':'Keine Keywords. Füge eines oben hinzu.',
+    'export.btn':'Exportieren','export.tooltip':'Aktuellen Feed als CSV exportieren',
     'upgrade.title':'Upgrade auf Pro',
     'upgrade.desc.tv':'Schau Bloomberg, CNBC, Al Jazeera und mehr live direkt im Terminal.',
     'upgrade.desc.squawk':'Automatische Sprachmeldungen für jede Breaking-News im Moment des Eintreffens — ohne Verzögerung.',
@@ -3277,7 +3521,7 @@ const STRINGS = {
     'nav.login':'Accedi','nav.signup':'Registrati',
     'squawk.off':'🔇 Squawk OFF','squawk.on':'🔊 Squawk ON','squawk.speaking':'🔊 In corso...',
     'search.placeholder':'Cerca notizie, asset, parole chiave...',
-    'sidebar.impact':'Impatto','sidebar.all_news':'Tutte le Notizie','sidebar.high_impact':'Alto Impatto',
+    'sidebar.impact':'Tutte le Notizie · Impatto','sidebar.all_news':'Tutte le Notizie','sidebar.high_impact':'Alto Impatto',
     'sidebar.medium':'Medio','sidebar.low':'Basso',
     'sidebar.watchlist_label':'Le Mie Notizie — Watchlist',
     'sidebar.watchlist_hint':'Seleziona asset da fissare a LE MIE NOTIZIE',
@@ -3327,13 +3571,17 @@ const STRINGS = {
     'nav.fx':'Tassi FX','nav.crypto':'Cripto','nav.commodities':'Materie Prime',
     'nav.macro':'Macro','nav.sentiment':'Sentiment','nav.earnings':'Risultati',
     'nav.central_banks':'Banche Centrali','nav.screener':'Screener','nav.signout':'Esci',
-    'mynews.title':'★ Le Mie Notizie','mynews.no_filters':'Nessun filtro attivo',
-    'mynews.basic_hint':'Seleziona le valute FX principali sotto','mynews.config':'⚙ Configura Feed',
+    'nav.correlations':'Correlazioni',
+    'summary.title':'Highlights di Oggi','summary.tooltip':'Visualizza i principali eventi di oggi',
+    'push.section':'Avvisi Push Browser','push.desc':'Avvisi anche con la scheda chiusa','push.enable':'Attiva','push.disable':'Disattiva',
+    'mynews.title':'Le Mie Notizie','mynews.no_filters':'Nessun filtro attivo',
+    'mynews.basic_hint':'Seleziona le valute FX principali sotto','mynews.config':'Configura Feed',
     'squawk.title':'⚙ Impostazioni Squawk','squawk.voice':'Voce','squawk.voice_auto':'Auto — migliore disponibile',
     'squawk.speed':'Velocità','squawk.read_news':'Leggi notizie',
     'squawk.chip_all':'Tutte','squawk.chip_high':'🔴 Alto Impatto','squawk.chip_medium':'🟡 Medio Impatto',
     'squawk.chip_mynews':'★ Le Mie','squawk.chip_calendar':'📅 Calendario','squawk.chip_low':'🟢 Basso Impatto',
     'squawk.ce_events':'📅 Eventi CE','squawk.chip_cal_high':'🔴 Alto','squawk.chip_cal_medium':'🟡 Medio','squawk.chip_cal_low':'🟢 Basso',
+    'squawk.assets_label':'Asset / Coppie',
     'squawk.test':'▶ Prova Voce',
     'squawk.note_html':'Le voci leggono sempre in inglese per chiarezza.<br>Le voci Neural/Google suonano meglio.',
     'sound.title':'🔔 Impostazioni Avvisi','sound.alert_for':'Avviso per','sound.volume':'Volume','sound.test':'▶ Prova Suono',
@@ -3410,7 +3658,10 @@ const STRINGS = {
     'sc.mob.sub':'Il Market Screener è ottimizzato per schermi più grandi. Aprilo su un desktop o laptop per l\'esperienza completa.',
     'mnf.title':'⚙ Configura il Mio Feed',
     'mnf.subtitle':'Personalizza notizie, categorie e paesi del calendario che vuoi seguire.',
-    'mnf.tab.assets':'Asset','mnf.tab.categories':'Categorie','mnf.tab.calendar':'Calendario',
+    'mnf.tab.assets':'Asset','mnf.tab.categories':'Categorie','mnf.tab.calendar':'Calendario','mnf.tab.impact':'Impatto',
+    'mnf.impact.title':'Filtra Le Mie Notizie per Livello di Impatto',
+    'mnf.impact.sub':'Mostra solo notizie con un livello di impatto specifico nel tuo feed personalizzato. Applicato in aggiunta alle tue iscrizioni ad asset e categorie.',
+    'mnf.impact.all':'Tutti i Livelli di Impatto','mnf.impact.high':'Solo Alto Impatto','mnf.impact.medium':'Impatto Medio','mnf.impact.low':'Basso Impatto',
     'mnf.basic_notice_html':'Sei nel <strong>Piano Basic</strong>. Sono disponibili solo le principali valute FX. <strong>Passa a Pro</strong> per sbloccare tutti gli asset, le categorie e i paesi.',
     'mnf.grp.fx_major':'💱 FX — Valute Principali','mnf.grp.fx_minor':'💱 FX — Minori ed Esotiche',
     'mnf.grp.crypto_large':'₿ Cripto — Grandi','mnf.grp.crypto_mid':'₿ Cripto — Medie',
@@ -3430,7 +3681,10 @@ const STRINGS = {
     'mnf.n_asset':'asset','mnf.n_assets':'asset',
     'mnf.n_category':'categoria','mnf.n_categories':'categorie',
     'mnf.n_country':'paese','mnf.n_countries':'paesi',
+    'mnf.n_impact':'livello di impatto','mnf.n_impacts':'livelli di impatto',
     'mnf.n_filter_active':'filtro attivo','mnf.n_filters_active':'filtri attivi',
+    'kw.tab':'Parole Chiave','kw.title':'Avvisi per Parola Chiave','kw.sub':'Ricevi un avviso istantaneo quando un titolo contiene le tue parole chiave.','kw.placeholder':'es: Fed, OPEC, China PMI','kw.add':'Aggiungi','kw.empty':'Nessuna parola chiave. Aggiungine una sopra.',
+    'export.btn':'Esporta','export.tooltip':'Esporta il feed attuale in CSV',
     'upgrade.title':'Passa a Pro',
     'upgrade.desc.tv':'Guarda Bloomberg, CNBC, Al Jazeera e altri canali live direttamente nel terminal.',
     'upgrade.desc.squawk':'Avvisi vocali automatici per ogni notizia breaking nel momento in cui arriva — zero ritardo.',
@@ -3793,12 +4047,17 @@ function closeMyNewsConfig() {
 }
 function setMyNewsTab(tab) {
   // Block PRO tabs for basic users
-  if (!IS_PRO && (tab === 'categories' || tab === 'calendar')) {
-    showUpgrade('My News ' + (tab === 'categories' ? 'Categories' : 'Calendar Countries'));
+  if (!IS_PRO && (tab === 'categories' || tab === 'calendar' || tab === 'keywords')) {
+    showUpgrade('My News ' + (tab === 'categories' ? 'Categories' : tab === 'calendar' ? 'Calendar Countries' : 'Keyword Alerts'));
     return;
   }
   document.querySelectorAll('.mynews-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
   document.querySelectorAll('.mynews-pane').forEach(p => p.classList.toggle('active', p.id === 'mnt-'+tab));
+  // Sync impact buttons when opening impact tab
+  if (tab === 'impact') {
+    document.querySelectorAll('.mnt-impact-btn').forEach(b => b.classList.toggle('active', myNewsImpact.has(b.dataset.impact)));
+  }
+  if (tab === 'keywords') _renderKwTags();
 }
 // FX Majors allowed for basic plan
 const _BASIC_ASSETS = new Set(['USD','EUR','GBP','JPY','CHF','AUD','CAD','NZD','DXY']);
@@ -3853,7 +4112,9 @@ function removeCustomTicker(ticker) {
   if (selectedCategories.has('MY_NEWS')) renderNews();
 }
 function _updateMyNewsCount() {
-  const total  = myWatchlist.length + myCatWatch.length + myCalCountries.length;
+  const impactCount = myNewsImpact.has('ALL') ? 0 : myNewsImpact.size;
+  const kwCount     = keywordAlerts.length;
+  const total  = myWatchlist.length + myCatWatch.length + myCalCountries.length + impactCount + kwCount;
   const badge  = document.getElementById('mynewsBadge');
   const summary= document.getElementById('mynewsSummary');
   const fc     = document.getElementById('mynewsFooterCount');
@@ -3866,6 +4127,8 @@ function _updateMyNewsCount() {
       if (myWatchlist.length)    parts.push(myWatchlist.length    + ' ' + t(myWatchlist.length    > 1 ? 'mnf.n_assets'     : 'mnf.n_asset'));
       if (myCatWatch.length)     parts.push(myCatWatch.length     + ' ' + t(myCatWatch.length     > 1 ? 'mnf.n_categories' : 'mnf.n_category'));
       if (myCalCountries.length) parts.push(myCalCountries.length + ' ' + t(myCalCountries.length > 1 ? 'mnf.n_countries'  : 'mnf.n_country'));
+      if (impactCount > 0)       parts.push(impactCount           + ' ' + t(impactCount           > 1 ? 'mnf.n_impacts'    : 'mnf.n_impact'));
+      if (kwCount > 0)           parts.push(kwCount               + ' ' + (kwCount > 1 ? 'keywords' : 'keyword'));
       summary.textContent = parts.join(' · ');
     }
   }
@@ -3919,10 +4182,12 @@ function toggleCalCountry(country) {
   if (selectedCategories.has('MY_NEWS')) renderNews();
 }
 function clearMyNewsFeed() {
-  myWatchlist = []; myCatWatch = []; myCalCountries = [];
+  myWatchlist = []; myCatWatch = []; myCalCountries = []; myNewsImpact = new Set(['ALL']);
   localStorage.setItem('myWatchlist',    JSON.stringify(myWatchlist));
   localStorage.setItem('myCatWatch',     JSON.stringify(myCatWatch));
   localStorage.setItem('myCalCountries', JSON.stringify(myCalCountries));
+  document.querySelectorAll('.mnt-impact-btn').forEach(b => b.classList.toggle('active', b.dataset.impact === 'ALL'));
+  _savePrefs({myNewsImpact: ['ALL']});
   _syncModalSelections();
   _updateMyNewsCount();
   _savePreferences();
@@ -4034,6 +4299,13 @@ function squawkSpeak(text, url, newsItem) {
                   || (squawkFilters.has('MEDIUM') && newsItem.impact === 'MEDIUM');
     const myNewsOk = squawkFilters.has('MY_NEWS') && newsMatchesCategory(newsItem, 'MY_NEWS');
     if (!impactOk && !myNewsOk) return;
+  }
+  // Asset filter for squawk
+  if (!squawkAssets.has('ALL') && newsItem && !newsItem._calRelease) {
+    const itemAssets = (newsItem.assets || '').split(',').map(x => x.trim().toUpperCase());
+    const headline = (newsItem.headline_en || newsItem.headline || '').toUpperCase();
+    const assetOk = [...squawkAssets].some(a => itemAssets.includes(a) || headline.includes(a));
+    if (!assetOk) return;
   }
   const clean = text.replace(/<[^>]*>/g,'').replace(/[🟢🔴🟡▲▼●★◈▶]/gu,'').replace(/\s+/g,' ').trim();
   if (!clean) return;
@@ -4181,6 +4453,7 @@ function _openSquawkDd(anchorEl, alignRight) {
   const ri = document.getElementById('squawkRateInput');
   if (ri) { ri.value = squawkRate; document.getElementById('squawkRateVal').textContent = squawkRate.toFixed(1) + '×'; }
   document.querySelectorAll('#squawkDd .squawk-chip').forEach(c => c.classList.toggle('sel', squawkFilters.has(c.dataset.sf)));
+  document.querySelectorAll('#squawkDd .squawk-asset-chip').forEach(c => c.classList.toggle('sel', squawkAssets.has(c.dataset.sa)));
 }
 function _closeSquawkDd() {
   document.getElementById('squawkDd')?.classList.remove('open');
@@ -4236,6 +4509,47 @@ function setSquawkFilter(f) {
   localStorage.setItem('squawkFilters', JSON.stringify([...squawkFilters]));
   document.querySelectorAll('#squawkDd .squawk-chip').forEach(c => c.classList.toggle('sel', squawkFilters.has(c.dataset.sf)));
   _savePreferences();
+}
+function setSquawkAsset(a, btn) {
+  if (a === 'ALL') {
+    squawkAssets = new Set(['ALL']);
+  } else {
+    squawkAssets.delete('ALL');
+    if (squawkAssets.has(a)) {
+      squawkAssets.delete(a);
+      if (squawkAssets.size === 0) squawkAssets.add('ALL');
+    } else {
+      squawkAssets.add(a);
+    }
+  }
+  localStorage.setItem('squawkAssets', JSON.stringify([...squawkAssets]));
+  document.querySelectorAll('#squawkDd .squawk-asset-chip').forEach(c => c.classList.toggle('sel', squawkAssets.has(c.dataset.sa)));
+  _savePreferences();
+  // Save squawkAssets immediately (no debounce) so it survives quick page reloads
+  _saveSquawkAssetsNow();
+}
+function _saveSquawkAssetsNow() {
+  // Bypass the debounce: save full prefs immediately so squawkAssets
+  // is persisted even if the user reloads within the 1s debounce window.
+  const tok = localStorage.getItem('tnt_token');
+  if (!tok) return;
+  const prefs = {
+    myWatchlist, myCatWatch, myCalCountries,
+    myNewsImpact: [...myNewsImpact],
+    keywordAlerts,
+    squawkEnabled, squawkRate,
+    squawkFilters: [...squawkFilters],
+    squawkAssets: [...squawkAssets],
+    squawkVoiceName,
+    soundEnabled,
+    soundFilters: [...soundFilters],
+    soundVolume,
+  };
+  fetch(BACKEND_URL + '/auth/me/preferences', {
+    method: 'PUT',
+    headers: { 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ preferences: prefs })
+  }).catch(() => {});
 }
 function testSquawkVoice() {
   if (_ttsAudio) { try { _ttsAudio.pause(); _ttsAudio.src = ''; } catch(e){} }
@@ -4436,6 +4750,8 @@ function handleNewsData(data, isInit) {
   // Process newest-first (data arrives newest-first from server) so the most
   // recent headline starts speaking immediately — older items get queued/dropped
   squawkItems.forEach(n => squawkSpeak(n.headline_en, n.url, n));
+  // Keyword alerts — check genuinely new items
+  if (soundNewItems.length) _checkKeywordAlerts(soundNewItems);
 
   // Sound: only on live updates (never on initial page load), and only if a new
   // item matches the user's sound filter. Throttled to max 1 beep per 60 s.
@@ -4688,6 +5004,7 @@ function switchTab(tab) {
   if (tab==='sentiment')    { loadSentiment(); }
   if (tab==='earnings')     { loadEarnings(); }
   if (tab==='centralbanks') { loadCentralBanks(); }
+  if (tab==='correlations') { _loadCorrelations(); }
   if (tab==='screener')    { _initScreener(); }
   _savePrefs({tab});
 }
@@ -4819,6 +5136,135 @@ function setImpact(impact, btn) {
   updateFeedTitle(); renderNews();
   _savePrefs({impactFilters: [...impactFilters]});
 }
+// My News impact filter (multi-select, applied only when MY_NEWS tab is active)
+function setMyNewsImpact(impact, btn) {
+  if (impact === 'ALL') {
+    myNewsImpact = new Set(['ALL']);
+  } else {
+    myNewsImpact.delete('ALL');
+    if (myNewsImpact.has(impact)) {
+      myNewsImpact.delete(impact);
+      if (myNewsImpact.size === 0) myNewsImpact = new Set(['ALL']);
+    } else {
+      myNewsImpact.add(impact);
+    }
+  }
+  document.querySelectorAll('.mnt-impact-btn').forEach(b => b.classList.toggle('active', myNewsImpact.has(b.dataset.impact)));
+  _savePrefs({myNewsImpact: [...myNewsImpact]});
+  _updateMyNewsCount();
+  if (selectedCategories.size === 1 && selectedCategories.has('MY_NEWS')) renderNews();
+}
+// ─── Keyword Alerts ──────────────────────────────────────────────
+function _renderKwTags() {
+  const tags = document.getElementById('kwTags');
+  const empty = document.getElementById('kwEmpty');
+  if (!tags) return;
+  tags.innerHTML = keywordAlerts.map(kw =>
+    `<span class="kw-tag">${kw}<span class="kw-tag-remove" onclick="removeKeyword('${kw.replace(/'/g,"\\'")}')">×</span></span>`
+  ).join('');
+  if (empty) empty.style.display = keywordAlerts.length ? 'none' : '';
+  document.querySelectorAll('.kw-suggest').forEach(el => {
+    el.classList.toggle('active', keywordAlerts.includes(el.textContent.trim().toLowerCase()));
+  });
+}
+function addKeyword() {
+  const input = document.getElementById('kwInput');
+  if (!input) return;
+  const val = input.value.trim().toLowerCase();
+  if (!val || keywordAlerts.includes(val)) { input.value = ''; return; }
+  keywordAlerts.push(val);
+  localStorage.setItem('keywordAlerts', JSON.stringify(keywordAlerts));
+  input.value = '';
+  _renderKwTags();
+  _updateMyNewsCount();
+  _savePreferences();
+}
+function removeKeyword(kw) {
+  keywordAlerts = keywordAlerts.filter(k => k !== kw);
+  localStorage.setItem('keywordAlerts', JSON.stringify(keywordAlerts));
+  _renderKwTags();
+  _updateMyNewsCount();
+  _savePreferences();
+}
+function addKeywordDirect(kw) {
+  const val = kw.toLowerCase();
+  if (!val || keywordAlerts.includes(val)) return;
+  keywordAlerts.push(val);
+  localStorage.setItem('keywordAlerts', JSON.stringify(keywordAlerts));
+  _renderKwTags();
+  _updateMyNewsCount();
+  _savePreferences();
+  // visually mark the suggestion chip as active
+  document.querySelectorAll('.kw-suggest').forEach(el => {
+    el.classList.toggle('active', keywordAlerts.includes(el.textContent.trim().toLowerCase()));
+  });
+}
+function _checkKeywordAlerts(items) {
+  if (!IS_PRO || !keywordAlerts.length) return;
+  for (const n of items) {
+    const text = ((n.headline_en || '') + ' ' + (n.headline || '')).toLowerCase();
+    const matched = keywordAlerts.find(kw => text.includes(kw));
+    if (matched) {
+      _showKwToast(matched, n.headline_en || n.headline);
+      _playKwBeep();
+      break; // one alert per batch max
+    }
+  }
+}
+function _showKwToast(keyword, headline) {
+  const existing = document.querySelector('.kw-alert-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.className = 'kw-alert-toast';
+  toast.innerHTML = `🔔 <strong>Keyword Alert: "${keyword}"</strong><br><span style="font-weight:400;font-size:11px;">${headline.slice(0,120)}${headline.length>120?'…':''}</span>`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 6000);
+}
+function _playKwBeep() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value = 880; o.type = 'sine';
+    g.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    o.start(); o.stop(audioCtx.currentTime + 0.5);
+  } catch {}
+}
+// ─── Export News Feed (CSV) ───────────────────────────────────────
+function exportNewsFeed() {
+  // Get currently rendered (filtered) items
+  const combined = [...allNews, ...calReleases].sort((a,b) => parseUTC(b.timestamp) - parseUTC(a.timestamp));
+  let filtered = combined;
+  if (!impactFilters.has('ALL')) filtered = filtered.filter(n => impactFilters.has(n.impact));
+  if (selectedCategories.size > 0) filtered = filtered.filter(n => newsMatchesSelected(n));
+  if (selectedCategories.size === 1 && selectedCategories.has('MY_NEWS') && !myNewsImpact.has('ALL')) {
+    filtered = filtered.filter(n => myNewsImpact.has(n.impact));
+  }
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    filtered = filtered.filter(n => (n.headline_en||n.headline||'').toLowerCase().includes(q));
+  }
+
+  const header = ['Timestamp (UTC)', 'Headline', 'Impact', 'Category', 'Assets', 'URL'];
+  const rows = filtered.slice(0, 500).map(n => [
+    n.timestamp || '',
+    (n.headline_en || n.headline || '').replace(/"/g, '""'),
+    n.impact || '',
+    n._calRelease ? 'Calendar' : (n.category || ''),
+    (n.assets || '').replace(/"/g, '""'),
+    n.url || ''
+  ]);
+
+  const csv = [header, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `tnt-news-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
 // MULTI-SELECT category
 function setCategory(cat, btn) {
   if (cat === 'ALL') {
@@ -4937,6 +5383,10 @@ function renderNews() {
   if (!impactFilters.has('ALL')) filtered = filtered.filter(n=>impactFilters.has(n.impact));
   // Category filter (multi-select) — 0 selected = ALL
   if (selectedCategories.size > 0) filtered = filtered.filter(n=>newsMatchesSelected(n));
+  // My News impact filter — only when MY_NEWS is the sole active category
+  if (selectedCategories.size === 1 && selectedCategories.has('MY_NEWS') && !myNewsImpact.has('ALL')) {
+    filtered = filtered.filter(n => myNewsImpact.has(n.impact));
+  }
   // Pin squawked item at the top while squawk is reading — after reading it falls to correct position
   if (_squawkBannerItem) {
     const _sq = _squawkBannerItem;
@@ -6109,6 +6559,15 @@ function _savePrefs(patch) {
     if (btn) btn.classList.add('active');
   }
 
+  // 2b. My News impact filter (supports both legacy string and new array format)
+  if (p.myNewsImpact) {
+    const vals = Array.isArray(p.myNewsImpact) ? p.myNewsImpact : [p.myNewsImpact];
+    if (vals.length && !(vals.length === 1 && vals[0] === 'ALL')) {
+      myNewsImpact = new Set(vals);
+      document.querySelectorAll('.mnt-impact-btn').forEach(b => b.classList.toggle('active', myNewsImpact.has(b.dataset.impact)));
+    }
+  }
+
   // 3. Category selection
   if (p.cats && Array.isArray(p.cats) && p.cats.length > 0) {
     selectedCategories = new Set(p.cats);
@@ -6121,7 +6580,7 @@ function _savePrefs(patch) {
 
   // 4. Last active tab (Pro tabs only restored if IS_PRO)
   if (p.tab && p.tab !== 'news') {
-    const proTabs = ['tv','fx','crypto','commodities','macro','sentiment','earnings','centralbanks'];
+    const proTabs = ['tv','fx','crypto','commodities','macro','sentiment','earnings','centralbanks','correlations'];
     const isProTab = proTabs.includes(p.tab);
     if (!isProTab || IS_PRO) {
       setTimeout(() => switchTab(p.tab), 50);
@@ -6171,6 +6630,11 @@ updateSquawkBtn();
   if (vi) vi.value = soundVolume;
   if (vl) vl.textContent = Math.round(soundVolume * 100) + '%';
   document.querySelectorAll('.sound-chip').forEach(c => c.classList.toggle('sel', soundFilters.has(c.dataset.sf)));
+  const _sa = JSON.parse(localStorage.getItem('squawkAssets') || '["ALL"]');
+  if (Array.isArray(_sa) && _sa.length) {
+    squawkAssets = new Set(_sa);
+    document.querySelectorAll('#squawkDd .squawk-asset-chip').forEach(c => c.classList.toggle('sel', squawkAssets.has(c.dataset.sa)));
+  }
 })();
 applyTranslations();
 // Parse flag emojis in the language picker through Twemoji so they render on Windows
@@ -6182,6 +6646,7 @@ if (window.twemoji) {
 // so this ensures counts/feed are correct after translation strings are ready)
 if (allNews.length > 0) { try { updateCounts(allNews); renderNews(); } catch(e) { console.error('[init] renderNews error:', e); } document.getElementById('totalCount').textContent = allNews.length; }
 connectWebSocket();
+_initPush();
 loadCalendar(); // load calendar immediately on boot
 setInterval(loadCalendar,60000);
 
@@ -7321,7 +7786,285 @@ function _fmtScTs(ts) {
   try { return parseUTC(ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
   catch { return ts; }
 }
+// ─── Shared time formatter ────────────────────────────────────────
+function _fmtTime(ts) {
+  if (!ts) return '';
+  try {
+    const d = new Date(ts.endsWith('Z') ? ts : ts + 'Z');
+    return d.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit',timeZone:'UTC'}) + ' UTC';
+  } catch { return ts; }
+}
+
+// ─── Correlations Tab ─────────────────────────────────────────────
+let _corrLoaded = false;
+let _corrRefreshInterval = null;
+let _corrNextRefresh = 0;
+const CORR_REFRESH_MS = 5 * 60 * 1000; // 5 minutes
+
+function _startCorrAutoRefresh() {
+  if (_corrRefreshInterval) return;
+  _corrNextRefresh = Date.now() + CORR_REFRESH_MS;
+  _corrRefreshInterval = setInterval(() => {
+    _corrNextRefresh = Date.now() + CORR_REFRESH_MS;
+    _loadCorrelations(true);
+  }, CORR_REFRESH_MS);
+  // Countdown ticker
+  setInterval(() => {
+    const cd = document.getElementById('corr-countdown');
+    if (!cd) return;
+    const tab = document.getElementById('tab-correlations');
+    if (!tab || tab.classList.contains('hidden')) return;
+    const secs = Math.max(0, Math.round((_corrNextRefresh - Date.now()) / 1000));
+    const m = String(Math.floor(secs / 60)).padStart(2, '0');
+    const s = String(secs % 60).padStart(2, '0');
+    cd.textContent = `↻ in ${m}:${s}`;
+  }, 1000);
+}
+
+async function _loadCorrelations(force) {
+  if (_corrLoaded && !force) return;
+  const body = document.getElementById('correlations-body');
+  if (!body) return;
+  if (!_corrLoaded) body.innerHTML = '<div class="data-loading">⟳ Computing correlations...</div>';
+  try {
+    const tok = localStorage.getItem('tnt_token');
+    const r = await fetch(BACKEND_URL + '/correlations', { headers: { 'Authorization': 'Bearer ' + tok } });
+    if (!r.ok) throw new Error(r.status);
+    const data = await r.json();
+    _corrLoaded = true;
+    _renderCorrelations(body, data);
+    _startCorrAutoRefresh();
+  } catch(e) {
+    body.innerHTML = `<div class="data-loading">Failed to load. <a href="#" onclick="_loadCorrelations(true);return false" style="color:var(--accent)">Retry</a></div>`;
+  }
+}
+function _corrColor(v) {
+  if (v === null || v === undefined) return 'rgba(255,255,255,0.04)';
+  if (v >= 0.7)  return 'rgba(0,200,100,0.25)';
+  if (v >= 0.3)  return 'rgba(0,200,100,0.10)';
+  if (v <= -0.7) return 'rgba(220,50,50,0.25)';
+  if (v <= -0.3) return 'rgba(220,50,50,0.10)';
+  return 'rgba(255,255,255,0.04)';
+}
+function _renderCorrelations(body, data) {
+  const { labels, matrix, updated_at } = data;
+  const fmt = v => v === null ? '–' : v === 1 ? '1.00' : v.toFixed(2);
+  const updStr = updated_at ? new Date(updated_at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
+  let html = `<div style="font-size:10px;color:var(--text-muted);margin-bottom:12px;">Updated: ${updStr}</div>`;
+  html += '<div style="overflow-x:auto;"><table class="corr-table"><thead><tr><th></th>';
+  labels.forEach(l => html += `<th>${l}</th>`);
+  html += '</tr></thead><tbody>';
+  matrix.forEach((row, i) => {
+    html += `<tr><th>${labels[i]}</th>`;
+    row.forEach((v, j) => {
+      const bg = i === j ? 'rgba(0,212,255,0.1)' : _corrColor(v);
+      const color = (v !== null && Math.abs(v) >= 0.5) ? 'var(--text)' : 'var(--text-muted)';
+      html += `<td style="background:${bg};color:${color};">${fmt(v)}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  html += `<div style="font-size:10px;color:var(--text-muted);margin-top:12px;">
+    <span style="display:inline-block;width:10px;height:10px;background:rgba(0,200,100,0.25);border-radius:2px;margin-right:4px;"></span>Strong positive &nbsp;
+    <span style="display:inline-block;width:10px;height:10px;background:rgba(220,50,50,0.25);border-radius:2px;margin-right:4px;"></span>Strong negative &nbsp;
+    <span style="display:inline-block;width:10px;height:10px;background:rgba(255,255,255,0.04);border-radius:2px;margin-right:4px;"></span>Neutral
+  </div>`;
+  body.innerHTML = html;
+}
+
+// ─── Session Summary ──────────────────────────────────────────────
+function openSummary() {
+  const overlay = document.getElementById('summaryOverlay');
+  const modal   = document.getElementById('summaryModal');
+  if (!overlay || !modal) return;
+  overlay.style.display = 'block';
+  modal.style.display   = 'flex';
+  _loadSummary();
+}
+function closeSummary() {
+  const overlay = document.getElementById('summaryOverlay');
+  const modal   = document.getElementById('summaryModal');
+  if (overlay) overlay.style.display = 'none';
+  if (modal)   modal.style.display   = 'none';
+}
+async function _loadSummary() {
+  const body = document.getElementById('summaryBody');
+  if (!body) return;
+  body.innerHTML = '<div class="data-loading">⟳ Loading today\'s highlights...</div>';
+  try {
+    const tok = localStorage.getItem('tnt_token');
+    const r = await fetch(BACKEND_URL + '/session-summary', { headers: { 'Authorization': 'Bearer ' + tok } });
+    if (!r.ok) throw new Error(r.status);
+    const data = await r.json();
+    _renderSummary(body, data);
+  } catch(e) {
+    body.innerHTML = `<div class="data-loading">Failed to load.</div>`;
+  }
+}
+function _renderSummary(body, data) {
+  if (!data.items || !data.items.length) {
+    body.innerHTML = '<div class="data-loading" style="padding:30px 0;">No highlights yet for today.</div>';
+    return;
+  }
+  const dot = i => i==='HIGH'?'🔴':i==='MEDIUM'?'🟡':'🟢';
+  let html = `<div style="font-size:11px;color:var(--text-muted);margin-bottom:14px;">${data.date} · ${data.high_count} high impact · ${data.medium_count} medium impact</div>`;
+  html += data.items.map(n => `
+    <div onclick="window.open('${n.url}','_blank')" style="padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+        <span>${dot(n.impact)}</span>
+        <span style="font-size:10px;color:var(--text-muted);text-transform:uppercase;">${(n.source||'').replace(/https?:\/\/(www\.)?/i,'').split('/')[0]}</span>
+        <span style="font-size:10px;color:var(--text-muted);margin-left:auto;">${_fmtTime(n.timestamp)}</span>
+      </div>
+      <div style="font-size:13px;color:var(--text);line-height:1.4;">${n.headline}</div>
+      ${n.assets ? `<div style="font-size:10px;color:var(--text-muted);margin-top:4px;">${n.assets}</div>` : ''}
+    </div>
+  `).join('');
+  body.innerHTML = html;
+}
+
+// ─── Push Notifications ───────────────────────────────────────────
+let _pushEnabled = false;
+async function _initPush() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+  try {
+    await navigator.serviceWorker.register('/sw.js');
+    const reg = await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.getSubscription();
+    if (sub) { _pushEnabled = true; _updatePushBtn(); }
+  } catch(e) { console.warn('[Push] init error:', e); }
+}
+
+async function _resetServiceWorker() {
+  // Unregister any stale service workers and re-register fresh
+  const regs = await navigator.serviceWorker.getRegistrations();
+  for (const r of regs) await r.unregister();
+  const reg = await navigator.serviceWorker.register('/sw.js');
+  // Wait for the new SW to become active
+  await new Promise(resolve => {
+    if (reg.active) { resolve(); return; }
+    const sw = reg.installing || reg.waiting;
+    if (!sw) { resolve(); return; }
+    sw.addEventListener('statechange', function onState() {
+      if (sw.state === 'activated') { sw.removeEventListener('statechange', onState); resolve(); }
+    });
+    setTimeout(resolve, 3000); // fallback timeout
+  });
+  return await navigator.serviceWorker.ready;
+}
+
+async function togglePushNotifications() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    _showPushToast('❌ Push notifications not supported in this browser.', '#c0392b');
+    return;
+  }
+  if (_pushEnabled) {
+    // Unsubscribe
+    try {
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.getSubscription();
+      if (sub) await sub.unsubscribe();
+      const tok = localStorage.getItem('tnt_token');
+      await fetch(BACKEND_URL + '/push/unsubscribe', { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + tok } });
+    } catch {}
+    _pushEnabled = false;
+    _updatePushBtn();
+    return;
+  }
+  // Subscribe — with auto-reset on FCM error
+  const permission = await Notification.requestPermission();
+  if (permission !== 'granted') {
+    _showPushToast('⚠️ Notification permission denied. Enable it in browser settings.', '#e67e22');
+    return;
+  }
+  const tok = localStorage.getItem('tnt_token');
+  let publicKey;
+  try {
+    const kr = await fetch(BACKEND_URL + '/push/vapid-public-key', { headers: { 'Authorization': 'Bearer ' + tok } });
+    ({ publicKey } = await kr.json());
+  } catch(e) {
+    _showPushToast('❌ Could not reach server. Check your connection.', '#c0392b');
+    return;
+  }
+  // First attempt
+  let sub = await _tryPushSubscribe(publicKey);
+  if (!sub) {
+    // Reset service worker and retry once
+    console.log('[Push] First attempt failed, resetting SW and retrying...');
+    try { await _resetServiceWorker(); } catch(e) { console.warn('[Push] SW reset failed:', e); }
+    sub = await _tryPushSubscribe(publicKey);
+  }
+  if (!sub) {
+    _showPushToast('❌ Push registration failed. Try: Settings → Privacy → Site Settings → Notifications → Reset for this site.', '#c0392b', 8000);
+    return;
+  }
+  // Save subscription to backend
+  try {
+    const s = sub.toJSON();
+    await fetch(BACKEND_URL + '/push/subscribe', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + tok, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ endpoint: s.endpoint, p256dh: s.keys.p256dh, auth: s.keys.auth })
+    });
+    _pushEnabled = true;
+    _updatePushBtn();
+    _showPushToast('✅ Push alerts enabled! You\'ll be notified even with the tab closed.', '#27ae60', 4000);
+  } catch(e) {
+    _showPushToast('❌ Could not save subscription. Try again.', '#c0392b');
+  }
+}
+
+async function _tryPushSubscribe(publicKey) {
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    return await reg.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: _urlBase64ToUint8Array(publicKey)
+    });
+  } catch(e) {
+    console.error('[Push] subscribe error:', e.name, e.message, e);
+    return null;
+  }
+}
+
+function _showPushToast(msg, bg, duration = 5000) {
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:' + bg + ';color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;z-index:9999;max-width:380px;text-align:center;line-height:1.4;';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), duration);
+}
+function _updatePushBtn() {
+  // Bell button in header
+  const bell = document.getElementById('pushBellBtn');
+  if (bell) bell.classList.toggle('active', _pushEnabled);
+  // Toggle card in squawk dropdown
+  const card   = document.getElementById('pushCard');
+  const toggle = document.getElementById('pushToggle');
+  const icon   = document.getElementById('pushCardIcon');
+  if (card)   card.classList.toggle('enabled', _pushEnabled);
+  if (toggle) toggle.classList.toggle('on', _pushEnabled);
+  if (icon)   icon.textContent = _pushEnabled ? '🔔' : '🔕';
+}
+function _urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  return new Uint8Array([...rawData].map(c => c.charCodeAt(0)));
+}
+
 </script>
+
+<!-- ── Session Summary Modal ── -->
+<div class="summary-overlay" id="summaryOverlay" onclick="closeSummary()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;"></div>
+<div class="summary-modal" id="summaryModal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(560px,95vw);max-height:80vh;background:var(--bg2);border:1px solid var(--border);border-radius:8px;z-index:1001;overflow:hidden;flex-direction:column;">
+  <div style="display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);">
+    <span style="font-size:14px;font-weight:700;color:var(--text);" data-i18n="summary.title">📋 Today's Highlights</span>
+    <button onclick="closeSummary()" style="margin-left:auto;background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;padding:0 4px;">×</button>
+  </div>
+  <div id="summaryBody" style="flex:1;overflow-y:auto;padding:16px;">
+    <div class="data-loading">⟳ Loading...</div>
+  </div>
+</div>
 
 <!-- ── Company Detail Modal ── -->
 <div class="company-overlay" id="company-overlay" onclick="if(event.target===this)closeCompany()">
@@ -7358,35 +8101,39 @@ function _fmtScTs(ts) {
 <div class="upgrade-overlay" id="upgrade-overlay" onclick="if(event.target===this)hideUpgrade()">
   <div class="upgrade-modal">
     <button class="upgrade-close" onclick="hideUpgrade()">✕</button>
-    <div class="upgrade-icon">🔒</div>
-    <div class="upgrade-feature" id="upgrade-feature-name">Pro Feature</div>
-    <h2 class="upgrade-title" data-i18n="upgrade.title">Upgrade to Pro</h2>
-    <p class="upgrade-desc" id="upgrade-feature-desc"></p>
-    <div class="upgrade-benefits">
-      <div class="upgrade-benefit" data-i18n="upgrade.benefit1">Real-time news feed — zero delay</div>
-      <div class="upgrade-benefit" data-i18n="upgrade.benefit2">Live squawk — instant voice alerts</div>
-      <div class="upgrade-benefit" data-i18n="upgrade.benefit3">Live financial TV — 7 channels</div>
-      <div class="upgrade-benefit" data-i18n="upgrade.benefit4">Comprehensive source coverage</div>
-      <div class="upgrade-benefit" data-i18n="upgrade.benefit5">100% ad-free experience</div>
+    <div class="upgrade-modal-top">
+      <div class="upgrade-lock-ring">🔒</div>
+      <div class="upgrade-feature" id="upgrade-feature-name">Pro Feature</div>
+      <h2 class="upgrade-title" data-i18n="upgrade.title">Upgrade to Pro</h2>
     </div>
-    <div class="plan-cards">
-      <div class="plan-card">
-        <div style="height:24px"></div>
-        <div class="plan-card-label" data-i18n="upgrade.monthly">Monthly</div>
-        <div class="plan-card-price">€40<span data-i18n="upgrade.per_mo">/mo</span></div>
-        <div class="plan-card-sub"><span data-i18n="upgrade.billed_monthly">Billed monthly</span><br><span data-i18n="upgrade.cancel_anytime">Cancel anytime</span></div>
-        <button class="plan-card-btn" onclick="goToPro(this,'price_1THo43PgXWxcInoUGZJGT1Ti')" data-i18n="upgrade.choose">Choose →</button>
+    <div class="upgrade-body">
+      <p class="upgrade-desc" id="upgrade-feature-desc"></p>
+      <div class="upgrade-benefits">
+        <div class="upgrade-benefit"><span class="upgrade-benefit-icon">✓</span><span data-i18n="upgrade.benefit1">Real-time news feed — zero delay</span></div>
+        <div class="upgrade-benefit"><span class="upgrade-benefit-icon">✓</span><span data-i18n="upgrade.benefit2">Live squawk — instant voice alerts</span></div>
+        <div class="upgrade-benefit"><span class="upgrade-benefit-icon">✓</span><span data-i18n="upgrade.benefit3">Live financial TV — 7 channels</span></div>
+        <div class="upgrade-benefit"><span class="upgrade-benefit-icon">✓</span><span data-i18n="upgrade.benefit4">Comprehensive source coverage</span></div>
+        <div class="upgrade-benefit"><span class="upgrade-benefit-icon">✓</span><span data-i18n="upgrade.benefit5">100% ad-free experience</span></div>
       </div>
-      <div class="plan-card annual">
-        <div class="plan-card-badge" data-i18n="upgrade.best_value">💰 Best Value</div>
-        <div class="plan-card-label" data-i18n="upgrade.annual">Annual</div>
-        <div class="plan-card-price">€30<span data-i18n="upgrade.per_mo">/mo</span></div>
-        <div class="plan-card-sub">€360/year · <s>€480</s><br><span data-i18n="upgrade.save">Save €120 (25% off)</span></div>
-        <button class="plan-card-btn" onclick="goToPro(this,'price_1THo41PgXWxcInoUF3o6fKDh')" data-i18n="upgrade.choose">Choose →</button>
+      <div class="plan-cards">
+        <div class="plan-card">
+          <div style="height:24px"></div>
+          <div class="plan-card-label" data-i18n="upgrade.monthly">Monthly</div>
+          <div class="plan-card-price">€40<span data-i18n="upgrade.per_mo">/mo</span></div>
+          <div class="plan-card-sub"><span data-i18n="upgrade.billed_monthly">Billed monthly</span><br><span data-i18n="upgrade.cancel_anytime">Cancel anytime</span></div>
+          <button class="plan-card-btn" onclick="goToPro(this,'price_1THo43PgXWxcInoUGZJGT1Ti')" data-i18n="upgrade.choose">Choose →</button>
+        </div>
+        <div class="plan-card annual">
+          <div class="plan-card-badge" data-i18n="upgrade.best_value">Best Value</div>
+          <div class="plan-card-label" data-i18n="upgrade.annual">Annual</div>
+          <div class="plan-card-price">€30<span data-i18n="upgrade.per_mo">/mo</span></div>
+          <div class="plan-card-sub">€360/year · <s>€480</s><br><span data-i18n="upgrade.save">Save €120 (25% off)</span></div>
+          <button class="plan-card-btn" onclick="goToPro(this,'price_1THo41PgXWxcInoUF3o6fKDh')" data-i18n="upgrade.choose">Choose →</button>
+        </div>
       </div>
+      <div class="upgrade-vat" data-i18n="upgrade.vat">excl. VAT where applicable · Billed in EUR</div>
+      <button class="upgrade-btn-later" onclick="hideUpgrade()" data-i18n="upgrade.maybe_later">Maybe later</button>
     </div>
-    <div class="upgrade-vat" data-i18n="upgrade.vat">excl. VAT where applicable · Billed in EUR</div>
-    <button class="upgrade-btn-later" onclick="hideUpgrade()" data-i18n="upgrade.maybe_later">Maybe later</button>
   </div>
 </div>
 
@@ -7512,6 +8259,8 @@ function _fmtScTs(ts) {
       <button class="mynews-tab active" data-tab="assets"     onclick="setMyNewsTab('assets')"><span data-i18n="mnf.tab.assets">📊 Assets</span></button>
       <button class="mynews-tab"        data-tab="categories" onclick="setMyNewsTab('categories')" data-pro-tab="1"><span data-i18n="mnf.tab.categories">🗂 Categories</span></button>
       <button class="mynews-tab"        data-tab="calendar"   onclick="setMyNewsTab('calendar')"   data-pro-tab="1"><span data-i18n="mnf.tab.calendar">📅 Calendar</span></button>
+      <button class="mynews-tab"        data-tab="impact"     onclick="setMyNewsTab('impact')"><span data-i18n="mnf.tab.impact">Impact</span></button>
+      <button class="mynews-tab"        data-tab="keywords"   onclick="setMyNewsTab('keywords')" data-pro-tab="1"><span data-i18n="kw.tab">Keywords</span></button>
     </div>
     <div class="mynews-body">
 
@@ -7773,6 +8522,71 @@ function _fmtScTs(ts) {
             <button class="mnt-cal-chip" data-country="KR" onclick="toggleCalCountry('KR')"><span class="cal-flag">🇰🇷</span><span class="cal-code">KRW</span><span class="cal-name">South Korea</span></button>
             <button class="mnt-cal-chip" data-country="ZA" onclick="toggleCalCountry('ZA')"><span class="cal-flag">🇿🇦</span><span class="cal-code">ZAR</span><span class="cal-name">South Africa</span></button>
             <button class="mnt-cal-chip" data-country="TR" onclick="toggleCalCountry('TR')"><span class="cal-flag">🇹🇷</span><span class="cal-code">TRY</span><span class="cal-name">Turkey</span></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── IMPACT PANE ── -->
+      <div class="mynews-pane" id="mnt-impact">
+        <div class="mnt-impact-header">
+          <div class="mnt-impact-title" data-i18n="mnf.impact.title">Filter My News by Impact Level</div>
+          <div class="mnt-impact-sub" data-i18n="mnf.impact.sub">Show only news with a specific market impact level in your personalised feed. This filter applies on top of your asset and category subscriptions.</div>
+        </div>
+        <div class="mnt-impact-options">
+          <button class="mnt-impact-btn active" data-impact="ALL" onclick="setMyNewsImpact('ALL',this)">
+            <div class="filter-dot dot-all"></div>
+            <span data-i18n="mnf.impact.all">All Impact Levels</span>
+          </button>
+          <button class="mnt-impact-btn" data-impact="HIGH" onclick="setMyNewsImpact('HIGH',this)">
+            <div class="filter-dot dot-high"></div>
+            <span data-i18n="mnf.impact.high">High Impact Only</span>
+          </button>
+          <button class="mnt-impact-btn" data-impact="MEDIUM" onclick="setMyNewsImpact('MEDIUM',this)">
+            <div class="filter-dot dot-medium"></div>
+            <span data-i18n="mnf.impact.medium">Medium Impact</span>
+          </button>
+          <button class="mnt-impact-btn" data-impact="LOW" onclick="setMyNewsImpact('LOW',this)">
+            <div class="filter-dot dot-low"></div>
+            <span data-i18n="mnf.impact.low">Low Impact</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Keyword Alerts pane -->
+      <div class="mynews-pane" id="mnt-keywords">
+        <div class="mnt-impact-header">
+          <div class="mnt-impact-title" data-i18n="kw.title">Keyword Alerts</div>
+          <div class="mnt-impact-sub" data-i18n="kw.sub">Get an instant alert when any headline contains your keywords. Works across all news sources in real time.</div>
+        </div>
+        <div class="kw-section">
+          <div class="kw-input-row">
+            <input class="kw-input" id="kwInput" type="text" placeholder="e.g. Fed, OPEC, China PMI" data-i18n-placeholder="kw.placeholder" onkeydown="if(event.key==='Enter')addKeyword()">
+            <button class="kw-add-btn" onclick="addKeyword()" data-i18n="kw.add">Add</button>
+          </div>
+          <div class="kw-tags" id="kwTags"></div>
+          <div class="kw-empty" id="kwEmpty" data-i18n="kw.empty">No keywords yet. Add one above.</div>
+          <div class="kw-suggestions-label">💡 Quick add</div>
+          <div class="kw-suggestions">
+            <span class="kw-suggest" onclick="addKeywordDirect('fed')">Fed</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('fomc')">FOMC</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('ecb')">ECB</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('boe')">BOE</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('boj')">BOJ</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('powell')">Powell</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('lagarde')">Lagarde</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('cpi')">CPI</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('inflation')">Inflation</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('nfp')">NFP</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('gdp')">GDP</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('pmi')">PMI</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('rate hike')">Rate Hike</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('rate cut')">Rate Cut</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('unemployment')">Unemployment</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('tariff')">Tariff</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('opec')">OPEC</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('recession')">Recession</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('sanctions')">Sanctions</span>
+            <span class="kw-suggest" onclick="addKeywordDirect('trump')">Trump</span>
           </div>
         </div>
       </div>
