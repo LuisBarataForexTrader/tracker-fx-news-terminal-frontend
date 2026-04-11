@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -1313,11 +1314,11 @@ async function sec2faDisable() {
   } finally { btn.disabled = false; btn.textContent = 'Disable 2FA'; }
 }
 
-// ── Country flag helper (img-based — works on Windows/all browsers) ──────────
-function _flag(cc, w=16, h=12) {
+// ── Country flag helper (CSS-based via flag-icons — no ext image req, works everywhere) ──
+function _flag(cc) {
   if (!cc || cc === 'XX') return '';
-  const c = cc.toLowerCase();
-  return `<img src="https://flagcdn.com/${w}x${h}/${c}.png" width="${w}" height="${h}" style="border-radius:1px;vertical-align:middle;display:inline-block;margin-right:3px" alt="${cc.toUpperCase()}" onerror="this.style.display='none'">`;
+  // flag-icons: <span class="fi fi-pt"> renders as SVG background-image from the CSS bundle
+  return `<span class="fi fi-${cc.toLowerCase()}" style="border-radius:1px;vertical-align:middle;display:inline-block;margin-right:3px;font-size:14px"></span>`;
 }
 
 // ── API ────────────────────────────────────────────────────────
