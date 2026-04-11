@@ -898,6 +898,14 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .push-explain-enable:hover{opacity:.85;}
 .push-explain-note{font-size:10px;color:var(--text-muted);text-align:center;margin:0;}
 @keyframes push-ring{0%,100%{transform:rotate(0deg)}20%{transform:rotate(-15deg)}40%{transform:rotate(15deg)}60%{transform:rotate(-10deg)}80%{transform:rotate(10deg)}}
+/* ── Squawk history ── */
+.squawk-history{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
+.squawk-history-title{font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:8px;}
+.squawk-history-empty{font-size:10px;color:rgba(255,255,255,.3);font-style:italic;}
+.squawk-hist-item{display:flex;flex-direction:column;gap:2px;padding:6px 8px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);margin-bottom:5px;cursor:pointer;transition:background .15s;}
+.squawk-hist-item:hover{background:rgba(0,212,255,.08);border-color:rgba(0,212,255,.25);}
+.squawk-hist-time{font-size:9px;color:rgba(255,255,255,.35);font-weight:600;}
+.squawk-hist-headline{font-size:10px;color:#d0e0f0;line-height:1.4;font-weight:500;}
 /* ── Push card in squawk dropdown ── */
 .push-card{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,215,0,0.15);background:rgba(255,215,0,0.04);margin-bottom:10px;cursor:pointer;transition:all .2s;gap:10px;}
 .push-card:hover{background:rgba(255,215,0,0.09);border-color:rgba(255,215,0,0.3);}
@@ -1569,13 +1577,18 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       <div class="feed-header">
         <div class="feed-title" id="feedTitle">All News <span class="feed-title-badge" data-i18n="feed.live">LIVE</span></div>
         <div class="feed-count" id="feedCount">Connecting...</div>
-        <button class="feed-export-btn" id="feedExportBtn" onclick="IS_PRO ? exportNewsFeed() : showUpgrade('Export News Feed')" title="Export to CSV" data-i18n-title="export.tooltip">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span data-i18n="export.btn">Export</span>
-        </button>
-        <button class="feed-export-btn" onclick="IS_PRO ? openSummary() : showUpgrade('Daily Summary')" title="Today's Highlights" style="margin-left:8px;" data-i18n-title="summary.tooltip">
-          📋
-        </button>
+        <div style="position:relative;margin-left:auto;display:flex;gap:6px;align-items:center;">
+          <button class="feed-export-btn" id="squawkHistBtn" onclick="toggleSquawkHist(event)" title="Recently read by squawk" style="gap:5px;">
+            🕐 <span id="squawkHistCount" style="display:none;background:var(--accent);color:#000;font-size:9px;font-weight:800;padding:1px 5px;border-radius:8px;"></span>
+          </button>
+          <div id="squawkHistDd" style="display:none;position:absolute;top:calc(100% + 6px);right:0;z-index:4000;background:#0d1118;border:1px solid var(--border2);border-radius:6px;padding:14px 16px;width:320px;box-shadow:0 20px 50px rgba(0,0,0,.7);">
+            <div style="font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;">🕐 Recently read by squawk</div>
+            <div id="squawkHistoryList"><div class="squawk-history-empty">Nothing read yet.</div></div>
+          </div>
+          <button class="feed-export-btn" onclick="IS_PRO ? openSummary() : showUpgrade('Daily Summary')" title="Today's Highlights" data-i18n-title="summary.tooltip">
+            📋
+          </button>
+        </div>
       </div>
       <div class="delay-banner-wrap" id="delayBannerWrap"></div>
       <div class="feed-inner" id="newsFeed">
@@ -2494,6 +2507,7 @@ function saveCalIds() {
 let squawkEnabled    = localStorage.getItem('squawkEnabled') === 'true';
 let squawkQueue      = [];
 let squawkSpeaking   = false;
+let squawkHistory    = []; // last 8 items read
 let squawkRate       = parseFloat(localStorage.getItem('squawkRate') || '1.0');
 let squawkFilters    = _migrateFilters(JSON.parse(localStorage.getItem('squawkFilters') || '["ALL"]'), 'squawkFilters');
 let squawkAssets     = new Set(['ALL']); // 'ALL' or specific asset codes like 'USD','EUR','GOLD'
@@ -4494,6 +4508,10 @@ function drainSquawkQueue() {
   _setSquawkTabBlink(true);
   updateSquawkBtn();
   const item = squawkQueue.shift();
+  // Add to history (keep last 8)
+  squawkHistory.unshift({ text: item.text, url: item.url, time: Date.now() });
+  if (squawkHistory.length > 8) squawkHistory.pop();
+  _renderSquawkHistory();
   // "Attention:" prefix — gives the user a clear audio cue before each headline
   const spokenText = 'Attention. ' + _prepareSquawkText(item.text);
   if (currentTab !== 'news') switchTab('news');
@@ -4508,6 +4526,35 @@ function drainSquawkQueue() {
   }, 150);
 }
 
+function toggleSquawkHist(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('squawkHistDd');
+  const open = dd.style.display === 'block';
+  // Close all other dropdowns first
+  document.querySelectorAll('.squawk-dd,.sound-dd').forEach(el => el.classList.remove('open'));
+  dd.style.display = open ? 'none' : 'block';
+  if (!open) _renderSquawkHistory();
+}
+document.addEventListener('click', e => {
+  const dd = document.getElementById('squawkHistDd');
+  if (dd && !dd.contains(e.target) && e.target.id !== 'squawkHistBtn') dd.style.display = 'none';
+});
+function _renderSquawkHistory() {
+  const el = document.getElementById('squawkHistoryList');
+  if (!el) return;
+  const cnt = document.getElementById('squawkHistCount');
+  if (cnt) { if (squawkHistory.length) { cnt.textContent = squawkHistory.length; cnt.style.display='inline'; } else { cnt.style.display='none'; } }
+  if (!squawkHistory.length) { el.innerHTML = '<div class="squawk-history-empty">Nothing read yet.</div>'; return; }
+  el.innerHTML = squawkHistory.map(h => {
+    const t = new Date(h.time).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+    const safe = (h.text||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const click = h.url ? `onclick="window.open('${h.url.replace(/'/g,"\\'")}','_blank')"` : '';
+    return `<div class="squawk-hist-item" ${click}>
+      <span class="squawk-hist-time">${t}</span>
+      <span class="squawk-hist-headline">${safe}</span>
+    </div>`;
+  }).join('');
+}
 function toggleMobSidebar(){document.body.classList.toggle('sidebar-open');}
 
 function toggleSquawk() {
