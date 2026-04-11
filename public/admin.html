@@ -772,12 +772,12 @@ th:hover .sort-arrow{color:var(--accent)}
             <div style="background:var(--bg2);border:1px solid rgba(167,139,250,.3);border-radius:6px;padding:14px 18px">
               <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#a78bfa;margin-bottom:4px">Basic Plan</div>
               <div id="plans-basic-count" style="font-size:28px;font-weight:700;color:#fff;font-family:var(--font-mono)">—</div>
-              <div style="font-size:10px;color:var(--text-muted);margin-top:2px">sources · delayed 2 min</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:2px">feeds com acesso no plano Basic</div>
             </div>
             <div style="background:var(--bg2);border:1px solid rgba(0,212,255,.3);border-radius:6px;padding:14px 18px">
               <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:4px">Pro Plan</div>
               <div id="plans-pro-count" style="font-size:28px;font-weight:700;color:#fff;font-family:var(--font-mono)">—</div>
-              <div style="font-size:10px;color:var(--text-muted);margin-top:2px">total sources · real-time</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:2px">feeds totais (basic + exclusivos)</div>
             </div>
           </div>
 
@@ -3126,9 +3126,11 @@ function renderPlanSources() {
     !qPro || f.source.toLowerCase().includes(qPro) || f.url.toLowerCase().includes(qPro)
   );
 
-  // KPIs
-  document.getElementById('plans-basic-count').textContent = _planBasicWhitelist || _planSources.basic.length;
-  document.getElementById('plans-pro-count').textContent   = _planTotalFeeds || _planAllFeeds.length;
+  // KPIs — use actual feed counts, not whitelist size
+  const basicFeedCount = _planAllFeeds.filter(f => f.plan === 'basic').length;
+  const proFeedCount   = _planAllFeeds.length;
+  document.getElementById('plans-basic-count').textContent = basicFeedCount || _planSources.basic.length;
+  document.getElementById('plans-pro-count').textContent   = proFeedCount;
 
   const rowStyle  = 'display:flex;align-items:center;gap:6px;padding:7px 12px;border-bottom:1px solid var(--border);font-size:12px';
   const nameStyle = 'font-weight:600;color:var(--text-dim);text-transform:capitalize;flex:1;min-width:0';
