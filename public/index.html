@@ -4417,38 +4417,8 @@ function _setSquawkTabBlink(on) {
   if (!on) btn.classList.remove('tab-squawk-reading');
 }
 
-// Tracks the item squawk is currently reading — renderNews uses this to pin it at top
-let _squawkBannerItem = null;
-
-function _removeSquawkBanner() {
-  _squawkBannerItem = null;
-  // Remove any leftover DOM banner from old approach
-  const b = document.getElementById('squawk-banner');
-  if (b) b.remove();
-  // Re-render so item returns to its correct time-sorted position
-  try { renderNews(); } catch(e) {}
-}
-
-// Sets the pin and immediately moves the card to top in the live DOM (no re-render needed)
-function _pinSquawkCard(item) {
-  _squawkBannerItem = item;
-  const feed = document.getElementById('newsFeed');
-  if (!feed) return;
-  // Find the card by calId (CE events) or by url (regular news)
-  const card = item.calId
-    ? feed.querySelector(`.news-item[data-calid="${CSS.escape(String(item.calId))}"]`)
-    : (item.url ? feed.querySelector(`.news-item[data-url="${CSS.escape(item.url)}"]`) : null);
-  if (card) {
-    card.classList.add('squawk-reading');
-    // Move card to very top of feed
-    feed.insertBefore(card, feed.firstChild);
-    feed.scrollTo({top: 0, behavior: 'smooth'});
-  }
-}
 
 function drainSquawkQueue() {
-  document.querySelectorAll('.squawk-reading').forEach(el => el.classList.remove('squawk-reading'));
-  _removeSquawkBanner();
   // Drop stale items (queued >20 seconds ago) to stay current — prevents lag buildup
   const _now = Date.now();
   while (squawkQueue.length > 0 && squawkQueue[0].queuedAt && (_now - squawkQueue[0].queuedAt) > 20000) {
@@ -4458,11 +4428,6 @@ function drainSquawkQueue() {
     squawkSpeaking = false;
     _setSquawkTabBlink(false);
     updateSquawkBtn();
-    // Queue finished — wait briefly so user sees the last item, then scroll news back to top
-    setTimeout(() => {
-      const feed = document.getElementById('newsFeed');
-      if (feed) feed.scrollTo({top: 0, behavior: 'smooth'});
-    }, 600);
     return;
   }
   squawkSpeaking = true;
@@ -4471,9 +4436,6 @@ function drainSquawkQueue() {
   const item = squawkQueue.shift();
   // "Attention:" prefix — gives the user a clear audio cue before each headline
   const spokenText = 'Attention. ' + _prepareSquawkText(item.text);
-  if (currentTab !== 'news') switchTab('news');
-  // Pin the card at the top of the feed immediately
-  setTimeout(() => _pinSquawkCard(item), 150);
   // Stop any current playback
   if (_ttsAudio) { try { _ttsAudio.pause(); _ttsAudio.src = ''; } catch(e) {} }
   setTimeout(async () => {
@@ -5436,14 +5398,6 @@ function renderNews() {
   if (selectedCategories.size === 1 && selectedCategories.has('MY_NEWS') && !myNewsImpact.has('ALL')) {
     filtered = filtered.filter(n => myNewsImpact.has(n.impact));
   }
-  // Pin squawked item at the top while squawk is reading — after reading it falls to correct position
-  if (_squawkBannerItem) {
-    const _sq = _squawkBannerItem;
-    const sqIdx = _sq.calId
-      ? filtered.findIndex(n => n._calId === _sq.calId)
-      : (_sq.url ? filtered.findIndex(n => n.url === _sq.url) : -1);
-    if (sqIdx > 0) { const [sq] = filtered.splice(sqIdx, 1); filtered.unshift(sq); }
-  }
   // Search filter
   if (searchQuery) {
     // Expand forex pair searches: "eurusd" → ["eur","usd"], "gbpjpy" → ["gbp","jpy"]
@@ -5588,12 +5542,7 @@ function renderNews() {
 
     const safeUrl = (n.url||'').replace(/"/g,'&quot;');
     const calIdAttr = n._calId ? ` data-calid="${n._calId}"` : '';
-    const isSquawkActive = _squawkBannerItem && (
-      (n._calId && _squawkBannerItem.calId && n._calId === _squawkBannerItem.calId) ||
-      (!n._calId && n.url && n.url === _squawkBannerItem.url)
-    );
-    const squawkCls = isSquawkActive ? ' squawk-reading' : '';
-    const card = `<div class="news-item ${itemCls}${freshCls}${ageCls?' '+ageCls:''}${ytId?' has-video':''}${squawkCls}" data-url="${safeUrl}"${calIdAttr} onclick="${clickAction}">
+    const card = `<div class="news-item ${itemCls}${freshCls}${ageCls?' '+ageCls:''}${ytId?' has-video':''}" data-url="${safeUrl}"${calIdAttr} onclick="${clickAction}">
       <div class="news-time">${formatTime(n.timestamp)}</div>
       <div>
         <div class="news-headline">${headline}${newBadge}</div>
