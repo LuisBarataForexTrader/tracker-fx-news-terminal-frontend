@@ -1134,6 +1134,21 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
   .tab-content#tab-sentiment{overflow-y:visible !important;}
   #sentiment-body{overflow:visible !important;height:auto !important;}
 }
+
+/* ── Trial Promo Popup ── */
+.trial-promo{position:fixed;bottom:24px;right:24px;z-index:3500;background:linear-gradient(135deg,#0f1720,#111827);border:1px solid rgba(167,139,250,0.35);border-radius:10px;padding:18px 20px 16px;width:280px;box-shadow:0 8px 40px rgba(0,0,0,0.6),0 0 30px rgba(167,139,250,0.08);animation:promoSlideIn .35s ease-out;display:none;}
+.trial-promo.show{display:block;}
+.trial-promo::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#a78bfa 50%,transparent);border-radius:10px 10px 0 0;}
+.trial-promo-close{position:absolute;top:10px;right:12px;background:none;border:none;color:#7a9ab0;cursor:pointer;font-size:14px;line-height:1;padding:2px 4px;}
+.trial-promo-close:hover{color:#fff;}
+.trial-promo-badge{display:inline-block;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#a78bfa;border:1px solid rgba(167,139,250,.3);background:rgba(167,139,250,.08);padding:2px 7px;border-radius:2px;margin-bottom:8px;}
+.trial-promo-title{font-size:14px;font-weight:800;color:#fff;margin-bottom:5px;padding-right:18px;line-height:1.3;}
+.trial-promo-body{font-size:11.5px;color:#9ab4cc;line-height:1.5;margin-bottom:14px;}
+.trial-promo-cta{display:block;width:100%;padding:9px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;font-family:var(--font);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;border-radius:4px;text-decoration:none;text-align:center;transition:all .2s;box-shadow:0 2px 12px rgba(167,139,250,.25);}
+.trial-promo-cta:hover{box-shadow:0 4px 20px rgba(167,139,250,.45);transform:translateY(-1px);}
+.trial-promo-note{font-size:10px;color:#556677;text-align:center;margin-top:6px;}
+@keyframes promoSlideIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.trial-promo{bottom:16px;right:16px;left:16px;width:auto;}}
 </style>
 </head>
 <body>
@@ -1685,8 +1700,12 @@ const LOGIN_URL = 'https://www.tradingnewsterminal.com/login.html';
         const _planChanged = _d.plan && _d.plan !== (user.plan || 'free');
         if (_d.id && !user.id) user.id = _d.id;
         if (_planChanged) user.plan = _d.plan;
-        if (_d.id || _planChanged) localStorage.setItem('tnt_user', JSON.stringify(user));
+        if (_d.had_trial !== undefined) user.had_trial = _d.had_trial;
+        if (_d.trial_source !== undefined) user.trial_source = _d.trial_source;
+        if (_d.id || _planChanged || _d.had_trial !== undefined) localStorage.setItem('tnt_user', JSON.stringify(user));
         if (_planChanged) window.location.reload();
+        // Show promo popup for eligible Basic users (after plan check to avoid flash before reload)
+        if (!_planChanged) _maybeShowTrialPromo(_d.had_trial || 0);
       } catch(e) {}
     })();
   } catch(e) {}
@@ -1704,6 +1723,29 @@ function doLogout() {
   localStorage.removeItem('tnt_user');
   localStorage.removeItem('tnt_login_at');
   window.location.replace(LOGIN_URL + '?logout=1');
+}
+
+// ─── Trial Promo Popup ────────────────────────────────────────────
+// Shows once to Basic/Free users who have never had any trial (neither Stripe nor admin)
+function _maybeShowTrialPromo(hadTrial) {
+  const plan = window._tntPlan || 'free';
+  if (plan === 'pro' || plan === 'trial') return; // already paying or in trial
+  if (hadTrial) return;                            // already used a trial
+  if (localStorage.getItem('tnt_trial_promo_dismissed')) return; // dismissed
+  const popup = document.getElementById('trialPromoPopup');
+  if (!popup) return;
+  // Show after 8s delay — gives page time to settle
+  setTimeout(() => {
+    popup.classList.add('show');
+    // Re-apply translations so data-i18n attributes are filled
+    if (typeof applyTranslations === 'function') applyTranslations();
+  }, 8000);
+}
+
+function dismissTrialPromo() {
+  const popup = document.getElementById('trialPromoPopup');
+  if (popup) popup.classList.remove('show');
+  localStorage.setItem('tnt_trial_promo_dismissed', '1');
 }
 
 // ─── Plan change monitor ─────────────────────────────────────────
@@ -2361,6 +2403,7 @@ const STRINGS = {
     'empty.no_news':'No news found','empty.no_news_sub':'Change filters or wait for next update',
     'share.btn':'⇪ Share','toast.link_copied':'Link copied',
     'toast.login':'Login coming soon — Pro features','toast.signup':'Sign up coming soon','toast.pro':'Pro Pack coming soon!','toast.trial_started':'\ud83c\udf89 Your 7-day Pro trial has started! Enjoy all Pro features.',
+    'promo.badge':'🎁 Free Trial','promo.trial_title':'Try Pro Free for 7 Days','promo.trial_body':'Full Pro access, no charge during trial. Cancel anytime.','promo.trial_cta':'Start Free Trial →','promo.trial_note':'Then €40/month + VAT',
     'badge.positive':'▲ POSITIVE','badge.negative':'▼ NEGATIVE','badge.neutral':'● NEUTRAL','badge.new':'NEW',
     'cal.tag.release':'📅 RELEASE',
     'feed.title.all':'All News','feed.title.high':'High Impact','feed.title.medium':'Medium Impact','feed.title.low':'Low Impact',
@@ -2539,6 +2582,7 @@ const STRINGS = {
     'empty.no_news':'Sem notícias','empty.no_news_sub':'Altera os filtros ou aguarda a próxima atualização',
     'share.btn':'⇪ Partilhar','toast.link_copied':'Ligação copiada',
     'toast.login':'Login em breve','toast.signup':'Registo em breve','toast.pro':'Plano Pro em breve!','toast.trial_started':'\ud83c\udf89 O teu trial Pro de 7 dias come\u00e7ou! Desfruta de todas as funcionalidades Pro.',
+    'promo.badge':'🎁 Trial Grátis','promo.trial_title':'Experimenta o Pro 7 Dias Grátis','promo.trial_body':'Acesso Pro completo, sem cobrança durante o trial. Cancela a qualquer momento.','promo.trial_cta':'Iniciar Trial Grátis →','promo.trial_note':'Depois €40/mês + IVA',
     'badge.positive':'▲ POSITIVO','badge.negative':'▼ NEGATIVO','badge.neutral':'● NEUTRO','badge.new':'NOVO',
     'cal.tag.release':'📅 DADOS',
     'feed.title.all':'Todas as Notícias','feed.title.high':'Alto Impacto','feed.title.medium':'Impacto Médio','feed.title.low':'Baixo Impacto',
@@ -2717,6 +2761,7 @@ const STRINGS = {
     'empty.no_news':'Sin noticias','empty.no_news_sub':'Cambia los filtros o espera la próxima actualización',
     'share.btn':'⇪ Compartir','toast.link_copied':'Enlace copiado',
     'toast.login':'Login pr\u00f3ximamente','toast.signup':'Registro pr\u00f3ximamente','toast.pro':'\u00a1Plan Pro pr\u00f3ximamente!','toast.trial_started':'\ud83c\udf89 \u00a1Tu prueba Pro de 7 d\u00edas ha comenzado! Disfruta de todas las funciones Pro.',
+    'promo.badge':'🎁 Prueba Gratis','promo.trial_title':'Prueba Pro Gratis 7 D\u00edas','promo.trial_body':'Acceso Pro completo, sin cargo durante la prueba. Cancela cuando quieras.','promo.trial_cta':'Iniciar Prueba Gratis →','promo.trial_note':'Despu\u00e9s €40/mes + IVA',
     'badge.positive':'▲ POSITIVO','badge.negative':'▼ NEGATIVO','badge.neutral':'● NEUTRAL','badge.new':'NUEVO',
     'cal.tag.release':'📅 PUBLICACIÓN',
     'feed.title.all':'Todas las Noticias','feed.title.high':'Alto Impacto','feed.title.medium':'Impacto Medio','feed.title.low':'Bajo Impacto',
@@ -2895,6 +2940,7 @@ const STRINGS = {
     'empty.no_news':'Aucune actualité','empty.no_news_sub':'Modifiez les filtres ou attendez la prochaine mise à jour',
     'share.btn':'⇪ Partager','toast.link_copied':'Lien copié',
     'toast.login':'Connexion bient\u00f4t','toast.signup':'Inscription bient\u00f4t','toast.pro':'Plan Pro bient\u00f4t !','toast.trial_started':'\ud83c\udf89 Votre essai Pro de 7 jours a commenc\u00e9 ! Profitez de toutes les fonctionnalit\u00e9s Pro.',
+    'promo.badge':'🎁 Essai Gratuit','promo.trial_title':'Essayez Pro Gratuitement 7 Jours','promo.trial_body':'Acc\u00e8s Pro complet, sans frais pendant l\u2019essai. Annulez \u00e0 tout moment.','promo.trial_cta':'D\u00e9marrer l\u2019Essai Gratuit →','promo.trial_note':'Ensuite €40/mois + TVA',
     'badge.positive':'▲ POSITIF','badge.negative':'▼ NÉGATIF','badge.neutral':'● NEUTRE','badge.new':'NOUVEAU',
     'cal.tag.release':'📅 PUBLICATION',
     'feed.title.all':'Toutes les Actualités','feed.title.high':'Impact Élevé','feed.title.medium':'Impact Moyen','feed.title.low':'Impact Faible',
@@ -3073,6 +3119,7 @@ const STRINGS = {
     'empty.no_news':'Keine Nachrichten','empty.no_news_sub':'Filter ändern oder auf nächstes Update warten',
     'share.btn':'⇪ Teilen','toast.link_copied':'Link kopiert',
     'toast.login':'Login bald verf\u00fcgbar','toast.signup':'Registrierung bald verf\u00fcgbar','toast.pro':'Pro-Plan bald verf\u00fcgbar!','toast.trial_started':'\ud83c\udf89 Deine 7-t\u00e4gige Pro-Testphase hat begonnen! Genie\u00dfe alle Pro-Funktionen.',
+    'promo.badge':'🎁 Kostenlose Testphase','promo.trial_title':'Pro 7 Tage kostenlos testen','promo.trial_body':'Voller Pro-Zugang, keine Kosten w\u00e4hrend der Testphase. Jederzeit k\u00fcndbar.','promo.trial_cta':'Kostenlos testen →','promo.trial_note':'Danach €40/Monat + MwSt.',
     'badge.positive':'▲ POSITIV','badge.negative':'▼ NEGATIV','badge.neutral':'● NEUTRAL','badge.new':'NEU',
     'cal.tag.release':'📅 VERÖFFENTLICHUNG',
     'feed.title.all':'Alle Nachrichten','feed.title.high':'Hoher Impact','feed.title.medium':'Mittlerer Impact','feed.title.low':'Niedriger Impact',
@@ -3251,6 +3298,7 @@ const STRINGS = {
     'empty.no_news':'Nessuna notizia','empty.no_news_sub':'Cambia i filtri o attendi il prossimo aggiornamento',
     'share.btn':'⇪ Condividi','toast.link_copied':'Link copiato',
     'toast.login':'Login presto disponibile','toast.signup':'Registrazione presto','toast.pro':'Piano Pro presto!','toast.trial_started':'\ud83c\udf89 La tua prova Pro di 7 giorni \u00e8 iniziata! Goditi tutte le funzionalit\u00e0 Pro.',
+    'promo.badge':'🎁 Prova Gratuita','promo.trial_title':'Prova Pro Gratis per 7 Giorni','promo.trial_body':'Accesso Pro completo, nessun addebito durante la prova. Annulla quando vuoi.','promo.trial_cta':'Inizia la Prova Gratuita →','promo.trial_note':'Poi €40/mese + IVA',
     'badge.positive':'▲ POSITIVO','badge.negative':'▼ NEGATIVO','badge.neutral':'● NEUTRO','badge.new':'NUOVO',
     'cal.tag.release':'📅 PUBBLICAZIONE',
     'feed.title.all':'Tutte le Notizie','feed.title.high':'Alto Impatto','feed.title.medium':'Impatto Medio','feed.title.low':'Basso Impatto',
@@ -7327,6 +7375,16 @@ function _fmtScTs(ts) {
     <div class="upgrade-vat" data-i18n="upgrade.vat">excl. VAT where applicable · Billed in EUR</div>
     <button class="upgrade-btn-later" onclick="hideUpgrade()" data-i18n="upgrade.maybe_later">Maybe later</button>
   </div>
+</div>
+
+<!-- ── Trial Promo Popup (Basic users, never had trial) ── -->
+<div class="trial-promo" id="trialPromoPopup">
+  <button class="trial-promo-close" onclick="dismissTrialPromo()" aria-label="Close">✕</button>
+  <div class="trial-promo-badge" data-i18n="promo.badge">🎁 Free Trial</div>
+  <div class="trial-promo-title" data-i18n="promo.trial_title">Try Pro Free for 7 Days</div>
+  <div class="trial-promo-body" data-i18n="promo.trial_body">Full Pro access, no charge during trial. Cancel anytime.</div>
+  <a class="trial-promo-cta" id="trialPromoCtaLink" href="https://tradingnewsterminal.com/login?plan=trial" data-i18n="promo.trial_cta">Start Free Trial →</a>
+  <div class="trial-promo-note" data-i18n="promo.trial_note">Then €40/month + VAT</div>
 </div>
 
 <!-- ── Settings Modal ── -->

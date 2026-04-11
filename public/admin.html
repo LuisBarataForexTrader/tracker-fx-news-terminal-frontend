@@ -2043,11 +2043,19 @@ function userRow(u) {
   const hadTrial = u.had_trial == 1 || plan === 'trial';
   const isTrial  = plan === 'trial';
   const isBasic  = plan === 'basic';
+  const trialSrc = u.trial_source || null; // 'stripe' | 'admin' | null
+
+  // Trial source mini-badge (shown next to TRIAL step)
+  const trialSrcBadge = trialSrc === 'stripe'
+    ? `<span style="font-size:9px;font-weight:700;letter-spacing:.04em;padding:1px 4px;border-radius:3px;background:rgba(99,102,241,.18);border:1px solid rgba(99,102,241,.4);color:#a5b4fc;margin-left:3px;vertical-align:middle" title="Website trial · 7 days · CC collected">STRIPE</span>`
+    : trialSrc === 'admin'
+    ? `<span style="font-size:9px;font-weight:700;letter-spacing:.04em;padding:1px 4px;border-radius:3px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:#fbbf24;margin-left:3px;vertical-align:middle" title="Manual trial · variable duration · no CC">ADMIN</span>`
+    : '';
 
   const stepBasic = `<span class="u-step s-basic${isTrial||isPro?' s-done':''}">BASIC</span>`;
   const arrowBT   = `<span class="u-arrow">›</span>`;
   const stepTrial = hadTrial
-    ? `<span class="u-step s-trial${isPro?' s-done':''}">TRIAL</span>`
+    ? `<span class="u-step s-trial${isPro?' s-done':''}">TRIAL${trialSrcBadge}</span>`
     : '';
   const arrowTP   = hadTrial && !isPro ? '' : (hadTrial ? `<span class="u-arrow">›</span>` : '');
   const stepPro   = isPro || hadTrial
@@ -2071,9 +2079,11 @@ function userRow(u) {
     const tEnd   = new Date(u.trial_ends_at.endsWith('Z')||u.trial_ends_at.includes('+')?u.trial_ends_at:u.trial_ends_at+'Z').getTime();
     const pct    = Math.min(100, Math.max(0, Math.round((Date.now()-tStart)/(tEnd-tStart)*100)));
     const hue    = Math.round(120 - pct * 1.2);
+    // Show trial source info in the bar
+    const srcInfo = trialSrc === 'stripe' ? ' · 💳 CC collected · auto-charges' : trialSrc === 'admin' ? ' · 👤 Admin granted · no CC' : '';
     trialBar = `<div class="u-trial-bar">
       <div class="trial-bar-track"><div class="trial-bar-fill" style="width:${pct}%;background:hsl(${hue},85%,45%)"></div></div>
-      <div class="trial-bar-lbl">ends ${_fmtDT(u.trial_ends_at)} · <span style="color:hsl(${hue},85%,55%);font-weight:700">${pct}%</span></div>
+      <div class="trial-bar-lbl">ends ${_fmtDT(u.trial_ends_at)} · <span style="color:hsl(${hue},85%,55%);font-weight:700">${pct}%</span>${srcInfo}</div>
     </div>`;
   }
 
