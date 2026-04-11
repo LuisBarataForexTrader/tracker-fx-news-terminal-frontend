@@ -867,7 +867,7 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .sidebar-push-icon{font-size:16px;flex-shrink:0;}
 .sidebar-push-text{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0;}
 .sidebar-push-title{font-size:11px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sidebar-push-status{font-size:10px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-push-status{font-size:10px;color:var(--text-muted);line-height:1.3;}
 .sidebar-push-row.push-active .sidebar-push-status{color:#27ae60;}
 /* Push explain popup — fixed near sidebar */
 .push-explain{position:fixed;left:calc(var(--sidebar-w) + 10px);bottom:80px;width:min(310px,92vw);background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 16px 14px;z-index:9000;box-shadow:0 8px 32px rgba(0,0,0,0.5);animation:fadeIn .2s ease;pointer-events:auto;}
@@ -2652,7 +2652,9 @@ const STRINGS = {
     'nav.central_banks':'Central Banks','nav.screener':'Screener','nav.signout':'Sign Out',
     'nav.correlations':'Correlations',
     'summary.title':'Today\'s Highlights','summary.tooltip':'View today\'s top stories',
-    'push.section':'Browser Notifications','push.desc':'Alerts even when tab is closed','push.status_active':'Active — HIGH impact alerts on','push.enable':'Enable','push.disable':'Disable',
+    'push.section':'Browser Notifications','push.desc':'Alerts even when tab is closed','push.status_active':'Active · HIGH impact alerts on','push.enable':'Enable','push.disable':'Disable',
+    'push.toast_enabled':'✅ Push alerts enabled! You\'ll be notified even when the tab is closed.',
+    'push.toast_disabled':'🔕 Push alerts disabled.',
     'push.sidebar_label':'Push Notifications',
     'push.explain_title':'Real-Time Market Alerts',
     'push.explain_body':'Get instant browser notifications for <strong>HIGH impact news</strong> from Trading News Terminal — even when this tab is closed or minimised.',
@@ -2848,7 +2850,9 @@ const STRINGS = {
     'nav.central_banks':'Bancos Centrais','nav.screener':'Screener','nav.signout':'Sair',
     'nav.correlations':'Correlações',
     'summary.title':'Destaques de Hoje','summary.tooltip':'Ver os destaques de hoje',
-    'push.section':'Notificações Browser','push.desc':'Alertas mesmo com o tab fechado','push.status_active':'Ativo — alertas de alto impacto ativos','push.enable':'Ativar','push.disable':'Desativar',
+    'push.section':'Notificações Browser','push.desc':'Alertas mesmo com o tab fechado','push.status_active':'Ativo · alertas HIGH impact ativos','push.enable':'Ativar','push.disable':'Desativar',
+    'push.toast_enabled':'✅ Alertas push ativos! Serás notificado mesmo com o tab fechado.',
+    'push.toast_disabled':'🔕 Alertas push desativados.',
     'push.sidebar_label':'Notificações Push',
     'push.explain_title':'Alertas em Tempo Real',
     'push.explain_body':'Recebe notificações instantâneas no browser para <strong>notícias de alto impacto</strong> do Trading News Terminal — mesmo com este tab fechado ou minimizado.',
@@ -3044,7 +3048,9 @@ const STRINGS = {
     'nav.central_banks':'Bancos Centrales','nav.screener':'Screener','nav.signout':'Cerrar Sesión',
     'nav.correlations':'Correlaciones',
     'summary.title':'Destacados de Hoy','summary.tooltip':'Ver las noticias más importantes de hoy',
-    'push.section':'Notificaciones del Navegador','push.desc':'Alertas incluso con la pestaña cerrada','push.status_active':'Activo — alertas de alto impacto activadas','push.enable':'Activar','push.disable':'Desactivar',
+    'push.section':'Notificaciones del Navegador','push.desc':'Alertas incluso con la pestaña cerrada','push.status_active':'Activo · alertas HIGH impact activas','push.enable':'Activar','push.disable':'Desactivar',
+    'push.toast_enabled':'✅ ¡Alertas push activadas! Te notificaremos aunque la pestaña esté cerrada.',
+    'push.toast_disabled':'🔕 Alertas push desactivadas.',
     'push.sidebar_label':'Notificaciones Push',
     'push.explain_title':'Alertas de Mercado en Tiempo Real',
     'push.explain_body':'Recibe notificaciones instantáneas del navegador para <strong>noticias de alto impacto</strong> del Trading News Terminal — incluso con esta pestaña cerrada o minimizada.',
@@ -3240,7 +3246,9 @@ const STRINGS = {
     'nav.central_banks':'Banques Centrales','nav.screener':'Screener','nav.signout':'Déconnexion',
     'nav.correlations':'Corrélations',
     'summary.title':'Points Forts du Jour','summary.tooltip':'Voir les actualités majeures du jour',
-    'push.section':'Notifications Navigateur','push.desc':'Alertes même onglet fermé','push.status_active':'Actif — alertes à fort impact activées','push.enable':'Activer','push.disable':'Désactiver',
+    'push.section':'Notifications Navigateur','push.desc':'Alertes même onglet fermé','push.status_active':'Actif · alertes HIGH impact actives','push.enable':'Activer','push.disable':'Désactiver',
+    'push.toast_enabled':'✅ Alertes push activées ! Vous serez notifié même onglet fermé.',
+    'push.toast_disabled':'🔕 Alertes push désactivées.',
     'push.sidebar_label':'Notifications Push',
     'push.explain_title':'Alertes Marché en Temps Réel',
     'push.explain_body':'Recevez des notifications instantanées pour les <strong>actualités à fort impact</strong> du Trading News Terminal — même quand cet onglet est fermé ou minimisé.',
@@ -3436,7 +3444,9 @@ const STRINGS = {
     'nav.central_banks':'Zentralbanken','nav.screener':'Screener','nav.signout':'Abmelden',
     'nav.correlations':'Korrelationen',
     'summary.title':'Heutige Highlights','summary.tooltip':'Heutige Top-Meldungen anzeigen',
-    'push.section':'Browser-Benachrichtigungen','push.desc':'Alarme auch bei geschlossenem Tab','push.status_active':'Aktiv — HIGH-Impact-Alarme aktiv','push.enable':'Aktivieren','push.disable':'Deaktivieren',
+    'push.section':'Browser-Benachrichtigungen','push.desc':'Alarme auch bei geschlossenem Tab','push.status_active':'Aktiv · HIGH-Impact-Alarme aktiv','push.enable':'Aktivieren','push.disable':'Deaktivieren',
+    'push.toast_enabled':'✅ Push-Alarme aktiviert! Sie werden auch bei geschlossenem Tab benachrichtigt.',
+    'push.toast_disabled':'🔕 Push-Alarme deaktiviert.',
     'push.sidebar_label':'Push-Benachrichtigungen',
     'push.explain_title':'Echtzeit-Marktwarnungen',
     'push.explain_body':'Erhalten Sie sofortige Browser-Benachrichtigungen für <strong>HIGH-Impact-Nachrichten</strong> vom Trading News Terminal — auch wenn dieser Tab geschlossen oder minimiert ist.',
@@ -3632,7 +3642,9 @@ const STRINGS = {
     'nav.central_banks':'Banche Centrali','nav.screener':'Screener','nav.signout':'Esci',
     'nav.correlations':'Correlazioni',
     'summary.title':'Highlights di Oggi','summary.tooltip':'Visualizza i principali eventi di oggi',
-    'push.section':'Notifiche Browser','push.desc':'Avvisi anche con la scheda chiusa','push.status_active':'Attivo — avvisi ad alto impatto attivi','push.enable':'Attiva','push.disable':'Disattiva',
+    'push.section':'Notifiche Browser','push.desc':'Avvisi anche con la scheda chiusa','push.status_active':'Attivo · avvisi HIGH impact attivi','push.enable':'Attiva','push.disable':'Disattiva',
+    'push.toast_enabled':'✅ Avvisi push attivati! Verrai avvisato anche con la scheda chiusa.',
+    'push.toast_disabled':'🔕 Avvisi push disattivati.',
     'push.sidebar_label':'Notifiche Push',
     'push.explain_title':'Avvisi di Mercato in Tempo Reale',
     'push.explain_body':'Ricevi notifiche istantanee del browser per <strong>notizie ad alto impatto</strong> dal Trading News Terminal — anche quando questa scheda è chiusa o minimizzata.',
@@ -8123,7 +8135,7 @@ async function togglePushNotifications() {
     _pushEnabled = true;
     _updatePushBtn();
     restore();
-    _showPushToast('✅ Push alerts enabled! You\'ll be notified even with the tab closed.', '#27ae60', 4000);
+    _showPushToast(t('push.toast_enabled'), '#27ae60', 4000);
   } catch(e) {
     _showPushToast('❌ Could not save subscription. Try again.', '#c0392b');
     restore();
