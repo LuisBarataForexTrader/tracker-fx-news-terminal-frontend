@@ -7950,11 +7950,8 @@ function _handlePushBellClick() {
   // Show explain popup (first time) OR go straight to subscribe
   const explainEl = document.getElementById('pushExplain');
   if (!explainEl) { togglePushNotifications(); return; }
-  const seen = localStorage.getItem('tnt_push_explain_seen');
-  if (seen) {
-    togglePushNotifications();
-  } else {
-    localStorage.setItem('tnt_push_explain_seen', '1');
+  // Always show the explain popup when push is off — let user decide
+  {
     explainEl.style.display = 'block';
     // Close on outside click
     setTimeout(() => {
