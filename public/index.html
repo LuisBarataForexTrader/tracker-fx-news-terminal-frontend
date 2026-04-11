@@ -863,8 +863,9 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .push-bell-btn:hover{background:rgba(255,255,255,0.08);border-color:var(--border);}
 .push-bell-btn.active{border-color:rgba(39,174,96,0.7);background:rgba(39,174,96,0.15);animation:push-ring .6s ease;box-shadow:0 0 8px rgba(39,174,96,0.35);}
 .push-bell-btn.active::after{content:'';position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:#27ae60;box-shadow:0 0 5px #27ae60;}
-/* Push explain popup */
-.push-explain{position:absolute;top:calc(100% + 10px);right:0;width:min(320px,92vw);background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 16px 14px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.5);animation:fadeIn .2s ease;}
+/* Push explain popup — fixed to viewport, never blocks header */
+.push-explain{position:fixed;top:56px;right:12px;width:min(320px,92vw);background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 16px 14px;z-index:9000;box-shadow:0 8px 32px rgba(0,0,0,0.5);animation:fadeIn .2s ease;pointer-events:auto;}
+@media(max-width:600px){.push-explain{top:auto;bottom:12px;right:4px;left:4px;width:auto;}}
 .push-explain-close{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;line-height:1;padding:2px 6px;}
 .push-explain-icon{font-size:28px;text-align:center;margin-bottom:8px;}
 .push-explain-title{font-size:14px;font-weight:700;color:var(--text);text-align:center;margin:0 0 6px;}
@@ -1294,22 +1295,6 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
       <button class="squawk-btn" id="squawkBtn" onclick="toggleSquawk()">🔇 Squawk OFF</button>
       <button class="squawk-cfg-btn" id="squawkCfgBtn" onclick="toggleSquawkCfg(event)" title="Squawk settings">⚙</button>
       <button class="push-bell-btn" id="pushBellBtn" onclick="IS_PRO ? _handlePushBellClick() : showUpgrade('Push Notifications')" title="Browser push alerts — get notified even when the tab is closed">🔔</button>
-      <!-- Push explain popup -->
-      <div class="push-explain" id="pushExplain" style="display:none">
-        <button class="push-explain-close" onclick="document.getElementById('pushExplain').style.display='none'">×</button>
-        <div class="push-explain-icon">📡</div>
-        <p class="push-explain-title">Real-Time Market Alerts</p>
-        <p class="push-explain-body">Get instant browser notifications for <strong>HIGH impact news</strong> from Trading News Terminal — even when this tab is closed or minimised.</p>
-        <div class="push-explain-preview">
-          <span class="push-preview-dot"></span>
-          <div>
-            <span class="push-preview-app">🔴 Trading News Terminal</span>
-            <span class="push-preview-msg">Fed raises rates by 50bps — surprise move...</span>
-          </div>
-        </div>
-        <button class="push-explain-enable" onclick="document.getElementById('pushExplain').style.display='none'; togglePushNotifications()">Enable Push Alerts</button>
-        <p class="push-explain-note">You can disable anytime by clicking the 🔔 button again.</p>
-      </div>
       <div class="squawk-dd" id="squawkDd">
         <div class="push-card" id="pushCard" onclick="IS_PRO ? togglePushNotifications() : showUpgrade('Push Notifications')">
           <div class="push-card-left">
@@ -7970,9 +7955,6 @@ function _handlePushBellClick() {
     togglePushNotifications();
   } else {
     localStorage.setItem('tnt_push_explain_seen', '1');
-    // Position relative to the squawk-wrap
-    const wrap = document.getElementById('squawkWrap');
-    if (wrap) wrap.style.position = 'relative';
     explainEl.style.display = 'block';
     // Close on outside click
     setTimeout(() => {
@@ -8833,5 +8815,21 @@ try { applyTranslations(); } catch(e) {}
   } else { init(); }
 })();
 </script>
+<!-- Push explain popup — lives at body level to never block header buttons -->
+<div class="push-explain" id="pushExplain" style="display:none" role="dialog" aria-modal="true">
+  <button class="push-explain-close" onclick="document.getElementById('pushExplain').style.display='none'" aria-label="Close">×</button>
+  <div class="push-explain-icon">📡</div>
+  <p class="push-explain-title">Real-Time Market Alerts</p>
+  <p class="push-explain-body">Get instant browser notifications for <strong>HIGH impact news</strong> from Trading News Terminal — even when this tab is closed or minimised.</p>
+  <div class="push-explain-preview">
+    <span class="push-preview-dot"></span>
+    <div>
+      <span class="push-preview-app">🔴 Trading News Terminal</span>
+      <span class="push-preview-msg">Fed raises rates by 50bps — surprise move...</span>
+    </div>
+  </div>
+  <button class="push-explain-enable" onclick="document.getElementById('pushExplain').style.display='none'; togglePushNotifications()">Enable Push Alerts</button>
+  <p class="push-explain-note">You can disable anytime by clicking the 🔔 button again.</p>
+</div>
 </body>
 </html>
