@@ -482,6 +482,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .news-video-frame{width:100%;height:100%;border:none;display:block;}
 .news-video-label{position:absolute;top:8px;left:8px;background:rgba(255,0,0,0.85);color:#fff;font-size:9px;font-weight:800;letter-spacing:0.12em;padding:3px 8px;border-radius:2px;pointer-events:none;}
 .yt-live-tag{font-size:9px;font-weight:800;letter-spacing:0.12em;color:#fff;background:rgba(255,0,0,0.85);padding:2px 6px;border-radius:2px;}
+.via-tg-badge{font-size:9px;font-weight:800;letter-spacing:0.10em;color:#fff;background:rgba(0,136,204,0.9);padding:2px 6px;border-radius:2px;vertical-align:middle;}
 
 /* ── TV Side Panel ── */
 .tv-panel{background:#000;border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
@@ -4219,7 +4220,7 @@ function removeCustomTicker(ticker) {
 }
 function _updateMyNewsCount() {
   const impactCount = myNewsImpact.has('ALL') ? 0 : myNewsImpact.size;
-  const kwCount     = keywordAlerts.length;
+  const kwCount     = IS_PRO ? keywordAlerts.length : 0;
   const total  = myWatchlist.length + myCatWatch.length + myCalCountries.length + impactCount + kwCount;
   const badge  = document.getElementById('mynewsBadge');
   const summary= document.getElementById('mynewsSummary');
@@ -4234,7 +4235,7 @@ function _updateMyNewsCount() {
       if (myCatWatch.length)     parts.push(myCatWatch.length     + ' ' + t(myCatWatch.length     > 1 ? 'mnf.n_categories' : 'mnf.n_category'));
       if (myCalCountries.length) parts.push(myCalCountries.length + ' ' + t(myCalCountries.length > 1 ? 'mnf.n_countries'  : 'mnf.n_country'));
       if (impactCount > 0)       parts.push(impactCount           + ' ' + t(impactCount           > 1 ? 'mnf.n_impacts'    : 'mnf.n_impact'));
-      if (kwCount > 0)           parts.push(kwCount               + ' ' + (kwCount > 1 ? 'keywords' : 'keyword'));
+      if (IS_PRO && kwCount > 0) parts.push(kwCount               + ' ' + (kwCount > 1 ? 'keywords' : 'keyword'));
       summary.textContent = parts.join(' · ');
     }
   }
@@ -5632,6 +5633,7 @@ function renderNews() {
     }
 
     const safeH = (headline||'').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+    const viaBadge = (n.via === 'telegram') ? `<span class="via-tg-badge">⚡ TG</span>` : '';
 
     // Detect YouTube URL → embed inline player
     const ytId = extractYouTubeId(n.url);
@@ -5660,6 +5662,7 @@ function renderNews() {
         <div class="news-headline">${headline}${newBadge}</div>
         <div class="news-meta">
           <span class="news-source">${src}</span>
+          ${viaBadge}
           ${isCalRelease?`<span class="${calTagCls}">${t('cal.tag.release')}</span>`:''}
           ${ytId?`<span class="yt-live-tag">▶ LIVE</span>`:''}
           ${tags.map(tg=>`<span class="asset-tag">${tg}</span>`).join('')}
