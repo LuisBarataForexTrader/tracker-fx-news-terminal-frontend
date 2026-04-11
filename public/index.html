@@ -2497,7 +2497,7 @@ let squawkQueue      = [];
 let squawkSpeaking   = false;
 let squawkHistory    = []; // last 8 items read
 let squawkRate       = parseFloat(localStorage.getItem('squawkRate') || '1.0');
-let squawkFilters    = _migrateFilters(JSON.parse(localStorage.getItem('squawkFilters') || '["ALL"]'), 'squawkFilters');
+let squawkFilters    = _migrateFilters(JSON.parse(localStorage.getItem('squawkFilters') || '["HIGH","CAL_HIGH","CAL_MEDIUM"]'), 'squawkFilters');
 let squawkVoiceName  = localStorage.getItem('squawkVoiceName') || '';
 let recentNewUrls    = new Set(); // URLs arrived in last 3 min → show NEW badge
 let newItemsCount    = 0;         // count for notification badge
@@ -4419,6 +4419,7 @@ function squawkSpeak(text, url, newsItem) {
     url: url||'',
     isCal: !!(newsItem && newsItem._calRelease),
     impact: newsItem ? (newsItem.impact||'') : '',
+    source: newsItem ? (newsItem.source||'') : '',
     country: newsItem ? (newsItem._calCountry||newsItem.country||'') : '',
     calId: newsItem ? (newsItem._calId||null) : null,
     queuedAt: Date.now(),
@@ -4497,7 +4498,7 @@ function drainSquawkQueue() {
     if (!squawkEnabled) return; // user may have toggled off while waiting
     // Add to history only for real news articles (not system messages like "Squawk enabled")
     if (item.url) {
-      squawkHistory.unshift({ text: item.text, url: item.url, time: Date.now() });
+      squawkHistory.unshift({ text: item.text, url: item.url, time: Date.now(), impact: item.impact, source: item.source, isCal: item.isCal });
       if (squawkHistory.length > 8) squawkHistory.pop();
       _renderSquawkHistory();
     }
@@ -4529,8 +4530,14 @@ function _renderSquawkHistory() {
     const t = new Date(h.time).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
     const safe = (h.text||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const click = h.url ? `onclick="window.open('${h.url.replace(/'/g,"\\'")}','_blank')"` : '';
+    const impactCls = {'HIGH':'#ef4444','MEDIUM':'#f59e0b','LOW':'#6b7280'}[h.impact]||'#6b7280';
+    const impactBadge = h.impact ? `<span style="font-size:8px;font-weight:800;color:${impactCls};border:1px solid ${impactCls};padding:1px 4px;border-radius:2px;margin-right:4px;">${h.impact}</span>` : '';
+    const srcLabel = h.isCal ? '<span style="font-size:8px;color:#60a5fa;font-weight:700;">📅 CAL</span>' : (h.source ? `<span style="font-size:8px;color:rgba(255,255,255,.4);text-transform:uppercase;">${h.source}</span>` : '');
     return `<div class="squawk-hist-item" ${click}>
-      <span class="squawk-hist-time">${t}</span>
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+        <span class="squawk-hist-time">${t}</span>
+        ${impactBadge}${srcLabel}
+      </div>
       <span class="squawk-hist-headline">${safe}</span>
     </div>`;
   }).join('');
