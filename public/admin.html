@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -1314,11 +1314,22 @@ async function sec2faDisable() {
   } finally { btn.disabled = false; btn.textContent = 'Disable 2FA'; }
 }
 
-// ── Country flag helper (CSS-based via flag-icons — no ext image req, works everywhere) ──
+// ── Country flag helper — uses twemoji to convert emoji → <img> (works on Windows) ──────
 function _flag(cc) {
   if (!cc || cc === 'XX') return '';
-  // flag-icons: <span class="fi fi-pt"> renders as SVG background-image from the CSS bundle
-  return `<span class="fi fi-${cc.toLowerCase()}" style="border-radius:1px;vertical-align:middle;display:inline-block;margin-right:3px;font-size:14px"></span>`;
+  // Build the regional-indicator emoji for this country code (e.g. PT → 🇵🇹)
+  const emoji = Array.from(cc.toUpperCase()).map(c =>
+    String.fromCodePoint(0x1F1E6 - 65 + c.codePointAt(0))
+  ).join('');
+  if (window.twemoji) {
+    // twemoji.parse() returns HTML string with <img> tags — renders on all OS/browsers
+    return twemoji.parse(emoji, {
+      folder: 'svg', ext: '.svg',
+      attributes: () => ({ style: 'width:16px;height:16px;vertical-align:middle;margin-right:3px;border-radius:1px' })
+    });
+  }
+  // Fallback: plain 2-letter code badge if twemoji hasn't loaded yet
+  return `<span style="font-size:9px;font-weight:700;padding:1px 4px;border-radius:2px;background:rgba(42,52,68,.9);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);letter-spacing:.04em;font-family:var(--font-mono);vertical-align:middle;margin-right:3px">${cc.toUpperCase()}</span>`;
 }
 
 // ── API ────────────────────────────────────────────────────────
