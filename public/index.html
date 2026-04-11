@@ -4525,10 +4525,12 @@ function drainSquawkQueue() {
   if (_ttsAudio) { try { _ttsAudio.pause(); _ttsAudio.src = ''; } catch(e) {} }
   setTimeout(async () => {
     if (!squawkEnabled) return; // user may have toggled off while waiting
-    // Add to history only when squawk actually starts reading
-    squawkHistory.unshift({ text: item.text, url: item.url, time: Date.now() });
-    if (squawkHistory.length > 8) squawkHistory.pop();
-    _renderSquawkHistory();
+    // Add to history only for real news articles (not system messages like "Squawk enabled")
+    if (item.url) {
+      squawkHistory.unshift({ text: item.text, url: item.url, time: Date.now() });
+      if (squawkHistory.length > 8) squawkHistory.pop();
+      _renderSquawkHistory();
+    }
     await _playTTS(spokenText);
     drainSquawkQueue();
   }, 150);
