@@ -868,6 +868,13 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .sidebar-push-row{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,0.03);cursor:pointer;transition:all .18s;user-select:none;}
 .sidebar-push-row:hover{background:rgba(255,255,255,0.06);border-color:var(--border2);}
 .sidebar-push-row.push-active{border-color:rgba(39,174,96,0.5);background:rgba(39,174,96,0.08);}
+/* Locked state for basic users */
+.sidebar-push-row.push-locked{opacity:0.45;cursor:not-allowed;pointer-events:none;}
+.sidebar-push-section.push-locked-section .sidebar-push-row:hover{background:rgba(255,255,255,0.03);border-color:var(--border);}
+.sidebar-push-section.push-locked-section{cursor:not-allowed;}
+.sidebar-push-section.push-locked-section .sidebar-push-row{pointer-events:none;}
+.sidebar-push-section.push-locked-section{pointer-events:all;}
+.push-lock-icon{font-size:13px;color:rgba(167,139,250,0.6);flex-shrink:0;}
 .sidebar-push-icon{font-size:16px;flex-shrink:0;}
 .sidebar-push-text{display:flex;flex-direction:column;gap:1px;flex:1;min-width:0;}
 .sidebar-push-title{font-size:11px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -1430,17 +1437,18 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
     </nav>
 
     <!-- ── Push Alerts (sidebar section, PRO only) ── -->
-    <div class="sidebar-push-section" id="sidebarPushSection">
+    <div class="sidebar-push-section" id="sidebarPushSection" onclick="!IS_PRO && showUpgrade('Push Notifications')">
       <div class="sidebar-label" style="display:flex;align-items:center;justify-content:space-between;">
         <span data-i18n="push.sidebar_label">Push Notifications</span>
         <span class="tab-pro-lock" id="pushProBadge">PRO</span>
       </div>
-      <div class="sidebar-push-row" id="sidebarPushRow" onclick="IS_PRO ? _handlePushBellClick() : showUpgrade('Push Notifications')" title="Browser push alerts — get notified even when the tab is closed">
+      <div class="sidebar-push-row" id="sidebarPushRow" onclick="IS_PRO ? _handlePushBellClick() : showUpgrade('Push Notifications')">
         <span class="sidebar-push-icon" id="sidebarPushIcon">🔕</span>
         <div class="sidebar-push-text">
           <span class="sidebar-push-title" data-i18n="push.section">Browser Notifications</span>
           <span class="sidebar-push-status" id="sidebarPushSub" data-i18n="push.desc">Alerts even when tab is closed</span>
         </div>
+        <span class="push-lock-icon" id="pushLockIcon" style="display:none">🔒</span>
         <div class="push-toggle" id="pushToggle">
           <div class="push-toggle-knob"></div>
         </div>
@@ -2298,6 +2306,16 @@ const PAGE_SIZE     = 50;
 // Hide PRO lock badges for pro/trial users — basic plan only sees them
 if (IS_PRO) {
   document.querySelectorAll('.tab-pro-lock').forEach(el => el.style.display = 'none');
+} else {
+  // Lock push section visually for basic users
+  const pushSection = document.getElementById('sidebarPushSection');
+  const pushRow     = document.getElementById('sidebarPushRow');
+  const pushToggle  = document.getElementById('pushToggle');
+  const pushLock    = document.getElementById('pushLockIcon');
+  if (pushSection) pushSection.classList.add('push-locked-section');
+  if (pushRow)     pushRow.classList.add('push-locked');
+  if (pushToggle)  pushToggle.style.display = 'none';
+  if (pushLock)    pushLock.style.display   = 'inline';
 }
 
 // ─── Article Translation (Google Translate proxy) — PRO only ─────
