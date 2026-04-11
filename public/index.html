@@ -7985,16 +7985,25 @@ async function togglePushNotifications() {
     _showPushToast('❌ Could not reach server. Check your connection.', '#c0392b');
     return;
   }
-  // First attempt
+  // Check FCM reachability before attempting subscription
+  let fcmReachable = false;
+  try {
+    await fetch('https://fcm.googleapis.com/', { mode: 'no-cors', cache: 'no-store' });
+    fcmReachable = true;
+  } catch(e) { fcmReachable = false; }
+  console.log('[Push] FCM reachable:', fcmReachable);
+
+  // Reset SW state first for a clean slate
+  console.log('[Push] Resetting SW...');
+  try { await _resetServiceWorker(); } catch(e) { console.warn('[Push] SW reset error:', e); }
+
   let sub = await _tryPushSubscribe(publicKey);
   if (!sub) {
-    // Reset service worker and retry once
-    console.log('[Push] First attempt failed, resetting SW and retrying...');
-    try { await _resetServiceWorker(); } catch(e) { console.warn('[Push] SW reset failed:', e); }
-    sub = await _tryPushSubscribe(publicKey);
-  }
-  if (!sub) {
-    _showPushToast('❌ Push registration failed. Try: Settings → Privacy → Site Settings → Notifications → Reset for this site.', '#c0392b', 8000);
+    if (!fcmReachable) {
+      _showPushToast('❌ Google\'s push service is unreachable from your network. Try disabling VPN or browser extensions.', '#c0392b', 8000);
+    } else {
+      _showPushToast('❌ Push failed. Please update Chrome (click the "Update" button in top-right) and try again.', '#c0392b', 8000);
+    }
     return;
   }
   // Save subscription to backend
