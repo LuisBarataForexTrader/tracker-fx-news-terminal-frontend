@@ -4694,7 +4694,7 @@ function handleNewsData(data, isInit) {
   const squawkHighAge = now - 2*60*1000;   // HIGH impact: allow up to 2 min since ingestion
   // Publication timestamp gates — prevents squawking articles GDELT/Marketaux indexed late
   const squawkPubMax  = now - 20*60*1000;  // regular news: must have been published <=20 min ago
-  const squawkPubHigh = now - 60*60*1000;  // HIGH impact:  must have been published <=60 min ago
+  const squawkPubHigh = now - 15*60*1000;  // HIGH impact:  must have been published <=15 min ago
   let hasRecentNew = false;
   let genuineNewCount = 0;
 
