@@ -2435,7 +2435,7 @@ let myNewsImpact     = new Set(['ALL']); // impact filter for My News tab only
 let selectedCategories = new Set(); // empty = ALL
 // Track which categories have already had their extended history loaded this session
 const _catHistoryLoaded = new Set();
-let _fetchingCatHistory = false;
+const _fetchingCatHistory = new Set(); // tracks in-progress fetches per category
 let calAssetFilter   = new Set();   // empty = ALL assets
 let calImpactFilter  = new Set([1, 0]);
 let searchQuery      = '';
@@ -3887,7 +3887,7 @@ const CATEGORY_KEYWORDS = {
     assets:['USD','EUR','GBP','JPY','AUD','CAD','CHF','NZD','CNY'],
     keywords:[
       // Generic FX
-      'forex','fx market','currency pair','exchange rate','foreign exchange','currency market',
+      'forex','fx market','currency pair','foreign exchange','currency market',
       // USD
       'dollar index','dxy','greenback','dollar rally','dollar drops','dollar gains','dollar weakens',
       // EUR
@@ -4118,6 +4118,18 @@ function newsMatchesCategory(n, cat) {
   // Agricultural commodities must NOT appear in FOREX/CRYPTO/BONDS/EQUITIES/INDEXES
   if (['FOREX','CRYPTO','BONDS','EQUITIES','INDEXES'].includes(cat) && isAgriCommodity(headline)) return false;
   const assets = (n.assets||'').split(',').map(x=>x.trim());
+  // FOREX: equity/index-tagged articles should never bleed into FOREX unless they carry a direct FX asset too.
+  // E.g. "S&P 500 drops as dollar gains" has both SP500 and USD → hasFxAsset=true → allowed.
+  // "European Stocks Surge on Earnings Beat" has SP500/DAX but no FX asset → blocked.
+  if (cat === 'FOREX') {
+    const hasFxAsset = def.assets && def.assets.some(a => assets.includes(a));
+    const _EQ_IDX = new Set(['SP500','NDX','DOW','DAX','FTSE','NIKKEI','CAC','HSI','VIX',
+      'AAPL','NVDA','MSFT','AMZN','META','TSLA','GOOGL','GOOG','JPM','BAC','XOM','AVGO','BRK']);
+    if (!hasFxAsset && assets.some(a => _EQ_IDX.has(a))) return false;
+    if (hasFxAsset) return true;
+    if (def.keywords && def.keywords.some(kw => _kwMatches(headline, kw))) return true;
+    return false;
+  }
   if (def.assets && def.assets.some(a => assets.includes(a))) return true;
   if (def.keywords && def.keywords.some(kw => _kwMatches(headline, kw))) return true;
   return false;
@@ -5249,8 +5261,8 @@ const _CAT_TO_BACKEND = {
 // Only runs once per category per session (tracked in _catHistoryLoaded).
 async function _fetchCategoryHistory(cat) {
   const backendCat = _CAT_TO_BACKEND[cat];
-  if (!backendCat || _catHistoryLoaded.has(cat) || _fetchingCatHistory) return;
-  _fetchingCatHistory = true;
+  if (!backendCat || _catHistoryLoaded.has(cat) || _fetchingCatHistory.has(cat)) return;
+  _fetchingCatHistory.add(cat);
   try {
     const tok = localStorage.getItem('tnt_token');
     const headers = tok ? { 'Authorization': 'Bearer ' + tok } : {};
@@ -5260,16 +5272,16 @@ async function _fetchCategoryHistory(cat) {
     if (!Array.isArray(data) || data.length === 0) return;
     const prevLen = allNews.length;
     allNews = mergeNewsArrays(allNews, data);
+    _catHistoryLoaded.add(cat);
     if (allNews.length > prevLen) {
       saveNewsCache(allNews);
       updateCounts(allNews);
       renderNews();
     }
-    _catHistoryLoaded.add(cat);
   } catch(e) {
     console.warn('[history]', e);
   } finally {
-    _fetchingCatHistory = false;
+    _fetchingCatHistory.delete(cat);
   }
 }
 
@@ -5286,7 +5298,7 @@ function setCategory(cat, btn) {
     } else {
       selectedCategories.add(cat); btn.classList.add('active');
       // Auto-load extended history for this category (once per session)
-      if (_CAT_TO_BACKEND[cat] && !_catHistoryLoaded.has(cat)) {
+      if (_CAT_TO_BACKEND[cat] && !_catHistoryLoaded.has(cat) && !_fetchingCatHistory.has(cat)) {
         _fetchCategoryHistory(cat);
       }
     }
