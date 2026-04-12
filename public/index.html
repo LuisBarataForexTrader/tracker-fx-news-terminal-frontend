@@ -3932,7 +3932,7 @@ const CATEGORY_KEYWORDS = {
       'bonk','jupiter dex','jup','optimism protocol',
       'crypto regulation','sec crypto','crypto etf','spot bitcoin etf',
       'crypto market','digital currency','virtual currency','crypto crash','crypto rally',
-      'mining','hash rate','halving','layer 2','defi protocol','yield farming',
+      'crypto mining','bitcoin mining','bitcoin miner','eth mining','proof of work','hash rate','halving','layer 2','defi protocol','yield farming',
     ],
     calCountries:[],
   },
@@ -4786,7 +4786,17 @@ function mergeNewsArrays(existing, incoming) {
   const map = new Map();
   existing.forEach(n => map.set(n.url, n));
   incoming.forEach(n => map.set(n.url, n)); // overwrite with fresh data
-  return [...map.values()].sort((a,b) => parseUTC(b.timestamp) - parseUTC(a.timestamp));
+  // Secondary dedup by headline text (first 80 chars, lowercased).
+  // Catches same story ingested from two sources with different URLs.
+  const seen = new Map(); // headlineKey → url
+  const result = [];
+  for (const n of [...map.values()].sort((a,b) => parseUTC(b.timestamp) - parseUTC(a.timestamp))) {
+    const hKey = (n.headline_en || n.headline || '').toLowerCase().slice(0, 80);
+    if (hKey && seen.has(hKey)) continue; // drop duplicate
+    if (hKey) seen.set(hKey, n.url);
+    result.push(n);
+  }
+  return result;
 }
 
 // ─── News data handler ────────────────────────────────────────────
