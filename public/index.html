@@ -616,10 +616,11 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .share-btn{font-size:10px;font-weight:500;padding:3px 9px;background:transparent;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;font-family:var(--font);transition:all .15s;border-radius:2px;}
 .share-btn:hover{border-color:var(--accent);color:var(--accent);}
 /* ── AI Explain button ── */
-.ai-btn{font-size:10px;font-weight:600;padding:3px 9px;background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(167,139,250,0.1));border:1px solid rgba(167,139,250,0.35);color:#a78bfa;cursor:pointer;font-family:var(--font);transition:all .15s;border-radius:2px;letter-spacing:0.02em;}
-.ai-btn:hover{background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(167,139,250,0.2));border-color:#a78bfa;color:#c4b5fd;}
-.ai-btn.loading{opacity:0.6;cursor:wait;}
-.ai-btn.done{color:#34d399;border-color:rgba(52,211,153,0.4);background:rgba(52,211,153,0.08);}
+@keyframes ai-glow{0%,100%{box-shadow:0 0 5px rgba(0,212,255,0.5),0 0 10px rgba(0,212,255,0.25);}50%{box-shadow:0 0 10px rgba(0,212,255,0.8),0 0 20px rgba(0,212,255,0.45),0 0 30px rgba(0,212,255,0.2);}}
+.ai-btn{font-size:10px;font-weight:700;padding:3px 9px;background:linear-gradient(135deg,rgba(0,212,255,0.12),rgba(0,180,220,0.07));border:1px solid rgba(0,212,255,0.45);color:#00d4ff;cursor:pointer;font-family:var(--font);transition:all .15s;border-radius:2px;letter-spacing:0.04em;animation:ai-glow 2.4s ease-in-out infinite;}
+.ai-btn:hover{background:linear-gradient(135deg,rgba(0,212,255,0.22),rgba(0,180,220,0.14));border-color:#00d4ff;color:#fff;box-shadow:0 0 14px rgba(0,212,255,0.7);}
+.ai-btn.loading{opacity:0.6;cursor:wait;animation:none;}
+.ai-btn.done{color:#34d399;border-color:rgba(52,211,153,0.4);background:rgba(52,211,153,0.08);animation:none;box-shadow:none;}
 /* ── AI result panel ── */
 .ai-result{display:none;margin-top:8px;padding:10px 12px;background:rgba(124,58,237,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:4px;font-size:11px;line-height:1.5;}
 .ai-result.show{display:block;}
