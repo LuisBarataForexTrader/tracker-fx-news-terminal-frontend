@@ -615,6 +615,26 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .news-actions{display:flex;align-items:center;gap:6px;margin-top:4px;}
 .share-btn{font-size:10px;font-weight:500;padding:3px 9px;background:transparent;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;font-family:var(--font);transition:all .15s;border-radius:2px;}
 .share-btn:hover{border-color:var(--accent);color:var(--accent);}
+/* ── AI Explain button ── */
+.ai-btn{font-size:10px;font-weight:600;padding:3px 9px;background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(167,139,250,0.1));border:1px solid rgba(167,139,250,0.35);color:#a78bfa;cursor:pointer;font-family:var(--font);transition:all .15s;border-radius:2px;letter-spacing:0.02em;}
+.ai-btn:hover{background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(167,139,250,0.2));border-color:#a78bfa;color:#c4b5fd;}
+.ai-btn.loading{opacity:0.6;cursor:wait;}
+.ai-btn.done{color:#34d399;border-color:rgba(52,211,153,0.4);background:rgba(52,211,153,0.08);}
+/* ── AI result panel ── */
+.ai-result{display:none;margin-top:8px;padding:10px 12px;background:rgba(124,58,237,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:4px;font-size:11px;line-height:1.5;}
+.ai-result.show{display:block;}
+.ai-result-explanation{color:var(--text);margin-bottom:8px;font-size:11.5px;line-height:1.6;}
+.ai-result-assets{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.ai-asset-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;letter-spacing:0.04em;}
+.ai-asset-tag.bullish{background:rgba(16,185,129,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.3);}
+.ai-asset-tag.bearish{background:rgba(255,59,92,0.12);color:#ff3b5c;border:1px solid rgba(255,59,92,0.25);}
+.ai-asset-tag.neutral{background:rgba(148,163,184,0.1);color:#94a3b8;border:1px solid rgba(148,163,184,0.2);}
+.ai-result-footer{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text-muted);}
+.ai-conf-badge{font-weight:700;padding:1px 6px;border-radius:2px;font-size:9px;letter-spacing:0.08em;}
+.ai-conf-badge.HIGH{background:rgba(255,59,92,0.15);color:#ff3b5c;}
+.ai-conf-badge.MEDIUM{background:rgba(245,158,11,0.15);color:#f59e0b;}
+.ai-conf-badge.LOW{background:rgba(148,163,184,0.1);color:#94a3b8;}
+.ai-key-level{font-size:10px;color:#a78bfa;font-style:italic;}
 .cal-release-time{font-size:12px;font-family:var(--font-mono);color:#fff;font-weight:500;letter-spacing:0.04em;}
 .cal-release-time::before{content:'🕐 Published: ';font-size:9px;font-weight:400;opacity:0.65;letter-spacing:0.08em;text-transform:uppercase;}
 .news-impact{text-align:right;padding-top:2px;}
@@ -5231,6 +5251,70 @@ function showToast(msg) {
   const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'),2800);
 }
+// ─── AI Explain News ───────────────────────────────────────────────
+async function aiExplainNews(idx, headline, summary, source) {
+  const btn    = document.getElementById('ai-btn-' + idx);
+  const panel  = document.getElementById('ai-result-' + idx);
+  if (!btn || !panel) return;
+
+  // Toggle off if already showing
+  if (panel.classList.contains('show')) {
+    panel.classList.remove('show');
+    btn.classList.remove('done');
+    btn.textContent = '✦ AI';
+    return;
+  }
+
+  btn.classList.add('loading');
+  btn.textContent = '⟳ Thinking…';
+
+  try {
+    const tok = localStorage.getItem('tnt_token');
+    const res = await fetch(BACKEND_URL + '/api/ai/explain', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + (tok || ''),
+      },
+      body: JSON.stringify({ headline, summary: summary || '', source: source || '', lang }),
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+
+    // Render explanation
+    const expHtml = `<div class="ai-result-explanation">${data.explanation || ''}</div>`;
+
+    // Render asset impact tags
+    const impacts = (data.market_impact || []).map(item => {
+      const dir = (item.direction || 'neutral').toLowerCase();
+      const arrow = dir === 'bullish' ? '▲' : dir === 'bearish' ? '▼' : '→';
+      return `<span class="ai-asset-tag ${dir}" title="${item.reason || ''}">${arrow} ${item.asset}</span>`;
+    }).join('');
+    const assetsHtml = impacts ? `<div class="ai-result-assets">${impacts}</div>` : '';
+
+    // Confidence + key level
+    const conf = (data.confidence || 'MEDIUM').toUpperCase();
+    const keyLevel = data.key_level ? `<span class="ai-key-level">📍 ${data.key_level}</span>` : '';
+    const footerHtml = `<div class="ai-result-footer">
+      <span class="ai-conf-badge ${conf}">CONF: ${conf}</span>
+      ${keyLevel}
+      <span style="margin-left:auto;opacity:0.5;font-size:9px;">✦ TNT AI · Llama 3.3 70B</span>
+    </div>`;
+
+    panel.innerHTML = expHtml + assetsHtml + footerHtml;
+    panel.classList.add('show');
+    btn.classList.remove('loading');
+    btn.classList.add('done');
+    btn.textContent = '✦ AI ✓';
+  } catch (err) {
+    console.warn('[AI]', err);
+    panel.innerHTML = `<div style="color:#ff3b5c;font-size:11px;">⚠ AI temporarily unavailable. Try again.</div>`;
+    panel.classList.add('show');
+    btn.classList.remove('loading');
+    btn.textContent = '✦ AI';
+  }
+}
+
 function shareNews(url,headline) {
   if (navigator.share) navigator.share({title:headline,url});
   else navigator.clipboard.writeText(url).then(()=>showToast(t('toast.link_copied')));
@@ -5467,7 +5551,9 @@ function renderNews() {
         <div class="news-actions">
           ${isCalRelease?`<span class="cal-release-time">🕐 ${parseUTC(n.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false})}</span>`:''}
           ${!ytId&&!isCalRelease&&n.url?`<button class="share-btn" onclick="event.stopPropagation();shareNews('${n.url}','${safeH}')">${t('share.btn')}</button>`:''}
+          ${IS_PRO&&!isCalRelease?`<button class="ai-btn" id="ai-btn-${idx}" onclick="event.stopPropagation();aiExplainNews(${idx},${JSON.stringify(headline)},${JSON.stringify(summary)},${JSON.stringify(src)})">✦ AI</button>`:''}
         </div>
+        ${IS_PRO&&!isCalRelease?`<div class="ai-result" id="ai-result-${idx}"></div>`:''}
       </div>
       <div class="news-impact"><span class="impact-badge ${badgeCls}">${badgeLbl}</span></div>
     </div>`;
