@@ -2433,6 +2433,9 @@ let lang             = 'en';
 let impactFilters    = new Set(['ALL']); // multi-select: 'ALL'|'HIGH'|'MEDIUM'|'LOW'
 let myNewsImpact     = new Set(['ALL']); // impact filter for My News tab only
 let selectedCategories = new Set(); // empty = ALL
+// Track which categories have already had their extended history loaded this session
+const _catHistoryLoaded = new Set();
+let _fetchingCatHistory = false;
 let calAssetFilter   = new Set();   // empty = ALL assets
 let calImpactFilter  = new Set([1, 0]);
 let searchQuery      = '';
@@ -5227,6 +5230,40 @@ function exportNewsFeed() {
   URL.revokeObjectURL(a.href);
 }
 // MULTI-SELECT category
+// Map frontend category keys → backend cat param (lowercase, matching _CAT_ASSET_FILTERS)
+const _CAT_TO_BACKEND = {
+  'FOREX':'forex','CRYPTO':'crypto','COMMODITIES':'commodities',
+  'BONDS':'bonds','EQUITIES':'equities','INDEXES':'indexes','MACRO':'macro',
+};
+
+// Fetch extended category history from backend when filtered results are sparse.
+// Only runs once per category per session (tracked in _catHistoryLoaded).
+async function _fetchCategoryHistory(cat) {
+  const backendCat = _CAT_TO_BACKEND[cat];
+  if (!backendCat || _catHistoryLoaded.has(cat) || _fetchingCatHistory) return;
+  _fetchingCatHistory = true;
+  try {
+    const tok = localStorage.getItem('tnt_token');
+    const headers = tok ? { 'Authorization': 'Bearer ' + tok } : {};
+    const r = await fetch(`${BACKEND_URL}/news?limit=1000&cat=${backendCat}`, { headers });
+    if (!r.ok) return;
+    const data = await r.json();
+    if (!Array.isArray(data) || data.length === 0) return;
+    const prevLen = allNews.length;
+    allNews = mergeNewsArrays(allNews, data);
+    if (allNews.length > prevLen) {
+      saveNewsCache(allNews);
+      updateCounts(allNews);
+      renderNews();
+    }
+    _catHistoryLoaded.add(cat);
+  } catch(e) {
+    console.warn('[history]', e);
+  } finally {
+    _fetchingCatHistory = false;
+  }
+}
+
 function setCategory(cat, btn) {
   if (cat === 'ALL') {
     selectedCategories.clear();
@@ -5239,6 +5276,10 @@ function setCategory(cat, btn) {
       selectedCategories.delete(cat); btn.classList.remove('active');
     } else {
       selectedCategories.add(cat); btn.classList.add('active');
+      // Auto-load extended history for this category (once per session)
+      if (_CAT_TO_BACKEND[cat] && !_catHistoryLoaded.has(cat)) {
+        _fetchCategoryHistory(cat);
+      }
     }
     if (selectedCategories.size === 0) {
       document.querySelector('[data-cat="ALL"]').classList.add('active');
