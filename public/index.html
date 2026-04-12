@@ -2543,12 +2543,25 @@ const ASSET_FLAG = {
   FOMC:'🏛️',ECB:'🏛️',BOE:'🏛️',CPI:'📈',GDP:'📊',NFP:'💼',
   // Geopolitical / Themes
   EUROPE:'🇪🇺',IRAN:'🇮🇷',RUSSIA:'🇷🇺',CHINA:'🇨🇳',UKRAINE:'🇺🇦',ISRAEL:'🇮🇱',
-  MIDEAST:'🕌',WAR:'⚔️',TRUMP:'🇺🇸',BIDEN:'🇺🇸',TARIFF:'📦',SANCTIONS:'🚫',OPEC:'🛢️'
+  MIDEAST:'🕌',WAR:'⚔️',TRUMP:'🇺🇸',BIDEN:'🇺🇸',TARIFF:'📦',SANCTIONS:'🚫',OPEC:'🛢️',
+  // Additional Currencies
+  SGD:'🇸🇬',HKD:'🇭🇰',KRW:'🇰🇷',CZK:'🇨🇿',
+  // Additional Crypto
+  SHIB:'🐕',TON:'💎',SUI:'◆',ARB:'◆',WLD:'👁️',
+  // Additional Stocks
+  TSM:'🇹🇼',BABA:'🇨🇳',BIDU:'🇨🇳',DIS:'🎬',BA:'✈️',PYPL:'💳',SQ:'💳',SHOP:'🛒',SNAP:'👻',
+  ABNB:'🏠',RIVN:'⚡',NIO:'⚡',SPOT:'🎵',RBLX:'🎮',WFC:'🏦',C:'🏦',HSBC:'🏦',ASML:'🔬',
+  // Macro
+  PCE:'📈',PPI:'📈',PMI:'📊',ISM:'📊',JOLTS:'💼',RETAIL:'🛍️',
+  // Geopolitical / Themes
+  INDIA:'🇮🇳',TAIWAN:'🇹🇼',NORTH_KOREA:'🇰🇵',NATO:'🛡️',AI:'🤖',EV:'⚡',
+  MUSK:'🚀',ZELENSKY:'🇺🇦',MODI:'🇮🇳',
 };
 const ASSET_NAME = {
   // Forex
   USD:'USD',EUR:'EUR',GBP:'GBP',JPY:'JPY',CHF:'CHF',AUD:'AUD',CAD:'CAD',NZD:'NZD',CNY:'CNY',
   SEK:'SEK',NOK:'NOK',DKK:'DKK',MXN:'MXN',BRL:'BRL',ZAR:'ZAR',TRY:'TRY',INR:'INR',KRW:'KRW',PLN:'PLN',
+  SGD:'SGD',HKD:'HKD',CZK:'CZK',
   // Metals & Commodities
   GOLD:'GOLD',SILVER:'SILVER',PLATINUM:'PLATINUM',PALLADIUM:'PALLADIUM',COPPER:'COPPER',
   OIL:'OIL',BRENT:'BRENT',NATGAS:'NAT GAS',WHEAT:'WHEAT',CORN:'CORN',SOYBEAN:'SOYBEAN',COFFEE:'COFFEE',COCOA:'COCOA',COTTON:'COTTON',
@@ -2558,15 +2571,21 @@ const ASSET_NAME = {
   // Crypto
   BTC:'BTC',ETH:'ETH',XRP:'XRP',SOL:'SOL',BNB:'BNB',DOGE:'DOGE',ADA:'ADA',LINK:'LINK',DOT:'DOT',
   LTC:'LTC',AVAX:'AVAX',UNI:'UNI',ATOM:'ATOM',NEAR:'NEAR',MATIC:'POL',AAVE:'AAVE',PEPE:'PEPE',CRYPTO:'CRYPTO',
+  SHIB:'SHIB',TON:'TON',SUI:'SUI',ARB:'ARB',WLD:'WLD',
   // US Stocks
   AAPL:'AAPL',MSFT:'MSFT',NVDA:'NVDA',GOOGL:'GOOGL',META:'META',AMZN:'AMZN',TSLA:'TSLA',NFLX:'NFLX',
   AMD:'AMD',INTC:'INTC',AVGO:'AVGO',CRM:'CRM',ADBE:'ADBE',ORCL:'ORCL',UBER:'UBER',PLTR:'PLTR',ARM:'ARM',COIN:'COIN',MSTR:'MSTR',
   JPM:'JPM',GS:'GS',BAC:'BAC',MS:'MS',V:'VISA',MA:'MASTERCARD','BRK-B':'BRK.B',XOM:'EXXON',CVX:'CHEVRON',UNH:'UNH',WMT:'WALMART',
+  TSM:'TSM',BABA:'BABA',BIDU:'BAIDU',DIS:'DISNEY',BA:'BOEING',PYPL:'PAYPAL',SQ:'BLOCK',SHOP:'SHOPIFY',
+  SNAP:'SNAP',ABNB:'AIRBNB',RIVN:'RIVIAN',NIO:'NIO',SPOT:'SPOTIFY',RBLX:'ROBLOX',WFC:'WELLS FARGO',C:'CITIGROUP',HSBC:'HSBC',ASML:'ASML',
   // Macro Events / Indicators
   FOMC:'FOMC',ECB:'ECB',BOE:'BoE',CPI:'CPI',GDP:'GDP',NFP:'NFP',
+  PCE:'PCE',PPI:'PPI',PMI:'PMI',ISM:'ISM',JOLTS:'JOLTS',RETAIL:'RETAIL',
   // Geopolitical / Themes
   EUROPE:'EUROPE',IRAN:'IRAN',RUSSIA:'RUSSIA',CHINA:'CHINA',UKRAINE:'UKRAINE',ISRAEL:'ISRAEL',
-  MIDEAST:'MID-EAST',WAR:'WAR',TRUMP:'TRUMP',BIDEN:'BIDEN',TARIFF:'TARIFFS',SANCTIONS:'SANCTIONS',OPEC:'OPEC'
+  MIDEAST:'MID-EAST',WAR:'WAR',TRUMP:'TRUMP',BIDEN:'BIDEN',TARIFF:'TARIFFS',SANCTIONS:'SANCTIONS',OPEC:'OPEC',
+  INDIA:'INDIA',TAIWAN:'TAIWAN',NORTH_KOREA:'N. KOREA',NATO:'NATO',AI:'AI',EV:'EV',
+  MUSK:'MUSK',ZELENSKY:'ZELENSKY',MODI:'MODI',
 };
 
 // ─── i18n ────────────────────────────────────────────────────────
@@ -4245,6 +4264,22 @@ function clearMyNewsFeed() {
 // Initialise on load
 _syncModalSelections();
 _updateMyNewsCount();
+
+// ─── Auto-tags: load trending topics from backend ─────────────────
+async function _loadAutoTags() {
+  try {
+    const r = await fetch(BACKEND_URL + '/api/auto-tags');
+    if (!r.ok) return;
+    const d = await r.json();
+    (d.auto_tags || []).forEach(at => {
+      ASSET_FLAG[at.tag] = '🔥';
+      ASSET_NAME[at.tag] = at.label.toUpperCase();
+    });
+    if ((d.auto_tags||[]).length)
+      console.log(`[AUTO_TAG] ${d.auto_tags.length} trending tags loaded:`, d.auto_tags.map(a=>a.label));
+  } catch(e) { /* silent — non-critical */ }
+}
+_loadAutoTags();
 
 // ─── Squawk (Edge TTS via backend API — Eric Neural voice) ─
 let _ttsAudio  = null;     // current Audio element
