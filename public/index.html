@@ -5281,7 +5281,7 @@ async function aiExplainNews(idx) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + (tok || ''),
       },
-      body: JSON.stringify({ headline, summary: summary || '', source: source || '', lang }),
+      body: JSON.stringify({ headline, summary: summary || '', source: source || '', url: d.url || '', lang }),
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
@@ -5556,7 +5556,7 @@ function renderNews() {
         <div class="news-actions">
           ${isCalRelease?`<span class="cal-release-time">🕐 ${parseUTC(n.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false})}</span>`:''}
           ${!ytId&&!isCalRelease&&n.url?`<button class="share-btn" onclick="event.stopPropagation();shareNews('${n.url}','${safeH}')">${t('share.btn')}</button>`:''}
-          ${IS_PRO&&!isCalRelease?(()=>{_aiNewsMap[idx]={headline,summary:n.summary||'',source:src};return`<button class="ai-btn" id="ai-btn-${idx}" onclick="event.stopPropagation();aiExplainNews(${idx})">✦ AI</button>`})():''}
+          ${IS_PRO&&!isCalRelease?(()=>{_aiNewsMap[idx]={headline,summary:n.summary||'',source:src,url:n.url||''};return`<button class="ai-btn" id="ai-btn-${idx}" onclick="event.stopPropagation();aiExplainNews(${idx})">✦ AI</button>`})():''}
         </div>
         ${IS_PRO&&!isCalRelease?`<div class="ai-result" id="ai-result-${idx}"></div>`:''}
       </div>
