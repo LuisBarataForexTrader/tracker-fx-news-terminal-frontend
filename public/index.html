@@ -541,7 +541,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .feed-title{font-size:16px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text);display:flex;align-items:center;gap:12px;}
 .feed-title-badge{font-size:9px;font-weight:700;letter-spacing:0.12em;color:var(--low);border:1px solid var(--low-border);padding:3px 8px;font-family:var(--font-mono);background:var(--low-bg);border-radius:2px;animation:blink 2s ease-in-out infinite;}
 .feed-count{font-size:11px;color:var(--text-muted);}
-.feed-inner{overflow-y:auto;flex:1;padding-bottom:40px;}
+.feed-inner{overflow-y:auto;flex:1;padding-bottom:40px;touch-action:pan-y;overscroll-behavior:contain;}
 
 /* ── News items ── */
 .news-item{border-bottom:1px solid var(--border);padding:14px 28px;transition:background .15s,filter .15s;cursor:pointer;display:grid;grid-template-columns:72px 1fr auto;gap:16px;align-items:start;animation:slideIn .3s ease-out;}
