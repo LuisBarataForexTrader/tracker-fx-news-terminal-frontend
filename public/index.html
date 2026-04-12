@@ -630,6 +630,11 @@ img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1
 .ai-asset-tag.bearish{background:rgba(255,59,92,0.12);color:#ff3b5c;border:1px solid rgba(255,59,92,0.25);}
 .ai-asset-tag.neutral{background:rgba(148,163,184,0.1);color:#94a3b8;border:1px solid rgba(148,163,184,0.2);}
 .ai-result-footer{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--text-muted);}
+.ai-upsell{padding:2px 0;}
+.ai-upsell-title{font-weight:700;font-size:11px;color:#a78bfa;margin-bottom:5px;letter-spacing:0.03em;}
+.ai-upsell-body{font-size:11px;color:var(--text-muted);line-height:1.5;margin-bottom:8px;}
+.ai-upsell-btn{display:inline-block;font-size:10px;font-weight:700;padding:4px 12px;background:linear-gradient(135deg,rgba(124,58,237,0.25),rgba(167,139,250,0.15));border:1px solid rgba(167,139,250,0.5);color:#c4b5fd;border-radius:2px;text-decoration:none;letter-spacing:0.03em;transition:all .15s;}
+.ai-upsell-btn:hover{background:linear-gradient(135deg,rgba(124,58,237,0.4),rgba(167,139,250,0.25));color:#fff;}
 .ai-conf-badge{font-weight:700;padding:1px 6px;border-radius:2px;font-size:9px;letter-spacing:0.08em;}
 .ai-conf-badge.HIGH{background:rgba(255,59,92,0.15);color:#ff3b5c;}
 .ai-conf-badge.MEDIUM{background:rgba(245,158,11,0.15);color:#f59e0b;}
@@ -5270,6 +5275,19 @@ async function aiExplainNews(idx) {
     return;
   }
 
+  // Basic plan — show upsell teaser instead of calling API
+  if (!IS_PRO) {
+    panel.innerHTML = `<div class="ai-upsell">
+      <div class="ai-upsell-title">✦ AI News Analysis</div>
+      <div class="ai-upsell-body">Reads the full article and gives you a structured analysis: market impact per asset (bullish / bearish / neutral), confidence level and key price levels to watch.</div>
+      <a href="/login?plan=pro" class="ai-upsell-btn">Upgrade to PRO →</a>
+    </div>`;
+    panel.classList.add('show');
+    btn.classList.add('done');
+    btn.textContent = '✦ AI ✦';
+    return;
+  }
+
   btn.classList.add('loading');
   btn.textContent = '⟳ Thinking…';
 
@@ -5303,7 +5321,6 @@ async function aiExplainNews(idx) {
     const footerHtml = `<div class="ai-result-footer">
       <span class="ai-conf-badge ${conf}">CONF: ${conf}</span>
       ${keyLevel}
-      <span style="margin-left:auto;opacity:0.5;font-size:9px;">✦ TNT AI · Llama 3.3 70B</span>
     </div>`;
 
     panel.innerHTML = expHtml + assetsHtml + footerHtml;
@@ -5556,9 +5573,9 @@ function renderNews() {
         <div class="news-actions">
           ${isCalRelease?`<span class="cal-release-time">🕐 ${parseUTC(n.timestamp).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false})}</span>`:''}
           ${!ytId&&!isCalRelease&&n.url?`<button class="share-btn" onclick="event.stopPropagation();shareNews('${n.url}','${safeH}')">${t('share.btn')}</button>`:''}
-          ${IS_PRO&&!isCalRelease?(()=>{_aiNewsMap[idx]={headline,summary:n.summary||'',source:src,url:n.url||''};return`<button class="ai-btn" id="ai-btn-${idx}" onclick="event.stopPropagation();aiExplainNews(${idx})">✦ AI</button>`})():''}
+          ${!isCalRelease?(()=>{_aiNewsMap[idx]={headline,summary:n.summary||'',source:src,url:n.url||''};return`<button class="ai-btn" id="ai-btn-${idx}" onclick="event.stopPropagation();aiExplainNews(${idx})">✦ AI</button>`})():''}
         </div>
-        ${IS_PRO&&!isCalRelease?`<div class="ai-result" id="ai-result-${idx}"></div>`:''}
+        ${!isCalRelease?`<div class="ai-result" id="ai-result-${idx}"></div>`:''}
       </div>
       <div class="news-impact"><span class="impact-badge ${badgeCls}">${badgeLbl}</span></div>
     </div>`;
