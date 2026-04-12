@@ -2501,6 +2501,7 @@ function _savePreferences() {
   const prefs = {
     myWatchlist, myCatWatch, myCalCountries,
     myNewsImpact: [...myNewsImpact],
+    impactFilters: [...impactFilters],
     squawkEnabled, squawkRate,
     squawkFilters: [...squawkFilters],
     soundEnabled,
@@ -2533,6 +2534,12 @@ async function _loadPreferences() {
     if (Array.isArray(p.myCatWatch))     { myCatWatch  = p.myCatWatch;     localStorage.setItem('myCatWatch',  JSON.stringify(myCatWatch)); }
     if (Array.isArray(p.myCalCountries)) { myCalCountries = p.myCalCountries; localStorage.setItem('myCalCountries', JSON.stringify(myCalCountries)); }
     if (Array.isArray(p.myNewsImpact) && p.myNewsImpact.length) { myNewsImpact = new Set(p.myNewsImpact); localStorage.setItem('myNewsImpact', JSON.stringify([...myNewsImpact])); }
+    if (Array.isArray(p.impactFilters) && p.impactFilters.length) {
+      impactFilters = new Set(p.impactFilters);
+      _savePrefs({impactFilters: [...impactFilters]});
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      impactFilters.forEach(impact => { const b = document.querySelector(`.filter-btn[data-impact="${impact}"]`); if (b) b.classList.add('active'); });
+    }
     if (typeof p.squawkEnabled === 'boolean') { squawkEnabled = p.squawkEnabled; localStorage.setItem('squawkEnabled', squawkEnabled); }
     if (typeof p.squawkRate    === 'number')  { squawkRate    = p.squawkRate;    localStorage.setItem('squawkRate', squawkRate.toString()); }
     if (Array.isArray(p.squawkFilters))  { squawkFilters = new Set(p.squawkFilters); localStorage.setItem('squawkFilters', JSON.stringify([...squawkFilters])); }
@@ -5160,6 +5167,7 @@ function setImpact(impact, btn) {
   displayLimit = PAGE_SIZE;
   updateFeedTitle(); renderNews();
   _savePrefs({impactFilters: [...impactFilters]});
+  _savePreferences();
 }
 // My News impact filter (multi-select, applied only when MY_NEWS tab is active)
 function setMyNewsImpact(impact, btn) {
