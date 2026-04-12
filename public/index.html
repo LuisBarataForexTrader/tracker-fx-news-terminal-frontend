@@ -4158,7 +4158,17 @@ function newsMatchesCategory(n, cat) {
       'QCOM','MU','SMCI','DELL','NET','SNOW','CRWD','PANW','CAT','DE',
       'SAP','NOVO','LVMH','BP','SHEL','RIO','BHP','BNTX','TTE']);
     if (!hasFxAsset && assets.some(a => _EQ_IDX.has(a))) return false;
-    if (hasFxAsset) return true;
+    if (hasFxAsset) {
+      // Extra check: USD-only articles where USD is just a price denomination (e.g. "stock hits $135 USD")
+      // must also have genuine FX context — a second FX asset, or an FX-specific word in the headline.
+      const fxAssets = assets.filter(a => def.assets.includes(a));
+      if (fxAssets.length === 1 && fxAssets[0] === 'USD') {
+        const hasFxContext = /\b(dollar|greenback|dxy|usd\/|\/usd|currency|forex|fx market|exchange rate|fed rate|fed funds|payroll|nfp|fomc)\b/.test(headline)
+          || def.assets.filter(a => a !== 'USD').some(a => assets.includes(a)); // second FX asset
+        if (!hasFxContext) return false;
+      }
+      return true;
+    }
     if (def.keywords && def.keywords.some(kw => _kwMatches(headline, kw))) return true;
     return false;
   }
