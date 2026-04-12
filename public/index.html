@@ -602,6 +602,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .news-source{font-size:10px;font-weight:600;letter-spacing:0.06em;color:rgba(255,255,255,0.7);text-transform:uppercase;}
 .news-item .news-time{color:#fff;}
 .news-item .news-source{color:rgba(255,255,255,0.7);}
+.news-source-blur{filter:blur(5px);user-select:none;pointer-events:none;}
 .asset-tag{font-size:12px;font-weight:700;padding:4px 9px;background:rgba(0,212,255,0.12);border:1px solid rgba(255,255,255,0.35);color:#fff;border-radius:3px;letter-spacing:0.04em;text-shadow:0 1px 3px rgba(0,0,0,0.5);display:inline-flex;align-items:center;gap:5px;font-family:var(--font),sans-serif;}
 .asset-tag .flag{font-size:15px;font-family:'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',sans-serif;line-height:1;}
 img.emoji{width:16px;height:16px;vertical-align:middle;display:inline;margin:0 1px;}
@@ -5443,7 +5444,7 @@ function renderNews() {
       <div>
         <div class="news-headline">${headline}${newBadge}</div>
         <div class="news-meta">
-          <span class="news-source">${src}</span>
+          <span class="news-source${IS_PRO?'':' news-source-blur'}">${src}</span>
           ${viaBadge}
           ${isCalRelease?`<span class="${calTagCls}">${t('cal.tag.release')}</span>`:''}
           ${ytId?`<span class="yt-live-tag">▶ LIVE</span>`:''}
