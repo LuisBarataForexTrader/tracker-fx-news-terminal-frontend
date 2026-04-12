@@ -3884,7 +3884,9 @@ function translatePT(text) {
 // calCountries: which calendar countries are shown in this category (null = all, [] = none)
 const CATEGORY_KEYWORDS = {
   FOREX: {
-    assets:['USD','EUR','GBP','JPY','AUD','CAD','CHF','NZD','CNY','SEK','NOK','MXN','BRL','ZAR','TRY','INR','PLN'],
+    assets:['USD','EUR','GBP','JPY','AUD','CAD','CHF','NZD','CNY',
+            'SEK','NOK','MXN','BRL','ZAR','TRY','INR','PLN',
+            'SGD','HKD','KRW','CZK','DKK','HUF','ILS','AED','SAR','THB','IDR','RUB','ARS','CLP'],
     keywords:[
       // Generic FX
       'forex','fx market','currency pair','foreign exchange','currency market',
@@ -3901,22 +3903,33 @@ const CATEGORY_KEYWORDS = {
       'new zealand dollar','nzd/usd','kiwi dollar','aussie dollar','loonie',
       // CNY
       'yuan','renminbi','cny','offshore yuan',
-      // Minor currencies
+      // Minor & EM currencies
       'swedish krona','norwegian krone','mexican peso','usd/mxn','brazilian real','usd/brl',
       'south african rand','usd/zar','turkish lira','usd/try','indian rupee','usd/inr','polish zloty',
+      'singapore dollar','usd/sgd','hong kong dollar','usd/hkd','korean won','usd/krw',
+      'danish krone','usd/dkk','hungarian forint','usd/huf','israeli shekel','usd/ils',
+      'russian ruble','usd/rub','argentine peso','usd/ars','thai baht','usd/thb',
+      'indonesian rupiah','usd/idr','chilean peso','usd/clp',
       // FX dynamics
       'currency intervention','safe haven currency','carry trade','dollar strength','dollar weakness',
     ],
-    calCountries:['US','EU','GB','JP','AU','CA','CH','NZ','CN','DE','FR'],
+    calCountries:['US','EU','GB','JP','AU','CA','CH','NZ','CN','DE','FR','SG','KR','IN','BR'],
   },
   CRYPTO: {
-    assets:['BTC','ETH','XRP','SOL','BNB','DOGE','ADA','DOT','AVAX','CRYPTO'],
+    assets:['BTC','ETH','XRP','SOL','BNB','DOGE','ADA','DOT','AVAX','CRYPTO',
+            'SHIB','TON','ARB','MATIC','PEPE','LTC','LINK','UNI','ATOM','NEAR','AAVE',
+            'TRX','XLM','HBAR','APT','OP','INJ','FIL','ICP','ETC','ALGO','STX','RENDER','WIF','BONK','JUP','SUI','WLD'],
     keywords:[
       'bitcoin','btc','crypto','cryptocurrency','ethereum','eth','blockchain','defi',
       'altcoin','digital asset','coinbase','binance','kraken','bybit','token',
       'stablecoin','usdt','usdc','nft','web3','solana','sol','xrp','ripple',
       'dogecoin','doge','cardano','ada','polkadot','dot','avalanche','avax',
       'chainlink','litecoin','ltc','bnb','shiba','pepe','meme coin',
+      'tron','trx','stellar','xlm','hedera','hbar','aptos','apt',
+      'injective','filecoin','fil','internet computer','icp','algorand','algo',
+      'ethereum classic','stacks','stx','arbitrum','polygon','near protocol',
+      'uniswap','cosmos','aave','render token','rndr','dogwifhat','wif',
+      'bonk','jupiter dex','jup','optimism protocol',
       'crypto regulation','sec crypto','crypto etf','spot bitcoin etf',
       'crypto market','digital currency','virtual currency','crypto crash','crypto rally',
       'mining','hash rate','halving','layer 2','defi protocol','yield farming',
@@ -3970,7 +3983,11 @@ const CATEGORY_KEYWORDS = {
     calCountries:['US','EU','GB','JP','AU','CA','CH','DE','FR'],
   },
   EQUITIES: {
-    assets:['SP500','AAPL','NVDA','MSFT','AMZN','META','TSLA','GOOGL','GOOG','JPM','BAC','GS','XOM','AVGO','BRK','MS','V','MA','WMT','UNH','CVX','NFLX','AMD','INTC','COIN','PLTR','ARM','MSTR','UBER','CRM','ADBE','ORCL'],
+    assets:['SP500','AAPL','NVDA','MSFT','AMZN','META','TSLA','GOOGL','GOOG','JPM','BAC','GS','XOM','AVGO','BRK','MS','V','MA','WMT','UNH','CVX','NFLX','AMD','INTC','COIN','PLTR','ARM','MSTR','UBER','CRM','ADBE','ORCL',
+            'TSM','BABA','DIS','BA','PYPL','SHOP','WFC','C','HSBC','ASML','BIDU','SNAP','ABNB','RIVN','NIO','SPOT','RBLX','SQ',
+            'LLY','JNJ','PFE','MRNA','ABBV','AMGN','PG','KO','PEP','MCD','SBUX','NKE','HD','GE','LMT','RTX','F','GM','T','VZ',
+            'QCOM','MU','SMCI','DELL','NET','SNOW','CRWD','PANW','CAT','DE',
+            'SAP','NOVO','LVMH','BP','SHEL','RIO','BHP','BNTX','TTE'],
     keywords:[
       // Earnings & results
       'earnings','quarterly results','annual results','q1 earnings','q2 earnings',
@@ -3991,7 +4008,8 @@ const CATEGORY_KEYWORDS = {
     calCountries:['US'],
   },
   INDEXES: {
-    assets:['SP500','NDX','DOW','DAX','FTSE','NIKKEI','CAC','HSI','VIX'],
+    assets:['SP500','NDX','DOW','DAX','FTSE','NIKKEI','CAC','HSI','VIX',
+            'SENSEX','KOSPI','ASX200','SSE','STOXX','IBEX','MIB','RUSSELL','TSX','BOVESPA'],
     keywords:[
       // US indices
       's&p 500','s&p500','sp500','dow jones','nasdaq composite','nasdaq 100',
@@ -3999,13 +4017,15 @@ const CATEGORY_KEYWORDS = {
       // European
       'dax','ftse 100','ftse250','cac 40','cac40','mib','ibex','stoxx 600','euro stoxx',
       'aex','bel20','smi','omx',
-      // Asian
-      'nikkei','topix','hang seng','kospi','sensex','nifty','asx 200','asx200',
-      'sti','set index','psei',
+      // Asian & EM
+      'nikkei','topix','hang seng','kospi','sensex','nifty 50','nifty','asx 200','asx200',
+      'sti','shanghai composite','csi 300','csi300','india index','korean index',
+      // Americas
+      'bovespa','ibovespa','tsx composite','s&p/tsx','canadian stocks index',
       // Generic
       'stock index','market index','indices','index futures','index rebalancing',
     ],
-    calCountries:['US','DE','GB','JP'],
+    calCountries:['US','DE','GB','JP','AU','KR','IN','BR','CA'],
   },
   COMMODITIES: {
     assets:['GOLD','SILVER','COPPER','OIL','BRENT','NATGAS','WHEAT','CORN','SOYBEAN','COFFEE','COCOA','PLATINUM','PALLADIUM'],
@@ -4127,8 +4147,13 @@ function newsMatchesCategory(n, cat) {
   if (cat === 'FOREX') {
     const hasFxAsset = def.assets && def.assets.some(a => assets.includes(a));
     const _EQ_IDX = new Set(['SP500','NDX','DOW','DAX','FTSE','NIKKEI','CAC','HSI','VIX',
+      'SENSEX','KOSPI','ASX200','SSE','STOXX','IBEX','MIB','RUSSELL','TSX','BOVESPA',
       'AAPL','NVDA','MSFT','AMZN','META','TSLA','GOOGL','GOOG','JPM','BAC','GS','XOM','AVGO','BRK',
-      'MS','V','MA','WMT','UNH','CVX','NFLX','AMD','INTC','COIN','PLTR','ARM','MSTR','UBER','CRM','ADBE','ORCL']);
+      'MS','V','MA','WMT','UNH','CVX','NFLX','AMD','INTC','COIN','PLTR','ARM','MSTR','UBER','CRM','ADBE','ORCL',
+      'TSM','BABA','DIS','BA','PYPL','SHOP','WFC','C','HSBC','ASML','BIDU','SNAP','ABNB','RIVN','NIO','SPOT','RBLX','SQ',
+      'LLY','JNJ','PFE','MRNA','ABBV','AMGN','PG','KO','PEP','MCD','SBUX','NKE','HD','GE','LMT','RTX','F','GM','T','VZ',
+      'QCOM','MU','SMCI','DELL','NET','SNOW','CRWD','PANW','CAT','DE',
+      'SAP','NOVO','LVMH','BP','SHEL','RIO','BHP','BNTX','TTE']);
     if (!hasFxAsset && assets.some(a => _EQ_IDX.has(a))) return false;
     if (hasFxAsset) return true;
     if (def.keywords && def.keywords.some(kw => _kwMatches(headline, kw))) return true;
@@ -5270,7 +5295,7 @@ async function _fetchCategoryHistory(cat) {
   try {
     const tok = localStorage.getItem('tnt_token');
     const headers = tok ? { 'Authorization': 'Bearer ' + tok } : {};
-    const r = await fetch(`${BACKEND_URL}/news?limit=1000&cat=${backendCat}`, { headers });
+    const r = await fetch(`${BACKEND_URL}/news?limit=1000&cat=${backendCat}&days=30`, { headers });
     if (!r.ok) return;
     const data = await r.json();
     if (!Array.isArray(data) || data.length === 0) return;
@@ -5476,7 +5501,16 @@ function parseUTC(ts) {
 }
 function formatTime(ts) {
   try{
-    return parseUTC(ts).toLocaleTimeString('en-GB',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    const d = parseUTC(ts);
+    const now = new Date();
+    const todayStr = now.toDateString();
+    const yesterday = new Date(now); yesterday.setDate(now.getDate()-1);
+    const dStr = d.toDateString();
+    const timeStr = d.toLocaleTimeString('en-GB',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    if (dStr === todayStr) return timeStr;
+    if (dStr === yesterday.toDateString()) return 'Yesterday ' + d.toLocaleTimeString('en-GB',{hour12:false,hour:'2-digit',minute:'2-digit'});
+    // Older: show "Apr 4" or "Feb 4"
+    return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) + ' ' + d.toLocaleTimeString('en-GB',{hour12:false,hour:'2-digit',minute:'2-digit'});
   }catch{return '--:--';}
 }
 function getAssetTags(a) {
